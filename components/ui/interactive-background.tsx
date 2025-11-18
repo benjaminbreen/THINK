@@ -16,17 +16,20 @@ export function InteractiveBackground() {
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
 
-  // Interactive controls state
-  const [matrixPaused, setMatrixPaused] = useState(false)
-  const [matrixColor, setMatrixColor] = useState<'blue' | 'green' | 'amber'>('blue')
-  const [showWhitman, setShowWhitman] = useState(true)
-  const [terminalExpanded, setTerminalExpanded] = useState(false)
-  const [terminalColorScheme, setTerminalColorScheme] = useState<'blue' | 'green' | 'amber'>('blue')
-  const [particleRainbow, setParticleRainbow] = useState(false)
-  const [particlePaused, setParticlePaused] = useState(false)
-  const [asciiPaused, setAsciiPaused] = useState(false)
-  const [resetLabyrinth, setResetLabyrinth] = useState(false)
-  const [refreshBooks, setRefreshBooks] = useState(false)
+  // Interactive controls state - using refs for real-time updates without re-render
+  const matrixPaused = useRef(false)
+  const matrixColor = useRef<'blue' | 'green' | 'amber'>('blue')
+  const showWhitman = useRef(true)
+  const terminalExpanded = useRef(false)
+  const terminalColorScheme = useRef<'blue' | 'green' | 'amber'>('blue')
+  const particleRainbow = useRef(false)
+  const particlePaused = useRef(false)
+  const asciiPaused = useRef(false)
+  const resetLabyrinth = useRef(false)
+  const refreshBooks = useRef(false)
+
+  // Force re-render for control UI updates
+  const [, forceUpdate] = useState(0)
 
   // Terminal state
   const terminalInput = useRef('')
@@ -432,7 +435,7 @@ export function InteractiveBackground() {
       ctx.font = '12px monospace'
 
       // Update time only if not paused
-      if (!asciiPaused) {
+      if (!asciiPaused.current) {
         asciiTimeRef.current = time
       }
 
@@ -482,13 +485,13 @@ export function InteractiveBackground() {
         green: '34, 197, 94',
         amber: '217, 119, 6'
       }
-      const matrixRgb = colorMap[matrixColor]
+      const matrixRgb = colorMap[matrixColor.current]
 
       // Calculate speed based on cursor Y position
       // Top of screen (y=0): slow (0.15)
       // Bottom of screen (y=canvas.height): fast (1.0)
       const cursorHeightRatio = Math.max(0, Math.min(1, mousePos.current.y / canvas.height))
-      const baseSpeed = matrixPaused ? 0 : 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
+      const baseSpeed = matrixPaused.current ? 0 : 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
 
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
@@ -497,7 +500,7 @@ export function InteractiveBackground() {
 
         // 50% Whitman words, 50% traditional matrix characters
         let text: string
-        if (showWhitman && Math.random() > 0.5) {
+        if (showWhitman.current && Math.random() > 0.5) {
           text = whitmanWords[Math.floor(Math.random() * whitmanWords.length)]
         } else {
           text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
@@ -518,7 +521,7 @@ export function InteractiveBackground() {
         }
 
         // Speed controlled by cursor Y position + horizontal influence
-        if (!matrixPaused) {
+        if (!matrixPaused.current) {
           matrixDrops[i] += baseSpeed + (influence * 0.3)
         }
       }
@@ -552,7 +555,7 @@ export function InteractiveBackground() {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((particle, i) => {
-        if (!particlePaused) {
+        if (!particlePaused.current) {
           const dx = mousePos.current.x - particle.x
           const dy = mousePos.current.y - particle.y
           const distance = Math.sqrt(dx * dx + dy * dy)
@@ -578,7 +581,7 @@ export function InteractiveBackground() {
 
         // Rainbow mode: cycle through hues based on position
         let color = '59, 130, 246' // default blue
-        if (particleRainbow) {
+        if (particleRainbow.current) {
           const hue = ((particle.x + particle.y + time * 0.05) % 360)
           const rgb = hslToRgb(hue / 360, 0.7, 0.6)
           color = `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`
@@ -643,7 +646,7 @@ export function InteractiveBackground() {
         green: '34, 197, 94',
         amber: '217, 119, 6'
       }
-      const terminalRgb = terminalColorMap[terminalColorScheme]
+      const terminalRgb = terminalColorMap[terminalColorScheme.current]
       ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
 
       const lineHeight = 20
@@ -693,9 +696,9 @@ export function InteractiveBackground() {
       const lab = labyrinth.current
 
       // Initialize maze if needed or reset requested
-      if (lab.maze.length === 0 || resetLabyrinth) {
+      if (lab.maze.length === 0 || resetLabyrinth.current) {
         initLabyrinth()
-        if (resetLabyrinth) setResetLabyrinth(false)
+        if (resetLabyrinth.current) resetLabyrinth.current = false
       }
 
       const cellSize = 25
@@ -798,9 +801,9 @@ export function InteractiveBackground() {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // Initialize if needed or refresh requested
-      if (books.current.length === 0 || refreshBooks) {
+      if (books.current.length === 0 || refreshBooks.current) {
         initBibliotheca()
-        if (refreshBooks) setRefreshBooks(false)
+        if (refreshBooks.current) refreshBooks.current = false
       }
 
       // Update and draw dust motes for atmosphere
@@ -1068,54 +1071,54 @@ export function InteractiveBackground() {
       <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto">
         {mode === 'matrix' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setMatrixPaused(!matrixPaused); }} className={buttonClass}>
-              {matrixPaused ? '▶ Resume' : '⏸ Pause'}
+            <button onClick={(e) => { e.stopPropagation(); matrixPaused.current = !matrixPaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              {matrixPaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
-            <button onClick={(e) => { e.stopPropagation(); setMatrixColor(matrixColor === 'blue' ? 'green' : matrixColor === 'green' ? 'amber' : 'blue'); }} className={buttonClass}>
-              Color: {matrixColor}
+            <button onClick={(e) => { e.stopPropagation(); matrixColor.current = matrixColor.current === 'blue' ? 'green' : matrixColor.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className={buttonClass}>
+              Color: {matrixColor.current}
             </button>
-            <button onClick={(e) => { e.stopPropagation(); setShowWhitman(!showWhitman); }} className={buttonClass}>
-              Whitman: {showWhitman ? 'On' : 'Off'}
+            <button onClick={(e) => { e.stopPropagation(); showWhitman.current = !showWhitman.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              Whitman: {showWhitman.current ? 'On' : 'Off'}
             </button>
           </div>
         )}
 
         {mode === 'terminal' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setTerminalColorScheme(terminalColorScheme === 'blue' ? 'green' : terminalColorScheme === 'green' ? 'amber' : 'blue'); }} className={buttonClass}>
-              Color: {terminalColorScheme}
+            <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className={buttonClass}>
+              Color: {terminalColorScheme.current}
             </button>
             <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className={buttonClass}>
               Clear
             </button>
-            <button onClick={(e) => { e.stopPropagation(); setTerminalExpanded(!terminalExpanded); }} className={buttonClass}>
-              {terminalExpanded ? '↙ Minimize' : '↗ Expand'}
+            <button onClick={(e) => { e.stopPropagation(); terminalExpanded.current = !terminalExpanded.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              {terminalExpanded.current ? '↙ Minimize' : '↗ Expand'}
             </button>
           </div>
         )}
 
         {mode === 'particles' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setParticlePaused(!particlePaused); }} className={buttonClass}>
-              {particlePaused ? '▶ Resume' : '⏸ Pause'}
+            <button onClick={(e) => { e.stopPropagation(); particlePaused.current = !particlePaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              {particlePaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
-            <button onClick={(e) => { e.stopPropagation(); setParticleRainbow(!particleRainbow); }} className={buttonClass}>
-              Rainbow: {particleRainbow ? 'On' : 'Off'}
+            <button onClick={(e) => { e.stopPropagation(); particleRainbow.current = !particleRainbow.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              Rainbow: {particleRainbow.current ? 'On' : 'Off'}
             </button>
           </div>
         )}
 
         {mode === 'ascii' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setAsciiPaused(!asciiPaused); }} className={buttonClass}>
-              {asciiPaused ? '▶ Resume' : '⏸ Pause'}
+            <button onClick={(e) => { e.stopPropagation(); asciiPaused.current = !asciiPaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              {asciiPaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
           </div>
         )}
 
         {mode === 'labyrinth' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setResetLabyrinth(true); }} className={buttonClass}>
+            <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className={buttonClass}>
               Reset Maze
             </button>
           </div>
@@ -1123,7 +1126,7 @@ export function InteractiveBackground() {
 
         {mode === 'bibliotheca' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-            <button onClick={(e) => { e.stopPropagation(); setRefreshBooks(true); }} className={buttonClass}>
+            <button onClick={(e) => { e.stopPropagation(); refreshBooks.current = true; }} className={buttonClass}>
               Refresh Books
             </button>
           </div>
