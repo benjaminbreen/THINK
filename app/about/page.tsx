@@ -65,6 +65,24 @@ export default function AboutPage() {
                 "counterfactual datasets" that surface marginalized forms of knowledge. By the end of year 3,
                 we expect to reach approximately 500 students at UCSC through two iterations of these four courses.
               </p>
+
+              <h2 className="text-3xl font-serif font-bold mb-4 mt-8">Why This Matters</h2>
+              <p>
+                LLMs are, at their core, deeply textual technologies. They live and die by their relationship to language,
+                genre, rhetoric—precisely the domains where humanities training matters most. Yet AI education continues to
+                marginalize humanistic perspectives, treating them as afterthoughts to technical skills.
+              </p>
+              <p>
+                THINK inverts that equation: what if the best people to teach, critique, and build with LLMs aren't just
+                computer scientists, but historians who know how archives get made, linguists who understand how meaning
+                emerges from context, literary scholars who recognize pastiche and genre-mimicry when they see it?
+              </p>
+              <p>
+                These aren't supplementary skills—they're foundational. When ChatGPT hallucinates a primary source that
+                sounds medievally perfect but never existed, you need a historian to spot it. When an LLM reproduces
+                historical biases baked into its training data, you need scholars trained in critical analysis of power
+                and representation. The technical and the humanistic aren't opposed—they're interdependent.
+              </p>
             </div>
 
             {/* Key Pillars */}
@@ -152,6 +170,24 @@ export default function AboutPage() {
                 </Button>
               </div>
 
+              <h2 className="text-3xl font-serif font-bold mb-4 mt-8">What Doesn't Work: Honest Caveats</h2>
+              <p>
+                Let's be direct: ChatGPT has been catastrophic for facilitating student plagiarism. The ease of generating
+                plausible-sounding essays has created massive challenges for academic integrity. We're not naive about this.
+              </p>
+              <p>
+                The assignments in THINK are designed specifically to make AI-based cheating obvious and pedagogically useless.
+                They require annotation of AI errors, fact-checking against original sources, and reflective analysis that can't
+                be outsourced to an LLM without the gaps showing immediately. When students try to cut corners, the failure becomes
+                a teachable moment—because the assignment itself is structured around understanding how and why AI fails.
+              </p>
+              <p>
+                We've also learned that not every use of AI in the classroom enhances learning. Simply asking students to "use
+                ChatGPT" without clear pedagogical scaffolding often produces shallow engagement. The difference between meaningful
+                integration and gimmickry lies in the design: students need unassisted intellectual struggle early in their education,
+                and they need to understand that AI is a tool for asking better questions, not a replacement for thinking.
+              </p>
+
               <h2 className="text-3xl font-serif font-bold mb-4 mt-8">Project Origins</h2>
               <p>
                 THINK builds on three recent pedagogical initiatives at UCSC:
@@ -164,6 +200,102 @@ export default function AboutPage() {
                 <li><strong>HistoryLens</strong> - LLM-powered historical simulations that increase student engagement,
                 encourage historical empathy, and build critical reflection about knowledge construction</li>
               </ul>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* FAQ Section */}
+      <Section className="border-t">
+        <Container>
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-3xl font-serif font-bold mb-8 text-center">Common Questions</h2>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Isn't this just teaching students to use ChatGPT?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    No. It's teaching students to recognize when ChatGPT is fabricating information—and why it sounds
+                    plausible while being wrong. That's a humanities skill par excellence: close reading, source criticism,
+                    and understanding how rhetoric creates the appearance of authority. Students learn by catching AI in the
+                    act of hallucination, then investigating why it failed and what that reveals about how these systems work.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Won't this make students intellectually lazy?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    Margaret Mead warned in 1963: automation only helps if you don't confuse eliminating drudgery with
+                    eliminating thinking. Our pedagogy is built around that distinction. Students do the hard intellectual
+                    work—researching, analyzing, fact-checking—while AI handles tasks like initial text generation or metadata
+                    extraction. The difference matters enormously, and learning to recognize it is part of what we teach.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Can't students just use AI to cheat on these assignments?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    Yes, students can and do try. That's precisely why every THINK assignment requires original source work,
+                    error annotation, and critical reflection that can't be outsourced to an LLM without it being immediately
+                    obvious. When a student submits AI-generated analysis of "errors" that don't exist, or cites sources they
+                    haven't read, the gaps are glaring. The assignment design makes cheating fail visibly.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Do students need coding experience for this curriculum?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    No. The first three THINK courses have no prerequisites and require zero coding knowledge. Students learn
+                    to prompt, critique, and work with AI tools through hands-on practice. In the fourth course (Applied LLM
+                    Projects), students may choose to incorporate AI-generated code into their projects, but this is optional
+                    and supported through scaffolded learning.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Can faculty at other institutions use these materials?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    Absolutely. All curriculum materials, simulations, and lesson plans are freely available on this site
+                    under open licenses. We've designed modular extracts specifically for easy adoption—you can use a single
+                    HistoryLens simulation in one class session, or build an entire unit around our pedagogical framework.
+                    We welcome adaptation and are happy to support implementation at other institutions.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Isn't AI just a passing trend in education?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    LLMs represent a fundamental shift in how information is processed and presented, similar to the invention
+                    of search engines or the printing press. Whether current models persist or evolve, the underlying challenge
+                    remains: students need to understand how automated text generation works, where it fails, and how to maintain
+                    critical thinking in an environment saturated with plausible-sounding but potentially unreliable information.
+                    These are enduring pedagogical concerns, not temporary trends.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </Container>

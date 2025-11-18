@@ -88,7 +88,7 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl mb-2">HistoryLens</CardTitle>
                 <CardDescription className="text-sm mb-3">
-                  Framework for creating AI historical simulations grounded in primary sources
+                  A suite of educational games and simulations built around open-ended "sandbox" learning enabled by LLM-generated roleplaying—but backstopped by real primary sources. Students learn history by testing AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways. Only through critical, skeptical engagement can we truly understand them.
                 </CardDescription>
                 <div className="flex flex-wrap gap-1.5">
                   <Badge variant="outline" className="text-xs">History</Badge>
@@ -346,7 +346,9 @@ export default function HomePage() {
               </p>
               <p className="leading-relaxed">
                 We believe that humanists should be building their own AI tools rather than relying solely on
-                commercial products. The projects featured here demonstrate what's possible when educators and researchers
+                commercial products. In 1963, Margaret Mead argued that automation could free humans for creative thinking—but
+                only if we didn't mistake drudgery-elimination for intellectual offloading. Six decades later, that distinction
+                matters more than ever. The projects featured here demonstrate what's possible when educators and researchers
                 take an active, critical, and creative role in shaping how AI gets used in teaching and scholarship.
               </p>
               <p className="leading-relaxed">
