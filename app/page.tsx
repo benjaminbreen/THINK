@@ -13,36 +13,36 @@ export default function HomePage() {
     <>
       <LiteraryTransformer />
       {/* Hero Section */}
-      <Section className="pt-20 pb-12 sm:pt-28 sm:pb-16 relative overflow-hidden mixed-mode-dark">
+      <Section className="pt-16 pb-8 sm:pt-24 sm:pb-12 relative overflow-hidden mixed-mode-dark">
         <InteractiveBackground />
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl">
-            <div className="inline-block mb-4 animate-fade-in">
+            <div className="inline-block mb-3 animate-fade-in">
               <Badge variant="outline" className="text-sm font-normal border-amber-600/30 text-amber-100">
                 <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-4 animate-fade-in animation-delay-100" data-literary="hero-title">
+            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100" data-literary="hero-title">
               Building AI Tools for Teaching & Research
             </h1>
-            <p className="text-lg text-white/80 mb-6 animate-fade-in animation-delay-200 leading-normal max-w-3xl" data-literary="hero-description">
+            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl" data-literary="hero-description">
               A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
-            <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
-                <Link href="#projects">
-                  <Sparkles className="mr-2 h-4 w-4" /> Browse Projects
+            <div className="flex flex-wrap gap-3 animate-fade-in animation-delay-300">
+              <Button asChild size="lg" className="btn-hover-scale bg-amber-600 hover:bg-amber-700 text-white border-0">
+                <Link href="/about">
+                  About THINK
                 </Link>
               </Button>
-              <Button asChild size="lg" className="btn-hover-scale bg-amber-600 hover:bg-amber-700 text-white border-0">
+              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
                 <Link href="#guides">
                   <BookOpen className="mr-2 h-4 w-4" /> How-to Guides
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="btn-hover-scale border-white/20 text-white hover:bg-white/10">
-                <Link href="/about">
-                  About THINK
+              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
+                <Link href="#projects">
+                  <Sparkles className="mr-2 h-4 w-4" /> Browse Projects
                 </Link>
               </Button>
             </div>
@@ -51,10 +51,10 @@ export default function HomePage() {
       </Section>
 
       {/* Project Gallery */}
-      <Section id="projects" className="bg-muted/40 py-12">
+      <Section id="projects" className="bg-muted/40 py-8">
         <Container>
-          <div className="mb-8">
-            <div className="flex items-start justify-between mb-6">
+          <div className="mb-6">
+            <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
                 <p className="text-muted-foreground" data-literary="projects-description">
@@ -67,7 +67,7 @@ export default function HomePage() {
             </div>
 
             {/* Filter tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6">
               <Badge className="cursor-pointer bg-amber-600 hover:bg-amber-700 text-white transition-colors">All Projects</Badge>
               <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Classroom Assignment</Badge>
               <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Full Course</Badge>
@@ -219,9 +219,9 @@ export default function HomePage() {
       </Section>
 
       {/* How-to Guides */}
-      <Section id="guides" className="border-t py-12">
+      <Section id="guides" className="border-t py-8">
         <Container>
-          <div className="mb-8">
+          <div className="mb-6">
             <h2 className="text-3xl font-serif font-bold mb-2" data-literary="guides-title">How-to Guides</h2>
             <p className="text-lg text-muted-foreground" data-literary="guides-description">
               Learn how to build your own experimental AI tools for teaching and research
@@ -229,7 +229,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Code className="h-5 w-5 text-amber-600" />
@@ -246,7 +246,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Sparkles className="h-5 w-5 text-amber-600" />
@@ -263,7 +263,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <GraduationCap className="h-5 w-5 text-amber-600" />
@@ -280,7 +280,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Microscope className="h-5 w-5 text-amber-600" />
@@ -297,7 +297,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <FileText className="h-5 w-5 text-amber-600" />
@@ -314,7 +314,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-600 shimmer">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-600">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <BookOpen className="h-5 w-5 text-amber-600" />

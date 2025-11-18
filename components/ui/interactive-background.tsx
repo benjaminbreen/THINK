@@ -456,6 +456,12 @@ export function InteractiveBackground() {
       ctx.font = '15px monospace'
       const binaryChars = '01アイウエオカキクケコサシスセソタチツテト'
 
+      // Calculate speed based on cursor Y position
+      // Top of screen (y=0): slow (0.15)
+      // Bottom of screen (y=canvas.height): fast (1.0)
+      const cursorHeightRatio = Math.max(0, Math.min(1, mousePos.current.y / canvas.height))
+      const baseSpeed = 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
+
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
         const dx = mousePos.current.x - columnX
@@ -483,7 +489,8 @@ export function InteractiveBackground() {
           matrixDrops[i] = 0
         }
 
-        matrixDrops[i] += 0.5 + influence * 0.5
+        // Speed controlled by cursor Y position + horizontal influence
+        matrixDrops[i] += baseSpeed + (influence * 0.3)
       }
     }
 
