@@ -30,17 +30,17 @@ export default function HomePage() {
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
                 <Link href="#projects">
                   <Sparkles className="mr-2 h-4 w-4" /> Browse Projects
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
                 <Link href="#guides">
                   <BookOpen className="mr-2 h-4 w-4" /> How-to Guides
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
                 <Link href="/about">
                   About THINK
                 </Link>
@@ -80,7 +80,7 @@ export default function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* HistoryLens */}
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Framework</Badge>
@@ -104,7 +104,7 @@ export default function HomePage() {
             </Card>
 
             {/* Young Darwin */}
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Simulation</Badge>
@@ -127,7 +127,7 @@ export default function HomePage() {
             </Card>
 
             {/* Apothecary Simulator */}
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Simulation</Badge>
@@ -150,7 +150,7 @@ export default function HomePage() {
             </Card>
 
             {/* History Simulator */}
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Generator</Badge>
@@ -173,7 +173,7 @@ export default function HomePage() {
             </Card>
 
             {/* Historical Figure Generator */}
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Generator</Badge>
@@ -229,9 +229,9 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Code className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">Getting Started with Claude Code</CardTitle>
@@ -240,15 +240,15 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/guides/claude-code-basics" className="text-sm text-primary hover:underline inline-flex items-center">
+                <Link href="/guides/claude-code-basics" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
                   Read guide <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">Building Historical Simulations</CardTitle>
@@ -257,15 +257,15 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/guides/building-simulations" className="text-sm text-primary hover:underline inline-flex items-center">
+                <Link href="/guides/building-simulations" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
                   Read guide <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <GraduationCap className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">Designing AI Assignments</CardTitle>
@@ -274,15 +274,15 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/guides/ai-assignments" className="text-sm text-primary hover:underline inline-flex items-center">
+                <Link href="/guides/ai-assignments" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
                   Read guide <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <Microscope className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">AI for Research Workflows</CardTitle>
@@ -291,15 +291,15 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/guides/research-workflows" className="text-sm text-primary hover:underline inline-flex items-center">
+                <Link href="/guides/research-workflows" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
                   Read guide <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <FileText className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">Prompt Engineering for Humanities</CardTitle>
@@ -308,15 +308,15 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/guides/prompt-engineering" className="text-sm text-primary hover:underline inline-flex items-center">
+                <Link href="/guides/prompt-engineering" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
                   Read guide <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift-glow">
+            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-600 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
                   <BookOpen className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg mb-2">Critical AI Pedagogy</CardTitle>

@@ -985,7 +985,7 @@ export function InteractiveBackground() {
       ref={canvasRef}
       onClick={cycleMode}
       className="absolute inset-0 w-full h-full cursor-pointer"
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.6 }}
     />
   )
 }
