@@ -4,6 +4,7 @@ import { Github, ExternalLink } from 'lucide-react'
 
 const footerLinks = {
   projects: [
+    { name: 'HistoryLens', href: '/projects/historylens' },
     { name: 'Young Darwin', href: '/projects/young-darwin' },
     { name: 'History Simulator', href: '/projects/history-simulator' },
     { name: 'Apothecary Simulator', href: '/projects/apothecary-simulator' },
@@ -11,6 +12,7 @@ const footerLinks = {
   resources: [
     { name: 'Pedagogy', href: '/pedagogy' },
     { name: 'External Resources', href: '/resources' },
+    { name: 'Team', href: '/team' },
     { name: 'Blog', href: '/blog' },
   ],
   about: [
@@ -28,18 +30,21 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             {/* Brand */}
             <div className="md:col-span-1">
-              <Link href="/" className="flex items-center space-x-2">
-                <span className="text-2xl font-serif font-bold">THINK</span>
+              <Link href="/" className="flex items-center space-x-2 group">
+                <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-primary transition-all">
+                  THINK
+                </span>
               </Link>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
                 Teaching with and about AI in humanities classes
               </p>
-              <div className="mt-4 flex space-x-4">
+              <div className="mt-6 flex space-x-4">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/benjaminbreen/THINK"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="GitHub Repository"
                 >
                   <Github className="h-5 w-5" />
                   <span className="sr-only">GitHub</span>
@@ -49,13 +54,13 @@ export function Footer() {
 
             {/* Projects */}
             <div>
-              <h3 className="text-sm font-semibold">Projects</h3>
-              <ul className="mt-4 space-y-2">
+              <h3 className="text-sm font-bold mb-4">Projects</h3>
+              <ul className="space-y-3">
                 {footerLinks.projects.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
                     >
                       {link.name}
                     </Link>
@@ -66,13 +71,13 @@ export function Footer() {
 
             {/* Resources */}
             <div>
-              <h3 className="text-sm font-semibold">Resources</h3>
-              <ul className="mt-4 space-y-2">
+              <h3 className="text-sm font-bold mb-4">Resources</h3>
+              <ul className="space-y-3">
                 {footerLinks.resources.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
                     >
                       {link.name}
                     </Link>
@@ -83,8 +88,8 @@ export function Footer() {
 
             {/* About */}
             <div>
-              <h3 className="text-sm font-semibold">About</h3>
-              <ul className="mt-4 space-y-2">
+              <h3 className="text-sm font-bold mb-4">About</h3>
+              <ul className="space-y-3">
                 {footerLinks.about.map((link) => (
                   <li key={link.name}>
                     {link.external ? (
@@ -92,15 +97,15 @@ export function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+                        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors group"
                       >
-                        {link.name}
-                        <ExternalLink className="ml-1 h-3 w-3" />
+                        <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
+                        <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-foreground"
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
                       >
                         {link.name}
                       </Link>
