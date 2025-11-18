@@ -4,9 +4,15 @@ import { useEffect, useRef, useState } from 'react'
 
 type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'constellation'
 
+// Get random starting mode
+const getRandomMode = (): BackgroundMode => {
+  const modes: BackgroundMode[] = ['ascii', 'matrix', 'particles', 'terminal', 'labyrinth', 'constellation']
+  return modes[Math.floor(Math.random() * modes.length)]
+}
+
 export function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [mode, setMode] = useState<BackgroundMode>('ascii')
+  const [mode, setMode] = useState<BackgroundMode>(getRandomMode())
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
 
@@ -53,8 +59,9 @@ export function InteractiveBackground() {
       canvas.height = canvas.offsetHeight
 
       // Reinitialize stars when resizing
-      if (mode === 'constellation') {
-        initStars()
+      if (mode === 'constellation' && stars.current.length > 0) {
+        // Clear stars so they're reinitalized with new canvas dimensions
+        stars.current = []
       }
     }
     resizeCanvas()
@@ -178,7 +185,7 @@ export function InteractiveBackground() {
       const lower = cmd.toLowerCase()
 
       if (lower === 'help') {
-        return 'Commands: help, about, projects, clear, time, joke, authors, normal. Try literary styles: hemingway, shakespeare, whitman, woolf, joyce (transforms page text!), plus austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus...'
+        return 'Commands: help, about, projects, clear, time, joke, authors, normal. Literary styles (transforms page!): hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, james, wilde. More (text only): melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus...'
       } else if (lower === 'about') {
         return 'THINK: AI tools for humanities research & teaching'
       } else if (lower === 'projects') {
@@ -198,7 +205,7 @@ export function InteractiveBackground() {
         ]
         return jokes[Math.floor(Math.random() * jokes.length)]
       } else if (lower === 'authors') {
-        return 'Try: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton. Type "normal" to restore.'
+        return '★ Full text transformations: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, james, wilde. ★ Response only: melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus. Type "normal" to restore.'
       } else if (lower === 'normal' || lower === 'reset' || lower === 'restore') {
         transformPageStyle('normal')
         return '★ Page restored to normal style'
@@ -219,13 +226,16 @@ export function InteractiveBackground() {
         return '★ Stately, plum modernist prose appears, bearing pages of possibility...'
       } else if (lower === 'austen') {
         transformPageStyle('austen')
-        return '★ It is a truth universally acknowledged that a webpage in want of style...'
+        return '★ Page transformed: It is a truth universally acknowledged...'
       } else if (lower === 'cervantes') {
         transformPageStyle('cervantes')
         return '★ En un lugar de la web, de cuyo nombre no quiero acordarme...'
       } else if (lower === 'borges') {
         transformPageStyle('borges')
         return '★ The Library contains all possible pages, including this one...'
+      } else if (lower === 'james' || lower === 'henry james') {
+        transformPageStyle('james')
+        return '★ A transformation of the most delicate complexity has been achieved...'
       } else if (lower === 'wilde') {
         transformPageStyle('wilde')
         return '★ I can resist everything except web design. This page is perfectly imperfect.'

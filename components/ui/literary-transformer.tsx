@@ -79,6 +79,81 @@ const styleTransformations = {
       description: 'Learnbuild your own experimental AI tools teaching research yes',
     },
   },
+  austen: {
+    hero: {
+      badge: 'It is a truth universally acknowledged',
+      title: 'Of Building AI Tools (A Most Particular Pursuit)',
+      description: 'It is a truth universally acknowledged, that an educator in possession of good ideas must be in want of proper instruments. Here assembled are resources for those of discriminating taste who wish to fashion AI tools suited to the teaching and researching arts.',
+    },
+    projects: {
+      title: 'A Gallery Most Accomplished',
+      description: 'Experimental instruments of considerable ingenuity for humanities instruction',
+    },
+    guides: {
+      title: 'Instructions for Young Practitioners',
+      description: 'Wherein one learns the arts of fashioning AI tools with elegance and propriety',
+    },
+  },
+  cervantes: {
+    hero: {
+      badge: 'En un lugar de la Web, de cuyo nombre no quiero acordarme',
+      title: 'La Ingeniosa Historia de las Herramientas de IA',
+      description: 'En un lugar del internet, de cuyo nombre bien puedo acordarme, se halla un repositorio de herramientas experimentales para la enseñanza. Browse these quixotic projects, share your own adventures, and learn to build tools as fantastical as windmill giants.',
+    },
+    projects: {
+      title: 'Galería de Hazañas Digitales',
+      description: 'Herramientas experimentales para los caballeros andantes de las humanidades',
+    },
+    guides: {
+      title: 'Guías del Arte Noble',
+      description: 'Sally forth and learn to craft your own chivalric AI instruments',
+    },
+  },
+  borges: {
+    hero: {
+      badge: 'The Library contains all possible tools',
+      title: 'The Garden of Forking Tools',
+      description: 'In this library—infinite, cyclical, hexagonal—one finds tools that perhaps exist, tools that should exist, and tools that cannot exist yet do. Each educator discovers their own labyrinth. The catalog is the collection; the collection, the universe.',
+    },
+    projects: {
+      title: 'A Catalogue of Parallel Instruments',
+      description: 'In one timeline these tools exist; in another, they are merely dreamed',
+    },
+    guides: {
+      title: 'The Aleph of Making',
+      description: 'All possible guides exist in this point; you need only learn to see them',
+    },
+  },
+  james: {
+    hero: {
+      badge: 'A situation of the most delicate complexity',
+      title: 'The Building of AI Tools: An Inquiry into Pedagogical Instruments',
+      description: 'One might venture to observe—though the observation itself demands qualification—that here exists a resource, free and altogether available, for those educators and researchers whose interest lies in the development of what one might term experimental applications of artificial intelligence within the rather specialized, one might even say rarefied, atmosphere of humanistic inquiry.',
+    },
+    projects: {
+      title: 'A Gallery of Considerable Refinement',
+      description: 'Experimental instruments of a complexity not altogether unsuited to scholarship',
+    },
+    guides: {
+      title: 'Guides of the Most Particular Sort',
+      description: 'Instructions—though that term scarcely captures the nuance—for building tools',
+    },
+  },
+  wilde: {
+    hero: {
+      badge: 'We are all in the gutter, but some of us are using AI',
+      title: 'The Importance of Building AI Tools Earnestly',
+      description: 'I can resist everything except good pedagogy. These tools are perfectly useless, which is why they are absolutely essential. One should either be a work of art, or create AI tools for teaching—there is no middle ground.',
+    },
+    projects: {
+      title: 'A Gallery of Beautiful Trivialities',
+      description: 'Experimental tools: delightfully artificial, intelligently frivolous',
+    },
+    guides: {
+      title: 'The Picture of Pedagogical Wilde',
+      description: 'Learn to build tools with all the superficiality that great art demands',
+    },
+  },
 }
 
 export function LiteraryTransformer() {
