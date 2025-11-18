@@ -31,7 +31,7 @@ export function Footer() {
             {/* Brand */}
             <div className="md:col-span-1">
               <Link href="/" className="flex items-center space-x-1 group">
-                <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-amber-600 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-primary transition-all">
+                <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
                   THINK
                 </span>
                 <span className="text-xl font-sans font-light text-muted-foreground">@ UCSC</span>

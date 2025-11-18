@@ -389,7 +389,7 @@ html {
   animation: shimmer-slide 3s infinite;
 }
 
-/* Mixed-mode sections (always dark/blue) */
+/* Mixed-mode sections (always dark) */
 .mixed-mode-dark {
   --foreground: 210 40% 98%;
   --card-foreground: 210 40% 98%;
@@ -397,12 +397,12 @@ html {
   --muted: 217.2 32.6% 17.5%;
   --muted-foreground: 215 20.2% 65.1%;
   @apply text-[hsl(var(--foreground))];
-  background-color: rgba(15, 35, 70, 0.85);
+  background: linear-gradient(to bottom, rgba(20, 30, 48, 0.95), rgba(15, 25, 40, 0.98));
   backdrop-filter: blur(8px);
 }
 
 .dark .mixed-mode-dark {
-  background-color: rgba(15, 23, 42, 0.75);
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.75), rgba(10, 18, 35, 0.85));
   backdrop-filter: blur(12px);
 }
 

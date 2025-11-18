@@ -18,7 +18,7 @@ export default function HomePage() {
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl">
             <div className="inline-block mb-4 animate-fade-in">
-              <Badge variant="outline" className="text-sm font-normal">
+              <Badge variant="outline" className="text-sm font-normal border-amber-600/30 text-amber-100">
                 <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
@@ -68,13 +68,13 @@ export default function HomePage() {
 
             {/* Filter tags */}
             <div className="flex flex-wrap gap-2 mb-8">
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">All Projects</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Classroom Assignment</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Full Course</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Research Tool</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">History</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Literature</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Linguistics</Badge>
+              <Badge className="cursor-pointer bg-amber-600 hover:bg-amber-700 text-white transition-colors">All Projects</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Classroom Assignment</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Full Course</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Research Tool</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">History</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Literature</Badge>
+              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Linguistics</Badge>
             </div>
           </div>
 
@@ -231,8 +231,8 @@ export default function HomePage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Code className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <Code className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">Getting Started with Claude Code</CardTitle>
                 <CardDescription className="text-sm">
@@ -248,8 +248,8 @@ export default function HomePage() {
 
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Sparkles className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <Sparkles className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">Building Historical Simulations</CardTitle>
                 <CardDescription className="text-sm">
@@ -265,8 +265,8 @@ export default function HomePage() {
 
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <GraduationCap className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <GraduationCap className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">Designing AI Assignments</CardTitle>
                 <CardDescription className="text-sm">
@@ -282,8 +282,8 @@ export default function HomePage() {
 
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Microscope className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <Microscope className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">AI for Research Workflows</CardTitle>
                 <CardDescription className="text-sm">
@@ -299,8 +299,8 @@ export default function HomePage() {
 
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <FileText className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <FileText className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">Prompt Engineering for Humanities</CardTitle>
                 <CardDescription className="text-sm">
@@ -316,8 +316,8 @@ export default function HomePage() {
 
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-600 shimmer">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <BookOpen className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
+                  <BookOpen className="h-5 w-5 text-amber-600" />
                 </div>
                 <CardTitle className="text-lg mb-2">Critical AI Pedagogy</CardTitle>
                 <CardDescription className="text-sm">
