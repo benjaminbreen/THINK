@@ -162,11 +162,11 @@ export default function HistoryLensPage() {
                 HistoryLens has gained significant attention in educational technology circles:
               </p>
               <ul>
-                <li>Featured in the <em>Chronicle of Higher Education</em></li>
-                <li>Highlighted in Ethan Mollick's bestselling book <em>Co-Intelligence: Living and Working with AI</em></li>
-                <li>Translated into Chinese for international audiences</li>
+                <li>Published in <em>Teaching History: A Journal of Methods</em> (2025)</li>
+                <li>Benjamin Breen has written about AI in education for the <em>Chronicle of Higher Education</em></li>
                 <li>Lesson plans being used in colleges and high schools across the country</li>
-                <li>Will be evaluated with 15 courses and 600-800 students during the NEH grant period</li>
+                <li>Featured in presentations and workshops on AI-enabled pedagogy</li>
+                <li>Will be rigorously evaluated with 15 courses and 600-800 students during the NEH grant period</li>
               </ul>
 
               <h2>Available Modules</h2>
