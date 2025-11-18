@@ -6,10 +6,12 @@ import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
+import { LiteraryTransformer } from '@/components/ui/literary-transformer'
 
 export default function HomePage() {
   return (
     <>
+      <LiteraryTransformer />
       {/* Hero Section */}
       <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24 relative overflow-hidden">
         <InteractiveBackground />
@@ -17,13 +19,13 @@ export default function HomePage() {
           <div className="mx-auto max-w-4xl">
             <div className="inline-block mb-4 animate-fade-in">
               <Badge variant="outline" className="text-sm font-normal">
-                A collaborative resource for experimental AI tools in the humanities
+                <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-6 animate-fade-in animation-delay-100">
+            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-6 animate-fade-in animation-delay-100" data-literary="hero-title">
               Building AI Tools for Teaching & Research
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 animate-fade-in animation-delay-200 leading-relaxed max-w-3xl">
+            <p className="text-xl text-muted-foreground mb-8 animate-fade-in animation-delay-200 leading-relaxed max-w-3xl" data-literary="hero-description">
               A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
@@ -54,8 +56,8 @@ export default function HomePage() {
           <div className="mb-12">
             <div className="flex items-start justify-between mb-6">
               <div>
-                <h2 className="text-3xl font-serif font-bold mb-2">Project Gallery</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
+                <p className="text-muted-foreground" data-literary="projects-description">
                   Experimental AI tools for humanities teaching and research
                 </p>
               </div>
@@ -220,8 +222,8 @@ export default function HomePage() {
       <Section id="guides" className="border-t">
         <Container>
           <div className="mb-12">
-            <h2 className="text-3xl font-serif font-bold mb-2">How-to Guides</h2>
-            <p className="text-lg text-muted-foreground">
+            <h2 className="text-3xl font-serif font-bold mb-2" data-literary="guides-title">How-to Guides</h2>
+            <p className="text-lg text-muted-foreground" data-literary="guides-description">
               Learn how to build your own experimental AI tools for teaching and research
             </p>
           </div>

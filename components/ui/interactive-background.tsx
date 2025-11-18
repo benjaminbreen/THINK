@@ -178,7 +178,7 @@ export function InteractiveBackground() {
       const lower = cmd.toLowerCase()
 
       if (lower === 'help') {
-        return 'Commands: help, about, projects, clear, time, joke, authors, hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus, and more...'
+        return 'Commands: help, about, projects, clear, time, joke, authors, normal. Try literary styles: hemingway, shakespeare, whitman, woolf, joyce (transforms page text!), plus austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus...'
       } else if (lower === 'about') {
         return 'THINK: AI tools for humanities research & teaching'
       } else if (lower === 'projects') {
@@ -198,7 +198,10 @@ export function InteractiveBackground() {
         ]
         return jokes[Math.floor(Math.random() * jokes.length)]
       } else if (lower === 'authors') {
-        return 'Try: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton'
+        return 'Try: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton. Type "normal" to restore.'
+      } else if (lower === 'normal' || lower === 'reset' || lower === 'restore') {
+        transformPageStyle('normal')
+        return '★ Page restored to normal style'
       } else if (lower === 'hemingway') {
         transformPageStyle('hemingway')
         return '★ Page transformed to Hemingway style: short sentences, simple words, true things.'
