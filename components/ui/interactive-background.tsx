@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'waves' | 'constellation'
+type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'constellation'
 
 export function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -19,8 +19,19 @@ export function InteractiveBackground() {
   ])
   const terminalCursorBlink = useRef(0)
 
-  // Wave state
-  const waves = useRef<Array<{ x: number; y: number; radius: number; maxRadius: number }>>([])
+  // Labyrinth state (Borges-themed maze)
+  const labyrinth = useRef({
+    playerX: 1,
+    playerY: 1,
+    maze: [] as number[][],
+    collected: new Set<string>(),
+    hasKey: false,
+    hasBook: false,
+    hasMirror: false,
+    solved: false,
+    message: 'Use arrow keys to navigate the Garden of Forking Paths...',
+    messageTime: 0
+  })
 
   // Constellation state (easter egg)
   const stars = useRef<Array<{ x: number; y: number; size: number; twinkle: number }>>([])
@@ -59,21 +70,13 @@ export function InteractiveBackground() {
     }
     canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Mouse click handler for waves
+    // Mouse click handler (reserved for future use)
     const handleMouseClick = (e: MouseEvent) => {
-      if (mode === 'waves') {
-        const rect = canvas.getBoundingClientRect()
-        waves.current.push({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-          radius: 0,
-          maxRadius: 200
-        })
-      }
+      // Click to cycle modes handled in onClick prop
     }
     canvas.addEventListener('click', handleMouseClick)
 
-    // Keyboard handler for terminal and easter eggs
+    // Keyboard handler for terminal, labyrinth, and easter eggs
     const handleKeyDown = (e: KeyboardEvent) => {
       if (mode === 'terminal') {
         e.preventDefault()
@@ -97,6 +100,51 @@ export function InteractiveBackground() {
           terminalInput.current = terminalInput.current.slice(0, -1)
         } else if (e.key.length === 1) {
           terminalInput.current += e.key
+        }
+      } else if (mode === 'labyrinth') {
+        e.preventDefault()
+        const lab = labyrinth.current
+        let newX = lab.playerX
+        let newY = lab.playerY
+
+        if (e.key === 'ArrowUp') newY--
+        else if (e.key === 'ArrowDown') newY++
+        else if (e.key === 'ArrowLeft') newX--
+        else if (e.key === 'ArrowRight') newX++
+
+        // Check if move is valid (not wall)
+        if (lab.maze[newY] && lab.maze[newY][newX] !== 1) {
+          lab.playerX = newX
+          lab.playerY = newY
+
+          // Check for items
+          const pos = `${newX},${newY}`
+          if (lab.maze[newY][newX] === 2 && !lab.collected.has(pos)) {
+            lab.collected.add(pos)
+            lab.hasBook = true
+            lab.message = 'Found: A volume from the Library of Babel!'
+            lab.messageTime = Date.now()
+          } else if (lab.maze[newY][newX] === 3 && !lab.collected.has(pos)) {
+            lab.collected.add(pos)
+            lab.hasKey = true
+            lab.message = 'Found: The Key to the Garden!'
+            lab.messageTime = Date.now()
+          } else if (lab.maze[newY][newX] === 4 && !lab.collected.has(pos)) {
+            lab.collected.add(pos)
+            lab.hasMirror = true
+            lab.message = 'Found: The Mirror of Tlön!'
+            lab.messageTime = Date.now()
+          } else if (lab.maze[newY][newX] === 5) {
+            // Exit - check if puzzle solved
+            if (lab.hasBook && lab.hasKey && lab.hasMirror) {
+              lab.solved = true
+              lab.message = '★ You have escaped the Labyrinth! ★'
+              lab.messageTime = Date.now()
+            } else {
+              lab.message = 'The exit is locked. Find all three artifacts...'
+              lab.messageTime = Date.now()
+            }
+          }
         }
       } else if (mode === 'constellation') {
         // Konami code check
@@ -125,12 +173,12 @@ export function InteractiveBackground() {
     }
     window.addEventListener('keydown', handleKeyDown)
 
-    // Terminal command processor
+    // Terminal command processor with literary Easter eggs
     const processCommand = (cmd: string): string => {
       const lower = cmd.toLowerCase()
 
       if (lower === 'help') {
-        return 'Commands: help, about, projects, clear, time, joke'
+        return 'Commands: help, about, projects, clear, time, joke, authors, hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus, and more...'
       } else if (lower === 'about') {
         return 'THINK: AI tools for humanities research & teaching'
       } else if (lower === 'projects') {
@@ -140,6 +188,8 @@ export function InteractiveBackground() {
         return ''
       } else if (lower === 'time') {
         return `Current time: ${new Date().toLocaleTimeString()}`
+      } else if (lower === 'date') {
+        return `Current date: ${new Date().toLocaleDateString()}`
       } else if (lower === 'joke') {
         const jokes = [
           'Why did the AI go to school? To improve its learning rate!',
@@ -147,11 +197,146 @@ export function InteractiveBackground() {
           'How many historians does it take to build an AI? Just one with Claude Code!'
         ]
         return jokes[Math.floor(Math.random() * jokes.length)]
+      } else if (lower === 'authors') {
+        return 'Try: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, wilde, melville, dickinson, kafka, proust, dante, milton'
+      } else if (lower === 'hemingway') {
+        transformPageStyle('hemingway')
+        return '★ Page transformed to Hemingway style: short sentences, simple words, true things.'
+      } else if (lower === 'shakespeare') {
+        transformPageStyle('shakespeare')
+        return '★ Page transformed to Shakespearean verse: what light through yonder webpage breaks!'
+      } else if (lower === 'whitman') {
+        transformPageStyle('whitman')
+        return '★ I sing the page electric! The democratic vistas of the humanities!'
+      } else if (lower === 'woolf') {
+        transformPageStyle('woolf')
+        return '★ Stream of consciousness activated—thoughts flowing like waves breaking...'
+      } else if (lower === 'joyce') {
+        transformPageStyle('joyce')
+        return '★ Stately, plum modernist prose appears, bearing pages of possibility...'
+      } else if (lower === 'austen') {
+        transformPageStyle('austen')
+        return '★ It is a truth universally acknowledged that a webpage in want of style...'
+      } else if (lower === 'cervantes') {
+        transformPageStyle('cervantes')
+        return '★ En un lugar de la web, de cuyo nombre no quiero acordarme...'
+      } else if (lower === 'borges') {
+        transformPageStyle('borges')
+        return '★ The Library contains all possible pages, including this one...'
+      } else if (lower === 'wilde') {
+        transformPageStyle('wilde')
+        return '★ I can resist everything except web design. This page is perfectly imperfect.'
+      } else if (lower === 'melville') {
+        transformPageStyle('melville')
+        return '★ Call me digital. Some years ago—never mind how long precisely...'
+      } else if (lower === 'dickinson') {
+        transformPageStyle('dickinson')
+        return '★ Tell all the truth but tell it slant— / The page too bright for our infirm delight'
+      } else if (lower === 'kafka') {
+        transformPageStyle('kafka')
+        return '★ One morning, upon waking from anxious dreams, the page had transformed...'
+      } else if (lower === 'proust') {
+        transformPageStyle('proust')
+        return '★ For a long time I browsed early. Sometimes, scarcely had the page loaded...'
+      } else if (lower === 'dante') {
+        transformPageStyle('dante')
+        return '★ Nel mezzo del cammin of our website / Mi ritrovai per una selva oscura...'
+      } else if (lower === 'milton') {
+        transformPageStyle('milton')
+        return '★ Of Mans First Disobedience of web standards, and the Fruit / Of that Forbidden Tree...'
+      } else if (lower === 'chaucer') {
+        transformPageStyle('chaucer')
+        return '★ Whan that Aprill with his shoures soote / The droghte of March hath perced to the roote...'
+      } else if (lower === 'sappho') {
+        transformPageStyle('sappho')
+        return '★ φαίνεταί μοι κῆνος / Some say the webpage is most beautiful...'
+      } else if (lower === 'horace') {
+        transformPageStyle('horace')
+        return '★ Carpe diem! Seize the page! Ars longa, vita brevis.'
+      } else if (lower === 'catullus') {
+        transformPageStyle('catullus')
+        return '★ Odi et amo this webpage. Why? You ask. I know not, but I feel it.'
+      } else if (lower === 'history') {
+        return 'The past is never dead. It\'s not even past. — Faulkner'
+      } else if (lower === 'ai') {
+        return 'AI is a tool, not a teacher. Use it wisely.'
+      } else if (lower === 'think') {
+        return '★ THINK: Tools for Historical INterpretation via Knowledge Engineering'
+      } else if (lower === 'matrix') {
+        return 'There is no spoon. Only prompts.'
+      } else if (lower === 'labyrinth') {
+        return 'Try the labyrinth mode—navigate Borges\' Garden of Forking Paths!'
+      } else if (lower === 'echo') {
+        return '...echo...echo...echo...'
       } else if (cmd === '') {
         return ''
       } else {
         return `Command not found: ${cmd}. Type "help" for commands.`
       }
+    }
+
+    // Transform page style (Easter egg - stores preference)
+    const transformPageStyle = (style: string) => {
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('THINK_textStyle', style)
+          // Trigger custom event for page to respond
+          window.dispatchEvent(new CustomEvent('THINK_styleChange', { detail: { style } }))
+        } catch (e) {
+          console.log('Style transformation activated:', style)
+        }
+      }
+    }
+
+    // Initialize labyrinth - Borges-themed maze
+    const initLabyrinth = () => {
+      // Create a maze using recursive backtracking
+      const width = 25
+      const height = 17
+      const maze: number[][] = Array(height).fill(0).map(() => Array(width).fill(1))
+
+      // Simple maze generation - create corridors
+      const carve = (x: number, y: number) => {
+        const dirs = [[0, -1], [1, 0], [0, 1], [-1, 0]].sort(() => Math.random() - 0.5)
+        maze[y][x] = 0
+
+        for (const [dx, dy] of dirs) {
+          const nx = x + dx * 2
+          const ny = y + dy * 2
+          if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1 && maze[ny][nx] === 1) {
+            maze[y + dy][x + dx] = 0
+            carve(nx, ny)
+          }
+        }
+      }
+
+      carve(1, 1)
+
+      // Place special items (Borges references)
+      // 2 = Book (Library of Babel), 3 = Key, 4 = Mirror (Tlön), 5 = Exit
+      let placed = 0
+      while (placed < 3) {
+        const x = Math.floor(Math.random() * (width - 2)) + 1
+        const y = Math.floor(Math.random() * (height - 2)) + 1
+        if (maze[y][x] === 0 && (x !== 1 || y !== 1)) {
+          maze[y][x] = placed + 2
+          placed++
+        }
+      }
+
+      // Place exit
+      maze[height - 2][width - 2] = 5
+
+      labyrinth.current.maze = maze
+      labyrinth.current.playerX = 1
+      labyrinth.current.playerY = 1
+      labyrinth.current.collected = new Set()
+      labyrinth.current.hasKey = false
+      labyrinth.current.hasBook = false
+      labyrinth.current.hasMirror = false
+      labyrinth.current.solved = false
+      labyrinth.current.message = 'Navigate the Garden of Forking Paths... Find 3 artifacts to escape.'
+      labyrinth.current.messageTime = Date.now()
     }
 
     // Initialize stars for constellation
@@ -198,23 +383,40 @@ export function InteractiveBackground() {
       }
     }
 
-    // Matrix Rain Effect
+    // Matrix Rain Effect with Walt Whitman words
     const matrixColumns = Math.floor(canvas.width / 20)
     const matrixDrops: number[] = Array(matrixColumns).fill(0)
+
+    // Walt Whitman vocabulary from "Leaves of Grass" and other poems
+    const whitmanWords = [
+      'I', 'sing', 'body', 'electric', 'soul', 'grass', 'leaves', 'self', 'song',
+      'America', 'democratic', 'vistas', 'open', 'road', 'vast', 'free', 'wild',
+      'ocean', 'stars', 'earth', 'mystic', 'barbaric', 'yawp', 'multitudes',
+      'contain', 'contradict', 'atom', 'world', 'eternal', 'infinite', 'cosmos',
+      'comrade', 'adhesive', 'love', 'death', 'life', 'joy', 'suffer', 'embrace',
+      'night', 'day', 'light', 'dark', 'sun', 'moon', 'sea', 'shore', 'wave'
+    ]
 
     const drawMatrix = (time: number) => {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       ctx.font = '15px monospace'
-      const chars = '01アイウエオカキクケコサシスセソタチツテト'
+      const binaryChars = '01アイウエオカキクケコサシスセソタチツテト'
 
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
         const dx = mousePos.current.x - columnX
         const influence = Math.max(0, 1 - Math.abs(dx) / 200)
 
-        const text = chars[Math.floor(Math.random() * chars.length)]
+        // 50% Whitman words, 50% traditional matrix characters
+        let text: string
+        if (Math.random() > 0.5) {
+          text = whitmanWords[Math.floor(Math.random() * whitmanWords.length)]
+        } else {
+          text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
+        }
+
         const opacity = 0.3 + influence * 0.5
 
         ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
@@ -313,7 +515,7 @@ export function InteractiveBackground() {
       const padding = 20
 
       // Draw history
-      terminalHistory.current.forEach((line, i) => {
+      terminalHistory.current.forEach((line: string, i: number) => {
         ctx.fillText(line, padding, startY + i * lineHeight)
       })
 
@@ -335,33 +537,103 @@ export function InteractiveBackground() {
       ctx.fillText('Click background to cycle modes | Type and press Enter', padding, canvas.height - 20)
     }
 
-    // Wave/Ripple Effect
-    const drawWaves = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.3)' // lighter fade for wave trails
+    // Labyrinth/Maze Effect - Borges-themed
+    const drawLabyrinth = (time: number) => {
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // dark background
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Update and draw waves
-      waves.current = waves.current.filter(wave => {
-        wave.radius += 2
+      const lab = labyrinth.current
 
-        if (wave.radius > wave.maxRadius) {
-          return false
+      // Initialize maze if needed
+      if (lab.maze.length === 0) {
+        initLabyrinth()
+      }
+
+      const cellSize = 25
+      const offsetX = (canvas.width - lab.maze[0].length * cellSize) / 2
+      const offsetY = (canvas.height - lab.maze.length * cellSize) / 2
+
+      // Draw maze
+      ctx.font = 'bold 16px monospace'
+      for (let y = 0; y < lab.maze.length; y++) {
+        for (let x = 0; x < lab.maze[y].length; x++) {
+          const px = offsetX + x * cellSize
+          const py = offsetY + y * cellSize
+          const cell = lab.maze[y][x]
+
+          if (cell === 1) {
+            // Wall
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.3)'
+            ctx.fillRect(px, py, cellSize, cellSize)
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.6)'
+            ctx.fillText('█', px + 5, py + 18)
+          } else if (cell === 2 && !lab.collected.has(`${x},${y}`)) {
+            // Book (Library of Babel)
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
+            ctx.fillText('📖', px + 4, py + 18)
+          } else if (cell === 3 && !lab.collected.has(`${x},${y}`)) {
+            // Key
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
+            ctx.fillText('🗝', px + 4, py + 18)
+          } else if (cell === 4 && !lab.collected.has(`${x},${y}`)) {
+            // Mirror (Tlön)
+            ctx.fillStyle = 'rgba(147, 197, 253, 0.8)' // blue-300
+            ctx.fillText('🪞', px + 4, py + 18)
+          } else if (cell === 5) {
+            // Exit
+            const exitColor = lab.solved ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.7)'
+            ctx.fillStyle = exitColor
+            ctx.fillText('🚪', px + 4, py + 18)
+          }
         }
+      }
 
-        const opacity = (1 - wave.radius / wave.maxRadius) * 0.6
-        ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`
-        ctx.lineWidth = 2
-        ctx.beginPath()
-        ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2)
-        ctx.stroke()
+      // Draw player
+      const playerPx = offsetX + lab.playerX * cellSize
+      const playerPy = offsetY + lab.playerY * cellSize
+      ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : 'rgba(59, 130, 246, 1)'
+      ctx.fillText('@', playerPx + 7, playerPy + 18)
 
-        return true
-      })
+      // Draw inventory
+      ctx.font = '14px monospace'
+      ctx.fillStyle = 'rgba(147, 197, 253, 0.9)'
+      const inventoryY = 30
+      ctx.fillText('Inventory:', 20, inventoryY)
+      let invY = inventoryY + 20
+      if (lab.hasBook) {
+        ctx.fillText('📖 Library of Babel volume', 20, invY)
+        invY += 18
+      }
+      if (lab.hasKey) {
+        ctx.fillText('🗝 Garden Key', 20, invY)
+        invY += 18
+      }
+      if (lab.hasMirror) {
+        ctx.fillText('🪞 Mirror of Tlön', 20, invY)
+        invY += 18
+      }
 
-      // Hint text
+      // Draw message
+      if (Date.now() - lab.messageTime < 3000) {
+        ctx.font = 'bold 14px monospace'
+        ctx.fillStyle = 'rgba(251, 191, 36, 1)'
+        const msgWidth = ctx.measureText(lab.message).width
+        ctx.fillText(lab.message, (canvas.width - msgWidth) / 2, canvas.height - 60)
+      }
+
+      // Draw instructions
       ctx.font = '12px monospace'
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.6)'
-      ctx.fillText('Click anywhere to create ripples', 20, canvas.height - 20)
+      ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'
+      ctx.fillText('Arrow keys to move | Find 3 artifacts to unlock exit | Click to change mode', 20, canvas.height - 20)
+
+      // Victory message
+      if (lab.solved) {
+        ctx.font = 'bold 24px monospace'
+        ctx.fillStyle = 'rgba(34, 197, 94, 1)'
+        const victoryMsg = '★ THE LABYRINTH YIELDS ITS SECRETS ★'
+        const victoryWidth = ctx.measureText(victoryMsg).width
+        ctx.fillText(victoryMsg, (canvas.width - victoryWidth) / 2, 60)
+      }
     }
 
     // Constellation Effect (Easter Egg)
@@ -375,7 +647,7 @@ export function InteractiveBackground() {
       }
 
       // Draw and twinkle stars
-      stars.current.forEach((star, i) => {
+      stars.current.forEach((star: { x: number; y: number; size: number; twinkle: number }, i: number) => {
         star.twinkle += 0.05
         const twinkle = Math.sin(star.twinkle) * 0.5 + 0.5
         const opacity = 0.3 + twinkle * 0.4
@@ -393,7 +665,7 @@ export function InteractiveBackground() {
 
         // Draw connections for nearby stars
         if (easterEggActive.current) {
-          stars.current.forEach((otherStar, j) => {
+          stars.current.forEach((otherStar: { x: number; y: number; size: number; twinkle: number }, j: number) => {
             if (i >= j) return
             const dx2 = star.x - otherStar.x
             const dy2 = star.y - otherStar.y
@@ -440,8 +712,8 @@ export function InteractiveBackground() {
         drawParticles(time)
       } else if (mode === 'terminal') {
         drawTerminal(time)
-      } else if (mode === 'waves') {
-        drawWaves(time)
+      } else if (mode === 'labyrinth') {
+        drawLabyrinth(time)
       } else if (mode === 'constellation') {
         drawConstellation(time)
       }
@@ -463,12 +735,12 @@ export function InteractiveBackground() {
   }, [mode])
 
   const cycleMode = () => {
-    setMode((current) => {
+    setMode((current: BackgroundMode) => {
       if (current === 'ascii') return 'matrix'
       if (current === 'matrix') return 'particles'
       if (current === 'particles') return 'terminal'
-      if (current === 'terminal') return 'waves'
-      if (current === 'waves') return 'constellation'
+      if (current === 'terminal') return 'labyrinth'
+      if (current === 'labyrinth') return 'constellation'
       return 'ascii'
     })
 
@@ -480,6 +752,16 @@ export function InteractiveBackground() {
         '> Type "help" for commands',
         ''
       ]
+    }
+
+    // Reset labyrinth when leaving
+    if (mode === 'labyrinth') {
+      labyrinth.current.maze = []
+      labyrinth.current.collected = new Set()
+      labyrinth.current.hasKey = false
+      labyrinth.current.hasBook = false
+      labyrinth.current.hasMirror = false
+      labyrinth.current.solved = false
     }
 
     // Reset easter egg when leaving
