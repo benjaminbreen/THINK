@@ -69,6 +69,9 @@ export function InteractiveBackground() {
   }>>([])
   const dustMotes = useRef<Array<{ x: number; y: number; vx: number; vy: number; opacity: number }>>([])
 
+  // ASCII animation time reference for pause functionality
+  const asciiTimeRef = useRef(0)
+
   // Humanistic quotes from across cultures and time
   const humanisticQuotes = [
     { text: "Know thyself", author: "Socrates" },
@@ -417,7 +420,6 @@ export function InteractiveBackground() {
     }
 
     // ASCII Grid Effect
-    const asciiTimeRef = useRef(0)
     const drawAsciiGrid = (time: number) => {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
       ctx.fillRect(0, 0, canvas.width, canvas.height)
