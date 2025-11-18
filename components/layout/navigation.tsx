@@ -27,10 +27,11 @@ export function Navigation() {
       <Container>
         <nav className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-primary transition-all">
+            <Link href="/" className="flex items-center space-x-1 group">
+              <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-amber-600 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-primary transition-all">
                 THINK
               </span>
+              <span className="text-lg font-sans font-light text-muted-foreground/70">@ UCSC</span>
             </Link>
           </div>
 
@@ -49,7 +50,7 @@ export function Navigation() {
               >
                 {item.name}
                 {pathname === item.href && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-gradient-to-r from-primary to-blue-600 rounded-full" />
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-gradient-to-r from-primary to-amber-600 rounded-full" />
                 )}
               </Link>
             ))}

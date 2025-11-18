@@ -13,7 +13,7 @@ export default function HomePage() {
     <>
       <LiteraryTransformer />
       {/* Hero Section */}
-      <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24 relative overflow-hidden mixed-mode-dark">
+      <Section className="pt-20 pb-12 sm:pt-28 sm:pb-16 relative overflow-hidden mixed-mode-dark">
         <InteractiveBackground />
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl">
@@ -22,25 +22,25 @@ export default function HomePage() {
                 <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-6 animate-fade-in animation-delay-100" data-literary="hero-title">
+            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-4 animate-fade-in animation-delay-100" data-literary="hero-title">
               Building AI Tools for Teaching & Research
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 animate-fade-in animation-delay-200 leading-relaxed max-w-3xl" data-literary="hero-description">
+            <p className="text-lg text-white/80 mb-6 animate-fade-in animation-delay-200 leading-normal max-w-3xl" data-literary="hero-description">
               A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
+              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
                 <Link href="#projects">
                   <Sparkles className="mr-2 h-4 w-4" /> Browse Projects
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
+              <Button asChild size="lg" className="btn-hover-scale bg-amber-600 hover:bg-amber-700 text-white border-0">
                 <Link href="#guides">
                   <BookOpen className="mr-2 h-4 w-4" /> How-to Guides
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="btn-hover-scale">
+              <Button asChild size="lg" variant="outline" className="btn-hover-scale border-white/20 text-white hover:bg-white/10">
                 <Link href="/about">
                   About THINK
                 </Link>
@@ -51,9 +51,9 @@ export default function HomePage() {
       </Section>
 
       {/* Project Gallery */}
-      <Section id="projects" className="bg-muted/40">
+      <Section id="projects" className="bg-muted/40 py-12">
         <Container>
-          <div className="mb-12">
+          <div className="mb-8">
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
@@ -82,18 +82,18 @@ export default function HomePage() {
             {/* HistoryLens */}
             <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100">
               <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Framework</Badge>
+                <div className="flex items-start justify-between mb-2">
+                  <Badge className="text-xs bg-amber-600 hover:bg-amber-700 text-white">Framework</Badge>
                   <span className="text-xs text-muted-foreground">2024</span>
                 </div>
                 <CardTitle className="text-xl mb-2">HistoryLens</CardTitle>
-                <CardDescription className="text-sm mb-3">
+                <CardDescription className="text-sm mb-2 leading-snug">
                   A suite of educational games and simulations built around open-ended "sandbox" learning enabled by LLM-generated roleplaying—but backstopped by real primary sources. Students learn history by testing AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways. Only through critical, skeptical engagement can we truly understand them.
                 </CardDescription>
                 <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Full Course</Badge>
-                  <Badge variant="outline" className="text-xs">Assignment</Badge>
+                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">History</Badge>
+                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">Full Course</Badge>
+                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">Assignment</Badge>
                 </div>
               </CardHeader>
               <CardContent>
@@ -219,9 +219,9 @@ export default function HomePage() {
       </Section>
 
       {/* How-to Guides */}
-      <Section id="guides" className="border-t">
+      <Section id="guides" className="border-t py-12">
         <Container>
-          <div className="mb-12">
+          <div className="mb-8">
             <h2 className="text-3xl font-serif font-bold mb-2" data-literary="guides-title">How-to Guides</h2>
             <p className="text-lg text-muted-foreground" data-literary="guides-description">
               Learn how to build your own experimental AI tools for teaching and research

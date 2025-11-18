@@ -30,10 +30,11 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             {/* Brand */}
             <div className="md:col-span-1">
-              <Link href="/" className="flex items-center space-x-2 group">
-                <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-primary transition-all">
+              <Link href="/" className="flex items-center space-x-1 group">
+                <span className="text-2xl font-serif font-bold bg-gradient-to-r from-primary to-amber-600 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-primary transition-all">
                   THINK
                 </span>
+                <span className="text-xl font-sans font-light text-muted-foreground">@ UCSC</span>
               </Link>
               <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
                 Teaching with and about AI in humanities classes
