@@ -16,6 +16,18 @@ export function InteractiveBackground() {
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
 
+  // Interactive controls state
+  const [matrixPaused, setMatrixPaused] = useState(false)
+  const [matrixColor, setMatrixColor] = useState<'blue' | 'green' | 'amber'>('blue')
+  const [showWhitman, setShowWhitman] = useState(true)
+  const [terminalExpanded, setTerminalExpanded] = useState(false)
+  const [terminalColorScheme, setTerminalColorScheme] = useState<'blue' | 'green' | 'amber'>('blue')
+  const [particleRainbow, setParticleRainbow] = useState(false)
+  const [particlePaused, setParticlePaused] = useState(false)
+  const [asciiPaused, setAsciiPaused] = useState(false)
+  const [resetLabyrinth, setResetLabyrinth] = useState(false)
+  const [refreshBooks, setRefreshBooks] = useState(false)
+
   // Terminal state
   const terminalInput = useRef('')
   const terminalHistory = useRef<string[]>([
@@ -456,11 +468,19 @@ export function InteractiveBackground() {
       ctx.font = '15px monospace'
       const binaryChars = '01アイウエオカキクケコサシスセソタチツテト'
 
+      // Color based on setting
+      const colorMap = {
+        blue: '59, 130, 246',
+        green: '34, 197, 94',
+        amber: '217, 119, 6'
+      }
+      const matrixRgb = colorMap[matrixColor]
+
       // Calculate speed based on cursor Y position
       // Top of screen (y=0): slow (0.15)
       // Bottom of screen (y=canvas.height): fast (1.0)
       const cursorHeightRatio = Math.max(0, Math.min(1, mousePos.current.y / canvas.height))
-      const baseSpeed = 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
+      const baseSpeed = matrixPaused ? 0 : 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
 
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
@@ -469,7 +489,7 @@ export function InteractiveBackground() {
 
         // 50% Whitman words, 50% traditional matrix characters
         let text: string
-        if (Math.random() > 0.5) {
+        if (showWhitman && Math.random() > 0.5) {
           text = whitmanWords[Math.floor(Math.random() * whitmanWords.length)]
         } else {
           text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
@@ -479,7 +499,7 @@ export function InteractiveBackground() {
         const glitch = Math.random() > 0.98
         const opacity = glitch ? 1 : 0.3 + influence * 0.5
 
-        ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
+        ctx.fillStyle = `rgba(${matrixRgb}, ${opacity})`
 
         // Glitch effect - random horizontal offset
         const glitchOffset = glitch ? (Math.random() - 0.5) * 10 : 0
@@ -490,7 +510,9 @@ export function InteractiveBackground() {
         }
 
         // Speed controlled by cursor Y position + horizontal influence
-        matrixDrops[i] += baseSpeed + (influence * 0.3)
+        if (!matrixPaused) {
+          matrixDrops[i] += baseSpeed + (influence * 0.3)
+        }
       }
     }
 
@@ -620,9 +642,10 @@ export function InteractiveBackground() {
 
       const lab = labyrinth.current
 
-      // Initialize maze if needed
-      if (lab.maze.length === 0) {
+      // Initialize maze if needed or reset requested
+      if (lab.maze.length === 0 || resetLabyrinth) {
         initLabyrinth()
+        if (resetLabyrinth) setResetLabyrinth(false)
       }
 
       const cellSize = 25
@@ -724,9 +747,10 @@ export function InteractiveBackground() {
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Initialize if needed
-      if (books.current.length === 0) {
+      // Initialize if needed or refresh requested
+      if (books.current.length === 0 || refreshBooks) {
         initBibliotheca()
+        if (refreshBooks) setRefreshBooks(false)
       }
 
       // Update and draw dust motes for atmosphere
@@ -987,12 +1011,86 @@ export function InteractiveBackground() {
     }
   }
 
+  const renderControls = () => {
+    const buttonClass = "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+
+    return (
+      <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto">
+        {mode === 'matrix' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setMatrixPaused(!matrixPaused); }} className={buttonClass}>
+              {matrixPaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); setMatrixColor(matrixColor === 'blue' ? 'green' : matrixColor === 'green' ? 'amber' : 'blue'); }} className={buttonClass}>
+              Color: {matrixColor}
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); setShowWhitman(!showWhitman); }} className={buttonClass}>
+              Whitman: {showWhitman ? 'On' : 'Off'}
+            </button>
+          </div>
+        )}
+
+        {mode === 'terminal' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setTerminalColorScheme(terminalColorScheme === 'blue' ? 'green' : terminalColorScheme === 'green' ? 'amber' : 'blue'); }} className={buttonClass}>
+              Color: {terminalColorScheme}
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className={buttonClass}>
+              Clear
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); setTerminalExpanded(!terminalExpanded); }} className={buttonClass}>
+              {terminalExpanded ? '↙ Minimize' : '↗ Expand'}
+            </button>
+          </div>
+        )}
+
+        {mode === 'particles' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setParticlePaused(!particlePaused); }} className={buttonClass}>
+              {particlePaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); setParticleRainbow(!particleRainbow); }} className={buttonClass}>
+              Rainbow: {particleRainbow ? 'On' : 'Off'}
+            </button>
+          </div>
+        )}
+
+        {mode === 'ascii' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setAsciiPaused(!asciiPaused); }} className={buttonClass}>
+              {asciiPaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+          </div>
+        )}
+
+        {mode === 'labyrinth' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setResetLabyrinth(true); }} className={buttonClass}>
+              Reset Maze
+            </button>
+          </div>
+        )}
+
+        {mode === 'bibliotheca' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); setRefreshBooks(true); }} className={buttonClass}>
+              Refresh Books
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
-    <canvas
-      ref={canvasRef}
-      onClick={cycleMode}
-      className="absolute inset-0 w-full h-full cursor-pointer"
-      style={{ opacity: 0.6 }}
-    />
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
+      <canvas
+        ref={canvasRef}
+        onClick={cycleMode}
+        className="absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"
+        style={{ opacity: 0.6 }}
+      />
+      {renderControls()}
+    </div>
   )
 }
