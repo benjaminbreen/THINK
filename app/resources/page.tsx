@@ -5,8 +5,9 @@ import { Container } from '@/components/ui/container'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ChevronRight } from 'lucide-react'
+import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ChevronRight, ArrowUpDown } from 'lucide-react'
 
+type SortOption = 'newest' | 'oldest' | 'author-az' | 'category' | 'type'
 type ResourceType = 'article' | 'paper' | 'blog' | 'video' | 'book' | 'tool'
 type ResourceCategory =
   | 'Historical Primary Sources'
@@ -902,11 +903,12 @@ export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | 'All'>('All')
   const [selectedType, setSelectedType] = useState<ResourceType | 'All'>('All')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sortBy, setSortBy] = useState<SortOption>('newest')
 
   const allCategories: ResourceCategory[] = Array.from(new Set(resources.map(r => r.category))).sort()
 
-  const filteredResources = useMemo(() => {
-    return resources.filter(resource => {
+  const filteredAndSortedResources = useMemo(() => {
+    let filtered = resources.filter(resource => {
       const matchesSearch = searchQuery === '' ||
         resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         resource.authors.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -916,19 +918,52 @@ export default function ResourcesPage() {
       const matchesType = selectedType === 'All' || resource.type === selectedType
 
       return matchesSearch && matchesCategory && matchesType
-    }).sort((a, b) => b.year - a.year)
-  }, [searchQuery, selectedCategory, selectedType])
+    })
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'newest':
+        return filtered.sort((a, b) => b.year - a.year)
+      case 'oldest':
+        return filtered.sort((a, b) => a.year - b.year)
+      case 'author-az':
+        return filtered.sort((a, b) => {
+          const authorA = a.authors.split(',')[0].trim().split(' ').pop() || a.authors
+          const authorB = b.authors.split(',')[0].trim().split(' ').pop() || b.authors
+          return authorA.localeCompare(authorB)
+        })
+      case 'category':
+        return filtered.sort((a, b) => a.category.localeCompare(b.category))
+      case 'type':
+        return filtered.sort((a, b) => a.type.localeCompare(b.type))
+      default:
+        return filtered.sort((a, b) => b.year - a.year)
+    }
+  }, [searchQuery, selectedCategory, selectedType, sortBy])
 
   const resourcesByCategory = useMemo(() => {
     const grouped: Record<string, Resource[]> = {}
-    filteredResources.forEach(resource => {
+    filteredAndSortedResources.forEach(resource => {
       if (!grouped[resource.category]) {
         grouped[resource.category] = []
       }
       grouped[resource.category].push(resource)
     })
     return grouped
-  }, [filteredResources])
+  }, [filteredAndSortedResources])
+
+  const resourcesByType = useMemo(() => {
+    const grouped: Record<string, Resource[]> = {}
+    filteredAndSortedResources.forEach(resource => {
+      if (!grouped[resource.type]) {
+        grouped[resource.type] = []
+      }
+      grouped[resource.type].push(resource)
+    })
+    return grouped
+  }, [filteredAndSortedResources])
+
+  const isGroupedView = sortBy === 'category' || sortBy === 'type'
 
   const getTypeIcon = (type: ResourceType) => {
     switch (type) {
@@ -1076,7 +1111,7 @@ export default function ResourcesPage() {
 
               {/* Results Count */}
               <div className="pt-4 border-t text-xs text-muted-foreground">
-                Showing {filteredResources.length} of {resources.length} resources
+                Showing {filteredAndSortedResources.length} of {resources.length} resources
               </div>
             </div>
           </aside>
@@ -1085,9 +1120,55 @@ export default function ResourcesPage() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
           <Container className="py-8 max-w-5xl">
-            {Object.entries(resourcesByCategory).length > 0 ? (
+            {/* Sort Controls */}
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Sort by:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge
+                  variant={sortBy === 'newest' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('newest')}
+                >
+                  Newest First
+                </Badge>
+                <Badge
+                  variant={sortBy === 'oldest' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('oldest')}
+                >
+                  Oldest First
+                </Badge>
+                <Badge
+                  variant={sortBy === 'author-az' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('author-az')}
+                >
+                  Author A-Z
+                </Badge>
+                <Badge
+                  variant={sortBy === 'category' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('category')}
+                >
+                  By Category
+                </Badge>
+                <Badge
+                  variant={sortBy === 'type' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('type')}
+                >
+                  By Format
+                </Badge>
+              </div>
+            </div>
+
+            {filteredAndSortedResources.length > 0 ? (
               <div className="space-y-12">
-                {Object.entries(resourcesByCategory)
+                {/* Grouped by Category View */}
+                {sortBy === 'category' && Object.entries(resourcesByCategory)
                   .sort(([catA], [catB]) => catA.localeCompare(catB))
                   .map(([category, categoryResources]) => (
                     <section key={category} id={category.toLowerCase().replace(/\s+/g, '-')}>
@@ -1149,6 +1230,121 @@ export default function ResourcesPage() {
                       </div>
                     </section>
                   ))}
+
+                {/* Grouped by Type/Format View */}
+                {sortBy === 'type' && Object.entries(resourcesByType)
+                  .sort(([typeA], [typeB]) => typeA.localeCompare(typeB))
+                  .map(([type, typeResources]) => (
+                    <section key={type}>
+                      <div className="mb-6 pb-3 border-b">
+                        <div className="flex items-center gap-3 mb-2">
+                          {getTypeIcon(type as ResourceType)}
+                          <h2 className="text-2xl font-serif font-bold capitalize">{type}s</h2>
+                          <Badge variant="secondary">{typeResources.length}</Badge>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {typeResources.map((resource, index) => (
+                          <Card key={index} className="hover:shadow-md transition-shadow">
+                            <CardContent className="p-4">
+                              <div className="flex gap-4">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="outline" className="text-xs">
+                                      {resource.category}
+                                    </Badge>
+                                    <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                    {resource.journal && (
+                                      <span className="text-xs text-muted-foreground italic truncate">
+                                        · {resource.journal}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h3 className="font-semibold text-base mb-1 leading-snug">
+                                    <a
+                                      href={resource.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:text-primary transition-colors hover:underline"
+                                    >
+                                      {resource.title}
+                                    </a>
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground mb-2">
+                                    {resource.authors}
+                                  </p>
+                                  <p className="text-sm leading-relaxed">
+                                    {resource.description}
+                                  </p>
+                                </div>
+                                <div className="flex-shrink-0">
+                                  <Button asChild variant="ghost" size="sm">
+                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+
+                {/* Flat List View (for date and author sorts) */}
+                {!isGroupedView && (
+                  <div className="space-y-3">
+                    {filteredAndSortedResources.map((resource, index) => (
+                      <Card key={index} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-4">
+                          <div className="flex gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                {getTypeIcon(resource.type)}
+                                <Badge variant="outline" className="text-xs capitalize">
+                                  {resource.type}
+                                </Badge>
+                                <Badge variant="outline" className="text-xs">
+                                  {resource.category}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                {resource.journal && (
+                                  <span className="text-xs text-muted-foreground italic truncate">
+                                    · {resource.journal}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="font-semibold text-base mb-1 leading-snug">
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="hover:text-primary transition-colors hover:underline"
+                                >
+                                  {resource.title}
+                                </a>
+                              </h3>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {resource.authors}
+                              </p>
+                              <p className="text-sm leading-relaxed">
+                                {resource.description}
+                              </p>
+                            </div>
+                            <div className="flex-shrink-0">
+                              <Button asChild variant="ghost" size="sm">
+                                <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-12">
