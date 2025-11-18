@@ -10,6 +10,7 @@ import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench } fr
 
 type ResourceType = 'article' | 'paper' | 'blog' | 'video' | 'book' | 'tool'
 type ResourceCategory =
+  | 'Historical Primary Sources'
   | 'Critical AI Theory'
   | 'Humanities Pedagogy'
   | 'Writing & Composition'
@@ -33,6 +34,130 @@ interface Resource {
 }
 
 const resources: Resource[] = [
+  // Historical Primary Sources (1843-1999)
+  {
+    title: "Notes on the Analytical Engine",
+    authors: "Ada Lovelace",
+    year: 1843,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Translation and notes on Babbage's Analytical Engine, including Note G—the first computer algorithm.",
+    url: "https://www.computerhistory.org/babbage/adalovelace/",
+    journal: "Taylor's Scientific Memoirs"
+  },
+  {
+    title: "As We May Think",
+    authors: "Vannevar Bush",
+    year: 1945,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Visionary essay proposing the memex—a proto-hypertext device presaging information retrieval and digital humanities.",
+    url: "https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/",
+    journal: "The Atlantic"
+  },
+  {
+    title: "A Mathematical Theory of Communication",
+    authors: "Claude Shannon",
+    year: 1948,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Foundational paper establishing information theory and introducing the concept of 'bits' as units of information.",
+    url: "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf",
+    journal: "Bell System Technical Journal"
+  },
+  {
+    title: "Cybernetics: Or Control and Communication in the Animal and the Machine",
+    authors: "Norbert Wiener",
+    year: 1948,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Technical foundation for cybernetics exploring feedback loops and control systems across biological and mechanical domains.",
+    url: "https://archive.org/details/cybernetics-or-communication-and-control-in-the-animal-and-the-machine-norbert-wiene-ocr"
+  },
+  {
+    title: "The Human Use of Human Beings: Cybernetics and Society",
+    authors: "Norbert Wiener",
+    year: 1950,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Accessible exploration of cybernetics' societal implications, warning about automation's impact on labor and human dignity.",
+    url: "https://monoskop.org/images/6/60/Wiener_Norbert_The_Human_Use_of_Human_Beings_1989.pdf"
+  },
+  {
+    title: "Computing Machinery and Intelligence",
+    authors: "Alan Turing",
+    year: 1950,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Seminal paper introducing the Turing Test and foundational questions about machine intelligence.",
+    url: "https://academic.oup.com/mind/article-abstract/LIX/236/433/986238",
+    journal: "Mind"
+  },
+  {
+    title: "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence",
+    authors: "John McCarthy, Marvin Minsky, Nathaniel Rochester, Claude Shannon",
+    year: 1955,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Historic proposal coining 'artificial intelligence' and launching AI as an academic discipline.",
+    url: "https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html"
+  },
+  {
+    title: "Computer Power and Human Reason: From Judgment to Calculation",
+    authors: "Joseph Weizenbaum",
+    year: 1976,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "ELIZA creator's critique arguing computers should never make important decisions requiring human wisdom and compassion.",
+    url: "https://archive.org/details/computerpowerhum0000weiz_v0i3"
+  },
+  {
+    title: "Literary Machines",
+    authors: "Ted Nelson",
+    year: 1981,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Foundational hypertext theory proposing transclusion, tumblers, and Project Xanadu's vision of networked writing.",
+    url: "https://www.eastgate.com/catalog/LiteraryMachines.html"
+  },
+  {
+    title: "The Second Self: Computers and the Human Spirit",
+    authors: "Sherry Turkle",
+    year: 1984,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Psychological study of how computers reshape human identity, thought, and relationships in the personal computing era.",
+    url: "https://direct.mit.edu/books/monograph/2327/The-Second-SelfComputers-and-the-Human-Spirit"
+  },
+  {
+    title: "A Cyborg Manifesto: Science, Technology, and Socialist-Feminism in the Late Twentieth Century",
+    authors: "Donna Haraway",
+    year: 1985,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Influential feminist critique using the cyborg as metaphor for boundary transgression and political coalitions.",
+    url: "https://theanarchistlibrary.org/library/donna-haraway-a-cyborg-manifesto",
+    journal: "Socialist Review"
+  },
+  {
+    title: "The Textual Condition",
+    authors: "Jerome McGann",
+    year: 1991,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Theory of texts as networks of linguistic and bibliographical codes, foundational for digital scholarly editing.",
+    url: "https://press.princeton.edu/books/paperback/9780691015187/the-textual-condition"
+  },
+  {
+    title: "How We Became Posthuman: Virtual Bodies in Cybernetics, Literature, and Informatics",
+    authors: "N. Katherine Hayles",
+    year: 1999,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Traces how information lost its body through cybernetics, constructing posthuman subjectivity.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/H/bo3769963.html"
+  },
+
   // Critical AI Theory
   {
     title: "On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?",
@@ -377,6 +502,33 @@ const resources: Resource[] = [
     url: "https://newrepublic.com/article/117428/limits-digital-humanities-adam-kirsch",
     journal: "The New Republic"
   },
+  {
+    title: "Reading Machines: Toward an Algorithmic Criticism",
+    authors: "Stephen Ramsay",
+    year: 2011,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Argues computation can enhance subjective literary interpretation through algorithmic textual analysis.",
+    url: "https://www.press.uillinois.edu/books/?id=p078200"
+  },
+  {
+    title: "Viral Texts: Mapping Networks of Reprinting in 19th-Century Newspapers and Magazines",
+    authors: "Ryan Cordell & David Smith",
+    year: 2024,
+    type: "tool",
+    category: "Digital Humanities",
+    description: "Computational project discovering text reuse patterns to understand nineteenth-century information virality.",
+    url: "https://viraltexts.org/"
+  },
+  {
+    title: "Index Thomisticus: A Pioneer Project in Digital Humanities",
+    authors: "Roberto Busa",
+    year: 1974,
+    type: "article",
+    category: "Digital Humanities",
+    description: "Chronicle of the first large-scale humanities computing project indexing Aquinas's complete works.",
+    url: "https://www.historyofinformation.com/detail.php?id=3077"
+  },
 
   // Historical Simulation & Interactive Learning
   {
@@ -703,6 +855,7 @@ export default function ResourcesPage() {
   }
 
   const categoryDescriptions: Record<ResourceCategory, string> = {
+    'Historical Primary Sources': 'Seminal texts from 1843-1999 establishing foundations of computing, AI, cybernetics, hypertext, and digital humanities—essential for understanding contemporary AI in historical context',
     'Critical AI Theory': 'Foundational texts examining AI systems through lenses of power, bias, labor, and social justice',
     'Humanities Pedagogy': 'Teaching approaches integrating AI in humanities courses with critical, humanistic frameworks',
     'Writing & Composition': 'Rhetoric and composition scholarship on AI writing tools in writing instruction',
