@@ -1,0 +1,66 @@
+backend:
+  name: github
+  repo: benjaminbreen/THINK
+  branch: main # Change to claude/clearing-house-website-011YAB7R6JcC3hwQX9RFEvn7 if needed
+
+# For local development only - uncomment to test locally
+# local_backend: true
+
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+# Publish mode - set to editorial_workflow to enable draft/publish workflow
+publish_mode: simple
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "app/blog"
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/page"
+    extension: "mdx"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Author", name: "author", widget: "string", default: "Benjamin Breen" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+    # Preview template
+    preview_path: "blog/{{slug}}"
+
+    # Sort posts by date, newest first
+    sortable_fields: ['date', 'title']
+    view_filters:
+      - label: "Posts by Benjamin Breen"
+        field: author
+        pattern: "Benjamin Breen"
+
+  - name: "pedagogy"
+    label: "Pedagogy Materials"
+    folder: "content/pedagogy"
+    create: true
+    slug: "{{slug}}"
+    extension: "mdx"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Type", name: "type", widget: "select", options: ["Syllabus", "Assignment", "Guide", "Module"] }
+      - { label: "Course", name: "course", widget: "string", required: false }
+      - { label: "Download Link", name: "download", widget: "string", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "About Page"
+        name: "about"
+        file: "content/about.mdx"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }

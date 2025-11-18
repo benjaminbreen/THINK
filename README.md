@@ -10,6 +10,7 @@ THINK is a project at UC Santa Cruz funded by the National Endowment for the Hum
 
 - 🎨 **Modern Design**: Beautiful, responsive UI built with Tailwind CSS
 - 🌓 **Dark Mode**: Full dark mode support with system preference detection
+- 📝 **Content Management System**: Decap CMS for easy blog post creation (no subscription needed!)
 - 📝 **MDX Blog**: Write blog posts in Markdown with embedded React components
 - 🎭 **Historical Simulations**: Showcase for AI-powered educational tools
 - 📚 **Pedagogy Materials**: Syllabi, assignments, and teaching guides
@@ -22,6 +23,7 @@ THINK is a project at UC Santa Cruz funded by the National Endowment for the Hum
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
+- **CMS**: Decap CMS (free, open-source, Git-based)
 - **Content**: MDX for blog posts and content pages
 - **Icons**: Lucide React
 - **Animations**: Framer Motion
@@ -85,7 +87,19 @@ THINK/
 
 ## Adding Content
 
-### Creating a New Blog Post
+### Using the CMS (Recommended)
+
+The easiest way to create blog posts is through the Content Management System:
+
+1. **Access the CMS**: Visit `/admin` on your deployed site (e.g., `https://your-domain.com/admin`)
+2. **Login**: Click "Login with GitHub" (you'll need write access to the repo)
+3. **Create Post**: Click "Blog Posts" → "New Blog Post"
+4. **Fill in details**: Title, description, author, date, and content
+5. **Publish**: Click "Publish" to save and deploy
+
+The CMS automatically creates the proper file structure and triggers deployment. **See [CMS-SETUP.md](CMS-SETUP.md) for complete setup instructions.**
+
+### Creating a New Blog Post Manually
 
 Create a new MDX file in `app/blog/[slug]/page.mdx`:
 
