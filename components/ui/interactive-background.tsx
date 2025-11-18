@@ -216,8 +216,40 @@ export function InteractiveBackground() {
     const processCommand = (cmd: string): string => {
       const lower = cmd.toLowerCase()
 
-      if (lower === 'help') {
-        return 'Commands: help, about, projects, clear, time, joke, authors, normal. Literary styles (transforms page!): hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, james, wilde. More (text only): melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus...'
+      // Navigation commands (work when expanded)
+      if (lower.startsWith('goto ') || lower.startsWith('cd ')) {
+        const path = lower.split(' ')[1]
+        if (path === '/projects' || path === 'projects') {
+          if (typeof window !== 'undefined') window.location.href = '/projects'
+          return '→ Navigating to /projects...'
+        } else if (path === '/about' || path === 'about') {
+          if (typeof window !== 'undefined') window.location.href = '/about'
+          return '→ Navigating to /about...'
+        } else if (path === '/resources' || path === 'resources') {
+          if (typeof window !== 'undefined') window.location.href = '/resources'
+          return '→ Navigating to /resources...'
+        } else if (path === '/guides' || path === 'guides') {
+          if (typeof window !== 'undefined') window.location.href = '/#guides'
+          return '→ Navigating to /guides...'
+        } else if (path === '/pedagogy' || path === 'pedagogy') {
+          if (typeof window !== 'undefined') window.location.href = '/pedagogy'
+          return '→ Navigating to /pedagogy...'
+        } else if (path === '/blog' || path === 'blog') {
+          if (typeof window !== 'undefined') window.location.href = '/blog'
+          return '→ Navigating to /blog...'
+        } else if (path === '/team' || path === 'team') {
+          if (typeof window !== 'undefined') window.location.href = '/team'
+          return '→ Navigating to /team...'
+        } else if (path === '/' || path === 'home') {
+          if (typeof window !== 'undefined') window.location.href = '/'
+          return '→ Navigating to home...'
+        } else {
+          return `Error: Path not found: ${path}. Try 'ls' to see available pages.`
+        }
+      } else if (lower === 'ls' || lower === 'dir') {
+        return 'Available pages:\n  /          (home)\n  /projects  (AI projects)\n  /about     (about THINK)\n  /resources (learning resources)\n  /guides    (how-to guides)\n  /pedagogy  (teaching philosophy)\n  /blog      (updates)\n  /team      (team members)\n\nUse: goto <page> or cd <page>'
+      } else if (lower === 'help') {
+        return 'Commands: help, ls, goto <page>, cd <page>, about, projects, clear, time, joke, authors, normal.\nLiterary styles: hemingway, shakespeare, whitman, woolf, joyce, austen, cervantes, borges, james, wilde.\nMore: melville, dickinson, kafka, proust, dante, milton, chaucer, sappho, horace, catullus'
       } else if (lower === 'about') {
         return 'THINK: AI tools for humanities research & teaching'
       } else if (lower === 'projects') {
@@ -461,6 +493,8 @@ export function InteractiveBackground() {
     // Matrix Rain Effect with Walt Whitman words
     const matrixColumns = Math.floor(canvas.width / 20)
     const matrixDrops: number[] = Array(matrixColumns).fill(0)
+    const matrixChars = useRef<string[]>(Array(matrixColumns).fill(''))
+    const matrixLastChange = useRef<number[]>(Array(matrixColumns).fill(0))
 
     // Walt Whitman vocabulary from "Leaves of Grass" and other poems
     const whitmanWords = [
@@ -488,26 +522,39 @@ export function InteractiveBackground() {
       const matrixRgb = colorMap[matrixColor.current]
 
       // Calculate speed based on cursor Y position
-      // Top of screen (y=0): slow (0.15)
-      // Bottom of screen (y=canvas.height): fast (1.0)
+      // Top of screen (y=0): barely moving (0.01)
+      // Bottom of screen (y=canvas.height): moderate speed (0.35)
       const cursorHeightRatio = Math.max(0, Math.min(1, mousePos.current.y / canvas.height))
-      const baseSpeed = matrixPaused.current ? 0 : 0.15 + (cursorHeightRatio * 0.85) // Range from 0.15 to 1.0
+      const baseSpeed = matrixPaused.current ? 0 : 0.01 + (cursorHeightRatio * 0.34) // Range from 0.01 to 0.35
+
+      // Character change interval based on cursor position (slower at top)
+      const changeInterval = matrixPaused.current ? Infinity : 100 + (1 - cursorHeightRatio) * 400 // 100-500ms
 
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
         const dx = mousePos.current.x - columnX
         const influence = Math.max(0, 1 - Math.abs(dx) / 200)
 
-        // 50% Whitman words, 50% traditional matrix characters
-        let text: string
-        if (showWhitman.current && Math.random() > 0.5) {
-          text = whitmanWords[Math.floor(Math.random() * whitmanWords.length)]
-        } else {
-          text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
+        // Only change character if not paused and enough time has passed
+        if (!matrixPaused.current && (time - matrixLastChange.current[i] > changeInterval)) {
+          // 50% Whitman words, 50% traditional matrix characters
+          if (showWhitman.current && Math.random() > 0.5) {
+            matrixChars.current[i] = whitmanWords[Math.floor(Math.random() * whitmanWords.length)]
+          } else {
+            matrixChars.current[i] = binaryChars[Math.floor(Math.random() * binaryChars.length)]
+          }
+          matrixLastChange.current[i] = time
         }
 
-        // Occasional character glitch
-        const glitch = Math.random() > 0.98
+        // Use stored character (or initialize if empty)
+        let text = matrixChars.current[i]
+        if (!text) {
+          text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
+          matrixChars.current[i] = text
+        }
+
+        // Occasional character glitch (only when not paused)
+        const glitch = !matrixPaused.current && Math.random() > 0.98
         const opacity = glitch ? 1 : 0.3 + influence * 0.5
 
         ctx.fillStyle = `rgba(${matrixRgb}, ${opacity})`
@@ -522,7 +569,7 @@ export function InteractiveBackground() {
 
         // Speed controlled by cursor Y position + horizontal influence
         if (!matrixPaused.current) {
-          matrixDrops[i] += baseSpeed + (influence * 0.3)
+          matrixDrops[i] += baseSpeed + (influence * 0.15)
         }
       }
     }
@@ -635,10 +682,7 @@ export function InteractiveBackground() {
 
     // Terminal Effect
     const drawTerminal = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // darker background for readability
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      ctx.font = '14px monospace'
+      const isExpanded = terminalExpanded.current
 
       // Terminal color based on setting
       const terminalColorMap = {
@@ -647,45 +691,118 @@ export function InteractiveBackground() {
         amber: '217, 119, 6'
       }
       const terminalRgb = terminalColorMap[terminalColorScheme.current]
-      ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
 
-      const lineHeight = 20
-      const startY = 30
-      const padding = 20
+      if (isExpanded) {
+        // Expanded mode - full screen retro terminal
+        ctx.fillStyle = 'rgba(5, 10, 20, 0.95)' // Very dark background
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Draw history
-      terminalHistory.current.forEach((line: string, i: number) => {
-        ctx.fillText(line, padding, startY + i * lineHeight)
-      })
+        // Retro terminal border
+        ctx.strokeStyle = `rgba(${terminalRgb}, 0.6)`
+        ctx.lineWidth = 3
+        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20)
 
-      // Draw current input with cursor
-      const currentY = startY + terminalHistory.current.length * lineHeight
-      const inputLine = `> ${terminalInput.current}`
-      ctx.fillText(inputLine, padding, currentY)
+        // Inner glow
+        ctx.strokeStyle = `rgba(${terminalRgb}, 0.3)`
+        ctx.lineWidth = 1
+        ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30)
 
-      // Blinking cursor
-      terminalCursorBlink.current = (terminalCursorBlink.current + 1) % 60
-      if (terminalCursorBlink.current < 30) {
-        const cursorX = padding + ctx.measureText(inputLine).width + 2
-        ctx.fillRect(cursorX, currentY - 12, 8, 14)
+        // Header
+        ctx.font = 'bold 20px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 1)`
+        ctx.fillText('THINK TERMINAL v1.0', 30, 45)
+        ctx.font = '12px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 0.6)`
+        ctx.fillText('Navigation System Online', 30, 65)
+
+        // Draw a separator line
+        ctx.strokeStyle = `rgba(${terminalRgb}, 0.4)`
+        ctx.beginPath()
+        ctx.moveTo(30, 75)
+        ctx.lineTo(canvas.width - 30, 75)
+        ctx.stroke()
+
+        ctx.font = '14px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
+
+        const lineHeight = 20
+        const startY = 100
+        const padding = 30
+
+        // Draw history with line wrapping for expanded view
+        let currentY = startY
+        terminalHistory.current.forEach((line: string) => {
+          const lines = line.split('\n')
+          lines.forEach((subLine: string) => {
+            ctx.fillText(subLine, padding, currentY)
+            currentY += lineHeight
+          })
+        })
+
+        // Draw current input with cursor
+        const inputLine = `> ${terminalInput.current}`
+        ctx.fillText(inputLine, padding, currentY)
+
+        // Blinking cursor
+        terminalCursorBlink.current = (terminalCursorBlink.current + 1) % 60
+        if (terminalCursorBlink.current < 30) {
+          const cursorX = padding + ctx.measureText(inputLine).width + 2
+          ctx.fillRect(cursorX, currentY - 12, 8, 14)
+        }
+
+        // Footer with instructions
+        ctx.font = 'bold 12px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 0.7)`
+        const footer = '[ Type "ls" for navigation | "help" for commands | Click controls to minimize ]'
+        const footerWidth = ctx.measureText(footer).width
+        ctx.fillText(footer, (canvas.width - footerWidth) / 2, canvas.height - 30)
+
+      } else {
+        // Normal mode - standard terminal view
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // darker background for readability
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        ctx.font = '14px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
+
+        const lineHeight = 20
+        const startY = 30
+        const padding = 20
+
+        // Draw history
+        terminalHistory.current.forEach((line: string, i: number) => {
+          ctx.fillText(line, padding, startY + i * lineHeight)
+        })
+
+        // Draw current input with cursor
+        const currentY = startY + terminalHistory.current.length * lineHeight
+        const inputLine = `> ${terminalInput.current}`
+        ctx.fillText(inputLine, padding, currentY)
+
+        // Blinking cursor
+        terminalCursorBlink.current = (terminalCursorBlink.current + 1) % 60
+        if (terminalCursorBlink.current < 30) {
+          const cursorX = padding + ctx.measureText(inputLine).width + 2
+          ctx.fillRect(cursorX, currentY - 12, 8, 14)
+        }
+
+        // Hint text
+        ctx.font = '12px monospace'
+        ctx.fillStyle = `rgba(${terminalRgb}, 0.4)`
+        ctx.fillText('Click background to cycle modes | Type and press Enter', padding, canvas.height - 20)
       }
 
-      // CRT scanline effect
+      // CRT scanline effect (both modes)
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
       for (let y = 0; y < canvas.height; y += 3) {
         ctx.fillRect(0, y, canvas.width, 1)
       }
 
-      // Subtle screen flicker
+      // Subtle screen flicker (both modes)
       if (Math.random() > 0.97) {
         ctx.fillStyle = `rgba(${terminalRgb}, ${0.02 + Math.random() * 0.03})`
         ctx.fillRect(0, 0, canvas.width, canvas.height)
       }
-
-      // Hint text
-      ctx.font = '12px monospace'
-      ctx.fillStyle = `rgba(${terminalRgb}, 0.4)`
-      ctx.fillText('Click background to cycle modes | Type and press Enter', padding, canvas.height - 20)
     }
 
     // Labyrinth/Maze Effect - Borges-themed
