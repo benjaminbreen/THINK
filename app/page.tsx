@@ -5,13 +5,15 @@ import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter } from 'lucide-react'
+import { InteractiveBackground } from '@/components/ui/interactive-background'
 
 export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24">
-        <Container>
+      <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24 relative overflow-hidden">
+        <InteractiveBackground />
+        <Container className="relative z-10">
           <div className="mx-auto max-w-4xl">
             <div className="inline-block mb-4 animate-fade-in">
               <Badge variant="outline" className="text-sm font-normal">
