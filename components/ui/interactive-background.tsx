@@ -400,7 +400,7 @@ export function InteractiveBackground() {
           open: false,
           openProgress: 0,
           hovered: false,
-          size: 30 + Math.random() * 20,
+          size: 80 + Math.random() * 40,  // Much wider books for text readability
         })
       }
 
@@ -417,6 +417,7 @@ export function InteractiveBackground() {
     }
 
     // ASCII Grid Effect
+    const asciiTimeRef = useRef(0)
     const drawAsciiGrid = (time: number) => {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -428,6 +429,11 @@ export function InteractiveBackground() {
 
       ctx.font = '12px monospace'
 
+      // Update time only if not paused
+      if (!asciiPaused) {
+        asciiTimeRef.current = time
+      }
+
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
           const x = i * gridSize
@@ -438,7 +444,7 @@ export function InteractiveBackground() {
           const distance = Math.sqrt(dx * dx + dy * dy)
 
           const opacity = Math.max(0, 1 - distance / 200) * 0.6
-          const timeOffset = (i + j + time * 0.001) % chars.length
+          const timeOffset = (i + j + asciiTimeRef.current * 0.001) % chars.length
           const char = chars[Math.floor(timeOffset)]
 
           ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
@@ -544,28 +550,39 @@ export function InteractiveBackground() {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((particle, i) => {
-        const dx = mousePos.current.x - particle.x
-        const dy = mousePos.current.y - particle.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
+        if (!particlePaused) {
+          const dx = mousePos.current.x - particle.x
+          const dy = mousePos.current.y - particle.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
 
-        if (distance < 150) {
-          const force = (150 - distance) / 150
-          particle.vx += (dx / distance) * force * 0.1
-          particle.vy += (dy / distance) * force * 0.1
+          if (distance < 150) {
+            const force = (150 - distance) / 150
+            particle.vx += (dx / distance) * force * 0.1
+            particle.vy += (dy / distance) * force * 0.1
+          }
+
+          particle.x += particle.vx
+          particle.y += particle.vy
+          particle.vx *= 0.99
+          particle.vy *= 0.99
+
+          if (particle.x < 0) particle.x = canvas.width
+          if (particle.x > canvas.width) particle.x = 0
+          if (particle.y < 0) particle.y = canvas.height
+          if (particle.y > canvas.height) particle.y = 0
         }
 
-        particle.x += particle.vx
-        particle.y += particle.vy
-        particle.vx *= 0.99
-        particle.vy *= 0.99
-
-        if (particle.x < 0) particle.x = canvas.width
-        if (particle.x > canvas.width) particle.x = 0
-        if (particle.y < 0) particle.y = canvas.height
-        if (particle.y > canvas.height) particle.y = 0
-
         const opacity = Math.min(0.8, 0.3 + (Math.abs(particle.vx) + Math.abs(particle.vy)) * 2)
-        ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
+
+        // Rainbow mode: cycle through hues based on position
+        let color = '59, 130, 246' // default blue
+        if (particleRainbow) {
+          const hue = ((particle.x + particle.y + time * 0.05) % 360)
+          const rgb = hslToRgb(hue / 360, 0.7, 0.6)
+          color = `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`
+        }
+
+        ctx.fillStyle = `rgba(${color}, ${opacity})`
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fill()
@@ -577,7 +594,7 @@ export function InteractiveBackground() {
           const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2)
 
           if (dist < 100) {
-            ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - dist / 100) * 0.2})`
+            ctx.strokeStyle = `rgba(${color}, ${(1 - dist / 100) * 0.2})`
             ctx.lineWidth = 0.5
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)
@@ -588,13 +605,44 @@ export function InteractiveBackground() {
       })
     }
 
+    // Helper function to convert HSL to RGB
+    const hslToRgb = (h: number, s: number, l: number): [number, number, number] => {
+      let r, g, b
+      if (s === 0) {
+        r = g = b = l
+      } else {
+        const hue2rgb = (p: number, q: number, t: number) => {
+          if (t < 0) t += 1
+          if (t > 1) t -= 1
+          if (t < 1/6) return p + (q - p) * 6 * t
+          if (t < 1/2) return q
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
+          return p
+        }
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+        const p = 2 * l - q
+        r = hue2rgb(p, q, h + 1/3)
+        g = hue2rgb(p, q, h)
+        b = hue2rgb(p, q, h - 1/3)
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
+    }
+
     // Terminal Effect
     const drawTerminal = (time: number) => {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // darker background for readability
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       ctx.font = '14px monospace'
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.9)'
+
+      // Terminal color based on setting
+      const terminalColorMap = {
+        blue: '59, 130, 246',
+        green: '34, 197, 94',
+        amber: '217, 119, 6'
+      }
+      const terminalRgb = terminalColorMap[terminalColorScheme]
+      ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
 
       const lineHeight = 20
       const startY = 30
@@ -625,13 +673,13 @@ export function InteractiveBackground() {
 
       // Subtle screen flicker
       if (Math.random() > 0.97) {
-        ctx.fillStyle = `rgba(59, 130, 246, ${0.02 + Math.random() * 0.03})`
+        ctx.fillStyle = `rgba(${terminalRgb}, ${0.02 + Math.random() * 0.03})`
         ctx.fillRect(0, 0, canvas.width, canvas.height)
       }
 
       // Hint text
       ctx.font = '12px monospace'
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.4)'
+      ctx.fillStyle = `rgba(${terminalRgb}, 0.4)`
       ctx.fillText('Click background to cycle modes | Type and press Enter', padding, canvas.height - 20)
     }
 
