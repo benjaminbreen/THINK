@@ -75,6 +75,10 @@ export function InteractiveBackground() {
   // ASCII animation time reference for pause functionality
   const asciiTimeRef = useRef(0)
 
+  // Matrix animation state for pause functionality
+  const matrixChars = useRef<string[]>([])
+  const matrixLastChange = useRef<number[]>([])
+
   // Humanistic quotes from across cultures and time
   const humanisticQuotes = [
     { text: "Know thyself", author: "Socrates" },
@@ -493,8 +497,12 @@ export function InteractiveBackground() {
     // Matrix Rain Effect with Walt Whitman words
     const matrixColumns = Math.floor(canvas.width / 20)
     const matrixDrops: number[] = Array(matrixColumns).fill(0)
-    const matrixChars = useRef<string[]>(Array(matrixColumns).fill(''))
-    const matrixLastChange = useRef<number[]>(Array(matrixColumns).fill(0))
+
+    // Initialize matrix state arrays if not already initialized
+    if (matrixChars.current.length === 0) {
+      matrixChars.current = Array(matrixColumns).fill('')
+      matrixLastChange.current = Array(matrixColumns).fill(0)
+    }
 
     // Walt Whitman vocabulary from "Leaves of Grass" and other poems
     const whitmanWords = [
