@@ -1183,7 +1183,7 @@ export default function ResourcesPage() {
                       </div>
                       <div className="space-y-3">
                         {categoryResources.map((resource, index) => (
-                          <Card key={index} className="hover:shadow-md transition-shadow">
+                          <Card key={index} className="hover-lift-glow">
                             <CardContent className="p-4">
                               <div className="flex gap-4">
                                 <div className="flex-1 min-w-0">
@@ -1245,7 +1245,7 @@ export default function ResourcesPage() {
                       </div>
                       <div className="space-y-3">
                         {typeResources.map((resource, index) => (
-                          <Card key={index} className="hover:shadow-md transition-shadow">
+                          <Card key={index} className="hover-lift-glow">
                             <CardContent className="p-4">
                               <div className="flex gap-4">
                                 <div className="flex-1 min-w-0">
@@ -1296,7 +1296,7 @@ export default function ResourcesPage() {
                 {!isGroupedView && (
                   <div className="space-y-3">
                     {filteredAndSortedResources.map((resource, index) => (
-                      <Card key={index} className="hover:shadow-md transition-shadow">
+                      <Card key={index} className="hover-lift-glow">
                         <CardContent className="p-4">
                           <div className="flex gap-4">
                             <div className="flex-1 min-w-0">

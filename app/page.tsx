@@ -13,7 +13,7 @@ export default function HomePage() {
     <>
       <LiteraryTransformer />
       {/* Hero Section */}
-      <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24 relative overflow-hidden">
+      <Section className="pt-24 pb-16 sm:pt-32 sm:pb-24 relative overflow-hidden mixed-mode-dark">
         <InteractiveBackground />
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl">
@@ -80,7 +80,7 @@ export default function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* HistoryLens */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Framework</Badge>
@@ -104,7 +104,7 @@ export default function HomePage() {
             </Card>
 
             {/* Young Darwin */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Simulation</Badge>
@@ -127,7 +127,7 @@ export default function HomePage() {
             </Card>
 
             {/* Apothecary Simulator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Simulation</Badge>
@@ -150,7 +150,7 @@ export default function HomePage() {
             </Card>
 
             {/* History Simulator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Generator</Badge>
@@ -173,7 +173,7 @@ export default function HomePage() {
             </Card>
 
             {/* Historical Figure Generator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-3">
                   <Badge variant="secondary" className="text-xs">Generator</Badge>
@@ -229,7 +229,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <Code className="h-5 w-5 text-primary" />
@@ -246,7 +246,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <Sparkles className="h-5 w-5 text-primary" />
@@ -263,7 +263,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <GraduationCap className="h-5 w-5 text-primary" />
@@ -280,7 +280,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <Microscope className="h-5 w-5 text-primary" />
@@ -297,7 +297,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <FileText className="h-5 w-5 text-primary" />
@@ -314,7 +314,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
+            <Card className="group hover-lift-glow">
               <CardHeader>
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                   <BookOpen className="h-5 w-5 text-primary" />

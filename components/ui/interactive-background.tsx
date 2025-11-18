@@ -469,10 +469,15 @@ export function InteractiveBackground() {
           text = binaryChars[Math.floor(Math.random() * binaryChars.length)]
         }
 
-        const opacity = 0.3 + influence * 0.5
+        // Occasional character glitch
+        const glitch = Math.random() > 0.98
+        const opacity = glitch ? 1 : 0.3 + influence * 0.5
 
         ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
-        ctx.fillText(text, i * 20, matrixDrops[i] * 20)
+
+        // Glitch effect - random horizontal offset
+        const glitchOffset = glitch ? (Math.random() - 0.5) * 10 : 0
+        ctx.fillText(text, i * 20 + glitchOffset, matrixDrops[i] * 20)
 
         if (matrixDrops[i] * 20 > canvas.height && Math.random() > 0.975) {
           matrixDrops[i] = 0
@@ -581,6 +586,18 @@ export function InteractiveBackground() {
       if (terminalCursorBlink.current < 30) {
         const cursorX = padding + ctx.measureText(inputLine).width + 2
         ctx.fillRect(cursorX, currentY - 12, 8, 14)
+      }
+
+      // CRT scanline effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
+      for (let y = 0; y < canvas.height; y += 3) {
+        ctx.fillRect(0, y, canvas.width, 1)
+      }
+
+      // Subtle screen flicker
+      if (Math.random() > 0.97) {
+        ctx.fillStyle = `rgba(59, 130, 246, ${0.02 + Math.random() * 0.03})`
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
       }
 
       // Hint text

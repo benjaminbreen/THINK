@@ -24,7 +24,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t bg-muted/40">
+    <footer className="border-t mixed-mode-dark">
       <Container>
         <div className="py-12 md:py-16">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">

@@ -24,6 +24,10 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+
+    /* Secondary accent colors */
+    --accent-amber: 29 96% 48%;
+    --accent-amber-foreground: 0 0% 100%;
   }
 
   .dark {
@@ -46,6 +50,10 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
+
+    /* Secondary accent colors */
+    --accent-sage: 160 84% 39%;
+    --accent-sage-foreground: 0 0% 100%;
   }
 }
 
@@ -55,6 +63,15 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Improved typography */
+  p {
+    line-height: 1.75;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.015em;
   }
 }
 
@@ -135,6 +152,24 @@ html {
   }
 }
 
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(var(--primary), 0.15);
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
 }
@@ -198,6 +233,76 @@ html {
 
 .hover-lift:hover {
   @apply -translate-y-1 shadow-xl;
+}
+
+/* Enhanced hover lift with glow */
+.hover-lift-glow {
+  @apply transition-all duration-300;
+}
+
+.hover-lift-glow:hover {
+  @apply -translate-y-1;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(0, 0, 0, 0.02),
+              0 0 20px rgba(var(--primary), 0.08);
+}
+
+.dark .hover-lift-glow:hover {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.05),
+              0 0 20px rgba(var(--primary), 0.15);
+}
+
+/* Mixed-mode sections (always dark) */
+.mixed-mode-dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
+}
+
+/* Gradient borders */
+.gradient-border {
+  position: relative;
+  border: none;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+    hsl(var(--border)) 0%,
+    transparent 50%,
+    hsl(var(--border)) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+}
+
+/* Focus glow */
+.focus-glow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.3),
+              0 0 15px hsl(var(--ring) / 0.2);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Prose styles for MDX content */
