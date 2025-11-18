@@ -161,12 +161,9 @@ export function LiteraryTransformer() {
   const [originalContent, setOriginalContent] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    // Check for saved style on mount
+    // Clear any saved style on mount (reset on page refresh)
     if (typeof window !== 'undefined') {
-      const savedStyle = localStorage.getItem('THINK_textStyle')
-      if (savedStyle && styleTransformations[savedStyle as keyof typeof styleTransformations]) {
-        setCurrentStyle(savedStyle)
-      }
+      localStorage.removeItem('THINK_textStyle')
     }
 
     // Listen for style change events

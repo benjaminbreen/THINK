@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'constellation'
+type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca'
 
 // Get random starting mode
 const getRandomMode = (): BackgroundMode => {
-  const modes: BackgroundMode[] = ['ascii', 'matrix', 'particles', 'terminal', 'labyrinth', 'constellation']
+  const modes: BackgroundMode[] = ['ascii', 'matrix', 'particles', 'terminal', 'labyrinth', 'bibliotheca']
   return modes[Math.floor(Math.random() * modes.length)]
 }
 
@@ -39,12 +39,47 @@ export function InteractiveBackground() {
     messageTime: 0
   })
 
-  // Constellation state (easter egg)
-  const stars = useRef<Array<{ x: number; y: number; size: number; twinkle: number }>>([])
-  const konamiCode = useRef<string[]>([])
-  const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight']
-  const secretWord = useRef('')
-  const easterEggActive = useRef(false)
+  // Bibliotheca state (Living Library)
+  const books = useRef<Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    rotation: number
+    rotationSpeed: number
+    type: 'book' | 'scroll' | 'manuscript'
+    quote: string
+    author: string
+    open: boolean
+    openProgress: number
+    hovered: boolean
+    size: number
+  }>>([])
+  const dustMotes = useRef<Array<{ x: number; y: number; vx: number; vy: number; opacity: number }>>([])
+
+  // Humanistic quotes from across cultures and time
+  const humanisticQuotes = [
+    { text: "Know thyself", author: "Socrates" },
+    { text: "The unexamined life is not worth living", author: "Socrates" },
+    { text: "I think, therefore I am", author: "Descartes" },
+    { text: "Man is the measure of all things", author: "Protagoras" },
+    { text: "The only true wisdom is knowing you know nothing", author: "Socrates" },
+    { text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment", author: "Emerson" },
+    { text: "What is truth?", author: "Pilate" },
+    { text: "Do not go gentle into that good night", author: "Dylan Thomas" },
+    { text: "I am large, I contain multitudes", author: "Whitman" },
+    { text: "The past is never dead. It's not even past", author: "Faulkner" },
+    { text: "In my beginning is my end", author: "Eliot" },
+    { text: "Between the idea and the reality falls the shadow", author: "Eliot" },
+    { text: "Hell is other people", author: "Sartre" },
+    { text: "One must imagine Sisyphus happy", author: "Camus" },
+    { text: "Esse est percipi - To be is to be perceived", author: "Berkeley" },
+    { text: "The owl of Minerva spreads its wings only with the falling of dusk", author: "Hegel" },
+    { text: "All that is solid melts into air", author: "Marx" },
+    { text: "God is dead", author: "Nietzsche" },
+    { text: "Become who you are", author: "Nietzsche" },
+    { text: "The limits of my language mean the limits of my world", author: "Wittgenstein" },
+  ]
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -58,10 +93,11 @@ export function InteractiveBackground() {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
 
-      // Reinitialize stars when resizing
-      if (mode === 'constellation' && stars.current.length > 0) {
-        // Clear stars so they're reinitalized with new canvas dimensions
-        stars.current = []
+      // Reinitialize bibliotheca when resizing
+      if (mode === 'bibliotheca' && books.current.length > 0) {
+        // Clear books so they're reinitialized with new canvas dimensions
+        books.current = []
+        dustMotes.current = []
       }
     }
     resizeCanvas()
@@ -153,30 +189,8 @@ export function InteractiveBackground() {
             }
           }
         }
-      } else if (mode === 'constellation') {
-        // Konami code check
-        konamiCode.current.push(e.key)
-        if (konamiCode.current.length > konamiSequence.length) {
-          konamiCode.current.shift()
-        }
-
-        if (JSON.stringify(konamiCode.current) === JSON.stringify(konamiSequence)) {
-          easterEggActive.current = !easterEggActive.current
-          konamiCode.current = []
-        }
-
-        // Secret word "THINK"
-        if (e.key.length === 1) {
-          secretWord.current += e.key.toLowerCase()
-          if (secretWord.current.length > 5) {
-            secretWord.current = secretWord.current.slice(-5)
-          }
-          if (secretWord.current === 'think') {
-            easterEggActive.current = true
-            secretWord.current = ''
-          }
-        }
       }
+      // Bibliotheca mode doesn't require keyboard input - mouse interaction only
     }
     window.addEventListener('keydown', handleKeyDown)
 
@@ -352,15 +366,40 @@ export function InteractiveBackground() {
       labyrinth.current.messageTime = Date.now()
     }
 
-    // Initialize stars for constellation
-    const initStars = () => {
-      stars.current = []
-      for (let i = 0; i < 150; i++) {
-        stars.current.push({
+    // Initialize Bibliotheca - Living Library with floating books
+    const initBibliotheca = () => {
+      books.current = []
+      dustMotes.current = []
+
+      // Create floating books with humanistic quotes
+      for (let i = 0; i < 15; i++) {
+        const quote = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)]
+        const types: Array<'book' | 'scroll' | 'manuscript'> = ['book', 'scroll', 'manuscript']
+        books.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2,
-          twinkle: Math.random() * Math.PI * 2
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.01,
+          type: types[Math.floor(Math.random() * types.length)],
+          quote: quote.text,
+          author: quote.author,
+          open: false,
+          openProgress: 0,
+          hovered: false,
+          size: 30 + Math.random() * 20,
+        })
+      }
+
+      // Create dust motes for atmosphere
+      for (let i = 0; i < 50; i++) {
+        dustMotes.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: Math.random() * 0.1 - 0.05,
+          opacity: Math.random() * 0.3,
         })
       }
     }
@@ -649,66 +688,206 @@ export function InteractiveBackground() {
       }
     }
 
-    // Constellation Effect (Easter Egg)
-    const drawConstellation = (time: number) => {
-      ctx.fillStyle = 'rgba(10, 15, 30, 0.5)' // very dark blue-black
+    // Bibliotheca - Living Library with floating books and scrolls
+    const drawBibliotheca = (time: number) => {
+      // Deep library background with warm glow
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 0,
+        canvas.width / 2, canvas.height / 2, canvas.width / 2
+      )
+      gradient.addColorStop(0, 'rgba(30, 20, 10, 0.95)')
+      gradient.addColorStop(1, 'rgba(10, 5, 0, 0.98)')
+      ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Initialize stars if needed
-      if (stars.current.length === 0) {
-        initStars()
+      // Initialize if needed
+      if (books.current.length === 0) {
+        initBibliotheca()
       }
 
-      // Draw and twinkle stars
-      stars.current.forEach((star: { x: number; y: number; size: number; twinkle: number }, i: number) => {
-        star.twinkle += 0.05
-        const twinkle = Math.sin(star.twinkle) * 0.5 + 0.5
-        const opacity = 0.3 + twinkle * 0.4
+      // Update and draw dust motes for atmosphere
+      dustMotes.current.forEach((mote: { x: number; y: number; vx: number; vy: number; opacity: number }) => {
+        mote.x += mote.vx
+        mote.y += mote.vy
 
-        // Distance from mouse affects brightness
-        const dx = mousePos.current.x - star.x
-        const dy = mousePos.current.y - star.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        const mouseInfluence = Math.max(0, 1 - distance / 150) * 0.3
+        if (mote.x < 0) mote.x = canvas.width
+        if (mote.x > canvas.width) mote.x = 0
+        if (mote.y < 0) mote.y = canvas.height
+        if (mote.y > canvas.height) mote.y = 0
 
-        ctx.fillStyle = `rgba(147, 197, 253, ${opacity + mouseInfluence})` // blue-300
+        ctx.fillStyle = `rgba(200, 180, 150, ${mote.opacity})`
         ctx.beginPath()
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
+        ctx.arc(mote.x, mote.y, 1, 0, Math.PI * 2)
         ctx.fill()
-
-        // Draw connections for nearby stars
-        if (easterEggActive.current) {
-          stars.current.forEach((otherStar: { x: number; y: number; size: number; twinkle: number }, j: number) => {
-            if (i >= j) return
-            const dx2 = star.x - otherStar.x
-            const dy2 = star.y - otherStar.y
-            const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2)
-
-            if (dist < 100) {
-              ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - dist / 100) * 0.3})`
-              ctx.lineWidth = 1
-              ctx.beginPath()
-              ctx.moveTo(star.x, star.y)
-              ctx.lineTo(otherStar.x, otherStar.y)
-              ctx.stroke()
-            }
-          })
-        }
       })
 
-      // Easter egg activated message
-      if (easterEggActive.current) {
-        ctx.font = 'bold 24px monospace'
-        ctx.fillStyle = 'rgba(59, 130, 246, 0.9)'
-        const text = '★ CONSTELLATION REVEALED ★'
-        const textWidth = ctx.measureText(text).width
-        ctx.fillText(text, (canvas.width - textWidth) / 2, 40)
-      }
+      // Update and draw books
+      books.current.forEach((book: {
+        x: number; y: number; vx: number; vy: number; rotation: number; rotationSpeed: number;
+        type: 'book' | 'scroll' | 'manuscript'; quote: string; author: string; open: boolean;
+        openProgress: number; hovered: boolean; size: number
+      }) => {
+        // Update position
+        book.x += book.vx
+        book.y += book.vy
+        book.rotation += book.rotationSpeed
+
+        // Wrap around edges
+        if (book.x < -book.size) book.x = canvas.width + book.size
+        if (book.x > canvas.width + book.size) book.x = -book.size
+        if (book.y < -book.size) book.y = canvas.height + book.size
+        if (book.y > canvas.height + book.size) book.y = -book.size
+
+        // Check if mouse is hovering
+        const dx = mousePos.current.x - book.x
+        const dy = mousePos.current.y - book.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        const wasHovered = book.hovered
+        book.hovered = distance < book.size * 1.5
+
+        // Animate opening/closing
+        if (book.hovered) {
+          book.openProgress = Math.min(1, book.openProgress + 0.05)
+          if (!wasHovered && !book.open) {
+            book.open = true
+          }
+        } else {
+          book.openProgress = Math.max(0, book.openProgress - 0.03)
+          if (book.openProgress === 0) {
+            book.open = false
+          }
+        }
+
+        ctx.save()
+        ctx.translate(book.x, book.y)
+        ctx.rotate(book.rotation * (1 - book.openProgress * 0.8))
+
+        // Draw book/scroll/manuscript
+        if (book.type === 'book') {
+          // Book spine
+          const baseOpacity = 0.6 + book.openProgress * 0.3
+          ctx.fillStyle = `rgba(139, 92, 46, ${baseOpacity})` // Brown leather
+          ctx.fillRect(-book.size / 2, -book.size / 2, book.size, book.size * 1.3)
+
+          // Book pages opening
+          if (book.openProgress > 0) {
+            const pageSpread = book.size * book.openProgress
+            ctx.fillStyle = `rgba(240, 230, 210, ${0.9 * book.openProgress})` // Aged paper
+            ctx.fillRect(-pageSpread / 2, -book.size / 2, pageSpread, book.size * 1.3)
+
+            // Draw quote on pages
+            ctx.fillStyle = `rgba(50, 40, 30, ${book.openProgress})`
+            ctx.font = `${10 + book.openProgress * 2}px serif`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+
+            // Wrap text
+            const words = book.quote.split(' ')
+            let line = ''
+            let y = -10
+            words.forEach((word: string) => {
+              const testLine = line + word + ' '
+              if (ctx.measureText(testLine).width > pageSpread * 0.8 && line !== '') {
+                ctx.fillText(line, 0, y)
+                line = word + ' '
+                y += 14
+              } else {
+                line = testLine
+              }
+            })
+            ctx.fillText(line, 0, y)
+
+            // Draw author
+            ctx.font = `${8 + book.openProgress}px italic serif`
+            ctx.fillText(`— ${book.author}`, 0, y + 20)
+          }
+        } else if (book.type === 'scroll') {
+          // Scroll
+          const scrollLength = book.size * (1 + book.openProgress * 2)
+          ctx.fillStyle = `rgba(220, 200, 170, ${0.7 + book.openProgress * 0.2})`
+          ctx.fillRect(-book.size / 4, -scrollLength / 2, book.size / 2, scrollLength)
+
+          // Scroll ends
+          ctx.fillStyle = `rgba(100, 70, 40, ${0.6})`
+          ctx.fillRect(-book.size / 4 - 3, -scrollLength / 2 - 5, book.size / 2 + 6, 5)
+          ctx.fillRect(-book.size / 4 - 3, scrollLength / 2, book.size / 2 + 6, 5)
+
+          if (book.openProgress > 0.3) {
+            ctx.fillStyle = `rgba(40, 30, 20, ${book.openProgress})`
+            ctx.font = `${9}px serif`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            const words = book.quote.split(' ')
+            let line = ''
+            let y = -scrollLength / 4
+            words.forEach((word: string) => {
+              const testLine = line + word + ' '
+              if (ctx.measureText(testLine).width > book.size * 0.4 && line !== '') {
+                ctx.fillText(line, 0, y)
+                line = word + ' '
+                y += 12
+              } else {
+                line = testLine
+              }
+            })
+            ctx.fillText(line, 0, y)
+            ctx.font = `${7}px italic serif`
+            ctx.fillText(`— ${book.author}`, 0, scrollLength / 4)
+          }
+        } else {
+          // Manuscript pages
+          ctx.fillStyle = `rgba(235, 220, 200, ${0.8 + book.openProgress * 0.15})`
+          const pageWidth = book.size * (0.7 + book.openProgress * 0.6)
+          ctx.fillRect(-pageWidth / 2, -book.size / 2, pageWidth, book.size * 1.2)
+
+          // Ornate border
+          ctx.strokeStyle = `rgba(150, 100, 50, ${0.5 + book.openProgress * 0.4})`
+          ctx.lineWidth = 2
+          ctx.strokeRect(-pageWidth / 2 + 5, -book.size / 2 + 5, pageWidth - 10, book.size * 1.2 - 10)
+
+          if (book.openProgress > 0.2) {
+            ctx.fillStyle = `rgba(40, 30, 20, ${book.openProgress})`
+            ctx.font = `${10}px serif`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            const words = book.quote.split(' ')
+            let line = ''
+            let y = -book.size / 4
+            words.forEach((word: string) => {
+              const testLine = line + word + ' '
+              if (ctx.measureText(testLine).width > pageWidth * 0.7 && line !== '') {
+                ctx.fillText(line, 0, y)
+                line = word + ' '
+                y += 13
+              } else {
+                line = testLine
+              }
+            })
+            ctx.fillText(line, 0, y)
+            ctx.font = `${8}px italic serif`
+            ctx.fillText(`— ${book.author}`, 0, y + 22)
+          }
+        }
+
+        // Glow effect when hovered
+        if (book.hovered) {
+          ctx.shadowBlur = 20 * book.openProgress
+          ctx.shadowColor = 'rgba(255, 220, 150, 0.8)'
+        }
+
+        ctx.restore()
+      })
+
+      // Draw title
+      ctx.font = 'bold 16px serif'
+      ctx.fillStyle = 'rgba(220, 200, 170, 0.7)'
+      ctx.textAlign = 'left'
+      ctx.fillText('✦ Bibliotheca Humanitatis ✦', 20, 30)
 
       // Hint text
-      ctx.font = '12px monospace'
-      ctx.fillStyle = 'rgba(147, 197, 253, 0.4)'
-      ctx.fillText('Try typing "THINK" or the Konami code...', 20, canvas.height - 20)
+      ctx.font = '12px serif'
+      ctx.fillStyle = 'rgba(200, 180, 150, 0.5)'
+      ctx.fillText('Hover over books to reveal wisdom from across the ages', 20, canvas.height - 20)
     }
 
     // Animation loop
@@ -727,8 +906,8 @@ export function InteractiveBackground() {
         drawTerminal(time)
       } else if (mode === 'labyrinth') {
         drawLabyrinth(time)
-      } else if (mode === 'constellation') {
-        drawConstellation(time)
+      } else if (mode === 'bibliotheca') {
+        drawBibliotheca(time)
       }
 
       animationFrameId.current = requestAnimationFrame(animate)
@@ -753,7 +932,7 @@ export function InteractiveBackground() {
       if (current === 'matrix') return 'particles'
       if (current === 'particles') return 'terminal'
       if (current === 'terminal') return 'labyrinth'
-      if (current === 'labyrinth') return 'constellation'
+      if (current === 'labyrinth') return 'bibliotheca'
       return 'ascii'
     })
 
@@ -777,11 +956,10 @@ export function InteractiveBackground() {
       labyrinth.current.solved = false
     }
 
-    // Reset easter egg when leaving
-    if (mode === 'constellation') {
-      easterEggActive.current = false
-      secretWord.current = ''
-      konamiCode.current = []
+    // Reset bibliotheca when leaving
+    if (mode === 'bibliotheca') {
+      books.current = []
+      dustMotes.current = []
     }
   }
 
