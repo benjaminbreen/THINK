@@ -1313,15 +1313,19 @@ export function InteractiveBackground() {
     forceUpdate(n => n + 1)
   }
 
-  // Render canvas wrapper with conditional styling for modal vs normal mode
-  const canvasElement = (
-    <canvas
-      ref={canvasRef}
-      onClick={isExpanded ? undefined : cycleMode}
-      className={isExpanded ? "absolute inset-0 w-full h-full rounded-lg" : "absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"}
-      style={{ opacity: isExpanded ? 1 : 0.6 }}
-    />
-  )
+  // Resize canvas when expanded state changes
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    // Small delay to ensure DOM has updated after portal renders
+    const timer = setTimeout(() => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }, 0)
+
+    return () => clearTimeout(timer)
+  }, [isExpanded])
 
   if (isExpanded && isMounted) {
     // Render modal via portal
@@ -1354,8 +1358,12 @@ export function InteractiveBackground() {
                   ✕
                 </button>
 
-                {/* Canvas */}
-                {canvasElement}
+                {/* Canvas - render directly here */}
+                <canvas
+                  ref={canvasRef}
+                  className="absolute inset-0 w-full h-full rounded-lg"
+                  style={{ opacity: 1 }}
+                />
 
                 {/* Controls */}
                 <div className="absolute bottom-4 right-4 z-[10000] flex flex-col gap-2">
@@ -1389,7 +1397,12 @@ export function InteractiveBackground() {
   // Normal mode
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none">
-      {canvasElement}
+      <canvas
+        ref={canvasRef}
+        onClick={cycleMode}
+        className="absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"
+        style={{ opacity: 0.6 }}
+      />
       {renderControls()}
     </div>
   )
