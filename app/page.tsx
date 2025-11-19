@@ -1,13 +1,76 @@
+'use client'
+
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter } from 'lucide-react'
+import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter, ArrowUpDown } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
+import { projects, filterProjects, sortProjects, type ProjectType, type Discipline } from '@/data/projects'
 
 export default function HomePage() {
+  const [typeFilter, setTypeFilter] = useState<ProjectType | 'all'>('all')
+  const [disciplineFilter, setDisciplineFilter] = useState<Discipline | 'all'>('all')
+  const [sortBy, setSortBy] = useState<'date-desc' | 'date-asc' | 'name-asc' | 'name-desc'>('date-desc')
+
+  // Filter and sort projects
+  const filteredAndSortedProjects = useMemo(() => {
+    const filtered = filterProjects(projects, {
+      type: typeFilter,
+      discipline: disciplineFilter
+    })
+    return sortProjects(filtered, sortBy)
+  }, [typeFilter, disciplineFilter, sortBy])
+
+  // Helper to get display label for tool tag
+  const getToolTagLabel = (tag: string) => {
+    const labels: Record<string, string> = {
+      'framework': 'Framework',
+      'simulation': 'Simulation',
+      'generator': 'Generator',
+      'analyzer': 'Analyzer'
+    }
+    return labels[tag] || tag
+  }
+
+  // Helper to get display label for project type
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      'classroom-assignment': 'Classroom Assignment',
+      'full-course': 'Full Course',
+      'research-tool': 'Research Tool'
+    }
+    return labels[type] || type
+  }
+
+  // Helper to format date
+  const formatDate = (dateString: string) => {
+    const [year, month] = dateString.split('-')
+    return year
+  }
+
+  // Cycle through sort options
+  const cycleSortOrder = () => {
+    const sortOptions: Array<'date-desc' | 'date-asc' | 'name-asc' | 'name-desc'> = ['date-desc', 'date-asc', 'name-asc', 'name-desc']
+    const currentIndex = sortOptions.indexOf(sortBy)
+    const nextIndex = (currentIndex + 1) % sortOptions.length
+    setSortBy(sortOptions[nextIndex])
+  }
+
+  const getSortLabel = () => {
+    const labels = {
+      'date-desc': 'Newest First',
+      'date-asc': 'Oldest First',
+      'name-asc': 'A → Z',
+      'name-desc': 'Z → A'
+    }
+    return labels[sortBy]
+  }
+
   return (
     <>
       {/* Hero Section */}
@@ -52,167 +115,207 @@ export default function HomePage() {
       <Section id="projects" className="bg-muted/40">
         <Container>
           <div className="mb-12">
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
               <div>
                 <h2 className="text-3xl font-serif font-bold mb-2">Project Gallery</h2>
                 <p className="text-muted-foreground">
-                  Experimental AI tools for humanities teaching and research
+                  {filteredAndSortedProjects.length} experimental AI tool{filteredAndSortedProjects.length !== 1 ? 's' : ''} for humanities teaching and research
                 </p>
               </div>
-              <Button variant="outline" size="sm">
-                <Filter className="mr-2 h-4 w-4" /> Filter by type
+              <Button variant="outline" size="sm" onClick={cycleSortOrder}>
+                <ArrowUpDown className="mr-2 h-4 w-4" /> {getSortLabel()}
               </Button>
             </div>
 
-            {/* Filter tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">All Projects</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Classroom Assignment</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Full Course</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Research Tool</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">History</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Literature</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-accent">Linguistics</Badge>
+            {/* Filter controls */}
+            <div className="space-y-4 mb-8">
+              {/* Type filters */}
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                  <Filter className="h-3.5 w-3.5" /> Filter by Type
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <Badge
+                    variant={typeFilter === 'all' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setTypeFilter('all')}
+                  >
+                    All Projects
+                  </Badge>
+                  <Badge
+                    variant={typeFilter === 'classroom-assignment' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setTypeFilter('classroom-assignment')}
+                  >
+                    Classroom Assignment
+                  </Badge>
+                  <Badge
+                    variant={typeFilter === 'full-course' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setTypeFilter('full-course')}
+                  >
+                    Full Course
+                  </Badge>
+                  <Badge
+                    variant={typeFilter === 'research-tool' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setTypeFilter('research-tool')}
+                  >
+                    Research Tool
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Discipline filters */}
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                  <Filter className="h-3.5 w-3.5" /> Filter by Discipline
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <Badge
+                    variant={disciplineFilter === 'all' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setDisciplineFilter('all')}
+                  >
+                    All Disciplines
+                  </Badge>
+                  <Badge
+                    variant={disciplineFilter === 'history' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setDisciplineFilter('history')}
+                  >
+                    History
+                  </Badge>
+                  <Badge
+                    variant={disciplineFilter === 'literature' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setDisciplineFilter('literature')}
+                  >
+                    Literature
+                  </Badge>
+                  <Badge
+                    variant={disciplineFilter === 'linguistics' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setDisciplineFilter('linguistics')}
+                  >
+                    Linguistics
+                  </Badge>
+                  <Badge
+                    variant={disciplineFilter === 'interdisciplinary' ? 'default' : 'outline'}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => setDisciplineFilter('interdisciplinary')}
+                  >
+                    Interdisciplinary
+                  </Badge>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* HistoryLens */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Framework</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">HistoryLens</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Framework for creating AI historical simulations grounded in primary sources
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Full Course</Badge>
-                  <Badge variant="outline" className="text-xs">Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/historylens" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+          <motion.div
+            layout
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredAndSortedProjects.map((project) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="group hover:shadow-lg transition-all duration-300 hover-lift h-full">
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-3">
+                        <Badge variant="secondary" className="text-xs">
+                          {getToolTagLabel(project.toolTag)}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {formatDate(project.date)}
+                        </span>
+                      </div>
+                      <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
+                      <CardDescription className="text-sm mb-3">
+                        {project.description}
+                      </CardDescription>
+                      <div className="flex flex-wrap gap-1.5">
+                        <Badge variant="outline" className="text-xs capitalize">
+                          {project.discipline}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {getTypeLabel(project.type)}
+                        </Badge>
+                        {project.featured && (
+                          <Badge variant="outline" className="text-xs bg-primary/5">
+                            ⭐ Featured
+                          </Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex gap-2 flex-wrap">
+                        <Link
+                          href={project.links.docs || `/projects/${project.slug}`}
+                          className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
+                        >
+                          View project <ArrowRight className="ml-1 h-3 w-3" />
+                        </Link>
+                        {project.links.demo && (
+                          <a
+                            href={project.links.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-muted-foreground hover:text-primary hover:underline inline-flex items-center"
+                          >
+                            Try demo
+                          </a>
+                        )}
+                        {project.links.github && (
+                          <a
+                            href={project.links.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-muted-foreground hover:text-primary hover:underline inline-flex items-center"
+                          >
+                            GitHub
+                          </a>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
 
-            {/* Young Darwin */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Simulation</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Young Darwin</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Interactive simulation of Darwin's Galápagos expedition with specimen collection
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Classroom Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/young-darwin" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Apothecary Simulator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Simulation</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Apothecary Simulator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  17th century medical practice using authentic early modern recipes
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Classroom Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/apothecary-simulator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* History Simulator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Generator</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">History Simulator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Generate historically plausible scenarios and figures for exploration
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Research Tool</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/history-simulator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Historical Figure Generator */}
-            <Card className="group hover:shadow-lg transition-all duration-300 hover-lift">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Generator</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Historical Figure Generator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Create randomized but plausible historical figures from different eras
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Research Tool</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/historical-figure-generator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Placeholder for community contributions */}
-            <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors">
-              <CardHeader>
-                <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
-                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-                    <Code className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <div className="text-center">
-                    <CardTitle className="text-lg mb-2">Share Your Project</CardTitle>
-                    <CardDescription className="text-sm">
-                      Built something interesting? We'd love to feature it here.
-                    </CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm" asChild>
-                    <a href="mailto:bbreen@ucsc.edu">Get in touch</a>
-                  </Button>
-                </div>
-              </CardHeader>
-            </Card>
-          </div>
+              {/* Placeholder for community contributions */}
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors h-full">
+                  <CardHeader>
+                    <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
+                      <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                        <Code className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                      <div className="text-center">
+                        <CardTitle className="text-lg mb-2">Share Your Project</CardTitle>
+                        <CardDescription className="text-sm">
+                          Built something interesting? We'd love to feature it here.
+                        </CardDescription>
+                      </div>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href="mailto:bbreen@ucsc.edu">Get in touch</a>
+                      </Button>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </Container>
       </Section>
 
