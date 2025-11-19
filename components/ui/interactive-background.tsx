@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca'
 
@@ -32,14 +31,6 @@ export function InteractiveBackground() {
 
   // Force re-render for control UI updates
   const [, forceUpdate] = useState(0)
-
-  // Track if component is mounted (for portal)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-    return () => setIsMounted(false)
-  }, [])
 
   // Terminal state
   const terminalInput = useRef('')
