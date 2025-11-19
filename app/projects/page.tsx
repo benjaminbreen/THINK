@@ -4,7 +4,7 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowRight, ExternalLink, BarChart3, Sparkles } from 'lucide-react'
+import { ArrowRight, ExternalLink, Users, BookOpen } from 'lucide-react'
 
 export default function ProjectsPage() {
   return (
@@ -12,86 +12,56 @@ export default function ProjectsPage() {
       <Section className="pt-24 pb-16">
         <Container>
           <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Our Projects</h1>
+            <h1 className="text-4xl font-serif font-bold mb-4">Project Examples</h1>
             <p className="text-lg text-muted-foreground">
-              AI-enabled historical simulations and educational tools for transformative humanities learning
+              Experimental tools and simulations for humanities teaching and research.
+              All freely shared as starting points for your own work.
             </p>
           </div>
 
-          {/* Featured Project: HistoryLens */}
-          <div className="mx-auto max-w-4xl mb-16">
-            <div className="text-center mb-6">
-              <Badge className="mb-4">Flagship Project</Badge>
-              <h2 className="text-2xl font-serif font-bold mb-2">HistoryLens</h2>
-              <p className="text-muted-foreground">
-                Our flagship pedagogical tool combining primary sources with LLM-powered simulations
-              </p>
-            </div>
-
-            <Card className="group hover:shadow-lg transition-all bg-primary/5 border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-2xl">Interactive Historical Simulations</CardTitle>
-                <CardDescription className="text-base">
-                  HistoryLens combines historical primary sources with detailed LLM prompts to generate
-                  richly detailed interactive simulations. Students navigate dynamically generated historical
-                  worlds, interact with period-appropriate characters, and build critical thinking skills through
-                  hands-on exploration.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 md:grid-cols-3 mb-6">
-                  <div className="text-center p-4 bg-background rounded-lg">
-                    <div className="text-3xl font-bold text-primary mb-1">200+</div>
-                    <div className="text-sm text-muted-foreground">Students Reached</div>
-                  </div>
-                  <div className="text-center p-4 bg-background rounded-lg">
-                    <div className="text-3xl font-bold text-primary mb-1">81%</div>
-                    <div className="text-sm text-muted-foreground">Enhanced Understanding</div>
-                  </div>
-                  <div className="text-center p-4 bg-background rounded-lg">
-                    <div className="text-3xl font-bold text-primary mb-1">3</div>
-                    <div className="text-sm text-muted-foreground">Classes Piloted</div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge variant="outline">Primary Sources</Badge>
-                  <Badge variant="outline">Interactive</Badge>
-                  <Badge variant="outline">Critical Thinking</Badge>
-                  <Badge variant="outline">Metacognition</Badge>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button asChild>
-                    <Link href="/projects/historylens">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" /> Try Demo
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Other Projects */}
-          <div className="mx-auto max-w-4xl">
-            <h2 className="text-2xl font-serif font-bold mb-6 text-center">Other Simulations & Tools</h2>
+          {/* HistoryLens as one project among others */}
+          <div className="mx-auto max-w-4xl mb-12">
             <div className="grid gap-6 md:grid-cols-2">
               <Card className="group hover:shadow-lg transition-all">
                 <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <CardTitle className="group-hover:text-primary transition-colors">
-                      Young Darwin
-                    </CardTitle>
-                    <Badge>Example</Badge>
-                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    HistoryLens
+                  </CardTitle>
                   <CardDescription>
-                    An interactive HistoryLens simulation exploring Charles Darwin's formative years
-                    and his historic voyage on HMS Beagle
+                    Interactive historical simulations combining primary sources with LLM prompts.
+                    Students explore dynamically generated historical scenarios and develop critical thinking
+                    skills through hands-on engagement with the past.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <Badge variant="outline">Primary Sources</Badge>
+                    <Badge variant="outline">Interactive</Badge>
+                    <Badge variant="outline">Critical Thinking</Badge>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button asChild variant="default" size="sm">
+                      <Link href="/projects/historylens">
+                        Learn more <ArrowRight className="ml-2 h-3 w-3" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="sm">
+                      <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-3 w-3" /> Try it
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    Young Darwin
+                  </CardTitle>
+                  <CardDescription>
+                    An example HistoryLens simulation exploring Charles Darwin's formative years
+                    and his historic voyage on HMS Beagle.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -110,22 +80,19 @@ export default function ProjectsPage() {
 
               <Card className="group hover:shadow-lg transition-all">
                 <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <CardTitle className="group-hover:text-primary transition-colors">
-                      History Simulator
-                    </CardTitle>
-                    <Badge>Example</Badge>
-                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    History Simulator
+                  </CardTitle>
                   <CardDescription>
-                    Create and explore historically plausible scenarios and counterfactual histories
-                    grounded in real historical contexts
+                    Explore historically plausible scenarios and counterfactual histories
+                    grounded in real historical contexts. A tool for thinking about contingency and causation.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <Badge variant="outline">Counterfactuals</Badge>
                     <Badge variant="outline">Simulation</Badge>
-                    <Badge variant="outline">Creative</Badge>
+                    <Badge variant="outline">Critical Thinking</Badge>
                   </div>
                   <Button asChild variant="default" size="sm">
                     <Link href="/projects/history-simulator">
@@ -137,15 +104,12 @@ export default function ProjectsPage() {
 
               <Card className="group hover:shadow-lg transition-all">
                 <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <CardTitle className="group-hover:text-primary transition-colors">
-                      Apothecary Simulator
-                    </CardTitle>
-                    <Badge>Example</Badge>
-                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    Apothecary Simulator
+                  </CardTitle>
                   <CardDescription>
-                    Experience the world of historical medicine and pharmacy practices from different
-                    eras and cultural contexts
+                    Experience historical medicine and pharmacy practices from different
+                    eras and cultural contexts. Explore the material culture of healing.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -164,15 +128,12 @@ export default function ProjectsPage() {
 
               <Card className="group hover:shadow-lg transition-all">
                 <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <CardTitle className="group-hover:text-primary transition-colors">
-                      Historical Figure Generator
-                    </CardTitle>
-                    <Badge variant="secondary">Tool</Badge>
-                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    Historical Figure Generator
+                  </CardTitle>
                   <CardDescription>
-                    Generate plausible historical figures with realistic backgrounds, occupations,
-                    and life stories based on specific time periods and locations
+                    Generate plausible historical figures with realistic backgrounds and life stories
+                    based on specific time periods and locations. Useful for research and teaching.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -193,64 +154,65 @@ export default function ProjectsPage() {
         </Container>
       </Section>
 
-      {/* Impact Section */}
+      {/* Community and Sharing Section */}
       <Section className="bg-muted/40">
         <Container>
-          <div className="mx-auto max-w-3xl text-center mb-8">
-            <h2 className="text-3xl font-serif font-bold mb-4">Proven Impact</h2>
-            <p className="text-muted-foreground">
-              Our simulations have demonstrated measurable improvements in student engagement and learning outcomes
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-4 mx-auto max-w-4xl">
-            <Card>
-              <CardHeader>
-                <BarChart3 className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="text-2xl">81%</CardTitle>
-                <CardDescription>Enhanced historical understanding</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <BarChart3 className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="text-2xl">48%</CardTitle>
-                <CardDescription>Valued AI critical thinking discussions</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <BarChart3 className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="text-2xl">43%</CardTitle>
-                <CardDescription>Better source contextualization</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <Sparkles className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="text-2xl">600+</CardTitle>
-                <CardDescription>Students to be reached in grant period</CardDescription>
-              </CardHeader>
-            </Card>
+          <div className="mx-auto max-w-3xl">
+            <div className="text-center mb-8">
+              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-3xl font-serif font-bold mb-4">A Collaborative Space</h2>
+              <p className="text-muted-foreground">
+                This is a clearinghouse for sharing experimental tools and pedagogical approaches.
+                All materials are freely available, and we welcome contributions from educators and
+                researchers working with AI in the humanities.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 mt-8">
+              <Card>
+                <CardHeader>
+                  <BookOpen className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Open Resources</CardTitle>
+                  <CardDescription>
+                    All lesson plans, prompts, and materials are freely shared. Adapt them for your own
+                    classroom or research, no strings attached.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <Users className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Community Contributions</CardTitle>
+                  <CardDescription>
+                    Have a project to share? We're building a community of practice around AI in humanities
+                    education. Your work could help others.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
           </div>
         </Container>
       </Section>
 
-      {/* Build Your Own Section */}
+      {/* Get Started Section */}
       <Section>
         <Container>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Build Your Own Simulation</h2>
+            <h2 className="text-3xl font-serif font-bold mb-4">Use or Adapt These Projects</h2>
             <p className="text-muted-foreground mb-8">
-              All HistoryLens modules and lesson plans are freely available. Learn how to create your own
-              AI-enabled historical simulations or adapt our existing materials for your classroom.
+              Browse our teaching guides to see how these tools work in practice, or dive into the
+              modules themselves. Everything here is designed to be modified and built upon.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center flex-wrap">
               <Button asChild size="lg">
-                <Link href="/pedagogy">View Teaching Resources</Link>
+                <Link href="/guides">How-To Guides</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/pedagogy">Teaching Approach</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" /> Access Modules
+                  <ExternalLink className="mr-2 h-4 w-4" /> Browse Modules
                 </a>
               </Button>
             </div>
