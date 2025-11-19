@@ -1310,12 +1310,12 @@ export function InteractiveBackground() {
       <>
         {/* Backdrop */}
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 pointer-events-auto"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998] pointer-events-auto"
           onClick={closeExpanded}
         />
 
         {/* Modal container */}
-        <div className="fixed inset-4 z-50 pointer-events-none flex items-center justify-center">
+        <div className="fixed inset-4 z-[9999] pointer-events-none flex items-center justify-center">
           <div
             className="relative w-full h-full pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
@@ -1323,7 +1323,7 @@ export function InteractiveBackground() {
             {/* Close button */}
             <button
               onClick={closeExpanded}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
+              className="absolute top-4 right-4 z-[10000] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
               aria-label="Close"
             >
               ✕
@@ -1337,7 +1337,7 @@ export function InteractiveBackground() {
             />
 
             {/* Controls - hide the expand/minimize button when in modal */}
-            <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2">
+            <div className="absolute bottom-4 right-4 z-[10000] flex flex-col gap-2">
               {mode === 'terminal' && (
                 <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
                   <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
