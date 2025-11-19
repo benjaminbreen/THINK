@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca'
 
@@ -31,6 +32,14 @@ export function InteractiveBackground() {
 
   // Force re-render for control UI updates
   const [, forceUpdate] = useState(0)
+
+  // Track if component is mounted (for portal)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+    return () => setIsMounted(false)
+  }, [])
 
   // Terminal state
   const terminalInput = useRef('')
@@ -1304,60 +1313,75 @@ export function InteractiveBackground() {
     forceUpdate(n => n + 1)
   }
 
-  if (isExpanded) {
-    // Expanded modal mode
+  // Render canvas wrapper with conditional styling for modal vs normal mode
+  const canvasElement = (
+    <canvas
+      ref={canvasRef}
+      onClick={isExpanded ? undefined : cycleMode}
+      className={isExpanded ? "absolute inset-0 w-full h-full rounded-lg" : "absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"}
+      style={{ opacity: isExpanded ? 1 : 0.6 }}
+    />
+  )
+
+  if (isExpanded && isMounted) {
+    // Render modal via portal
     return (
       <>
-        {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998] pointer-events-auto"
-          onClick={closeExpanded}
-        />
+        {/* Empty placeholder in original position */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none" />
 
-        {/* Modal container */}
-        <div className="fixed inset-4 z-[9999] pointer-events-none flex items-center justify-center">
-          <div
-            className="relative w-full h-full pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
+        {/* Modal rendered via portal */}
+        {createPortal(
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998] pointer-events-auto"
               onClick={closeExpanded}
-              className="absolute top-4 right-4 z-[10000] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
-              aria-label="Close"
-            >
-              ✕
-            </button>
-
-            {/* Canvas */}
-            <canvas
-              ref={canvasRef}
-              className="absolute inset-0 w-full h-full rounded-lg"
-              style={{ opacity: 1 }}
             />
 
-            {/* Controls - hide the expand/minimize button when in modal */}
-            <div className="absolute bottom-4 right-4 z-[10000] flex flex-col gap-2">
-              {mode === 'terminal' && (
-                <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-                  <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
-                    Color: {terminalColorScheme.current}
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
-                    Clear
-                  </button>
+            {/* Modal container */}
+            <div className="fixed inset-4 z-[9999] pointer-events-none flex items-center justify-center">
+              <div
+                className="relative w-full h-full pointer-events-auto bg-transparent"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close button */}
+                <button
+                  onClick={closeExpanded}
+                  className="absolute top-4 right-4 z-[10000] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+
+                {/* Canvas */}
+                {canvasElement}
+
+                {/* Controls */}
+                <div className="absolute bottom-4 right-4 z-[10000] flex flex-col gap-2">
+                  {mode === 'terminal' && (
+                    <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+                      <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                        Color: {terminalColorScheme.current}
+                      </button>
+                      <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                        Clear
+                      </button>
+                    </div>
+                  )}
+                  {mode === 'labyrinth' && (
+                    <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+                      <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                        Reset Maze
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-              {mode === 'labyrinth' && (
-                <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-                  <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
-                    Reset Maze
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
+          </>,
+          document.body
+        )}
       </>
     )
   }
@@ -1365,12 +1389,7 @@ export function InteractiveBackground() {
   // Normal mode
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none">
-      <canvas
-        ref={canvasRef}
-        onClick={cycleMode}
-        className="absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"
-        style={{ opacity: 0.6 }}
-      />
+      {canvasElement}
       {renderControls()}
     </div>
   )
