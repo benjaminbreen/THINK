@@ -22,6 +22,7 @@ export function InteractiveBackground() {
   const showWhitman = useRef(true)
   const terminalExpanded = useRef(false)
   const terminalColorScheme = useRef<'blue' | 'green' | 'amber'>('blue')
+  const labyrinthExpanded = useRef(false)
   const particleRainbow = useRef(false)
   const particlePaused = useRef(false)
   const asciiPaused = useRef(false)
@@ -210,6 +211,16 @@ export function InteractiveBackground() {
               lab.messageTime = Date.now()
             }
           }
+        }
+      }
+
+      // ESC key to close expanded modes
+      if (e.key === 'Escape') {
+        if (terminalExpanded.current || labyrinthExpanded.current) {
+          e.preventDefault()
+          terminalExpanded.current = false
+          labyrinthExpanded.current = false
+          forceUpdate(n => n + 1)
         }
       }
       // Bibliotheca mode doesn't require keyboard input - mouse interaction only
@@ -815,8 +826,27 @@ export function InteractiveBackground() {
 
     // Labyrinth/Maze Effect - Borges-themed
     const drawLabyrinth = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // dark background
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      const isExpanded = labyrinthExpanded.current
+
+      if (isExpanded) {
+        // Expanded mode - darker background with subtle gradient
+        const gradient = ctx.createRadialGradient(
+          canvas.width / 2, canvas.height / 2, 0,
+          canvas.width / 2, canvas.height / 2, canvas.width / 1.5
+        )
+        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
+        gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
+        ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        // Border frame
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+        ctx.lineWidth = 2
+        ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40)
+      } else {
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // dark background
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+      }
 
       const lab = labyrinth.current
 
@@ -901,7 +931,10 @@ export function InteractiveBackground() {
       // Draw instructions
       ctx.font = '12px monospace'
       ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'
-      ctx.fillText('Arrow keys to move | Find 3 artifacts to unlock exit | Click to change mode', 20, canvas.height - 20)
+      const instructions = isExpanded
+        ? 'Arrow keys to move | Find 3 artifacts to unlock exit | ESC or close button to exit'
+        : 'Arrow keys to move | Find 3 artifacts to unlock exit | Click to change mode'
+      ctx.fillText(instructions, 20, canvas.height - 20)
 
       // Victory message
       if (lab.solved) {
@@ -1243,6 +1276,9 @@ export function InteractiveBackground() {
 
         {mode === 'labyrinth' && (
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => { e.stopPropagation(); labyrinthExpanded.current = !labyrinthExpanded.current; forceUpdate(n => n + 1); }} className={buttonClass}>
+              {labyrinthExpanded.current ? '↙ Minimize' : '↗ Expand'}
+            </button>
             <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className={buttonClass}>
               Reset Maze
             </button>
@@ -1260,6 +1296,73 @@ export function InteractiveBackground() {
     )
   }
 
+  const isExpanded = terminalExpanded.current || labyrinthExpanded.current
+
+  const closeExpanded = () => {
+    terminalExpanded.current = false
+    labyrinthExpanded.current = false
+    forceUpdate(n => n + 1)
+  }
+
+  if (isExpanded) {
+    // Expanded modal mode
+    return (
+      <>
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 pointer-events-auto"
+          onClick={closeExpanded}
+        />
+
+        {/* Modal container */}
+        <div className="fixed inset-4 z-50 pointer-events-none flex items-center justify-center">
+          <div
+            className="relative w-full h-full pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={closeExpanded}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            {/* Canvas */}
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 w-full h-full rounded-lg"
+              style={{ opacity: 1 }}
+            />
+
+            {/* Controls - hide the expand/minimize button when in modal */}
+            <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2">
+              {mode === 'terminal' && (
+                <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+                  <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                    Color: {terminalColorScheme.current}
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                    Clear
+                  </button>
+                </div>
+              )}
+              {mode === 'labyrinth' && (
+                <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+                  <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                    Reset Maze
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  // Normal mode
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none">
       <canvas
