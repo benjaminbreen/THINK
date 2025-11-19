@@ -1,796 +1,1760 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+'use client'
+
+import { useState, useMemo } from 'react'
 import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ExternalLink, BookOpen, Code, Users, Newspaper, ScrollText, Archive } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ChevronRight, ArrowUpDown } from 'lucide-react'
 
-const resources = {
-  historicalSources: [
-    {
-      title: 'Samuel Butler - "Darwin Among the Machines" (1863)',
-      description: 'Prescient essay arguing machines could eventually develop consciousness through evolution',
-      link: 'https://nzetc.victoria.ac.nz/tm/scholarly/tei-ButFir-t1-g1-t1-g1-t4-body.html',
-      category: '19th Century',
-    },
-    {
-      title: 'Samuel Butler - Erewhon (1872)',
-      description: 'Dystopian novel featuring "The Book of the Machines" - imagining machine consciousness and evolution',
-      link: 'https://www.gutenberg.org/ebooks/1906',
-      category: '19th Century',
-    },
-    {
-      title: 'Ada Lovelace - Notes on the Analytical Engine (1843)',
-      description: 'First published algorithm and speculation on machine creativity beyond mere calculation',
-      link: 'https://www.fourmilab.ch/babbage/sketch.html',
-      category: '19th Century',
-    },
-    {
-      title: 'Alan Turing - "Computing Machinery and Intelligence" (1950)',
-      description: 'The foundational paper introducing the Turing Test and the question "Can machines think?"',
-      link: 'https://academic.oup.com/mind/article/LIX/236/433/986238',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Norbert Wiener - Cybernetics (1948)',
-      description: 'Groundbreaking work on control and communication in animals and machines',
-      link: 'https://archive.org/details/norbert-wiener-cybernetics',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Norbert Wiener - The Human Use of Human Beings (1950)',
-      description: 'Accessible exploration of cybernetics and its social implications for automation',
-      link: 'https://archive.org/details/humanuseohumanbe00wien',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Warren McCulloch & Walter Pitts - "A Logical Calculus..." (1943)',
-      description: 'Mathematical model of neural networks - foundational to modern AI',
-      link: 'https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Vannevar Bush - "As We May Think" (1945)',
-      description: 'Visionary essay on the "memex" - an early conceptualization of hypertext and knowledge machines',
-      link: 'https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Claude Shannon - "A Mathematical Theory of Communication" (1948)',
-      description: 'Foundation of information theory - essential to understanding computational intelligence',
-      link: 'https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Karel Čapek - R.U.R. (Rossum\'s Universal Robots) (1920)',
-      description: 'Play that introduced the word "robot" - exploring artificial workers and rebellion',
-      link: 'https://www.gutenberg.org/ebooks/59112',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Isaac Asimov - "Runaround" (1942) - Three Laws of Robotics',
-      description: 'Short story introducing the influential Three Laws governing robot behavior',
-      link: 'https://archive.org/details/I_Robot_-_Isaac_Asimov',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'John von Neumann - Theory of Self-Reproducing Automata (1966)',
-      description: 'Posthumous work on machines that can replicate themselves',
-      link: 'https://archive.org/details/theoryofselfrepr00vonn',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Macy Conferences on Cybernetics (1946-1953)',
-      description: 'Transcripts and papers from interdisciplinary meetings that shaped cybernetics',
-      link: 'https://www.asc-cybernetics.org/foundations/history/MacySummary.htm',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'W. Ross Ashby - An Introduction to Cybernetics (1956)',
-      description: 'Accessible introduction to cybernetic principles and self-regulating systems',
-      link: 'https://archive.org/details/introductiontocy00ashb',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Marvin Minsky - "Steps Toward Artificial Intelligence" (1961)',
-      description: 'Early survey of AI research problems and potential approaches',
-      link: 'https://web.media.mit.edu/~minsky/papers/steps.html',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Joseph Weizenbaum - ELIZA (1966) & "Computer Power..." (1976)',
-      description: 'Early chatbot and critical book on limits of artificial intelligence',
-      link: 'https://web.stanford.edu/class/symbsys205/Weizenbaum.pdf',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'J.C.R. Licklider - "Man-Computer Symbiosis" (1960)',
-      description: 'Vision of cooperative interaction between humans and computers',
-      link: 'https://groups.csail.mit.edu/medg/people/psz/Licklider.html',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Herbert Simon - "The Shape of Automation" (1965)',
-      description: 'Analysis of automation\'s impact on society and human work',
-      link: 'https://archive.org/details/shapeofautomatio00simo',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Hubert Dreyfus - "Alchemy and AI" (1965)',
-      description: 'Early philosophical critique of artificial intelligence assumptions',
-      link: 'https://www.rand.org/pubs/papers/P3244.html',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'John McCarthy - "Programs with Common Sense" (1959)',
-      description: 'Foundational paper on AI from the researcher who coined the term',
-      link: 'http://jmc.stanford.edu/articles/mcc59.html',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'E.M. Forster - "The Machine Stops" (1909)',
-      description: 'Dystopian story of humanity\'s dependence on an all-controlling machine',
-      link: 'https://www.gutenberg.org/ebooks/73676',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Ambrose Bierce - "Moxon\'s Master" (1899)',
-      description: 'Early science fiction about a chess-playing automaton that becomes violent',
-      link: 'https://www.gutenberg.org/files/4366/4366-h/4366-h.htm',
-      category: '19th Century',
-    },
-    {
-      title: 'Edward Bellamy - Looking Backward (1888)',
-      description: 'Utopian novel imagining automated production and technological society',
-      link: 'https://www.gutenberg.org/ebooks/624',
-      category: '19th Century',
-    },
-    {
-      title: 'Charles Babbage - Passages from the Life of a Philosopher (1864)',
-      description: 'Autobiography including detailed accounts of the Analytical Engine',
-      link: 'https://www.gutenberg.org/ebooks/57532',
-      category: '19th Century',
-    },
-    {
-      title: 'George Boole - The Laws of Thought (1854)',
-      description: 'Foundation of Boolean logic essential to computer science',
-      link: 'https://www.gutenberg.org/ebooks/15114',
-      category: '19th Century',
-    },
-    {
-      title: 'Donna Haraway - "A Cyborg Manifesto" (1985)',
-      description: 'Influential feminist theory of technology, cyborgs, and identity',
-      link: 'https://warwick.ac.uk/fac/arts/english/currentstudents/undergraduate/modules/fictionnow/manifestly_haraway_----_a_cyborg_manifesto_science_technology_and_socialist-feminism_in_the_....pdf',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Douglas Hofstadter - Gödel, Escher, Bach (1979)',
-      description: 'Exploration of consciousness, self-reference, and artificial intelligence',
-      link: 'https://archive.org/details/GdelEscherBach',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Sherry Turkle - The Second Self (1984)',
-      description: 'Psychological study of computers and human identity',
-      link: 'https://archive.org/details/secondselfcomput00turk',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Pamela McCorduck - Machines Who Think (1979)',
-      description: 'Historical account of AI research from ancient automata to 1970s',
-      link: 'https://archive.org/details/machineswhothink00mcco',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Grey Walter - The Living Brain (1953)',
-      description: 'Neurophysiologist\'s account of robotic "tortoises" and brain function',
-      link: 'https://archive.org/details/livingbrain00walt',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Mary Shelley - Frankenstein (1818)',
-      description: 'The foundational text on creating artificial life and its consequences',
-      link: 'https://www.gutenberg.org/ebooks/84',
-      category: '19th Century',
-    },
-    {
-      title: 'Edgar Allan Poe - "Maelzel\'s Chess Player" (1836)',
-      description: 'Essay investigating a famous chess-playing automaton and the question of machine intelligence',
-      link: 'https://www.eapoe.org/works/essays/maelzel.htm',
-      category: '19th Century',
-    },
-    {
-      title: 'Herman Melville - "The Bell-Tower" (1855)',
-      description: 'Short story about a mechanical man and the dangers of technological hubris',
-      link: 'https://www.gutenberg.org/files/15859/15859-h/15859-h.htm',
-      category: '19th Century',
-    },
-    {
-      title: 'Villiers de l\'Isle-Adam - L\'Ève future (1886)',
-      description: 'Novel about creating an artificial woman - "the future Eve" - via electricity',
-      link: 'https://www.gutenberg.org/ebooks/41653',
-      category: '19th Century',
-    },
-    {
-      title: 'William Morris - News from Nowhere (1890)',
-      description: 'Utopian vision examining machines, labor, and human fulfillment',
-      link: 'https://www.gutenberg.org/ebooks/3261',
-      category: '19th Century',
-    },
-    {
-      title: 'Oscar Wilde - "The Soul of Man Under Socialism" (1891)',
-      description: 'Essay arguing machines will liberate humanity from mechanical labor',
-      link: 'https://www.gutenberg.org/ebooks/1017',
-      category: '19th Century',
-    },
-    {
-      title: 'Yevgeny Zamyatin - We (1921)',
-      description: 'Dystopian novel of mathematical precision and mechanized society',
-      link: 'https://archive.org/details/we_zamy',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Aldous Huxley - Brave New World (1932)',
-      description: 'Dystopia of technological control, conditioning, and manufactured humans',
-      link: 'https://www.gutenberg.org/ebooks/68283',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Charlotte Perkins Gilman - Herland (1915)',
-      description: 'Utopian fiction exploring rational organization and efficient technology',
-      link: 'https://www.gutenberg.org/ebooks/32',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Kurt Gödel - "On Formally Undecidable Propositions" (1931)',
-      description: 'Incompleteness theorems - foundational for limits of computation',
-      link: 'https://monoskop.org/images/9/93/Kurt_G%C3%B6del_On_Formally_Undecidable_Propositions_Of_Principia_Mathematica_And_Related_Systems_1992.pdf',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Bertrand Russell & Alfred Whitehead - Principia Mathematica (1910-13)',
-      description: 'Attempt to ground mathematics in logic - influenced computational theory',
-      link: 'https://archive.org/details/PrincipiaMathematicaVolumeI',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Gregory Bateson - Steps to an Ecology of Mind (1972)',
-      description: 'Cybernetic approach to mind, nature, and communication',
-      link: 'https://archive.org/details/stepstoecologyof00greg',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Stafford Beer - Brain of the Firm (1972)',
-      description: 'Applying cybernetics to organizational management',
-      link: 'https://archive.org/details/brainoffirm00beer',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Ludwig von Bertalanffy - General System Theory (1968)',
-      description: 'Foundations of systems thinking applicable to cybernetics',
-      link: 'https://archive.org/details/generalsystemthe0000bert',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Noam Chomsky - Syntactic Structures (1957)',
-      description: 'Revolutionary work on formal grammars - foundational to computational linguistics',
-      link: 'https://archive.org/details/syntacticstructu00chom',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Hannah Arendt - The Human Condition (1958)',
-      description: 'Philosophical analysis of labor, work, and action in the age of automation',
-      link: 'https://archive.org/details/humancondition00aren',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Seymour Papert - Mindstorms (1980)',
-      description: 'Vision of computers as tools for learning and thinking',
-      link: 'https://archive.org/details/mindstormschildr00pape',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Marvin Minsky - The Society of Mind (1986)',
-      description: 'Theory of intelligence as emergent from simple interacting agents',
-      link: 'https://archive.org/details/societyofmind00mins',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Terry Winograd - Understanding Natural Language (1972)',
-      description: 'Influential work on computational understanding of language (SHRDLU)',
-      link: 'https://hci.stanford.edu/~winograd/shrdlu/',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Lucy Suchman - Plans and Situated Actions (1987)',
-      description: 'Anthropological critique of AI planning models',
-      link: 'https://www.goodreads.com/book/show/1882466.Plans_and_Situated_Actions',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'William Gibson - Neuromancer (1984)',
-      description: 'Cyberpunk novel coining "cyberspace" and imagining AI consciousness',
-      link: 'https://archive.org/details/neuromancer000gibs',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Philip K. Dick - Do Androids Dream of Electric Sheep? (1968)',
-      description: 'Novel exploring the boundaries between human and artificial intelligence',
-      link: 'https://archive.org/details/DoAndroidsDreamOfElectricSheepByPhilipK.Dick',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Ursula K. Le Guin - The Lathe of Heaven (1971)',
-      description: 'Novel exploring reality, dreams, and the limits of controlling complex systems',
-      link: 'https://archive.org/details/latheofheaven00legu',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Octavia Butler - Dawn (Xenogenesis, 1987)',
-      description: 'Science fiction examining biological engineering and posthuman futures',
-      link: 'https://archive.org/details/dawn0000butl',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Stanisław Lem - The Cyberiad (1965)',
-      description: 'Stories of robot constructors exploring philosophy through cybernetic fables',
-      link: 'https://archive.org/details/cyberiadstories00stan',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Arthur C. Clarke - 2001: A Space Odyssey (1968)',
-      description: 'Novel featuring HAL 9000 - exploration of machine consciousness and error',
-      link: 'https://archive.org/details/2001spaceodyssey00clar',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'John Searle - "Minds, Brains, and Programs" (1980)',
-      description: 'The Chinese Room argument - influential critique of strong AI',
-      link: 'https://www.law.upenn.edu/live/files/3413-searle-j-minds-brains-and-programs-1980pdf',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Roger Penrose - The Emperor\'s New Mind (1989)',
-      description: 'Argument that human consciousness cannot be algorithmic',
-      link: 'https://archive.org/details/emperorsnewmindc00penr',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Margaret Boden - Artificial Intelligence and Natural Man (1977)',
-      description: 'Philosophical exploration of AI and human psychology',
-      link: 'https://archive.org/details/artificialintell0000bode',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Frank Rosenblatt - Principles of Neurodynamics (1962)',
-      description: 'Work on the Perceptron - early neural network research',
-      link: 'https://archive.org/details/principlesofneur00rose',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Donald Hebb - The Organization of Behavior (1949)',
-      description: 'Foundational neuroscience work influencing neural network theory',
-      link: 'https://archive.org/details/organizationofbe00hebb',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Heinz von Foerster - Observing Systems (1981)',
-      description: 'Second-order cybernetics and the observer\'s role in systems',
-      link: 'https://archive.org/details/observingsystems0000foer',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Humberto Maturana & Francisco Varela - Autopoiesis (1972)',
-      description: 'Theory of self-organizing systems - influential in AI and cognitive science',
-      link: 'https://archive.org/details/autopoiesisandco0000matu',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Lewis Mumford - Technics and Civilization (1934)',
-      description: 'Historical analysis of technology\'s impact on human culture and values',
-      link: 'https://archive.org/details/technicsciviliza00mum',
-      category: 'Early 20th Century',
-    },
-    {
-      title: 'Jacques Ellul - The Technological Society (1954)',
-      description: 'Critical analysis of technique and technological determinism',
-      link: 'https://archive.org/details/technologicalsoc00ellu',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Marshall McLuhan - Understanding Media (1964)',
-      description: 'Media theory with implications for human-computer interaction',
-      link: 'https://archive.org/details/understandingmed00mclu',
-      category: 'Mid-20th Century',
-    },
-    {
-      title: 'Ivan Illich - Tools for Conviviality (1973)',
-      description: 'Critique of industrial productivity and vision of empowering tools',
-      link: 'https://archive.org/details/illich-ivan-tools-for-conviviality',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Langdon Winner - Autonomous Technology (1977)',
-      description: 'Political philosophy of technology and technological autonomy',
-      link: 'https://archive.org/details/autonomoustechn00winn',
-      category: 'Late 20th Century',
-    },
-    {
-      title: 'Theodore Roszak - The Cult of Information (1986)',
-      description: 'Critique of computer-centrism and the information society',
-      link: 'https://archive.org/details/cultofinformatio00rosz',
-      category: 'Late 20th Century',
-    },
-  ],
-  tools: [
-    {
-      title: 'Claude API',
-      description: 'Anthropic\'s powerful AI API for building applications',
-      link: 'https://www.anthropic.com',
-      category: 'AI Platform',
-    },
-    {
-      title: 'Claude Code',
-      description: 'AI-powered coding assistant for building simulations',
-      link: 'https://docs.claude.com/en/docs/claude-code',
-      category: 'Development Tool',
-    },
-    {
-      title: 'OpenAI API',
-      description: 'GPT models and other AI tools for developers',
-      link: 'https://openai.com/api/',
-      category: 'AI Platform',
-    },
-    {
-      title: 'Hugging Face',
-      description: 'Open-source AI models and datasets for NLP and machine learning',
-      link: 'https://huggingface.co/',
-      category: 'AI Platform',
-    },
-    {
-      title: 'LangChain',
-      description: 'Framework for developing applications with large language models',
-      link: 'https://www.langchain.com/',
-      category: 'Development Tool',
-    },
-    {
-      title: 'Jupyter Notebooks',
-      description: 'Interactive computing environment for data science and AI experimentation',
-      link: 'https://jupyter.org/',
-      category: 'Development Tool',
-    },
-  ],
-  educational: [
-    {
-      title: 'Digital Humanities Quarterly',
-      description: 'Open-access journal covering digital humanities scholarship',
-      link: 'http://www.digitalhumanities.org/dhq/',
-      category: 'Journal',
-    },
-    {
-      title: 'Programming Historian',
-      description: 'Peer-reviewed tutorials for digital humanities methods',
-      link: 'https://programminghistorian.org',
-      category: 'Tutorial',
-    },
-    {
-      title: 'Humanities Commons',
-      description: 'Network for humanities scholars sharing work and ideas',
-      link: 'https://hcommons.org',
-      category: 'Community',
-    },
-    {
-      title: 'Stanford CS+Social Good',
-      description: 'Resources for using computer science for social impact',
-      link: 'https://cs.stanford.edu/social-good',
-      category: 'Education',
-    },
-    {
-      title: 'AI4ALL',
-      description: 'Educational programs increasing diversity and inclusion in AI',
-      link: 'https://ai-4-all.org/',
-      category: 'Education',
-    },
-    {
-      title: 'fast.ai',
-      description: 'Practical deep learning courses for coders',
-      link: 'https://www.fast.ai/',
-      category: 'Tutorial',
-    },
-    {
-      title: 'Elements of AI',
-      description: 'Free online introduction to AI for non-technical audiences',
-      link: 'https://www.elementsofai.com/',
-      category: 'Tutorial',
-    },
-    {
-      title: 'Moral Machine',
-      description: 'MIT platform for exploring ethical dilemmas in AI decision-making',
-      link: 'https://www.moralmachine.net/',
-      category: 'Ethics',
-    },
-  ],
-  aiEthics: [
-    {
-      title: 'AI Now Institute',
-      description: 'Research institute examining social implications of artificial intelligence',
-      link: 'https://ainowinstitute.org/',
-      category: 'Research',
-    },
-    {
-      title: 'Partnership on AI',
-      description: 'Multi-stakeholder organization working on responsible AI practices',
-      link: 'https://partnershiponai.org/',
-      category: 'Organization',
-    },
-    {
-      title: 'Data & Society',
-      description: 'Research on social and cultural issues of data and automation',
-      link: 'https://datasociety.net/',
-      category: 'Research',
-    },
-    {
-      title: 'Algorithm Watch',
-      description: 'Non-profit examining algorithmic decision-making',
-      link: 'https://algorithmwatch.org/',
-      category: 'Watchdog',
-    },
-    {
-      title: 'Algorithmic Justice League',
-      description: 'Organization combining art and research to fight AI bias',
-      link: 'https://www.ajl.org/',
-      category: 'Advocacy',
-    },
-    {
-      title: 'Montreal AI Ethics Institute',
-      description: 'International community making AI ethical and equitable',
-      link: 'https://montrealethics.ai/',
-      category: 'Research',
-    },
-    {
-      title: 'AI Ethics Guidelines Global Inventory',
-      description: 'Database of AI ethics principles from around the world',
-      link: 'https://inventory.algorithmwatch.org/',
-      category: 'Database',
-    },
-    {
-      title: 'Centre for the Governance of AI',
-      description: 'Research center on political challenges of transformative AI',
-      link: 'https://www.governance.ai/',
-      category: 'Research',
-    },
-  ],
-  organizations: [
-    {
-      title: 'National Endowment for the Humanities',
-      description: 'Federal agency supporting humanities research and education',
-      link: 'https://www.neh.gov',
-      category: 'Funding',
-    },
-    {
-      title: 'Alliance of Digital Humanities Organizations',
-      description: 'International organization promoting digital humanities',
-      link: 'https://adho.org',
-      category: 'Professional',
-    },
-    {
-      title: 'American Historical Association',
-      description: 'Professional organization for historians with DH resources',
-      link: 'https://www.historians.org/',
-      category: 'Professional',
-    },
-    {
-      title: 'Association for Computers and the Humanities',
-      description: 'Organization supporting computational approaches to humanities',
-      link: 'http://ach.org/',
-      category: 'Professional',
-    },
-    {
-      title: 'Digital Library Federation',
-      description: 'Community advancing research, learning, and heritage through digital collections',
-      link: 'https://www.diglib.org/',
-      category: 'Community',
-    },
-    {
-      title: 'Text Encoding Initiative',
-      description: 'Consortium developing standards for digital text representation',
-      link: 'https://tei-c.org/',
-      category: 'Standards',
-    },
-  ],
-  archives: [
-    {
-      title: 'Internet Archive',
-      description: 'Digital library with millions of free books, texts, and historical materials',
-      link: 'https://archive.org/',
-      category: 'Archive',
-    },
-    {
-      title: 'HathiTrust Digital Library',
-      description: 'Partnership of research libraries preserving and sharing digital content',
-      link: 'https://www.hathitrust.org/',
-      category: 'Archive',
-    },
-    {
-      title: 'Europeana',
-      description: 'European cultural heritage collections from museums, libraries, and archives',
-      link: 'https://www.europeana.eu/',
-      category: 'Archive',
-    },
-    {
-      title: 'Digital Public Library of America',
-      description: 'Portal to millions of photographs, manuscripts, books, and more',
-      link: 'https://dp.la/',
-      category: 'Archive',
-    },
-    {
-      title: 'The Charles Babbage Institute',
-      description: 'Archive for history of information technology',
-      link: 'https://cbi.umn.edu/',
-      category: 'Archive',
-    },
-    {
-      title: 'Computer History Museum',
-      description: 'Collections and exhibitions on computing history',
-      link: 'https://computerhistory.org/',
-      category: 'Museum',
-    },
-    {
-      title: 'Turing Digital Archive',
-      description: 'Alan Turing\'s papers, photographs, and correspondence',
-      link: 'https://turingarchive.kings.cam.ac.uk/',
-      category: 'Archive',
-    },
-  ],
-}
+type SortOption = 'newest' | 'oldest' | 'author-az' | 'category' | 'type'
+type ResourceType = 'article' | 'paper' | 'blog' | 'video' | 'book' | 'tool'
+type ResourceCategory =
+  | 'Historical Primary Sources'
+  | 'Critical AI Theory'
+  | 'Humanities Pedagogy'
+  | 'Writing & Composition'
+  | 'Academic Integrity'
+  | 'Digital Humanities'
+  | 'Historical Simulation'
+  | 'AI Literacy'
+  | 'Policy & Guidance'
+  | 'Tools & Platforms'
+  | 'Data Ethics'
 
-interface ResourceLinkProps {
+interface Resource {
   title: string
+  authors: string
+  year: number
+  type: ResourceType
+  category: ResourceCategory
   description: string
-  link: string
-  category: string
+  url: string
+  journal?: string
 }
 
-function ResourceLink({ title, description, link, category }: ResourceLinkProps) {
-  return (
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block group"
-    >
-      <Card className="h-full hover:shadow-lg transition-shadow">
-        <CardHeader>
-          <div className="flex items-start justify-between mb-2">
-            <CardTitle className="text-lg group-hover:text-primary transition-colors">
-              {title}
-            </CardTitle>
-            <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
-          </div>
-          <Badge variant="outline" className="w-fit">{category}</Badge>
-        </CardHeader>
-        <CardContent>
-          <CardDescription>{description}</CardDescription>
-        </CardContent>
-      </Card>
-    </a>
-  )
-}
+const resources: Resource[] = [
+  // Historical Primary Sources (1818-1999)
+  {
+    title: "Frankenstein; or, The Modern Prometheus",
+    authors: "Mary Shelley",
+    year: 1818,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Foundational Gothic novel exploring artificial creation of life and its ethical consequences, establishing themes central to AI philosophy.",
+    url: "https://www.gutenberg.org/ebooks/84"
+  },
+  {
+    title: "Notes on the Analytical Engine",
+    authors: "Ada Lovelace",
+    year: 1843,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Translation and notes on Babbage's Analytical Engine, including Note G—the first computer algorithm.",
+    url: "https://www.computerhistory.org/babbage/adalovelace/",
+    journal: "Taylor's Scientific Memoirs"
+  },
+  {
+    title: "The Bell-Tower",
+    authors: "Herman Melville",
+    year: 1855,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Dark tale of a mechanist whose automated bell-ringer turns deadly, exploring hubris and the dangers of mechanical creation.",
+    url: "https://www.gutenberg.org/ebooks/15859"
+  },
+  {
+    title: "Maelzel's Chess-Player",
+    authors: "Edgar Allan Poe",
+    year: 1836,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Analytical essay debunking the Mechanical Turk automaton, exploring boundaries between human intelligence and mechanical simulation.",
+    url: "https://www.eapoe.org/works/essays/maelzel.htm"
+  },
+  {
+    title: "Darwin Among the Machines",
+    authors: "Samuel Butler",
+    year: 1863,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Prescient speculation that machines could eventually develop consciousness through evolution, predating cybernetics by 80 years.",
+    url: "https://nzetc.victoria.ac.nz/tm/scholarly/tei-ButFir-t1-g1-t1-g1-t4-body.html",
+    journal: "The Press (Christchurch)"
+  },
+  {
+    title: "Erewhon: or, Over the Range",
+    authors: "Samuel Butler",
+    year: 1872,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Satirical novel featuring 'Book of the Machines' chapters warning against machine consciousness and technological dependency.",
+    url: "https://www.gutenberg.org/ebooks/1906"
+  },
+  {
+    title: "L'Ève future (Tomorrow's Eve)",
+    authors: "Auguste Villiers de l'Isle-Adam",
+    year: 1886,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Novel depicting Thomas Edison creating an android woman, exploring artificial beings and gender through symbolist lens.",
+    url: "https://www.gutenberg.org/ebooks/8581"
+  },
+  {
+    title: "News from Nowhere",
+    authors: "William Morris",
+    year: 1890,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Utopian socialist vision where machines liberate humans for creative work rather than enslaving them to industrial capitalism.",
+    url: "https://www.gutenberg.org/ebooks/3261"
+  },
+  {
+    title: "The Soul of Man Under Socialism",
+    authors: "Oscar Wilde",
+    year: 1891,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Essay advocating machines should perform tedious labor to free humans for individualist self-realization and artistic creation.",
+    url: "https://www.gutenberg.org/ebooks/1017"
+  },
+  {
+    title: "Principia Mathematica",
+    authors: "Bertrand Russell & Alfred North Whitehead",
+    year: 1910,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Monumental attempt to derive mathematics from logical foundations, influencing later theories of computation and AI.",
+    url: "https://plato.stanford.edu/entries/principia-mathematica/"
+  },
+  {
+    title: "Herland",
+    authors: "Charlotte Perkins Gilman",
+    year: 1915,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Feminist utopian novel depicting rational society using technology to achieve collective flourishing without patriarchy.",
+    url: "https://www.gutenberg.org/ebooks/32"
+  },
+  {
+    title: "We",
+    authors: "Yevgeny Zamyatin",
+    year: 1924,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Dystopian novel depicting mathematically-ordered surveillance state, influencing Orwell and cybernetic control theory critiques.",
+    url: "https://www.gutenberg.org/ebooks/61963"
+  },
+  {
+    title: "On Computable Numbers",
+    authors: "Alan Turing",
+    year: 1936,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Foundational paper introducing the Turing machine and establishing theoretical limits of computation.",
+    url: "https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf",
+    journal: "Proceedings of the London Mathematical Society"
+  },
+  {
+    title: "Brave New World",
+    authors: "Aldous Huxley",
+    year: 1932,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Dystopian vision of technological society using genetic engineering and psychological conditioning for social control.",
+    url: "https://www.huxley.net/bnw/"
+  },
+  {
+    title: "On Formally Undecidable Propositions",
+    authors: "Kurt Gödel",
+    year: 1931,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Incompleteness theorems proving limits of formal systems, foundational for AI philosophy and computational theory.",
+    url: "https://plato.stanford.edu/entries/goedel-incompleteness/",
+    journal: "Monatshefte für Mathematik und Physik"
+  },
+  {
+    title: "Technics and Civilization",
+    authors: "Lewis Mumford",
+    year: 1934,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Historical study examining how technologies shape culture, warning against subordinating human values to mechanical efficiency.",
+    url: "https://archive.org/details/technicsciviliza00mumf"
+  },
+  {
+    title: "As We May Think",
+    authors: "Vannevar Bush",
+    year: 1945,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Visionary essay proposing the memex—a proto-hypertext device presaging information retrieval and digital humanities.",
+    url: "https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/",
+    journal: "The Atlantic"
+  },
+  {
+    title: "A Mathematical Theory of Communication",
+    authors: "Claude Shannon",
+    year: 1948,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Foundational paper establishing information theory and introducing the concept of 'bits' as units of information.",
+    url: "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf",
+    journal: "Bell System Technical Journal"
+  },
+  {
+    title: "Cybernetics: Or Control and Communication in the Animal and the Machine",
+    authors: "Norbert Wiener",
+    year: 1948,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Technical foundation for cybernetics exploring feedback loops and control systems across biological and mechanical domains.",
+    url: "https://archive.org/details/cybernetics-or-communication-and-control-in-the-animal-and-the-machine-norbert-wiene-ocr"
+  },
+  {
+    title: "The Organization of Behavior",
+    authors: "Donald Hebb",
+    year: 1949,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Introduced Hebbian learning theory explaining how neural pathways strengthen through use, foundational for connectionist AI.",
+    url: "https://pure.mpg.de/rest/items/item_2346268_3/component/file_2346267/content"
+  },
+  {
+    title: "The Human Use of Human Beings: Cybernetics and Society",
+    authors: "Norbert Wiener",
+    year: 1950,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Accessible exploration of cybernetics' societal implications, warning about automation's impact on labor and human dignity.",
+    url: "https://monoskop.org/images/6/60/Wiener_Norbert_The_Human_Use_of_Human_Beings_1989.pdf"
+  },
+  {
+    title: "Computing Machinery and Intelligence",
+    authors: "Alan Turing",
+    year: 1950,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Seminal paper introducing the Turing Test and foundational questions about machine intelligence.",
+    url: "https://academic.oup.com/mind/article-abstract/LIX/236/433/986238",
+    journal: "Mind"
+  },
+  {
+    title: "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence",
+    authors: "John McCarthy, Marvin Minsky, Nathaniel Rochester, Claude Shannon",
+    year: 1955,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Historic proposal coining 'artificial intelligence' and launching AI as an academic discipline.",
+    url: "https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html"
+  },
+  {
+    title: "The Technological Society",
+    authors: "Jacques Ellul",
+    year: 1954,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Prophetic critique arguing technique becomes autonomous force reshaping all aspects of society including human consciousness.",
+    url: "https://www.penguinrandomhouse.com/books/318263/the-technological-society-by-jacques-ellul/"
+  },
+  {
+    title: "Syntactic Structures",
+    authors: "Noam Chomsky",
+    year: 1957,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Revolutionary linguistic theory proposing universal grammar, profoundly influencing computational linguistics and NLP.",
+    url: "https://www.hup.harvard.edu/books/9781583484470"
+  },
+  {
+    title: "The Human Condition",
+    authors: "Hannah Arendt",
+    year: 1958,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Philosophical examination of labor, work, and action in technological modernity, warning against reducing humans to makers.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/H/bo3637086.html"
+  },
+  {
+    title: "The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain",
+    authors: "Frank Rosenblatt",
+    year: 1958,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Introduced the perceptron neural network model, pioneering machine learning through pattern recognition.",
+    url: "https://psycnet.apa.org/record/1959-09865-001",
+    journal: "Psychological Review"
+  },
+  {
+    title: "Cybernetics and Management",
+    authors: "Stafford Beer",
+    year: 1959,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Applied cybernetic principles to organizational management, developing viable system model for autonomous control.",
+    url: "https://monoskop.org/images/e/e0/Beer_Stafford_Cybernetics_and_Management.pdf"
+  },
+  {
+    title: "Solaris",
+    authors: "Stanisław Lem",
+    year: 1961,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Philosophical science fiction exploring radically alien intelligence and limits of human understanding and communication.",
+    url: "https://www.hachettebookgroup.com/titles/stanislaw-lem/solaris/9780156027601/"
+  },
+  {
+    title: "Understanding Media: The Extensions of Man",
+    authors: "Marshall McLuhan",
+    year: 1964,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Media theory arguing technologies extend human capabilities while reshaping sensory ratios and social organization.",
+    url: "https://mitpress.mit.edu/9780262631594/understanding-media/"
+  },
+  {
+    title: "Do Androids Dream of Electric Sheep?",
+    authors: "Philip K. Dick",
+    year: 1968,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Novel exploring empathy as marker of humanity in world of realistic androids, questioning authenticity and consciousness.",
+    url: "https://www.penguinrandomhouse.com/books/308/do-androids-dream-of-electric-sheep-by-philip-k-dick/"
+  },
+  {
+    title: "2001: A Space Odyssey",
+    authors: "Arthur C. Clarke",
+    year: 1968,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Co-written with Kubrick, depicting HAL 9000's evolution from tool to autonomous agent with fatal consequences.",
+    url: "https://www.penguinrandomhouse.com/books/255239/2001-a-space-odyssey-by-arthur-c-clarke/"
+  },
+  {
+    title: "The Left Hand of Darkness",
+    authors: "Ursula K. Le Guin",
+    year: 1969,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Science fiction masterwork using alien society to interrogate gender, identity, and cultural assumptions.",
+    url: "https://www.hachettebookgroup.com/titles/ursula-k-le-guin/the-left-hand-of-darkness/9780441007318/"
+  },
+  {
+    title: "SHRDLU: A Computer Program for Understanding Natural Language",
+    authors: "Terry Winograd",
+    year: 1971,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Pioneering NLP system demonstrating language understanding in microworld, influencing dialogue systems research.",
+    url: "https://hci.stanford.edu/~winograd/shrdlu/",
+    journal: "MIT AI Lab Technical Report"
+  },
+  {
+    title: "Steps to an Ecology of Mind",
+    authors: "Gregory Bateson",
+    year: 1972,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Cybernetic anthropology proposing mind as systemic phenomenon distributed across organisms and environments.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/S/bo13179630.html"
+  },
+  {
+    title: "Autopoiesis and Cognition: The Realization of the Living",
+    authors: "Humberto Maturana & Francisco Varela",
+    year: 1972,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Theory of living systems as self-producing networks, influencing cognitive science and artificial life research.",
+    url: "https://link.springer.com/book/10.1007/978-94-009-8947-4"
+  },
+  {
+    title: "Tools for Conviviality",
+    authors: "Ivan Illich",
+    year: 1973,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Critique of industrial productivity arguing for 'convivial tools' enhancing human autonomy rather than manipulation.",
+    url: "https://www.cabinetmagazine.org/kiosk/illich_ivan_14_september_2009.php"
+  },
+  {
+    title: "Computer Power and Human Reason: From Judgment to Calculation",
+    authors: "Joseph Weizenbaum",
+    year: 1976,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "ELIZA creator's critique arguing computers should never make important decisions requiring human wisdom and compassion.",
+    url: "https://archive.org/details/computerpowerhum0000weiz_v0i3"
+  },
+  {
+    title: "Autonomous Technology: Technics-out-of-Control as a Theme in Political Thought",
+    authors: "Langdon Winner",
+    year: 1977,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Political philosophy examining how technologies develop autonomous momentum beyond human control or intention.",
+    url: "https://mitpress.mit.edu/9780262730495/autonomous-technology/"
+  },
+  {
+    title: "Artificial Intelligence and Natural Man",
+    authors: "Margaret Boden",
+    year: 1977,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Philosophical investigation of AI's implications for understanding human mind, creativity, and consciousness.",
+    url: "https://direct.mit.edu/books/monograph/4943/Artificial-Intelligence-and-Natural-Man"
+  },
+  {
+    title: "Mindstorms: Children, Computers, and Powerful Ideas",
+    authors: "Seymour Papert",
+    year: 1980,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Constructionist learning theory showing how programming empowers children's mathematical and epistemological thinking.",
+    url: "https://mitpress.mit.edu/9780465046744/mindstorms/"
+  },
+  {
+    title: "Minds, Brains, and Programs (The Chinese Room Argument)",
+    authors: "John Searle",
+    year: 1980,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Influential thought experiment arguing syntax alone cannot generate semantic understanding in computational systems.",
+    url: "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/minds-brains-and-programs/DC644B47A4299C637C89772FACC2706A",
+    journal: "Behavioral and Brain Sciences"
+  },
+  {
+    title: "Observing Systems",
+    authors: "Heinz von Foerster",
+    year: 1981,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Second-order cybernetics including observers in observed systems, foundational for constructivist epistemology.",
+    url: "https://www.jstor.org/stable/j.ctvx5wbcr"
+  },
+  {
+    title: "Literary Machines",
+    authors: "Ted Nelson",
+    year: 1981,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Foundational hypertext theory proposing transclusion, tumblers, and Project Xanadu's vision of networked writing.",
+    url: "https://www.eastgate.com/catalog/LiteraryMachines.html"
+  },
+  {
+    title: "Neuromancer",
+    authors: "William Gibson",
+    year: 1984,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Cyberpunk novel coining 'cyberspace' and depicting virtual reality, AI, and networked consciousness.",
+    url: "https://www.penguinrandomhouse.com/books/293501/neuromancer-by-william-gibson/"
+  },
+  {
+    title: "The Second Self: Computers and the Human Spirit",
+    authors: "Sherry Turkle",
+    year: 1984,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Psychological study of how computers reshape human identity, thought, and relationships in the personal computing era.",
+    url: "https://direct.mit.edu/books/monograph/2327/The-Second-SelfComputers-and-the-Human-Spirit"
+  },
+  {
+    title: "A Cyborg Manifesto: Science, Technology, and Socialist-Feminism in the Late Twentieth Century",
+    authors: "Donna Haraway",
+    year: 1985,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Influential feminist critique using the cyborg as metaphor for boundary transgression and political coalitions.",
+    url: "https://theanarchistlibrary.org/library/donna-haraway-a-cyborg-manifesto",
+    journal: "Socialist Review"
+  },
+  {
+    title: "The Society of Mind",
+    authors: "Marvin Minsky",
+    year: 1986,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Theory of intelligence emerging from interactions of simple, mindless agents rather than unified reasoning system.",
+    url: "https://web.media.mit.edu/~minsky/OLPC-1.html"
+  },
+  {
+    title: "The Cult of Information: A Neo-Luddite Treatise",
+    authors: "Theodore Roszak",
+    year: 1986,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Critique of information ideology arguing computers distract from genuine knowledge and wisdom.",
+    url: "https://www.ucpress.edu/book/9780520085848/the-cult-of-information"
+  },
+  {
+    title: "Plans and Situated Actions: The Problem of Human-Machine Communication",
+    authors: "Lucy Suchman",
+    year: 1987,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Ethnographic study showing how human action is situated and improvisational rather than plan-based.",
+    url: "https://www.cambridge.org/core/books/plans-and-situated-actions/8BC13A0A2CADC60DBF042BB4F0A94E47"
+  },
+  {
+    title: "The Emperor's New Mind: Concerning Computers, Minds, and the Laws of Physics",
+    authors: "Roger Penrose",
+    year: 1989,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Argues consciousness involves non-computable quantum processes, challenging strong AI thesis.",
+    url: "https://global.oup.com/academic/product/the-emperors-new-mind-9780192861986"
+  },
+  {
+    title: "Parable of the Sower",
+    authors: "Octavia Butler",
+    year: 1993,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Afrofuturist novel depicting technology, ecology, and social collapse through intersectional feminist lens.",
+    url: "https://www.hachettebookgroup.com/titles/octavia-e-butler/parable-of-the-sower/9781538732182/"
+  },
+  {
+    title: "The Textual Condition",
+    authors: "Jerome McGann",
+    year: 1991,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Theory of texts as networks of linguistic and bibliographical codes, foundational for digital scholarly editing.",
+    url: "https://press.princeton.edu/books/paperback/9780691015187/the-textual-condition"
+  },
+  {
+    title: "Sorting Things Out: Classification and Its Consequences",
+    authors: "Geoffrey C. Bowker & Susan Leigh Star",
+    year: 1999,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Foundational STS text exploring how classification systems shape knowledge, power, and social order.",
+    url: "https://direct.mit.edu/books/monograph/4738/Sorting-Things-OutClassification-and-Its"
+  },
+  {
+    title: "How We Became Posthuman: Virtual Bodies in Cybernetics, Literature, and Informatics",
+    authors: "N. Katherine Hayles",
+    year: 1999,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Traces how information lost its body through cybernetics, constructing posthuman subjectivity.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/H/bo3769963.html"
+  },
+
+  // Critical AI Theory
+  {
+    title: "On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?",
+    authors: "Emily M. Bender, Timnit Gebru, Angelina McMillan-Major, Margaret Mitchell",
+    year: 2021,
+    type: "paper",
+    category: "Critical AI Theory",
+    description: "Landmark paper examining environmental costs, data biases, and the illusion of meaning in large language models.",
+    url: "https://dl.acm.org/doi/10.1145/3442188.3445922",
+    journal: "FAccT '21"
+  },
+  {
+    title: "Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence",
+    authors: "Kate Crawford",
+    year: 2021,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Reveals how AI is a technology of extraction from natural resources, labor, and data, with profound political implications.",
+    url: "https://yalebooks.yale.edu/book/9780300264630/atlas-of-ai/"
+  },
+  {
+    title: "Algorithms of Oppression: How Search Engines Reinforce Racism",
+    authors: "Safiya Umoja Noble",
+    year: 2018,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Documents how algorithms perpetuate discrimination and inequality through search engine results and classifications.",
+    url: "https://nyupress.org/9781479837243/algorithms-of-oppression/"
+  },
+  {
+    title: "Artificial Unintelligence: How Computers Misunderstand the World",
+    authors: "Meredith Broussard",
+    year: 2018,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Critique of technochauvinism arguing that technology is not always the solution to social problems.",
+    url: "https://mitpress.mit.edu/9780262537018/artificial-unintelligence/"
+  },
+  {
+    title: "Weapons of Math Destruction: How Big Data Increases Inequality",
+    authors: "Cathy O'Neil",
+    year: 2016,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Examines how algorithmic systems reinforce inequality across education, employment, and criminal justice.",
+    url: "https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/"
+  },
+  {
+    title: "Coded Bias",
+    authors: "Joy Buolamwini (featured), Shalini Kantayya (director)",
+    year: 2020,
+    type: "video",
+    category: "Critical AI Theory",
+    description: "Documentary exposing facial recognition bias and the Algorithmic Justice League's fight for equitable AI systems.",
+    url: "https://www.codedbias.com/"
+  },
+  {
+    title: "Resisting Dehumanization in the Age of 'AI'",
+    authors: "Emily M. Bender",
+    year: 2024,
+    type: "paper",
+    category: "Critical AI Theory",
+    description: "Argues for rejecting anthropomorphic AI language to maintain focus on human agency and corporate accountability.",
+    url: "https://faculty.washington.edu/ebender/papers/Bender-2024-preprint.pdf"
+  },
+  {
+    title: "The AI Con: How to Fight Big Tech's Hype and Create the Future We Want",
+    authors: "Emily M. Bender & Alex Hanna",
+    year: 2024,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Dismantles AI industry hype and offers frameworks for building technology that serves human flourishing.",
+    url: "https://mitpress.mit.edu/9780262049528/the-ai-con/"
+  },
+  {
+    title: "Enshittification and Platform Decay",
+    authors: "Cory Doctorow",
+    year: 2023,
+    type: "article",
+    category: "Critical AI Theory",
+    description: "Defines pattern where platforms degrade quality to maximize profit, including AI integration nobody wanted.",
+    url: "https://pluralistic.net/2023/01/21/potemkin-ai/"
+  },
+  {
+    title: "The Distributed AI Research Institute (DAIR)",
+    authors: "Timnit Gebru (founder)",
+    year: 2021,
+    type: "tool",
+    category: "Critical AI Theory",
+    description: "Independent research institute prioritizing community-rooted AI research benefiting marginalized groups.",
+    url: "https://www.dair-institute.org/"
+  },
+
+  // Humanities Pedagogy
+  {
+    title: "Simulating History with ChatGPT",
+    authors: "Benjamin Breen",
+    year: 2024,
+    type: "blog",
+    category: "Humanities Pedagogy",
+    description: "Uses LLMs as 'hallucination engines' for interactive historical simulations that teach critical AI literacy.",
+    url: "https://resobscura.substack.com/p/simulating-history-with-chatgpt"
+  },
+  {
+    title: "Can Automation Help Make the Humanities More Human?",
+    authors: "Benjamin Breen",
+    year: 2024,
+    type: "blog",
+    category: "Humanities Pedagogy",
+    description: "Applies Margaret Mead's 1963 automation vision to distinguish drudgery-elimination from intellectual offloading.",
+    url: "https://resobscura.substack.com/p/can-automation-make-the-humanities-more-human"
+  },
+  {
+    title: "Undoing the Grade: Why We Grade, and How to Stop",
+    authors: "Jesse Stommel",
+    year: 2023,
+    type: "book",
+    category: "Humanities Pedagogy",
+    description: "Comprehensive framework for ungrading emphasizing authentic assessment over competition for grades.",
+    url: "https://pressbooks.pub/thegrade/"
+  },
+  {
+    title: "The AI Pedagogy Project",
+    authors: "metaLAB at Harvard",
+    year: 2024,
+    type: "tool",
+    category: "Humanities Pedagogy",
+    description: "Collaborative research initiative exploring pedagogical approaches to teaching with and about AI.",
+    url: "https://aipedagogy.org/"
+  },
+  {
+    title: "Generative AI in the Humanities Classroom",
+    authors: "Arizona State University",
+    year: 2024,
+    type: "article",
+    category: "Humanities Pedagogy",
+    description: "NEH-funded study examining voluntary AI platform use in composition and humanities courses.",
+    url: "https://news.asu.edu/20240229-arts-humanities-and-education-generative-ai-humanities-classroom"
+  },
+  {
+    title: "Understanding Generative AI as a Pedagogical Innovation",
+    authors: "Various Contributors",
+    year: 2024,
+    type: "article",
+    category: "Humanities Pedagogy",
+    description: "Frames generative AI as general-purpose pedagogical technology requiring thoughtful instructional design.",
+    url: "https://www.insidehighered.com/opinion/views/2024/11/25/understanding-generative-ai-pedagogical-innovation-opinion"
+  },
+  {
+    title: "Teaching with AI",
+    authors: "Anna Mills & Lauren M.E. Goodlad (editors)",
+    year: 2024,
+    type: "tool",
+    category: "Humanities Pedagogy",
+    description: "Comprehensive resource hub for assignment design, prompting strategies, and ethical AI integration.",
+    url: "https://www.teachingwithai.org/"
+  },
+  {
+    title: "Against Efficiency: The Humanities and ChatGPT",
+    authors: "Ted Underwood",
+    year: 2023,
+    type: "blog",
+    category: "Humanities Pedagogy",
+    description: "Argues humanities' resistance to efficiency metrics uniquely positions them to reshape AI toward human values.",
+    url: "https://tedunderwood.com/2023/01/23/against-efficiency/"
+  },
+  {
+    title: "Historians Need to Understand How AI Actually Works",
+    authors: "Cameron Blevins",
+    year: 2023,
+    type: "article",
+    category: "Humanities Pedagogy",
+    description: "Makes the case for historians developing technical literacy to critique and use AI responsibly.",
+    url: "https://www.historians.org/research-and-publications/perspectives-on-history/march-2023/historians-need-to-understand-how-ai-actually-works",
+    journal: "Perspectives on History"
+  },
+
+  // Writing & Composition
+  {
+    title: "Rhetorically Training Students to Generate with AI",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "Writing & Composition",
+    description: "Applies rhetorical theory to teach students critical engagement with AI as audience and collaborator.",
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S8755461524000045",
+    journal: "Computers and Composition"
+  },
+  {
+    title: "Playing the Digital Dialectic Game: Writing Pedagogy with Generative AI",
+    authors: "Various Authors",
+    year: 2025,
+    type: "paper",
+    category: "Writing & Composition",
+    description: "Frames AI writing tools as sites for dialectical play that teaches critical and ethical engagement.",
+    url: "https://www.sciencedirect.com/science/article/pii/S8755461525000027",
+    journal: "Computers and Composition"
+  },
+  {
+    title: "Generative AI in First-Year Writing: Affordances, Limitations, and Framework",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "Writing & Composition",
+    description: "Early analysis providing practical framework for integrating AI in composition courses.",
+    url: "https://www.sciencedirect.com/science/article/pii/S8755461524000033",
+    journal: "Computers and Composition"
+  },
+  {
+    title: "Statement on AI and Writing Across the Curriculum",
+    authors: "Association for Writing Across the Curriculum",
+    year: 2024,
+    type: "article",
+    category: "Writing & Composition",
+    description: "Professional organization guidance on AI's role in writing instruction across disciplines.",
+    url: "https://wacassociation.org/ai-statement/"
+  },
+  {
+    title: "Adapting Writing Pedagogy in the AI Era",
+    authors: "Various Contributors",
+    year: 2024,
+    type: "article",
+    category: "Writing & Composition",
+    description: "Practical strategies for redesigning writing assignments to maintain pedagogical integrity with AI.",
+    url: "https://wcu-tlc.org/ai/adapting-writing-pedagogy-in-the-ai-era/"
+  },
+  {
+    title: "The Futures of Text: Teaching Writing in a World of ChatGPT",
+    authors: "Anna Mills",
+    year: 2023,
+    type: "blog",
+    category: "Writing & Composition",
+    description: "Framework for redesigning writing assignments that incorporate AI while preserving learning outcomes.",
+    url: "https://annamills.net/"
+  },
+
+  // Academic Integrity & Assessment
+  {
+    title: "How Do We Maintain Academic Integrity in the ChatGPT Era?",
+    authors: "AAC&U",
+    year: 2024,
+    type: "article",
+    category: "Academic Integrity",
+    description: "Recommendations for rethinking academic integrity beyond detection toward pedagogical redesign.",
+    url: "https://www.aacu.org/liberaleducation/articles/how-do-we-maintain-academic-integrity-in-the-chatgpt-era"
+  },
+  {
+    title: "Ensuring Academic Integrity in the Age of ChatGPT",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "Academic Integrity",
+    description: "Proposes rethinking exam design, assessment strategies, and ethical AI policies in higher education.",
+    url: "https://www.cedtech.net/download/ensuring-academic-integrity-in-the-age-of-chatgpt-rethinking-exam-design-assessment-strategies-and-15775.pdf",
+    journal: "Contemporary Educational Technology"
+  },
+  {
+    title: "Unexpected Bedfellows: Using ChatGPT to Uphold Academic Assessment Integrity",
+    authors: "Various Authors",
+    year: 2023,
+    type: "article",
+    category: "Academic Integrity",
+    description: "Explores counterintuitive approach of using AI to design more robust, authentic assessments.",
+    url: "https://er.educause.edu/articles/2023/9/unexpected-bedfellows-using-chatgpt-to-uphold-academic-assessment-integrity",
+    journal: "EDUCAUSE Review"
+  },
+  {
+    title: "The End of Writing: AI Essays and Academic Integrity",
+    authors: "Rebecca Moore Howard & Tricia Serviss",
+    year: 2023,
+    type: "article",
+    category: "Academic Integrity",
+    description: "Challenges traditional integrity approaches and proposes pedagogical redesign over detection.",
+    url: "https://www.insidehighered.com/views/2023/01/13/colleges-should-meet-challenge-chatgpt-changing-how-we-teach-opinion"
+  },
+  {
+    title: "ChatGPT Unveiled: Perceptions of Academic Integrity in Higher Education",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "Academic Integrity",
+    description: "Qualitative research examining student and faculty perceptions of AI and academic honesty.",
+    url: "https://link.springer.com/article/10.1007/s10805-024-09543-6",
+    journal: "Journal of Academic Ethics"
+  },
+
+  // Digital Humanities Methods
+  {
+    title: "Distant Horizons: Digital Evidence and Literary Change",
+    authors: "Ted Underwood",
+    year: 2019,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Uses machine learning to trace literary patterns across centuries, demonstrating computational humanities methods.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/D/bo35853783.html"
+  },
+  {
+    title: "Machine Learning and the Literary Imagination",
+    authors: "Ted Underwood (interview)",
+    year: 2024,
+    type: "article",
+    category: "Digital Humanities",
+    description: "Explores how machine learning serves as philosophical interlocutor for humanities interpretation.",
+    url: "https://thegradientpub.substack.com/p/ted-underwood-machine-learning-and"
+  },
+  {
+    title: "Paper Trails: The US Post and the Making of the American West",
+    authors: "Cameron Blevins",
+    year: 2021,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Spatial history using digital mapping to reveal how postal networks shaped the American West.",
+    url: "https://global.oup.com/academic/product/paper-trails-9780190053673"
+  },
+  {
+    title: "Learning by Doing: Labs and Pedagogy in the Digital Humanities",
+    authors: "Cameron Blevins",
+    year: 2016,
+    type: "blog",
+    category: "Digital Humanities",
+    description: "Articulates pedagogical philosophy for teaching digital methods through hands-on lab experiences.",
+    url: "https://cblevins.github.io/posts/learning-by-doing/"
+  },
+  {
+    title: "Think Talk Make Do: Power and the Digital Humanities",
+    authors: "Miriam Posner",
+    year: 2013,
+    type: "article",
+    category: "Digital Humanities",
+    description: "Critical examination of power dynamics, labor, and representation in digital humanities work.",
+    url: "http://journalofdigitalhumanities.org/2-3/dh-that-matters-by-miriam-posner/",
+    journal: "Journal of Digital Humanities"
+  },
+  {
+    title: "DH101: Introduction to Digital Humanities",
+    authors: "Miriam Posner",
+    year: 2024,
+    type: "tool",
+    category: "Digital Humanities",
+    description: "Course materials for developing humanistic attitudes toward data with critical, interrogative stance.",
+    url: "https://miriamposner.com/dh101f15/"
+  },
+  {
+    title: "Data Feminism",
+    authors: "Catherine D'Ignazio & Lauren F. Klein",
+    year: 2020,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Applies intersectional feminist thought to data science, visualization, and ethics.",
+    url: "https://data-feminism.mitpress.mit.edu/"
+  },
+  {
+    title: "Feminist Data Visualization",
+    authors: "Catherine D'Ignazio & Lauren F. Klein",
+    year: 2016,
+    type: "paper",
+    category: "Digital Humanities",
+    description: "Explores how emotion and embodied experience can expand effective data visualization practices.",
+    url: "https://kanarinka.com/wp-content/uploads/2015/07/IEEE_Feminist_Data_Visualization.pdf",
+    journal: "IEEE VIS 2015"
+  },
+  {
+    title: "Graphesis: Visual Forms of Knowledge Production",
+    authors: "Johanna Drucker",
+    year: 2014,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Critical language for analyzing how visual formats organize and produce knowledge humanistically.",
+    url: "https://www.hup.harvard.edu/books/9780674724938"
+  },
+  {
+    title: "Mechanisms: New Media and the Forensic Imagination",
+    authors: "Matthew G. Kirschenbaum",
+    year: 2008,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Applies computer forensics to study new media textuality through forensic and formal materiality.",
+    url: "https://direct.mit.edu/books/monograph/3356/MechanismsNew-Media-and-the-Forensic-Imagination"
+  },
+  {
+    title: "Software Studies: A Lexicon",
+    authors: "Matthew Fuller (editor)",
+    year: 2008,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Field guide to cultural, political, social, and aesthetic impact of software across disciplines.",
+    url: "https://mitpress.mit.edu/9780262062749/software-studies/"
+  },
+  {
+    title: "Always Already New: Media, History, and the Data of Culture",
+    authors: "Lisa Gitelman",
+    year: 2006,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Media history exploring how recorded sound and digital networks emerged as embedded cultural forms.",
+    url: "https://direct.mit.edu/books/monograph/4377/Always-Already-NewMedia-History-and-the-Data-of"
+  },
+  {
+    title: "The Laws of Cool: Knowledge Work and the Culture of Information",
+    authors: "Alan Liu",
+    year: 2004,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Examines information technology's cultural impact and the emergence of 'information cool' in knowledge work.",
+    url: "https://press.uchicago.edu/ucp/books/book/chicago/L/bo3628842.html"
+  },
+  {
+    title: "Prompt Engineering for Humanities Research",
+    authors: "Quinn Dombrowski, Roopika Risam, Liz Grumbach",
+    year: 2024,
+    type: "blog",
+    category: "Digital Humanities",
+    description: "Practical guide to designing effective prompts for literary studies, history, and cultural analysis.",
+    url: "https://datasittersclub.github.io/site/"
+  },
+  {
+    title: "The Limits of the Digital Humanities",
+    authors: "Adam Kirsch",
+    year: 2014,
+    type: "article",
+    category: "Digital Humanities",
+    description: "Early critique examining tensions between computational approaches and humanistic inquiry.",
+    url: "https://newrepublic.com/article/117428/limits-digital-humanities-adam-kirsch",
+    journal: "The New Republic"
+  },
+  {
+    title: "Reading Machines: Toward an Algorithmic Criticism",
+    authors: "Stephen Ramsay",
+    year: 2011,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Argues computation can enhance subjective literary interpretation through algorithmic textual analysis.",
+    url: "https://www.press.uillinois.edu/books/?id=p078200"
+  },
+  {
+    title: "Viral Texts: Mapping Networks of Reprinting in 19th-Century Newspapers and Magazines",
+    authors: "Ryan Cordell & David Smith",
+    year: 2024,
+    type: "tool",
+    category: "Digital Humanities",
+    description: "Computational project discovering text reuse patterns to understand nineteenth-century information virality.",
+    url: "https://viraltexts.org/"
+  },
+  {
+    title: "Index Thomisticus: A Pioneer Project in Digital Humanities",
+    authors: "Roberto Busa",
+    year: 1974,
+    type: "article",
+    category: "Digital Humanities",
+    description: "Chronicle of the first large-scale humanities computing project indexing Aquinas's complete works.",
+    url: "https://www.historyofinformation.com/detail.php?id=3077"
+  },
+
+  // Historical Simulation & Interactive Learning
+  {
+    title: "The Role of AI in Historical Simulation Design: A TPACK Perspective",
+    authors: "Various Authors",
+    year: 2025,
+    type: "paper",
+    category: "Historical Simulation",
+    description: "Examines educator involvement with GenAI in designing French Revolution simulation for classrooms.",
+    url: "https://www.mdpi.com/2227-7102/15/2/192",
+    journal: "Education Sciences"
+  },
+  {
+    title: "AI Tools for History Teachers",
+    authors: "Tom Daccord",
+    year: 2024,
+    type: "tool",
+    category: "Historical Simulation",
+    description: "Curated collection of AI tools specifically designed for social studies and history education.",
+    url: "https://www.tomdaccord.com/ai-tools-for-history-teachers"
+  },
+  {
+    title: "How Teachers Can Use AI Chatbots in History Class",
+    authors: "SchoolAI",
+    year: 2024,
+    type: "article",
+    category: "Historical Simulation",
+    description: "Practical strategies for using conversational AI to create historical simulations and dialogues.",
+    url: "https://schoolai.com/blog/engaging-in-history-class-using-ai-chatbots-as-a-teaching-tool"
+  },
+  {
+    title: "Revolutionizing History Education Through AI",
+    authors: "Historica Canada",
+    year: 2024,
+    type: "article",
+    category: "Historical Simulation",
+    description: "Explores immersive AI applications bringing historical events to life in interactive classrooms.",
+    url: "https://www.historica.org/blog/ai-in-history-classrooms"
+  },
+  {
+    title: "Hello History: AI Conversations with Historical Figures",
+    authors: "Hello History Team",
+    year: 2024,
+    type: "tool",
+    category: "Historical Simulation",
+    description: "Platform enabling students to engage in AI-powered dialogues with simulated historical personalities.",
+    url: "https://www.hellohistory.ai/for-education"
+  },
+  {
+    title: "Guiding Principles for Artificial Intelligence in History Education",
+    authors: "American Historical Association",
+    year: 2024,
+    type: "article",
+    category: "Historical Simulation",
+    description: "Professional guidelines recognizing AI opportunities while emphasizing irreplaceable role of human teachers.",
+    url: "https://www.historians.org/resource/guiding-principles-for-artificial-intelligence-in-history-education/"
+  },
+
+  // AI Literacy & Prompt Engineering
+  {
+    title: "Understanding AI Literacy",
+    authors: "Stanford Teaching Commons",
+    year: 2024,
+    type: "article",
+    category: "AI Literacy",
+    description: "Framework identifying functional, ethical, rhetorical, and pedagogical domains of AI literacy.",
+    url: "https://teachingcommons.stanford.edu/teaching-guides/artificial-intelligence-teaching-guide/understanding-ai-literacy"
+  },
+  {
+    title: "Prompt Engineering in Higher Education: A Systematic Review",
+    authors: "Various Authors",
+    year: 2025,
+    type: "paper",
+    category: "AI Literacy",
+    description: "Comprehensive review informing curriculum development for teaching prompt engineering skills.",
+    url: "https://educationaltechnologyjournal.springeropen.com/articles/10.1186/s41239-025-00503-7",
+    journal: "International Journal of Educational Technology"
+  },
+  {
+    title: "Embracing AI Literacy, Prompt Engineering, and Critical Thinking",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "AI Literacy",
+    description: "Argues prompt engineering belongs to higher cognitive competences grouped under AI literacy umbrella.",
+    url: "https://educationaltechnologyjournal.springeropen.com/articles/10.1186/s41239-024-00448-3",
+    journal: "International Journal of Educational Technology"
+  },
+  {
+    title: "Generative AI Prompt Engineering for Educators: Practical Strategies",
+    authors: "Jiyeon Park & Sam Choo",
+    year: 2024,
+    type: "paper",
+    category: "AI Literacy",
+    description: "Introduces IDEA framework for scaffolded, step-by-step prompt engineering in teacher preparation.",
+    url: "https://journals.sagepub.com/doi/10.1177/01626434241298954",
+    journal: "Journal of Education"
+  },
+  {
+    title: "AI Literacy and Its Implications for Prompt Engineering Strategies",
+    authors: "Various Authors",
+    year: 2024,
+    type: "paper",
+    category: "AI Literacy",
+    description: "Demonstrates how AI literacy predicts quality of prompt engineering and LLM output.",
+    url: "https://www.sciencedirect.com/science/article/pii/S2666920X24000262",
+    journal: "Computers and Education: AI"
+  },
+  {
+    title: "Prompt Engineering or AI Literacy? Developing Critical Awareness",
+    authors: "Various Authors",
+    year: 2024,
+    type: "article",
+    category: "AI Literacy",
+    description: "Explores relationship between technical prompting skills and broader critical AI awareness.",
+    url: "https://altc.alt.ac.uk/blog/2024/02/prompting-engineering-or-ai-literacy-how-to-develop-a-critical-awareness-of-generative-ai-in-education/"
+  },
+  {
+    title: "AI Prompt Engineering: The New Literacy Skill for Students",
+    authors: "MiddleWeb",
+    year: 2024,
+    type: "article",
+    category: "AI Literacy",
+    description: "Positions prompt engineering as essential next-generation literacy requiring intentional instruction.",
+    url: "https://www.middleweb.com/52275/ai-prompt-engineering-the-new-literacy-skill/"
+  },
+  {
+    title: "New Guide Helps Educators Build Critical AI Literacy",
+    authors: "University of Kansas",
+    year: 2024,
+    type: "tool",
+    category: "AI Literacy",
+    description: "Practical guide for developing student ability to critically analyze, evaluate, and reflect on AI use.",
+    url: "https://cms.ku.edu/news/article/new-guide-helps-educators-build-critical-ai-literacy"
+  },
+
+  // Policy & Institutional Guidance
+  {
+    title: "AI and Education: Guidance for Policy-Makers",
+    authors: "UNESCO",
+    year: 2021,
+    type: "paper",
+    category: "Policy & Guidance",
+    description: "International framework introducing AI essentials and responding to educational challenges and opportunities.",
+    url: "https://unesdoc.unesco.org/ark:/48223/pf0000376709"
+  },
+  {
+    title: "Guidance for Generative AI in Education and Research",
+    authors: "UNESCO",
+    year: 2023,
+    type: "paper",
+    category: "Policy & Guidance",
+    description: "First global guidance on GenAI emphasizing human-centered approach with equity and inclusion.",
+    url: "https://unesdoc.unesco.org/ark:/48223/pf0000386693"
+  },
+  {
+    title: "Artificial Intelligence and the Future of Teaching and Learning",
+    authors: "U.S. Department of Education, Office of Educational Technology",
+    year: 2023,
+    type: "paper",
+    category: "Policy & Guidance",
+    description: "Federal policy guidance emphasizing equity, safety, and human-centered design in educational AI.",
+    url: "https://tech.ed.gov/ai/"
+  },
+  {
+    title: "ChatGPT and the Transformation of Academic Research and Teaching",
+    authors: "UNESCO",
+    year: 2023,
+    type: "paper",
+    category: "Policy & Guidance",
+    description: "Framework addressing ChatGPT's higher education impact with ethical integration recommendations.",
+    url: "https://www.unesco.org/en/articles/chatgpt-and-artificial-intelligence-higher-education"
+  },
+  {
+    title: "Navigating AI Literacy Education: Insights from a Decade of Research",
+    authors: "Various Authors",
+    year: 2025,
+    type: "paper",
+    category: "Policy & Guidance",
+    description: "Systematic review of AI literacy research from 2014-2024 informing educational policy development.",
+    url: "https://www.nature.com/articles/s41599-025-04583-8",
+    journal: "Humanities and Social Sciences Communications"
+  },
+
+  // Tools & Platforms
+  {
+    title: "MagicSchool AI",
+    authors: "MagicSchool Team",
+    year: 2024,
+    type: "tool",
+    category: "Tools & Platforms",
+    description: "Platform with 80+ AI tools for teachers helping 6 million educators save 7-10 hours weekly.",
+    url: "https://www.magicschool.ai"
+  },
+  {
+    title: "Brisk Teaching",
+    authors: "Brisk Team",
+    year: 2024,
+    type: "tool",
+    category: "Tools & Platforms",
+    description: "Chrome extension integrating AI assistance into Google Workspace, Canvas, and LMS platforms.",
+    url: "https://www.briskteaching.com/"
+  },
+  {
+    title: "SchoolAI",
+    authors: "SchoolAI Team",
+    year: 2024,
+    type: "tool",
+    category: "Tools & Platforms",
+    description: "AI teaching assistant generating standards-aligned lessons and interactive historical simulations.",
+    url: "https://schoolai.com/"
+  },
+  {
+    title: "Eduaide.AI",
+    authors: "Eduaide Team",
+    year: 2024,
+    type: "tool",
+    category: "Tools & Platforms",
+    description: "Specialized AI assistant for creating individualized IEPs, assessments, and academic content.",
+    url: "https://www.eduaide.ai/"
+  },
+  {
+    title: "Diffit",
+    authors: "Diffit Team",
+    year: 2024,
+    type: "tool",
+    category: "Tools & Platforms",
+    description: "AI tool for automatically differentiating reading materials to appropriate student levels.",
+    url: "https://www.diffit.me/"
+  },
+
+  // Data Ethics & Visualization
+  {
+    title: "The Seven Principles of Data Feminism",
+    authors: "Catherine D'Ignazio & Lauren F. Klein",
+    year: 2020,
+    type: "article",
+    category: "Data Ethics",
+    description: "Framework for examining power, challenging binaries, and centering emotion in data work.",
+    url: "https://responsibledata.io/anniversary/the-seven-principles-of-data-feminism/"
+  },
+  {
+    title: "Unmasking AI: My Mission to Protect What Is Human",
+    authors: "Joy Buolamwini",
+    year: 2023,
+    type: "book",
+    category: "Data Ethics",
+    description: "Personal account of discovering facial recognition bias and founding the Algorithmic Justice League.",
+    url: "https://www.penguinrandomhouse.com/books/645447/unmasking-ai-by-joy-buolamwini/"
+  },
+  {
+    title: "Race After Technology: Abolitionist Tools for the New Jim Code",
+    authors: "Ruha Benjamin",
+    year: 2019,
+    type: "book",
+    category: "Data Ethics",
+    description: "Examines how technology reproduces racial discrimination through design defaults and algorithmic bias.",
+    url: "https://www.wiley.com/en-us/Race+After+Technology%3A+Abolitionist+Tools+for+the+New+Jim+Code-p-9781509526406"
+  },
+  {
+    title: "Automating Inequality: How High-Tech Tools Profile, Police, and Punish",
+    authors: "Virginia Eubanks",
+    year: 2018,
+    type: "book",
+    category: "Data Ethics",
+    description: "Investigates how automated systems harm poor and working-class communities through digital poverty management.",
+    url: "https://us.macmillan.com/books/9781250074317/automatinginequality"
+  },
+  {
+    title: "Organizations and Researchers Pursuing Algorithmic Justice",
+    authors: "Algorithmic Justice League & Others",
+    year: 2024,
+    type: "article",
+    category: "Data Ethics",
+    description: "Directory of scholars and organizations working toward equitable, accountable AI systems.",
+    url: "https://www.ajl.org/"
+  }
+]
 
 export default function ResourcesPage() {
-  return (
-    <>
-      <Section className="pt-24 pb-16">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Resources</h1>
-            <p className="text-lg text-muted-foreground">
-              Curated collection of historical sources, tools, and scholarship on AI, automation, and digital humanities
-            </p>
-          </div>
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | 'All'>('All')
+  const [selectedType, setSelectedType] = useState<ResourceType | 'All'>('All')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sortBy, setSortBy] = useState<SortOption>('newest')
 
-          {/* Historical Primary Sources */}
-          <div className="mb-16">
-            <div className="flex items-start gap-3 mb-4">
-              <ScrollText className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-              <div>
-                <h2 className="text-3xl font-serif font-bold mb-2">Historical Primary Sources on AI & Automation</h2>
-                <p className="text-muted-foreground">
-                  19th and 20th century texts exploring intelligent machines, automation, and artificial minds—
-                  essential for understanding the deep history of AI concepts
-                </p>
+  const allCategories: ResourceCategory[] = Array.from(new Set(resources.map(r => r.category))).sort()
+
+  const filteredAndSortedResources = useMemo(() => {
+    let filtered = resources.filter(resource => {
+      const matchesSearch = searchQuery === '' ||
+        resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.authors.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+
+      const matchesCategory = selectedCategory === 'All' || resource.category === selectedCategory
+      const matchesType = selectedType === 'All' || resource.type === selectedType
+
+      return matchesSearch && matchesCategory && matchesType
+    })
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'newest':
+        return filtered.sort((a, b) => b.year - a.year)
+      case 'oldest':
+        return filtered.sort((a, b) => a.year - b.year)
+      case 'author-az':
+        return filtered.sort((a, b) => {
+          const authorA = a.authors.split(',')[0].trim().split(' ').pop() || a.authors
+          const authorB = b.authors.split(',')[0].trim().split(' ').pop() || b.authors
+          return authorA.localeCompare(authorB)
+        })
+      case 'category':
+        return filtered.sort((a, b) => a.category.localeCompare(b.category))
+      case 'type':
+        return filtered.sort((a, b) => a.type.localeCompare(b.type))
+      default:
+        return filtered.sort((a, b) => b.year - a.year)
+    }
+  }, [searchQuery, selectedCategory, selectedType, sortBy])
+
+  const resourcesByCategory = useMemo(() => {
+    const grouped: Record<string, Resource[]> = {}
+    filteredAndSortedResources.forEach(resource => {
+      if (!grouped[resource.category]) {
+        grouped[resource.category] = []
+      }
+      grouped[resource.category].push(resource)
+    })
+    return grouped
+  }, [filteredAndSortedResources])
+
+  const resourcesByType = useMemo(() => {
+    const grouped: Record<string, Resource[]> = {}
+    filteredAndSortedResources.forEach(resource => {
+      if (!grouped[resource.type]) {
+        grouped[resource.type] = []
+      }
+      grouped[resource.type].push(resource)
+    })
+    return grouped
+  }, [filteredAndSortedResources])
+
+  const isGroupedView = sortBy === 'category' || sortBy === 'type'
+
+  const getTypeIcon = (type: ResourceType) => {
+    switch (type) {
+      case 'article': return <Newspaper className="h-3.5 w-3.5" />
+      case 'paper': return <FileText className="h-3.5 w-3.5" />
+      case 'blog': return <FileText className="h-3.5 w-3.5" />
+      case 'video': return <Video className="h-3.5 w-3.5" />
+      case 'book': return <BookOpen className="h-3.5 w-3.5" />
+      case 'tool': return <Wrench className="h-3.5 w-3.5" />
+    }
+  }
+
+  const categoryDescriptions: Record<ResourceCategory, string> = {
+    'Historical Primary Sources': 'Seminal texts from 1818-1999 spanning literature, philosophy, and technical works that shaped thinking about intelligent machines, automation, and computation',
+    'Critical AI Theory': 'Foundational texts examining AI systems through lenses of power, bias, labor, and social justice',
+    'Humanities Pedagogy': 'Teaching approaches integrating AI in humanities courses with critical, humanistic frameworks',
+    'Writing & Composition': 'Rhetoric and composition scholarship on AI writing tools in writing instruction',
+    'Academic Integrity': 'Research on plagiarism, assessment redesign, and maintaining integrity in the AI era',
+    'Digital Humanities': 'Computational methods, data analysis, and visualization in humanities research and teaching',
+    'Historical Simulation': 'AI tools and pedagogies for interactive historical learning and simulation',
+    'AI Literacy': 'Teaching students and educators to use, critique, and understand AI systems',
+    'Policy & Guidance': 'Institutional frameworks and policy recommendations for AI in education',
+    'Tools & Platforms': 'Practical AI tools designed for educators and classroom use',
+    'Data Ethics': 'Critical perspectives on algorithmic bias, fairness, and ethical data practices'
+  }
+
+  const scrollToCategory = (category: ResourceCategory) => {
+    setSelectedCategory(category)
+    const element = document.getElementById(category.toLowerCase().replace(/\s+/g, '-'))
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center px-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mr-4"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-serif font-bold">Resources</h1>
+            <Badge variant="secondary" className="text-xs">
+              {resources.length} Total
+            </Badge>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex">
+        {/* Sidebar */}
+        {sidebarOpen && (
+          <aside className="sticky top-16 h-[calc(100vh-4rem)] w-72 flex-shrink-0 border-r bg-muted/30 overflow-y-auto">
+            <div className="p-4 space-y-6">
+              {/* Search */}
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Search
+                </label>
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Search resources..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              {/* Type Filter */}
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Type
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge
+                    variant={selectedType === 'All' ? 'default' : 'outline'}
+                    className="cursor-pointer text-xs"
+                    onClick={() => setSelectedType('All')}
+                  >
+                    All
+                  </Badge>
+                  {(['book', 'paper', 'article', 'blog', 'video', 'tool'] as ResourceType[]).map(type => (
+                    <Badge
+                      key={type}
+                      variant={selectedType === type ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs capitalize"
+                      onClick={() => setSelectedType(type)}
+                    >
+                      {type}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Categories Navigation */}
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Categories
+                </label>
+                <nav className="space-y-1">
+                  <button
+                    onClick={() => setSelectedCategory('All')}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${
+                      selectedCategory === 'All'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'hover:bg-muted'
+                    }`}
+                  >
+                    <span>All Resources</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {resources.length}
+                    </Badge>
+                  </button>
+                  {allCategories.map(category => {
+                    const count = resources.filter(r => r.category === category).length
+                    return (
+                      <button
+                        key={category}
+                        onClick={() => scrollToCategory(category)}
+                        className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors text-left ${
+                          selectedCategory === category
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-muted'
+                        }`}
+                      >
+                        <span className="flex-1 truncate">{category}</span>
+                        <Badge variant="secondary" className="text-xs ml-2">
+                          {count}
+                        </Badge>
+                      </button>
+                    )
+                  })}
+                </nav>
+              </div>
+
+              {/* Results Count */}
+              <div className="pt-4 border-t text-xs text-muted-foreground">
+                Showing {filteredAndSortedResources.length} of {resources.length} resources
               </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.historicalSources.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
+          </aside>
+        )}
 
-          {/* AI Tools & Platforms */}
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <Code className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl font-serif font-bold">AI Tools & Platforms</h2>
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <Container className="py-8 max-w-5xl">
+            {/* Sort Controls */}
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Sort by:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge
+                  variant={sortBy === 'newest' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('newest')}
+                >
+                  Newest First
+                </Badge>
+                <Badge
+                  variant={sortBy === 'oldest' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('oldest')}
+                >
+                  Oldest First
+                </Badge>
+                <Badge
+                  variant={sortBy === 'author-az' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('author-az')}
+                >
+                  Author A-Z
+                </Badge>
+                <Badge
+                  variant={sortBy === 'category' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('category')}
+                >
+                  By Category
+                </Badge>
+                <Badge
+                  variant={sortBy === 'type' ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setSortBy('type')}
+                >
+                  By Format
+                </Badge>
+              </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.tools.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
 
-          {/* Educational Resources */}
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <BookOpen className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl font-serif font-bold">Educational Resources</h2>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.educational.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
+            {filteredAndSortedResources.length > 0 ? (
+              <div className="space-y-12">
+                {/* Grouped by Category View */}
+                {sortBy === 'category' && Object.entries(resourcesByCategory)
+                  .sort(([catA], [catB]) => catA.localeCompare(catB))
+                  .map(([category, categoryResources]) => (
+                    <section key={category} id={category.toLowerCase().replace(/\s+/g, '-')}>
+                      <div className="mb-6 pb-3 border-b">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h2 className="text-2xl font-serif font-bold">{category}</h2>
+                          <Badge variant="secondary">{categoryResources.length}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {categoryDescriptions[category as ResourceCategory]}
+                        </p>
+                      </div>
+                      <div className="space-y-3">
+                        {categoryResources.map((resource, index) => (
+                          <Card key={index} className="hover-lift-glow">
+                            <CardContent className="p-4">
+                              <div className="flex gap-4">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    {getTypeIcon(resource.type)}
+                                    <Badge variant="outline" className="text-xs capitalize">
+                                      {resource.type}
+                                    </Badge>
+                                    <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                    {resource.journal && (
+                                      <span className="text-xs text-muted-foreground italic truncate">
+                                        · {resource.journal}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h3 className="font-semibold text-base mb-1 leading-snug">
+                                    <a
+                                      href={resource.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:text-primary transition-colors hover:underline"
+                                    >
+                                      {resource.title}
+                                    </a>
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground mb-2">
+                                    {resource.authors}
+                                  </p>
+                                  <p className="text-sm leading-relaxed">
+                                    {resource.description}
+                                  </p>
+                                </div>
+                                <div className="flex-shrink-0">
+                                  <Button asChild variant="ghost" size="sm">
+                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
 
-          {/* AI Ethics & Responsible Use */}
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <Newspaper className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl font-serif font-bold">AI Ethics & Responsible Use</h2>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.aiEthics.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
+                {/* Grouped by Type/Format View */}
+                {sortBy === 'type' && Object.entries(resourcesByType)
+                  .sort(([typeA], [typeB]) => typeA.localeCompare(typeB))
+                  .map(([type, typeResources]) => (
+                    <section key={type}>
+                      <div className="mb-6 pb-3 border-b">
+                        <div className="flex items-center gap-3 mb-2">
+                          {getTypeIcon(type as ResourceType)}
+                          <h2 className="text-2xl font-serif font-bold capitalize">{type}s</h2>
+                          <Badge variant="secondary">{typeResources.length}</Badge>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {typeResources.map((resource, index) => (
+                          <Card key={index} className="hover-lift-glow">
+                            <CardContent className="p-4">
+                              <div className="flex gap-4">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="outline" className="text-xs">
+                                      {resource.category}
+                                    </Badge>
+                                    <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                    {resource.journal && (
+                                      <span className="text-xs text-muted-foreground italic truncate">
+                                        · {resource.journal}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h3 className="font-semibold text-base mb-1 leading-snug">
+                                    <a
+                                      href={resource.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:text-primary transition-colors hover:underline"
+                                    >
+                                      {resource.title}
+                                    </a>
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground mb-2">
+                                    {resource.authors}
+                                  </p>
+                                  <p className="text-sm leading-relaxed">
+                                    {resource.description}
+                                  </p>
+                                </div>
+                                <div className="flex-shrink-0">
+                                  <Button asChild variant="ghost" size="sm">
+                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
 
-          {/* Archives & Digital Collections */}
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <Archive className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl font-serif font-bold">Archives & Digital Collections</h2>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.archives.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
+                {/* Flat List View (for date and author sorts) */}
+                {!isGroupedView && (
+                  <div className="space-y-3">
+                    {filteredAndSortedResources.map((resource, index) => (
+                      <Card key={index} className="hover-lift-glow">
+                        <CardContent className="p-4">
+                          <div className="flex gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                {getTypeIcon(resource.type)}
+                                <Badge variant="outline" className="text-xs capitalize">
+                                  {resource.type}
+                                </Badge>
+                                <Badge variant="outline" className="text-xs">
+                                  {resource.category}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                {resource.journal && (
+                                  <span className="text-xs text-muted-foreground italic truncate">
+                                    · {resource.journal}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="font-semibold text-base mb-1 leading-snug">
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="hover:text-primary transition-colors hover:underline"
+                                >
+                                  {resource.title}
+                                </a>
+                              </h3>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {resource.authors}
+                              </p>
+                              <p className="text-sm leading-relaxed">
+                                {resource.description}
+                              </p>
+                            </div>
+                            <div className="flex-shrink-0">
+                              <Button asChild variant="ghost" size="sm">
+                                <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground mb-4">No resources found matching your criteria.</p>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchQuery('')
+                    setSelectedCategory('All')
+                    setSelectedType('All')
+                  }}
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
 
-          {/* Organizations */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <Users className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl font-serif font-bold">Organizations & Communities</h2>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {resources.organizations.map((resource, index) => (
-                <ResourceLink key={index} {...resource} />
-              ))}
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Submit Resource CTA */}
-      <Section className="bg-muted/40">
-        <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Know a Great Resource?</h2>
-            <p className="text-muted-foreground mb-8">
-              Help us build this collection by suggesting resources that would benefit the community
-            </p>
-            <a
-              href="mailto:bbreen@ucsc.edu?subject=Resource Suggestion"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-            >
-              Suggest a Resource
-            </a>
-          </div>
-        </Container>
-      </Section>
-    </>
+            {/* Contribution Call */}
+            <Card className="mt-12 border-dashed border-2 bg-muted/30">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-lg font-semibold mb-2">Know a resource we should include?</h3>
+                <p className="text-sm text-muted-foreground mb-4 max-w-xl mx-auto">
+                  This is a living collection. We welcome suggestions for articles, tools, papers, and
+                  resources related to AI in humanities education.
+                </p>
+                <Button asChild>
+                  <a href="mailto:bbreen@ucsc.edu?subject=THINK Resource Suggestion">
+                    Suggest a Resource
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          </Container>
+        </main>
+      </div>
+    </div>
   )
 }
