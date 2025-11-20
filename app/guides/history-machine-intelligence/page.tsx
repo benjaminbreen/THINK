@@ -2,7 +2,7 @@ import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { ArrowLeft, Lightbulb, BookOpen, ExternalLink, Calendar } from 'lucide-react'
+import { ArrowLeft, Lightbulb, BookOpen, ExternalLink, Calendar, AlertCircle } from 'lucide-react'
 
 export default function HistoryMachineIntelligenceGuide() {
   return (
