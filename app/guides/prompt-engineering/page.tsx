@@ -343,8 +343,8 @@ this same format and style.`}
                       <Code className="h-4 w-4" />
                       Full Prompt Example
                     </h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`I'm building an interactive timeline tool for my course on the
 Scientific Revolution (1500-1700).
 
@@ -390,8 +390,8 @@ Generate 20 events following this format.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">This prompt helps generate thoughtful discussion questions for course readings:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`Generate 10 discussion questions for [READING TITLE] by [AUTHOR].
 
 CONTEXT: This is for an upper-division undergraduate course on
@@ -432,8 +432,8 @@ Q1: [Question]
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <h4 className="font-sans text-base font-semibold mt-0 mb-3">Example: Coding Historical Newspapers</h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`I'm analyzing 100 newspaper articles about labor strikes from
 1870-1900. I need you to code each article for specific themes.
 
@@ -495,8 +495,8 @@ Here is article 1:
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">Transform messy citation formats into organized, consistently formatted bibliographies:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`I have a list of citations in mixed formats that I need converted
 to Chicago Style (author-date) and organized alphabetically.
 
@@ -521,8 +521,8 @@ citations you flagged as incomplete or suspicious.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">Extract chronological information from narrative sources to create datasets:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`Extract all dates and events from this diary entry and create a
 structured timeline.
 
@@ -571,8 +571,8 @@ Here is the diary entry:
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <h4 className="font-sans text-base font-semibold mt-0 mb-3">Full System Prompt Example</h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`You are roleplaying as Frederick Douglass in Rochester, New York,
 in July 1852, shortly after delivering your "What to the Slave Is
 the Fourth of July?" speech.
@@ -630,8 +630,8 @@ the student wishes to discuss.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">For simulations of events or situations rather than specific people:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`You are simulating a town meeting in Salem, Massachusetts in
 March 1692, during the early Salem Witch Trials.
 
@@ -752,8 +752,8 @@ other questions. Respond to student interventions in character.`}
                   </p>
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
-                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
+                    <div className="code-block-dark p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap">
 {`Before generating your timeline entry, think through this step-by-step:
 
 1. First, verify the date is correct by checking against known events

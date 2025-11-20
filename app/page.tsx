@@ -22,10 +22,10 @@ export default function HomePage() {
                 <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100" data-literary="hero-title">
+            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" data-literary="hero-title">
               Building AI Tools for Teaching & Research
             </h1>
-            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl" data-literary="hero-description">
+            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" data-literary="hero-description">
               A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
