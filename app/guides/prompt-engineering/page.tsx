@@ -1,13 +1,23 @@
+'use client'
+
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { BackToTop } from '@/components/ui/back-to-top'
+import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, AlertCircle, CheckCircle, Code } from 'lucide-react'
 
 export default function PromptEngineeringGuide() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: 'Prompt Engineering for Humanities' }
+      ]} />
+      <Section className="pt-8 pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -82,7 +92,7 @@ export default function PromptEngineeringGuide() {
                     </div>
                   </div>
 
-                  <h2 id="what-is-prompting" className="font-serif scroll-mt-24">What Is Prompt Engineering?</h2>
+                  <HeadingAnchor id="what-is-prompting">What Is Prompt Engineering?</HeadingAnchor>
 
                   <p>
                     When you interact with AI—whether through ChatGPT, Claude Code, or custom tools you've built—you're writing prompts. A prompt is simply the instruction or question you give to the AI. Prompt engineering means crafting these instructions strategically to get reliable, useful results.
@@ -99,7 +109,7 @@ export default function PromptEngineeringGuide() {
                     <li><strong>Verification is necessary:</strong> Claims need to be traceable to sources</li>
                   </ul>
 
-                  <h2 id="boundaries" className="font-serif scroll-mt-24">Ethical Boundaries: Augmentation vs. Replacement</h2>
+                  <HeadingAnchor id="boundaries">Ethical Boundaries: Augmentation vs. Replacement</HeadingAnchor>
 
                   <p>
                     Before diving into techniques, we need to establish clear boundaries about what AI should and shouldn't do in humanities work.
@@ -179,7 +189,7 @@ export default function PromptEngineeringGuide() {
                     </div>
                   </div>
 
-                  <h2 id="anatomy" className="font-serif scroll-mt-24">Anatomy of an Effective Prompt</h2>
+                  <HeadingAnchor id="anatomy">Anatomy of an Effective Prompt</HeadingAnchor>
 
                   <p>
                     Whether you're building a tool or automating a mechanical task, strong prompts typically include these elements:
@@ -313,7 +323,7 @@ this same format and style.`}
                     </div>
                   </div>
 
-                  <h2 id="building-tools" className="font-serif scroll-mt-24">Building Educational Tools</h2>
+                  <HeadingAnchor id="building-tools">Building Educational Tools</HeadingAnchor>
 
                   <p>
                     One of the best uses of prompt engineering is building custom educational tools for your courses. Here's how to approach this systematically.
@@ -326,8 +336,8 @@ this same format and style.`}
                       <Code className="h-4 w-4" />
                       Full Prompt Example
                     </h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`I'm building an interactive timeline tool for my course on the
 Scientific Revolution (1500-1700).
 
@@ -373,8 +383,8 @@ Generate 20 events following this format.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">This prompt helps generate thoughtful discussion questions for course readings:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`Generate 10 discussion questions for [READING TITLE] by [AUTHOR].
 
 CONTEXT: This is for an upper-division undergraduate course on
@@ -401,7 +411,7 @@ Q1: [Question]
                     </div>
                   </div>
 
-                  <h2 id="augmentation" className="font-serif scroll-mt-24">Research Augmentation</h2>
+                  <HeadingAnchor id="augmentation">Research Augmentation</HeadingAnchor>
 
                   <p>
                     These prompts help with mechanical research tasks that augment but don't replace scholarly work.
@@ -415,8 +425,8 @@ Q1: [Question]
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <h4 className="font-sans text-base font-semibold mt-0 mb-3">Example: Coding Historical Newspapers</h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`I'm analyzing 100 newspaper articles about labor strikes from
 1870-1900. I need you to code each article for specific themes.
 
@@ -478,8 +488,8 @@ Here is article 1:
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">Transform messy citation formats into organized, consistently formatted bibliographies:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`I have a list of citations in mixed formats that I need converted
 to Chicago Style (author-date) and organized alphabetically.
 
@@ -504,8 +514,8 @@ citations you flagged as incomplete or suspicious.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">Extract chronological information from narrative sources to create datasets:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`Extract all dates and events from this diary entry and create a
 structured timeline.
 
@@ -530,7 +540,7 @@ Here is the diary entry:
                     </div>
                   </div>
 
-                  <h2 id="simulations" className="font-serif scroll-mt-24">Historical Simulations (Pedagogical Use)</h2>
+                  <HeadingAnchor id="simulations">Historical Simulations (Pedagogical Use)</HeadingAnchor>
 
                   <p>
                     Historical simulations where students interact with AI-powered characters can be powerful pedagogical tools—but they require careful prompting to balance engagement with accuracy.
@@ -554,8 +564,8 @@ Here is the diary entry:
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <h4 className="font-sans text-base font-semibold mt-0 mb-3">Full System Prompt Example</h4>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`You are roleplaying as Frederick Douglass in Rochester, New York,
 in July 1852, shortly after delivering your "What to the Slave Is
 the Fourth of July?" speech.
@@ -613,8 +623,8 @@ the student wishes to discuss.`}
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
                     <p className="text-sm mb-4">For simulations of events or situations rather than specific people:</p>
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`You are simulating a town meeting in Salem, Massachusetts in
 March 1692, during the early Salem Witch Trials.
 
@@ -657,7 +667,7 @@ other questions. Respond to student interventions in character.`}
                     </div>
                   </div>
 
-                  <h2 id="testing" className="font-serif scroll-mt-24">Testing and Iteration</h2>
+                  <HeadingAnchor id="testing">Testing and Iteration</HeadingAnchor>
 
                   <p>
                     Prompt engineering is iterative. Your first attempt will rarely be perfect. Here's a systematic approach to improvement.
@@ -735,8 +745,8 @@ other questions. Respond to student interventions in character.`}
                   </p>
 
                   <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
-                    <div className="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-md overflow-x-auto">
-                      <pre className="text-xs mb-0 whitespace-pre-wrap">
+                    <div className="bg-slate-900 dark:bg-slate-950 p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs mb-0 whitespace-pre-wrap !text-slate-100">
 {`Before generating your timeline entry, think through this step-by-step:
 
 1. First, verify the date is correct by checking against known events
@@ -755,7 +765,7 @@ entry.`}
                     </p>
                   </div>
 
-                  <h2 id="pitfalls" className="font-serif scroll-mt-24">Common Pitfalls and How to Avoid Them</h2>
+                  <HeadingAnchor id="pitfalls">Common Pitfalls and How to Avoid Them</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Pitfall 1: The Vague Prompt</h3>
 
@@ -958,6 +968,7 @@ entry.`}
           </div>
         </Container>
       </Section>
+      <BackToTop />
     </>
   )
 }

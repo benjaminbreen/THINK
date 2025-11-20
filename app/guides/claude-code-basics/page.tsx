@@ -1,13 +1,23 @@
+'use client'
+
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { BackToTop } from '@/components/ui/back-to-top'
+import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import Link from 'next/link'
 import { ArrowLeft, Terminal, Download, Key, Lightbulb, AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function ClaudeCodeBasicsGuide() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: 'Getting Started with Claude Code' }
+      ]} />
+      <Section className="pt-8 pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -83,7 +93,7 @@ export default function ClaudeCodeBasicsGuide() {
                     </div>
                   </div>
 
-                  <h2 id="what-is-terminal" className="font-serif scroll-mt-24">What is the Terminal?</h2>
+                  <HeadingAnchor id="what-is-terminal">What is the Terminal?</HeadingAnchor>
 
                   <p>
                     Before we can use Claude Code, we need to understand what the "terminal" is. If you've never encountered it before, the terminal (also called "command line" or "console") might seem intimidating—it's that black window with text that you see in movies when hackers are doing their thing. In reality, it's just another way to interact with your computer.
@@ -187,7 +197,7 @@ export default function ClaudeCodeBasicsGuide() {
                     </div>
                   </div>
 
-                  <h2 id="code-editor" className="font-serif scroll-mt-24">Getting a Code Editor</h2>
+                  <HeadingAnchor id="code-editor">Getting a Code Editor</HeadingAnchor>
 
                   <p>
                     A code editor is like Microsoft Word, but designed for writing code instead of essays. You'll use it to view and edit the files that Claude Code creates for you. The good news: the best code editor is completely free.
@@ -237,7 +247,7 @@ export default function ClaudeCodeBasicsGuide() {
                     </div>
                   </div>
 
-                  <h2 id="install-claude" className="font-serif scroll-mt-24">Installing Claude Code</h2>
+                  <HeadingAnchor id="install-claude">Installing Claude Code</HeadingAnchor>
 
                   <p>
                     Claude Code is a tool that lets you use AI to build software by simply describing what you want in plain English. Instead of learning a programming language, you just talk to Claude naturally, and it writes the code for you.
@@ -346,7 +356,7 @@ How can I help you today?`}
                     </pre>
                   </div>
 
-                  <h2 id="first-steps" className="font-serif scroll-mt-24">Your First Steps with Claude Code</h2>
+                  <HeadingAnchor id="first-steps">Your First Steps with Claude Code</HeadingAnchor>
 
                   <p>
                     Now for the exciting part: actually using Claude Code. The most important thing to understand is that <strong>you interact with Claude Code using plain English</strong>. You don't need to know any programming languages or special syntax.
@@ -485,7 +495,7 @@ claude`}
                     </div>
                   </div>
 
-                  <h2 id="starter-project-1" className="font-serif scroll-mt-24">Starter Project 1: Literary Text Analyzer</h2>
+                  <HeadingAnchor id="starter-project-1">Starter Project 1: Literary Text Analyzer</HeadingAnchor>
 
                   <p>
                     Now let's build something useful: a tool that analyzes literary texts. This project will count words, find the most frequent terms, and identify interesting patterns—the kind of analysis that's useful for close reading or digital humanities research.
@@ -584,7 +594,7 @@ claude`}
                     <li><strong>Save results:</strong> "Can I download the analysis as a PDF for my research notes?"</li>
                   </ul>
 
-                  <h2 id="starter-project-2" className="font-serif scroll-mt-24">Starter Project 2: Interactive Historical Timeline</h2>
+                  <HeadingAnchor id="starter-project-2">Starter Project 2: Interactive Historical Timeline</HeadingAnchor>
 
                   <p>
                     For the second project, let's create something more visual: an interactive timeline where you can add historical events, see them displayed chronologically, and click on events to read more details.
@@ -688,7 +698,7 @@ claude`}
                     </div>
                   </div>
 
-                  <h2 id="alternatives" className="font-serif scroll-mt-24">Alternative AI Coding Tools</h2>
+                  <HeadingAnchor id="alternatives">Alternative AI Coding Tools</HeadingAnchor>
 
                   <p>
                     Claude Code is just one option in a rapidly growing ecosystem of AI coding assistants. Here are some alternatives worth knowing about, each with different strengths:
@@ -788,7 +798,7 @@ claude`}
                     The good news: you're not locked into one choice. Many developers use multiple tools for different tasks. You might use Claude Code for building new projects, then switch to Cursor when fine-tuning the code. Experiment and see what fits your workflow.
                   </p>
 
-                  <h2 id="next-steps" className="font-serif scroll-mt-24">What's Next?</h2>
+                  <HeadingAnchor id="next-steps">What's Next?</HeadingAnchor>
 
                   <p>
                     You now have the foundation to start building your own AI-powered tools for teaching and research. Here are some directions to explore:
@@ -896,6 +906,7 @@ claude`}
           </div>
         </Container>
       </Section>
+      <BackToTop />
     </>
   )
 }

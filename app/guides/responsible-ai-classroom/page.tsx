@@ -1,13 +1,22 @@
+'use client'
+
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { BackToTop } from '@/components/ui/back-to-top'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
 export default function ResponsibleAIClassroomGuide() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: 'Responsible AI Use in the Classroom' }
+      ]} />
+      <Section className="pt-8 pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -304,6 +313,7 @@ export default function ResponsibleAIClassroomGuide() {
           </div>
         </Container>
       </Section>
+      <BackToTop />
     </>
   )
 }

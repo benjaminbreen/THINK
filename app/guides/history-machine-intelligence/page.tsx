@@ -1,13 +1,23 @@
+'use client'
+
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { BackToTop } from '@/components/ui/back-to-top'
+import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, BookOpen, ExternalLink, Calendar, AlertCircle } from 'lucide-react'
 
 export default function HistoryMachineIntelligenceGuide() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: 'History of Machine Intelligence' }
+      ]} />
+      <Section className="pt-8 pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -84,7 +94,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     </div>
                   </div>
 
-                  <h2 id="intro" className="font-serif scroll-mt-24">Introduction: The Long History of "Thinking Machines"</h2>
+                  <HeadingAnchor id="intro">Introduction: The Long History of "Thinking Machines"</HeadingAnchor>
 
                   <p>
                     When we talk about artificial intelligence in 2025, we often treat it as radically new—a technology
@@ -231,7 +241,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     </div>
                   </div>
 
-                  <h2 id="early-mechanist" className="font-serif scroll-mt-24">Early Mechanist Philosophy (1747-1879)</h2>
+                  <HeadingAnchor id="early-mechanist">Early Mechanist Philosophy (1747-1879)</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">La Mettrie's Radical Materialism (1747)</h3>
 
@@ -280,7 +290,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     </div>
                   </div>
 
-                  <h2 id="prehistory" className="font-serif scroll-mt-24">The Prehistory of AI: Statistics, Psychology, and Information Anxiety (1870s-1940)</h2>
+                  <HeadingAnchor id="prehistory">The Prehistory of AI: Statistics, Psychology, and Information Anxiety (1870s-1940)</HeadingAnchor>
 
                   <p>
                     The decades between the Industrial Revolution and World War II saw rapid technological change that fundamentally
@@ -608,7 +618,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     objective measurement.
                   </p>
 
-                  <h2 id="computing-pioneers" className="font-serif scroll-mt-24">Computing Pioneers (1843-1909)</h2>
+                  <HeadingAnchor id="computing-pioneers">Computing Pioneers (1843-1909)</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Ada Lovelace and the First Algorithm (1843)</h3>
 
@@ -677,7 +687,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     remarkably relevant for discussing contemporary AI infrastructure and platform dependence.
                   </p>
 
-                  <h2 id="information-theory" className="font-serif scroll-mt-24">Information Theory & Cybernetics (1945-1950)</h2>
+                  <HeadingAnchor id="information-theory">Information Theory & Cybernetics (1945-1950)</HeadingAnchor>
 
                   <p>
                     The period from 1945-1950 saw an explosion of foundational work that made modern computing—and eventually AI—possible.
@@ -779,7 +789,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     </blockquote>
                   </div>
 
-                  <h2 id="birth-ai" className="font-serif scroll-mt-24">The Birth of Artificial Intelligence (1950-1962)</h2>
+                  <HeadingAnchor id="birth-ai">The Birth of Artificial Intelligence (1950-1962)</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Turing's Imitation Game (1950)</h3>
 
@@ -859,7 +869,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     writing and thinking, or systems that automate intellectual labor? The answer shapes how we design and deploy them.
                   </p>
 
-                  <h2 id="critical-voices" className="font-serif scroll-mt-24">Critical Voices (1954-1985)</h2>
+                  <HeadingAnchor id="critical-voices">Critical Voices (1954-1985)</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Heidegger on Technology (1954)</h3>
 
@@ -916,7 +926,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     and digital humanities.
                   </p>
 
-                  <h2 id="digital-humanities" className="font-serif scroll-mt-24">Digital Humanities Foundations (1942-1991)</h2>
+                  <HeadingAnchor id="digital-humanities">Digital Humanities Foundations (1942-1991)</HeadingAnchor>
 
                   <p>
                     While AI researchers pursued intelligent machines, humanists began theorizing computational approaches to texts,
@@ -977,7 +987,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     across textual networks that constitutes interpretation?
                   </p>
 
-                  <h2 id="contemporary-theory" className="font-serif scroll-mt-24">Contemporary Critical Theory (1999-Present)</h2>
+                  <HeadingAnchor id="contemporary-theory">Contemporary Critical Theory (1999-Present)</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Classification and Power (1999)</h3>
 
@@ -1015,7 +1025,7 @@ export default function HistoryMachineIntelligenceGuide() {
                     often repeats this erasure, treating intelligence as abstract computation.
                   </p>
 
-                  <h2 id="teaching" className="font-serif scroll-mt-24">Teaching This History</h2>
+                  <HeadingAnchor id="teaching">Teaching This History</HeadingAnchor>
 
                   <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Why Historical Context Matters</h3>
 
@@ -1166,6 +1176,7 @@ export default function HistoryMachineIntelligenceGuide() {
           </div>
         </Container>
       </Section>
+      <BackToTop />
     </>
   )
 }
