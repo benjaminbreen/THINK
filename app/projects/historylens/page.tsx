@@ -3,6 +3,7 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ProjectBanner } from '@/components/ui/project-banner'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Github, BarChart3, Users, BookOpen, Sparkles } from 'lucide-react'
 
@@ -20,6 +21,11 @@ export default function HistoryLensPage() {
           </div>
 
           <div className="mx-auto max-w-3xl">
+            <ProjectBanner
+              thumbnailPath="/thumbnails/historylens.png"
+              projectTitle="HistoryLens"
+            />
+
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <h1 className="text-4xl font-serif font-bold">HistoryLens</h1>
