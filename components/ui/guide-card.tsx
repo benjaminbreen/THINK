@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, LucideIcon } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 
 interface GuideCardProps {
@@ -11,7 +11,7 @@ interface GuideCardProps {
   description: string
   href: string
   thumbnailPath?: string
-  icon: LucideIcon
+  icon: React.ReactNode
   animationDelay?: string
 }
 
@@ -20,7 +20,7 @@ export function GuideCard({
   description,
   href,
   thumbnailPath,
-  icon: Icon,
+  icon,
   animationDelay = '100'
 }: GuideCardProps) {
   const [hasImage, setHasImage] = useState(!!thumbnailPath)
@@ -40,7 +40,7 @@ export function GuideCard({
           </div>
         ) : (
           <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-            <Icon className="h-5 w-5 text-amber-600" />
+            {icon}
           </div>
         )}
         <CardTitle className="text-lg mb-2">{title}</CardTitle>

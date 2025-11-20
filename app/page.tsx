@@ -175,7 +175,7 @@ export default function HomePage() {
               description="Learn how to use Claude Code in the terminal to build custom AI tools"
               href="/guides/claude-code-basics"
               thumbnailPath="/thumbnails/claude-code-basics.png"
-              icon={Code}
+              icon={<Code className="h-5 w-5 text-amber-600" />}
               animationDelay="100"
             />
 
@@ -184,7 +184,7 @@ export default function HomePage() {
               description="How to communicate effectively with AI when building educational tools"
               href="/guides/prompt-engineering"
               thumbnailPath="/thumbnails/prompt-engineering.png"
-              icon={FileText}
+              icon={<FileText className="h-5 w-5 text-amber-600" />}
               animationDelay="200"
             />
 
@@ -193,7 +193,7 @@ export default function HomePage() {
               description="NotebookLM, Elicit, and other AI tools for augmenting scholarly research"
               href="/guides/ai-historical-research"
               thumbnailPath="/thumbnails/ai-historical-research.png"
-              icon={Microscope}
+              icon={<Microscope className="h-5 w-5 text-amber-600" />}
               animationDelay="300"
             />
 
@@ -202,7 +202,7 @@ export default function HomePage() {
               description="From 18th-century mechanist philosophy to contemporary AI"
               href="/guides/history-machine-intelligence"
               thumbnailPath="/thumbnails/history-machine-intelligence.png"
-              icon={BookOpen}
+              icon={<BookOpen className="h-5 w-5 text-amber-600" />}
               animationDelay="400"
             />
 
@@ -211,7 +211,7 @@ export default function HomePage() {
               description="How humanities faculty are approaching AI integration in 2025"
               href="/guides/responsible-ai-classroom"
               thumbnailPath="/thumbnails/responsible-ai-classroom.png"
-              icon={Lightbulb}
+              icon={<Lightbulb className="h-5 w-5 text-amber-600" />}
               animationDelay="500"
             />
           </div>
