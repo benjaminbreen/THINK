@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { BackToTop } from '@/components/ui/back-to-top'
+import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, AlertCircle, CheckCircle, ExternalLink, BookOpen, FileText, Search } from 'lucide-react'
@@ -13,7 +16,12 @@ export default function AIHistoricalResearchGuide() {
 
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: 'AI for Historical Research' }
+      ]} />
+      <Section className="pt-8 pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -87,7 +95,7 @@ export default function AIHistoricalResearchGuide() {
                     </div>
                   </div>
 
-                  <h2 id="intro" className="font-serif scroll-mt-24">Introduction: AI as Research Assistant</h2>
+                  <HeadingAnchor id="intro">Introduction: AI as Research Assistant</HeadingAnchor>
 
                   <p>
                     Artificial intelligence is transforming historical research workflows in 2024-2025. From transcribing 19th-century handwritten documents to synthesizing hundreds of scholarly articles, AI tools are making tasks that once took weeks or months achievable in hours or days. But these tools work best when historians understand both their capabilities and limitations.
@@ -116,7 +124,7 @@ export default function AIHistoricalResearchGuide() {
                     </div>
                   </div>
 
-                  <h2 id="landscape" className="font-serif scroll-mt-24">The Current Landscape (2024-2025)</h2>
+                  <HeadingAnchor id="landscape">The Current Landscape (2024-2025)</HeadingAnchor>
 
                   <p>
                     The AI tools available to historians have matured dramatically in the past two years. Here's an overview of the major categories:
@@ -167,7 +175,7 @@ export default function AIHistoricalResearchGuide() {
                     </table>
                   </div>
 
-                  <h2 id="notebooklm" className="font-serif scroll-mt-24">Google NotebookLM: Your AI Research Partner</h2>
+                  <HeadingAnchor id="notebooklm">Google NotebookLM: Your AI Research Partner</HeadingAnchor>
 
                   <p>
                     <a href="https://notebooklm.google.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
@@ -263,7 +271,7 @@ export default function AIHistoricalResearchGuide() {
                     </div>
                   </div>
 
-                  <h2 id="research-tools" className="font-serif scroll-mt-24">Literature Review & Research Synthesis Tools</h2>
+                  <HeadingAnchor id="research-tools">Literature Review & Research Synthesis Tools</HeadingAnchor>
 
                   <p>
                     Beyond NotebookLM, several specialized tools help historians navigate the vast scholarly literature. These tools search academic databases and extract structured information from published research.
@@ -339,7 +347,7 @@ export default function AIHistoricalResearchGuide() {
                     <strong>Best for:</strong> Exploratory research, unfamiliar topics, or getting oriented in a new area. Ask broad questions and follow up based on the cited sources.
                   </p>
 
-                  <h2 id="document-analysis" className="font-serif scroll-mt-24">Document Analysis & OCR: Reading Historical Sources</h2>
+                  <HeadingAnchor id="document-analysis">Document Analysis & OCR: Reading Historical Sources</HeadingAnchor>
 
                   <p>
                     One of the most transformative applications of AI for historians is automated transcription and translation of historical documents. Recent advances in vision-language models have dramatically improved accuracy for handwritten and damaged materials.
@@ -502,7 +510,7 @@ Context: This is a [TYPE OF DOCUMENT] from [DATE/PERIOD]
                     </div>
                   </div>
 
-                  <h2 id="workflows" className="font-serif scroll-mt-24">Practical Workflows for Historians</h2>
+                  <HeadingAnchor id="workflows">Practical Workflows for Historians</HeadingAnchor>
 
                   <p>
                     Here are tested workflows combining multiple tools for common historical research tasks.
@@ -591,7 +599,7 @@ Context: This is a [TYPE OF DOCUMENT] from [DATE/PERIOD]
                     </ol>
                   </div>
 
-                  <h2 id="prompts" className="font-serif scroll-mt-24">Prompt Library for Historians</h2>
+                  <HeadingAnchor id="prompts">Prompt Library for Historians</HeadingAnchor>
 
                   <p>
                     Here are tested prompts for common research tasks. Adapt these to your specific needs.
@@ -664,7 +672,7 @@ For each term, please:
                     </div>
                   </div>
 
-                  <h2 id="limitations" className="font-serif scroll-mt-24">Limitations & Ethical Considerations</h2>
+                  <HeadingAnchor id="limitations">Limitations & Ethical Considerations</HeadingAnchor>
 
                   <p>
                     AI tools for historical research have significant limitations that historians must understand and account for.
@@ -723,7 +731,7 @@ For each term, please:
                     </ol>
                   </div>
 
-                  <h2 id="future" className="font-serif scroll-mt-24">The Future: What's Coming</h2>
+                  <HeadingAnchor id="future">The Future: What's Coming</HeadingAnchor>
 
                   <p>
                     Based on 2024 developments, here's what historians can expect in the next 1-2 years:
@@ -801,6 +809,7 @@ For each term, please:
           </div>
         </Container>
       </Section>
+      <BackToTop />
     </>
   )
 }
