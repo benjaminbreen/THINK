@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
+import { GuideBanner } from '@/components/ui/guide-banner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, AlertCircle, CheckCircle, ExternalLink, BookOpen, FileText, Search } from 'lucide-react'
@@ -23,6 +24,12 @@ export default function AIHistoricalResearchGuide() {
       ]} />
       <Section className="pt-8 pb-16">
         <Container>
+          <GuideBanner
+            thumbnailPath="/thumbnails/ai-historical-research.png"
+            guideTitle="AI for Historical Research"
+            guideId="ai-historical-research"
+          />
+
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
               <Link href="/#guides">

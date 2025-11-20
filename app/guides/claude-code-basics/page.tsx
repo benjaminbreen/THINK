@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
+import { GuideBanner } from '@/components/ui/guide-banner'
 import Link from 'next/link'
 import { ArrowLeft, Terminal, Download, Key, Lightbulb, AlertCircle, CheckCircle } from 'lucide-react'
 
@@ -19,6 +20,12 @@ export default function ClaudeCodeBasicsGuide() {
       ]} />
       <Section className="pt-8 pb-16">
         <Container>
+          <GuideBanner
+            thumbnailPath="/thumbnails/claude-code-basics.png"
+            guideTitle="Getting Started with Claude Code"
+            guideId="claude-code-basics"
+          />
+
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
               <Link href="/#guides">

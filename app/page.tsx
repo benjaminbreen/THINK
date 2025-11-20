@@ -4,7 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter } from 'lucide-react'
+import { ProjectCard } from '@/components/ui/project-card'
+import { GuideCard } from '@/components/ui/guide-card'
+import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter, Lightbulb } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
 import { LiteraryTransformer } from '@/components/ui/literary-transformer'
 
@@ -22,10 +24,10 @@ export default function HomePage() {
                 <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
               </Badge>
             </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100" data-literary="hero-title">
+            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" data-literary="hero-title">
               Building AI Tools for Teaching & Research
             </h1>
-            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl" data-literary="hero-description">
+            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" data-literary="hero-description">
               A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
               Browse projects, share your own work, and learn how to build custom tools for your courses and research.
             </p>
@@ -79,121 +81,60 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* HistoryLens */}
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <Badge className="text-xs bg-amber-600 hover:bg-amber-700 text-white">Framework</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">HistoryLens</CardTitle>
-                <CardDescription className="text-sm mb-2 leading-snug">
-                  A suite of educational games and simulations built around open-ended "sandbox" learning enabled by LLM-generated roleplaying—but backstopped by real primary sources. Students learn history by testing AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways. Only through critical, skeptical engagement can we truly understand them.
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">History</Badge>
-                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">Full Course</Badge>
-                  <Badge variant="outline" className="text-xs border-emerald-600/30 text-emerald-700 dark:text-emerald-400">Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/historylens" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <ProjectCard
+              title="HistoryLens"
+              description="A suite of educational games and simulations built around open-ended 'sandbox' learning enabled by LLM-generated roleplaying—but backstopped by real primary sources. Students learn history by testing AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways."
+              href="/projects/historylens"
+              slug="historylens"
+              type="Framework"
+              year="2024"
+              tags={['History', 'Full Course', 'Assignment']}
+              animationDelay="100"
+            />
 
-            {/* Young Darwin */}
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Simulation</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Young Darwin</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Interactive simulation of Darwin's Galápagos expedition with specimen collection
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Classroom Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/young-darwin" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <ProjectCard
+              title="Young Darwin"
+              description="Interactive simulation of Darwin's Galápagos expedition with specimen collection"
+              href="/projects/young-darwin"
+              slug="young-darwin"
+              type="Simulation"
+              year="2024"
+              tags={['History', 'Classroom Assignment']}
+              animationDelay="200"
+            />
 
-            {/* Apothecary Simulator */}
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Simulation</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Apothecary Simulator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  17th century medical practice using authentic early modern recipes
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Classroom Assignment</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/apothecary-simulator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <ProjectCard
+              title="Apothecary Simulator"
+              description="17th century medical practice using authentic early modern recipes"
+              href="/projects/apothecary-simulator"
+              slug="apothecary-simulator"
+              type="Simulation"
+              year="2024"
+              tags={['History', 'Classroom Assignment']}
+              animationDelay="300"
+            />
 
-            {/* History Simulator */}
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Generator</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">History Simulator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Generate historically plausible scenarios and figures for exploration
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Research Tool</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/history-simulator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <ProjectCard
+              title="History Simulator"
+              description="Generate historically plausible scenarios and figures for exploration"
+              href="/projects/history-simulator"
+              slug="history-simulator"
+              type="Generator"
+              year="2024"
+              tags={['History', 'Research Tool']}
+              animationDelay="400"
+            />
 
-            {/* Historical Figure Generator */}
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="secondary" className="text-xs">Generator</Badge>
-                  <span className="text-xs text-muted-foreground">2024</span>
-                </div>
-                <CardTitle className="text-xl mb-2">Historical Figure Generator</CardTitle>
-                <CardDescription className="text-sm mb-3">
-                  Create randomized but plausible historical figures from different eras
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="text-xs">History</Badge>
-                  <Badge variant="outline" className="text-xs">Research Tool</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href="/projects/historical-figure-generator" className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-                  View project <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <ProjectCard
+              title="Historical Figure Generator"
+              description="Create randomized but plausible historical figures from different eras"
+              href="/projects/historical-figure-generator"
+              slug="historical-figure-generator"
+              type="Generator"
+              year="2024"
+              tags={['History', 'Research Tool']}
+              animationDelay="500"
+            />
 
             {/* Placeholder for community contributions */}
             <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors">
@@ -229,107 +170,50 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-100">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Code className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">Getting Started with Claude Code</CardTitle>
-                <CardDescription className="text-sm">
-                  Learn how to use Claude Code in the terminal to build custom AI tools
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/claude-code-basics" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <GuideCard
+              title="Getting Started with Claude Code"
+              description="Learn how to use Claude Code in the terminal to build custom AI tools"
+              href="/guides/claude-code-basics"
+              thumbnailPath="/thumbnails/claude-code-basics.png"
+              icon={<Code className="h-5 w-5 text-amber-600" />}
+              animationDelay="100"
+            />
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-200">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Sparkles className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">Building Historical Simulations</CardTitle>
-                <CardDescription className="text-sm">
-                  Step-by-step guide to creating AI-powered historical simulations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/building-simulations" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <GuideCard
+              title="Prompt Engineering for Humanities"
+              description="How to communicate effectively with AI when building educational tools"
+              href="/guides/prompt-engineering"
+              thumbnailPath="/thumbnails/prompt-engineering.png"
+              icon={<FileText className="h-5 w-5 text-amber-600" />}
+              animationDelay="200"
+            />
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-300">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <GraduationCap className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">Designing AI Assignments</CardTitle>
-                <CardDescription className="text-sm">
-                  Best practices for creating effective AI-enhanced assignments
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/ai-assignments" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <GuideCard
+              title="AI for Historical Research"
+              description="NotebookLM, Elicit, and other AI tools for augmenting scholarly research"
+              href="/guides/ai-historical-research"
+              thumbnailPath="/thumbnails/ai-historical-research.png"
+              icon={<Microscope className="h-5 w-5 text-amber-600" />}
+              animationDelay="300"
+            />
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-400">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <Microscope className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">AI for Research Workflows</CardTitle>
-                <CardDescription className="text-sm">
-                  Using LLMs for historical research, translation, and data analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/research-workflows" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <GuideCard
+              title="History of Machine Intelligence"
+              description="From 18th-century mechanist philosophy to contemporary AI"
+              href="/guides/history-machine-intelligence"
+              thumbnailPath="/thumbnails/history-machine-intelligence.png"
+              icon={<BookOpen className="h-5 w-5 text-amber-600" />}
+              animationDelay="400"
+            />
 
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-500">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <FileText className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">Prompt Engineering for Humanities</CardTitle>
-                <CardDescription className="text-sm">
-                  Techniques for writing effective prompts for historical and literary analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/prompt-engineering" className="text-sm text-primary hover:underline inline-flex items-center link-underline">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-600">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 animate-bounce-subtle">
-                  <BookOpen className="h-5 w-5 text-amber-600" />
-                </div>
-                <CardTitle className="text-lg mb-2">Critical AI Pedagogy</CardTitle>
-                <CardDescription className="text-sm">
-                  Teaching students to think critically about AI outputs and limitations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/guides/critical-pedagogy" className="text-sm text-primary hover:underline inline-flex items-center">
-                  Read guide <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </CardContent>
-            </Card>
+            <GuideCard
+              title="Responsible AI Use in the Classroom"
+              description="How humanities faculty are approaching AI integration in 2025"
+              href="/guides/responsible-ai-classroom"
+              thumbnailPath="/thumbnails/responsible-ai-classroom.png"
+              icon={<Lightbulb className="h-5 w-5 text-amber-600" />}
+              animationDelay="500"
+            />
           </div>
 
           <div className="text-center mt-8">
