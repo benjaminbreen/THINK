@@ -294,12 +294,12 @@ export default function PedagogyPage() {
                 <CardHeader>
                   <CardTitle className="text-lg">Responsible AI Use in the Classroom</CardTitle>
                   <CardDescription>
-                    Tips and strategies for effective, ethical AI integration in humanities courses
+                    How humanities faculty are thinking about AI integration in 2025
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button asChild variant="ghost" size="sm" className="w-full">
-                    <Link href="#">Read Guide (Coming Soon)</Link>
+                    <Link href="/guides/responsible-ai-classroom">Read Guide</Link>
                   </Button>
                 </CardContent>
               </Card>
