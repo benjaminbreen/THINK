@@ -1,0 +1,337 @@
+'use client'
+
+import { useState } from 'react'
+import { Container } from '@/components/ui/container'
+import { Section } from '@/components/ui/section'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import {
+  Code, Sparkles, GraduationCap, Microscope, FileText, BookOpen,
+  Grid3x3, List, ArrowUpDown, Lightbulb
+} from 'lucide-react'
+
+type ViewMode = 'cards' | 'list'
+type SortBy = 'default' | 'title' | 'category'
+
+interface Guide {
+  id: string
+  title: string
+  description: string
+  href: string
+  category: 'Technical' | 'Pedagogical' | 'Research' | 'Best Practices'
+  icon: any
+  status: 'available' | 'coming-soon'
+}
+
+const guides: Guide[] = [
+  {
+    id: 'claude-code-basics',
+    title: 'Getting Started with Claude Code',
+    description: 'Learn how to use Claude Code in the terminal to build custom AI tools—no technical background required',
+    href: '/guides/claude-code-basics',
+    category: 'Technical',
+    icon: Code,
+    status: 'available'
+  },
+  {
+    id: 'prompt-engineering',
+    title: 'Prompt Engineering for Humanities',
+    description: 'How to communicate effectively with AI when building educational tools and augmenting research workflows',
+    href: '/guides/prompt-engineering',
+    category: 'Technical',
+    icon: FileText,
+    status: 'available'
+  },
+  {
+    id: 'building-simulations',
+    title: 'Building Historical Simulations',
+    description: 'Step-by-step guide to creating AI-powered historical simulations with HistoryLens',
+    href: '/guides/building-simulations',
+    category: 'Pedagogical',
+    icon: Sparkles,
+    status: 'available'
+  },
+  {
+    id: 'ai-assignments',
+    title: 'Designing AI Assignments',
+    description: 'Best practices for creating effective AI-enhanced assignments that promote critical thinking',
+    href: '/guides/ai-assignments',
+    category: 'Pedagogical',
+    icon: GraduationCap,
+    status: 'available'
+  },
+  {
+    id: 'research-workflows',
+    title: 'AI for Research Workflows',
+    description: 'Using LLMs for historical research, translation, data analysis, and literature reviews',
+    href: '/guides/research-workflows',
+    category: 'Research',
+    icon: Microscope,
+    status: 'available'
+  },
+  {
+    id: 'critical-pedagogy',
+    title: 'Critical AI Pedagogy',
+    description: 'Teaching students to think critically about AI outputs, limitations, and biases',
+    href: '/guides/critical-pedagogy',
+    category: 'Pedagogical',
+    icon: BookOpen,
+    status: 'available'
+  },
+  {
+    id: 'responsible-ai-classroom',
+    title: 'Responsible AI Use in the Classroom',
+    description: 'How humanities faculty are approaching AI integration in 2025—policies, practices, and principles',
+    href: '/guides/responsible-ai-classroom',
+    category: 'Best Practices',
+    icon: Lightbulb,
+    status: 'available'
+  },
+  {
+    id: 'facilitating-discussions',
+    title: 'Facilitating Critical AI Discussions',
+    description: 'Techniques for leading productive conversations about AI limitations and biases',
+    href: '#',
+    category: 'Best Practices',
+    icon: BookOpen,
+    status: 'coming-soon'
+  },
+  {
+    id: 'assessment-strategies',
+    title: 'Assessment Strategies for AI-Enhanced Learning',
+    description: 'How to evaluate student work in courses that incorporate AI tools',
+    href: '#',
+    category: 'Best Practices',
+    icon: GraduationCap,
+    status: 'coming-soon'
+  }
+]
+
+export default function GuidesPage() {
+  const [viewMode, setViewMode] = useState<ViewMode>('cards')
+  const [sortBy, setSortBy] = useState<SortBy>('default')
+
+  const sortedGuides = [...guides].sort((a, b) => {
+    if (sortBy === 'title') {
+      return a.title.localeCompare(b.title)
+    }
+    if (sortBy === 'category') {
+      return a.category.localeCompare(b.category)
+    }
+    return 0 // default order
+  })
+
+  const categoryColors = {
+    'Technical': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+    'Pedagogical': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    'Research': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+    'Best Practices': 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
+  }
+
+  return (
+    <>
+      <Section className="pt-24 pb-16">
+        <Container>
+          <div className="mx-auto max-w-3xl text-center mb-12">
+            <h1 className="text-4xl font-serif font-bold mb-4">How-to Guides</h1>
+            <p className="text-lg text-muted-foreground">
+              Comprehensive guides for building AI tools, designing assignments, and integrating AI thoughtfully into humanities teaching and research
+            </p>
+          </div>
+
+          {/* View Controls */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8">
+            <div className="flex gap-2">
+              <Button
+                variant={viewMode === 'cards' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('cards')}
+              >
+                <Grid3x3 className="h-4 w-4 mr-2" />
+                Cards
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="h-4 w-4 mr-2" />
+                List
+              </Button>
+            </div>
+
+            <div className="flex gap-2 items-center">
+              <span className="text-sm text-muted-foreground">Sort by:</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (sortBy === 'default') setSortBy('title')
+                  else if (sortBy === 'title') setSortBy('category')
+                  else setSortBy('default')
+                }}
+              >
+                <ArrowUpDown className="h-4 w-4 mr-2" />
+                {sortBy === 'default' && 'Default'}
+                {sortBy === 'title' && 'Title'}
+                {sortBy === 'category' && 'Category'}
+              </Button>
+            </div>
+          </div>
+
+          {/* Cards View */}
+          {viewMode === 'cards' && (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {sortedGuides.map((guide, index) => {
+                const Icon = guide.icon
+                return (
+                  <Card
+                    key={guide.id}
+                    className={`group hover-lift-glow transition-all ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center">
+                          <Icon className="h-5 w-5 text-amber-600" />
+                        </div>
+                        <Badge className={categoryColors[guide.category]}>
+                          {guide.category}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg mb-2">{guide.title}</CardTitle>
+                      <CardDescription className="text-sm">
+                        {guide.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {guide.status === 'available' ? (
+                        <Link
+                          href={guide.href}
+                          className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
+                        >
+                          Read guide →
+                        </Link>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">
+                          Coming soon
+                        </span>
+                      )}
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+
+          {/* List View */}
+          {viewMode === 'list' && (
+            <div className="space-y-4">
+              {sortedGuides.map((guide) => {
+                const Icon = guide.icon
+                return (
+                  <Card
+                    key={guide.id}
+                    className={`hover:shadow-md transition-shadow ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start gap-4">
+                        <div className="h-12 w-12 rounded-lg bg-amber-600/10 flex items-center justify-center flex-shrink-0">
+                          <Icon className="h-6 w-6 text-amber-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-4 mb-2">
+                            <CardTitle className="text-xl">{guide.title}</CardTitle>
+                            <Badge className={`${categoryColors[guide.category]} flex-shrink-0`}>
+                              {guide.category}
+                            </Badge>
+                          </div>
+                          <CardDescription className="mb-3">
+                            {guide.description}
+                          </CardDescription>
+                          {guide.status === 'available' ? (
+                            <Button asChild variant="outline" size="sm">
+                              <Link href={guide.href}>
+                                Read guide →
+                              </Link>
+                            </Button>
+                          ) : (
+                            <span className="text-sm text-muted-foreground">
+                              Coming soon
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Categories Legend */}
+          <div className="mt-12 p-6 bg-muted/50 rounded-lg">
+            <h3 className="font-semibold mb-4">Guide Categories</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div>
+                <Badge className={categoryColors['Technical']}>Technical</Badge>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Building tools and working with AI systems
+                </p>
+              </div>
+              <div>
+                <Badge className={categoryColors['Pedagogical']}>Pedagogical</Badge>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Designing courses, assignments, and simulations
+                </p>
+              </div>
+              <div>
+                <Badge className={categoryColors['Research']}>Research</Badge>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Augmenting scholarly research workflows
+                </p>
+              </div>
+              <div>
+                <Badge className={categoryColors['Best Practices']}>Best Practices</Badge>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Ethical approaches and institutional guidelines
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Additional Resources */}
+      <Section className="bg-muted/40 border-t">
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-2xl font-serif font-bold mb-4">Looking for More?</h2>
+            <p className="text-muted-foreground mb-8">
+              Explore our project gallery to see these principles in action, or check out the pedagogy
+              materials page for curriculum modules and sample assignments.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Button asChild variant="outline">
+                <Link href="/projects">
+                  Browse Projects
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/pedagogy">
+                  Pedagogy Materials
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/resources">
+                  Historical Resources
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
+  )
+}

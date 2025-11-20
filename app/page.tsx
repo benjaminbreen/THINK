@@ -331,6 +331,14 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </div>
+
+          <div className="text-center mt-8">
+            <Button asChild variant="outline" size="lg">
+              <Link href="/guides">
+                View All Guides <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </Container>
       </Section>
 

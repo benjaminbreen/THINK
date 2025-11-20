@@ -12,7 +12,7 @@ const footerLinks = {
   resources: [
     { name: 'Pedagogy', href: '/pedagogy' },
     { name: 'External Resources', href: '/resources' },
-    { name: 'Team', href: '/team' },
+    { name: 'Guides', href: '/guides' },
     { name: 'Blog', href: '/blog' },
   ],
   about: [
