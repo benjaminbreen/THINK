@@ -2,6 +2,7 @@ import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { ProjectBanner } from '@/components/ui/project-banner'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react'
 
@@ -19,6 +20,11 @@ export default function HistorySimulatorPage() {
           </div>
 
           <div className="mx-auto max-w-3xl">
+            <ProjectBanner
+              thumbnailPath="/thumbnails/history-simulator.png"
+              projectTitle="History Simulator"
+            />
+
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <h1 className="text-4xl font-serif font-bold">History Simulator</h1>

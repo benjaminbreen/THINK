@@ -34,14 +34,32 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
   return (
     <div className="mb-8">
       {/* Banner Image */}
-      <div className="relative w-full h-48 md:h-64 bg-muted rounded-lg overflow-hidden group cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
-        <Image
-          src={thumbnailPath}
-          alt={guideTitle}
-          fill
-          className="object-cover"
-          priority
-        />
+      <div
+        className={`relative w-full bg-muted rounded-lg overflow-hidden group cursor-pointer transition-all duration-500 ${
+          isExpanded ? 'h-auto' : 'h-48 md:h-64'
+        }`}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {isExpanded ? (
+          <div className="relative w-full">
+            <Image
+              src={thumbnailPath}
+              alt={guideTitle}
+              width={1200}
+              height={800}
+              className="w-full h-auto"
+              priority
+            />
+          </div>
+        ) : (
+          <Image
+            src={thumbnailPath}
+            alt={guideTitle}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
           <Button
             variant="secondary"
@@ -51,76 +69,74 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
             {isExpanded ? (
               <>
                 <ChevronUp className="h-4 w-4" />
-                Hide Details
+                Collapse Image
               </>
             ) : (
               <>
                 <ChevronDown className="h-4 w-4" />
-                About This Image
+                View Full Image
               </>
             )}
           </Button>
         </div>
       </div>
 
-      {/* Expanded Content */}
-      {isExpanded && (
-        <div className="mt-4 p-6 bg-muted/50 rounded-lg border">
-          <h3 className="font-sans text-lg font-semibold mb-4">Image Attribution & Mini-Game</h3>
+      {/* Attribution Content - Always visible below image */}
+      <div className="mt-4 p-6 bg-muted/50 rounded-lg border">
+        <h3 className="font-sans text-lg font-semibold mb-4">Image Attribution & Mini-Game</h3>
 
-          <div className="prose prose-sm max-w-none mb-6">
-            <p>
-              Seven of the eight guide thumbnails on this site were created using Google's{' '}
-              <span className="font-semibold">Imagen 3</span> by riffing on imagery from{' '}
-              <a
-                href="https://publicdomainreview.org/collection/a-19th-century-vision-of-the-year-2000/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                "A 19th-Century Vision of the Year 2000"
-              </a>
-              {' '}— a series of French illustrations from around 1900 imagining future technology.
-            </p>
-            <p className="mb-4">
-              One thumbnail is <strong>not</strong> AI-generated. Can you guess which one this guide uses?
+        <div className="prose prose-sm max-w-none mb-6">
+          <p>
+            Seven of the eight guide thumbnails on this site were created using Google's{' '}
+            <span className="font-semibold">Imagen 3</span> by riffing on imagery from{' '}
+            <a
+              href="https://publicdomainreview.org/collection/a-19th-century-vision-of-the-year-2000/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              "A 19th-Century Vision of the Year 2000"
+            </a>
+            {' '}— a series of French illustrations from around 1900 imagining future technology.
+          </p>
+          <p className="mb-4">
+            One thumbnail is <strong>not</strong> AI-generated. Can you guess which one this guide uses?
+          </p>
+        </div>
+
+        {!hasGuessed ? (
+          <div className="flex gap-3">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleGuess('ai')
+              }}
+              variant="outline"
+            >
+              This is AI-generated
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleGuess('non-ai')
+              }}
+              variant="outline"
+            >
+              This is NOT AI-generated
+            </Button>
+          </div>
+        ) : (
+          <div className={`p-4 rounded-lg ${isNonAIImage ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800' : 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800'}`}>
+            <p className="text-sm mb-0">
+              {isNonAIImage ? (
+                <span className="font-semibold">This image is NOT AI-generated!</span>
+              ) : (
+                <span>This image was created using AI. The non-AI image is on the <strong>Responsible AI Use in the Classroom</strong> guide.</span>
+              )}
             </p>
           </div>
-
-          {!hasGuessed ? (
-            <div className="flex gap-3">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleGuess('ai')
-                }}
-                variant="outline"
-              >
-                This is AI-generated
-              </Button>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleGuess('non-ai')
-                }}
-                variant="outline"
-              >
-                This is NOT AI-generated
-              </Button>
-            </div>
-          ) : (
-            <div className={`p-4 rounded-lg ${isNonAIImage ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800' : 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800'}`}>
-              <p className="text-sm mb-0">
-                {isNonAIImage ? (
-                  <span className="font-semibold">This image is NOT AI-generated!</span>
-                ) : (
-                  <span>This image was created using AI. The non-AI image is on the <strong>Responsible AI Use in the Classroom</strong> guide.</span>
-                )}
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Toast Notification */}
       {showToast && (
