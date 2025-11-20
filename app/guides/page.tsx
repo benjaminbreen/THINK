@@ -72,13 +72,13 @@ const guides: Guide[] = [
     status: 'coming-soon'
   },
   {
-    id: 'research-workflows',
-    title: 'AI for Research Workflows',
-    description: 'Using LLMs for historical research, translation, data analysis, and literature reviews',
-    href: '/guides/research-workflows',
+    id: 'ai-historical-research',
+    title: 'AI for Historical Research',
+    description: 'NotebookLM, Elicit, Consensus, and other AI tools for augmenting scholarly research—from OCR to synthesis',
+    href: '/guides/ai-historical-research',
     category: 'Research',
     icon: Microscope,
-    status: 'coming-soon'
+    status: 'available'
   },
   {
     id: 'critical-pedagogy',
