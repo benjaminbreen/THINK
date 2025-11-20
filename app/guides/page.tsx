@@ -45,13 +45,22 @@ const guides: Guide[] = [
     status: 'available'
   },
   {
+    id: 'history-machine-intelligence',
+    title: 'History of Machine Intelligence',
+    description: 'From 18th-century mechanist philosophy to contemporary AI—a humanities perspective on thinking machines',
+    href: '/guides/history-machine-intelligence',
+    category: 'Research',
+    icon: BookOpen,
+    status: 'available'
+  },
+  {
     id: 'building-simulations',
     title: 'Building Historical Simulations',
     description: 'Step-by-step guide to creating AI-powered historical simulations with HistoryLens',
     href: '/guides/building-simulations',
     category: 'Pedagogical',
     icon: Sparkles,
-    status: 'available'
+    status: 'coming-soon'
   },
   {
     id: 'ai-assignments',
@@ -60,7 +69,7 @@ const guides: Guide[] = [
     href: '/guides/ai-assignments',
     category: 'Pedagogical',
     icon: GraduationCap,
-    status: 'available'
+    status: 'coming-soon'
   },
   {
     id: 'research-workflows',
@@ -69,7 +78,7 @@ const guides: Guide[] = [
     href: '/guides/research-workflows',
     category: 'Research',
     icon: Microscope,
-    status: 'available'
+    status: 'coming-soon'
   },
   {
     id: 'critical-pedagogy',
@@ -78,7 +87,7 @@ const guides: Guide[] = [
     href: '/guides/critical-pedagogy',
     category: 'Pedagogical',
     icon: BookOpen,
-    status: 'available'
+    status: 'coming-soon'
   },
   {
     id: 'responsible-ai-classroom',
@@ -88,24 +97,6 @@ const guides: Guide[] = [
     category: 'Best Practices',
     icon: Lightbulb,
     status: 'available'
-  },
-  {
-    id: 'facilitating-discussions',
-    title: 'Facilitating Critical AI Discussions',
-    description: 'Techniques for leading productive conversations about AI limitations and biases',
-    href: '#',
-    category: 'Best Practices',
-    icon: BookOpen,
-    status: 'coming-soon'
-  },
-  {
-    id: 'assessment-strategies',
-    title: 'Assessment Strategies for AI-Enhanced Learning',
-    description: 'How to evaluate student work in courses that incorporate AI tools',
-    href: '#',
-    category: 'Best Practices',
-    icon: GraduationCap,
-    status: 'coming-soon'
   }
 ]
 
