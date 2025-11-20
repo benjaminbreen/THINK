@@ -299,7 +299,7 @@ export default function PedagogyPage() {
                 </CardHeader>
                 <CardContent>
                   <Button asChild variant="ghost" size="sm" className="w-full">
-                    <Link href="#">Read Guide (Coming Soon)</Link>
+                    <Link href="/guides/responsible-ai-classroom">Read Guide</Link>
                   </Button>
                 </CardContent>
               </Card>
