@@ -31,6 +31,9 @@ export default function HistoryMachineIntelligenceGuide() {
                   <a href="#early-mechanist" className="block text-foreground/70 hover:text-primary transition-colors">
                     Early Mechanist Philosophy
                   </a>
+                  <a href="#prehistory" className="block text-foreground/70 hover:text-primary transition-colors">
+                    Prehistory of AI (1870s-1940)
+                  </a>
                   <a href="#computing-pioneers" className="block text-foreground/70 hover:text-primary transition-colors">
                     Computing Pioneers
                   </a>
@@ -123,6 +126,46 @@ export default function HistoryMachineIntelligenceGuide() {
                         <div className="flex-1 border-l-2 border-primary/30 pl-4 pb-4">
                           <p className="text-sm font-semibold mb-1">Ada Lovelace's notes on Babbage's Analytical Engine</p>
                           <p className="text-xs text-muted-foreground">First computer algorithm</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 items-start">
+                        <div className="flex-shrink-0 w-20 text-right">
+                          <span className="text-sm font-bold text-primary">1879</span>
+                        </div>
+                        <div className="flex-1 border-l-2 border-primary/30 pl-4 pb-4">
+                          <p className="text-sm font-semibold mb-1">William James: "Are We Automata?"</p>
+                          <p className="text-xs text-muted-foreground">Psychology meets mechanism</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 items-start">
+                        <div className="flex-shrink-0 w-20 text-right">
+                          <span className="text-sm font-bold text-primary">1890s</span>
+                        </div>
+                        <div className="flex-1 border-l-2 border-primary/30 pl-4 pb-4">
+                          <p className="text-sm font-semibold mb-1">Galton & Pearson develop statistical methods</p>
+                          <p className="text-xs text-muted-foreground">Quantifying intelligence</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 items-start">
+                        <div className="flex-shrink-0 w-20 text-right">
+                          <span className="text-sm font-bold text-primary">1909</span>
+                        </div>
+                        <div className="flex-1 border-l-2 border-primary/30 pl-4 pb-4">
+                          <p className="text-sm font-semibold mb-1">E.M. Forster: "The Machine Stops"</p>
+                          <p className="text-xs text-muted-foreground">Dystopia of total automation</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 items-start">
+                        <div className="flex-shrink-0 w-20 text-right">
+                          <span className="text-sm font-bold text-primary">1935</span>
+                        </div>
+                        <div className="flex-1 border-l-2 border-primary/30 pl-4 pb-4">
+                          <p className="text-sm font-semibold mb-1">Benjamin: "Mechanical Reproduction"</p>
+                          <p className="text-xs text-muted-foreground">Automation and authenticity</p>
                         </div>
                       </div>
 
@@ -237,22 +280,332 @@ export default function HistoryMachineIntelligenceGuide() {
                     </div>
                   </div>
 
-                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">William James on Consciousness (1879)</h3>
+                  <h2 id="prehistory" className="font-serif scroll-mt-24">The Prehistory of AI: Statistics, Psychology, and Information Anxiety (1870s-1940)</h2>
 
                   <p>
-                    More than a century later, philosopher and psychologist <strong>William James</strong> took up the question directly in{' '}
-                    <a href="https://archive.org/details/jstor-2246397" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
-                      "Are We Automata?" (1879)
-                      <ExternalLink className="ml-1 h-3 w-3" />
-                    </a>
-                    . James examined whether humans possess genuine consciousness and free will, or whether we're merely
-                    sophisticated automata responding mechanically to stimuli.
+                    The decades between the Industrial Revolution and World War II saw rapid technological change that fundamentally
+                    reshaped how people thought about minds, machines, and information. This period—what we might call the "prehistory"
+                    of artificial intelligence—witnessed the emergence of statistical thinking, experimental psychology, evolutionary
+                    theories of mind, and widespread anxieties about the increasing mechanization and acceleration of modern life.
                   </p>
 
                   <p>
-                    James ultimately argued for the reality of consciousness as something irreducible to mechanics—but he took
-                    the automaton theory seriously enough to engage with it philosophically. This debate continues today: Are large
-                    language models "conscious" in any meaningful sense? Do they "understand" language, or merely process patterns?
+                    While AI as a discipline wouldn't be named until 1956, the conceptual groundwork was being laid: How can we
+                    measure intelligence? Can mental processes be reduced to mechanical operations? What happens when information
+                    flows faster than human cognition can handle? These questions, born in the late 19th and early 20th centuries,
+                    directly prefigure contemporary debates about machine learning, cognitive automation, and information overload.
+                  </p>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">William James and the Automaton Debate (1879)</h3>
+
+                  <p>
+                    <strong>William James</strong>, founding figure of American psychology and philosophy, directly confronted the question
+                    of human automatism in his 1879 essay{' '}
+                    <a href="https://archive.org/details/jstor-2246397" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
+                      "Are We Automata?"
+                      <ExternalLink className="ml-1 h-3 w-3" />
+                    </a>
+                    . Writing at the intersection of philosophy, physiology, and the emerging science of psychology, James examined whether
+                    consciousness serves any real function or whether humans are merely sophisticated machines responding mechanically to stimuli.
+                  </p>
+
+                  <p>
+                    The "automaton theory"—advanced by physiologists like Thomas Henry Huxley—held that consciousness is an epiphenomenon,
+                    a byproduct of brain activity that plays no causal role in behavior. Just as a steam whistle doesn't power the locomotive,
+                    consciousness doesn't actually <em>do</em> anything; it merely accompanies the brain's mechanical operations.
+                  </p>
+
+                  <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                    <h4 className="font-sans text-base font-semibold mt-0 mb-3 flex items-center gap-2">
+                      <BookOpen className="h-4 w-4" />
+                      James on Consciousness and Causation
+                    </h4>
+                    <blockquote className="text-sm italic border-l-4 border-primary pl-4 mb-3">
+                      "If consciousness is thus a mere shadow, impotent to affect the material world, if all our acts are determined
+                      by molecular changes which consciousness accompanies but does not instigate, what becomes of moral responsibility?"
+                    </blockquote>
+                    <p className="text-sm text-muted-foreground mb-0">
+                      James ultimately rejected the automaton theory, arguing that consciousness must be causally efficacious—but the
+                      very fact that he took the mechanist position seriously shows how powerful the analogy between brains and machines
+                      had become by the 1870s.
+                    </p>
+                  </div>
+
+                  <p>
+                    James's struggle with this question remains relevant. When we debate whether large language models "understand" language
+                    or merely process statistical patterns, we're echoing the 19th-century automaton debate: Does the appearance of intelligence
+                    require genuine comprehension, or can sophisticated mechanical operations produce intelligent-seeming behavior without
+                    understanding?
+                  </p>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Quantifying Intelligence: Galton, Pearson, and Statistical Thinking</h3>
+
+                  <p>
+                    While James wrestled with consciousness philosophically, others approached intelligence as something that could be
+                    <strong>measured and quantified</strong>. <strong>Francis Galton</strong> (1822-1911), Charles Darwin's cousin, pioneered
+                    the statistical study of human traits, including intelligence. His work on hereditary genius, anthropometric measurement,
+                    and correlation laid foundations for what would become psychometrics—the measurement of mental capacities.
+                  </p>
+
+                  <p>
+                    Galton believed intelligence was largely hereditary and measurable through physical and mental tests. He developed
+                    statistical tools to analyze distributions of human abilities, introducing concepts like regression to the mean and
+                    percentile ranking. His protégé <strong>Karl Pearson</strong> (1857-1936) formalized these methods, developing the
+                    correlation coefficient and chi-square test—statistical techniques still fundamental to machine learning today.
+                  </p>
+
+                  <div className="my-8 overflow-x-auto">
+                    <table className="w-full border-collapse border border-slate-300 dark:border-slate-700">
+                      <thead>
+                        <tr className="bg-slate-100 dark:bg-slate-800">
+                          <th className="border border-slate-300 dark:border-slate-700 px-4 py-2 text-left font-sans text-sm font-semibold">Innovation</th>
+                          <th className="border border-slate-300 dark:border-slate-700 px-4 py-2 text-left font-sans text-sm font-semibold">Developer</th>
+                          <th className="border border-slate-300 dark:border-slate-700 px-4 py-2 text-left font-sans text-sm font-semibold">Year</th>
+                          <th className="border border-slate-300 dark:border-slate-700 px-4 py-2 text-left font-sans text-sm font-semibold">Relevance to AI</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm">
+                        <tr>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Correlation coefficient</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Karl Pearson</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">1895</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Foundation for measuring relationships between variables in ML</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Regression analysis</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Francis Galton</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">1886</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Predicting values from data; core ML technique</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Normal distribution in human traits</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Galton & Pearson</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">1890s</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Statistical models of variation; basis for probabilistic AI</td>
+                        </tr>
+                        <tr>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Eugenics (dark legacy)</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Galton</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">1883</td>
+                          <td className="border border-slate-300 dark:border-slate-700 px-4 py-2">Warning: how "scientific" measurement can justify oppression</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="my-8 p-6 bg-orange-50 dark:bg-orange-950/20 border-l-4 border-orange-600 rounded-r-lg">
+                    <div className="flex gap-3">
+                      <AlertCircle className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-sans text-base font-semibold mt-0 mb-2 text-orange-900 dark:text-orange-100">
+                          Critical Context: Eugenics and Scientific Racism
+                        </h4>
+                        <p className="text-sm text-orange-900/80 dark:text-orange-100/80 mb-0">
+                          Galton coined the term "eugenics" and advocated using statistical knowledge to "improve" the human race through
+                          selective breeding. This pseudoscientific ideology led to forced sterilizations, immigration restrictions, and
+                          ultimately inspired Nazi atrocities. The link between statistical thinking, intelligence measurement, and eugenic
+                          ideology is a crucial cautionary tale for contemporary AI, which also uses statistical methods to classify and
+                          rank human abilities—often reproducing historical biases.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Evolutionary Theories of Mind</h3>
+
+                  <p>
+                    Darwin's <em>Origin of Species</em> (1859) didn't just revolutionize biology—it transformed how thinkers understood
+                    mind and intelligence. If complex organs like eyes evolved through natural selection, couldn't mental faculties evolve
+                    too? And if minds evolved, weren't they ultimately mechanical processes shaped by evolutionary pressures?
+                  </p>
+
+                  <p>
+                    This evolutionary perspective made mind seem less mysterious and more amenable to scientific study. Psychologists began
+                    examining mental processes as adaptive mechanisms rather than metaphysical phenomena. The mind became something that
+                    could potentially be <em>reverse-engineered</em>—understood through its functional components and evolutionary history.
+                  </p>
+
+                  <p>
+                    Writers like <strong>Samuel Butler</strong> (discussed earlier) and philosopher <strong>C. Lloyd Morgan</strong> explored
+                    implications of evolutionary psychology. If intelligence evolved through gradual modifications, where was the boundary
+                    between automatic reflex and conscious thought? This gradient view of intelligence—rather than a sharp human/animal or
+                    conscious/unconscious divide—anticipates contemporary debates about whether AI systems exhibit "proto-intelligence" or
+                    merely sophisticated pattern-matching.
+                  </p>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Fictional Visions: Automatons and Thinking Machines</h3>
+
+                  <p>
+                    As real machines grew more complex, writers imagined their logical conclusion: fully autonomous mechanical beings.
+                    <strong>Ambrose Bierce</strong>, the American satirist, wrote "Moxon's Master" (1899), a chilling story about a
+                    chess-playing automaton that may or may not be conscious—and that murders its creator after losing a game.
+                  </p>
+
+                  <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                    <h4 className="font-sans text-base font-semibold mt-0 mb-3">Bierce's Prophetic Fiction</h4>
+                    <p className="text-sm mb-3">
+                      "Moxon's Master" asks whether a machine that plays chess intelligently must be conscious. The inventor Moxon argues
+                      that any entity that exhibits intelligent behavior must possess some form of awareness. When the automaton loses and
+                      "strangles" its creator, Bierce leaves deliberately ambiguous whether this is malfunction, programmed behavior, or
+                      genuine rage.
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-0">
+                      This 1899 story anticipates both the Turing Test (can we distinguish machine from human intelligence?) and contemporary
+                      AI safety concerns (what happens when autonomous systems behave unexpectedly?).
+                    </p>
+                  </div>
+
+                  <p>
+                    Other writers explored similar themes: <strong>L. Frank Baum's</strong> Tik-Tok (1907), a mechanical man who "thinks,
+                    speaks, acts, and does everything but live," and various automaton stories in pulp magazines that imagined mechanical
+                    workers, companions, and even lovers. These fictions processed cultural anxieties about automation and the boundaries
+                    of personhood—questions we're still grappling with as AI systems become more sophisticated and ubiquitous.
+                  </p>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Information Age Anxieties: Speed, Overload, and Nervous Exhaustion</h3>
+
+                  <p>
+                    The late 19th and early 20th centuries saw transformative communication technologies: telegraph (1840s), telephone (1876),
+                    ticker tape (1867), wireless radio (1890s). Information suddenly moved at the speed of electricity rather than the speed
+                    of horses and ships. This acceleration produced new forms of work—and new pathologies.
+                  </p>
+
+                  <p>
+                    <strong>Henry James's</strong> novella{' '}
+                    <a href="https://www.gutenberg.org/files/1144/1144-h/1144-h.htm" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
+                      <em>In the Cage</em> (1898)
+                      <ExternalLink className="ml-1 h-3 w-3" />
+                    </a>
+                    {' '}depicted a young woman working as a telegraphist—mediating others' communications while trapped in her booth,
+                    drowning in information flows she processes but doesn't originate. The telegraphist becomes a kind of human computer,
+                    mechanically transferring messages while fantasizing about the lives of her privileged customers.
+                  </p>
+
+                  <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                    <h4 className="font-sans text-base font-semibold mt-0 mb-3">James on Information Workers</h4>
+                    <blockquote className="text-sm italic border-l-4 border-primary pl-4 mb-3">
+                      "She had surrendered herself moreover, of late, to a certain expansion of her consciousness; something that
+                      seemed perhaps vulgarly accounted for by the fact that, as the blast of the season roared louder... she had
+                      never before lived so long at such close quarters with so much of the human scene."
+                    </blockquote>
+                    <p className="text-sm text-muted-foreground mb-0">
+                      The telegraphist's position—simultaneously central to information flows and utterly marginalized—presages modern
+                      platform workers, content moderators, and data labelers whose labor is essential to AI systems but largely invisible
+                      and undervalued.
+                    </p>
+                  </div>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Neurasthenia and the Nervous System Under Pressure</h3>
+
+                  <p>
+                    The speed-up of modern life produced what physician <strong>George Miller Beard</strong> termed "neurasthenia" in his
+                    1881 book <em>American Nervousness</em>. This diagnosis—nervous exhaustion caused by the demands of modern civilization—
+                    became wildly popular. Beard attributed neurasthenia to five distinctively modern forces: steam power, the periodical
+                    press, the telegraph, the sciences, and "the mental activity of women."
+                  </p>
+
+                  <p>
+                    Neurasthenia was essentially an information overload diagnosis. The nervous system, Beard argued, had limited energy,
+                    and modern life's relentless stimulation depleted it. Telegraph operators were seen as particularly susceptible,
+                    suffering from what was called "telegrapher's paralysis"—a psychosomatic condition attributed to the stress of
+                    constant attention to electrical signals.
+                  </p>
+
+                  <div className="my-8 p-6 bg-blue-50 dark:bg-blue-950/20 border-l-4 border-blue-600 rounded-r-lg">
+                    <div className="flex gap-3">
+                      <Lightbulb className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-sans text-base font-semibold mt-0 mb-2 text-blue-900 dark:text-blue-100">
+                          Historical Parallel
+                        </h4>
+                        <p className="text-sm text-blue-900/80 dark:text-blue-100/80 mb-0">
+                          The 19th-century diagnosis of neurasthenia closely parallels contemporary concerns about digital overload,
+                          "always-on" work culture, and attention economy exhaustion. Just as telegraph operators suffered from information
+                          flow stress, today's knowledge workers report burnout from constant email, Slack messages, and notifications.
+                          The technology changes; the human nervous system's limitations remain.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">McLuhan's Early Media Theory (1951)</h3>
+
+                  <p>
+                    Though published just after our period, <strong>Marshall McLuhan's</strong>{' '}
+                    <a href="https://archive.org/details/mechanicalbridef00mclu" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
+                      <em>The Mechanical Bride</em> (1951)
+                      <ExternalLink className="ml-1 h-3 w-3" />
+                    </a>
+                    {' '}crystallized anxieties that had been building for decades. McLuhan analyzed how advertising and mass media
+                    "mechanize" human consciousness, turning people into predictable, manipulable consumers. His method—close reading
+                    of advertisements as cultural texts—revealed how commercial media uses psychological techniques to bypass rational
+                    thought and trigger automatic responses.
+                  </p>
+
+                  <p>
+                    McLuhan's insight was that media technologies don't just transmit information; they reshape how we think. The "mechanical
+                    bride" is modern humanity, wedded to technological systems that increasingly determine thought patterns. This prefigures
+                    contemporary concerns about algorithmic recommendation systems, filter bubbles, and how platform architectures structure
+                    human attention and behavior.
+                  </p>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Benjamin on Mechanical Reproduction (1935)</h3>
+
+                  <p>
+                    <strong>Walter Benjamin's</strong> famous essay{' '}
+                    <a href="https://web.mit.edu/allanmc/www/benjamin.pdf" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center">
+                      "The Work of Art in the Age of Mechanical Reproduction" (1935)
+                      <ExternalLink className="ml-1 h-3 w-3" />
+                    </a>
+                    {' '}examined how photography and film fundamentally changed art. Mechanical reproduction destroys the artwork's "aura"—
+                    its unique presence in time and space. A photograph of the Mona Lisa is infinitely reproducible; the painting itself
+                    is singular.
+                  </p>
+
+                  <p>
+                    But Benjamin saw both danger and possibility in this shift. While mechanical reproduction destroys traditional authority
+                    and authenticity, it also democratizes access and enables new artistic forms. Film creates experiences impossible in
+                    traditional art—montage, close-ups, temporal manipulation.
+                  </p>
+
+                  <div className="my-6 p-5 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                    <h4 className="font-sans text-base font-semibold mt-0 mb-3">Benjamin and AI-Generated Content</h4>
+                    <p className="text-sm mb-0">
+                      Benjamin's analysis applies powerfully to AI-generated text, images, and music. AI doesn't just reproduce existing
+                      works—it generates new ones that lack "original" authorship in any traditional sense. What is the status of an AI-generated
+                      artwork? Is it meaningfully different from mechanical reproduction? Or does it represent a new category entirely—not
+                      reproduction but <em>synthetic generation</em>? These questions animate contemporary debates about AI creativity,
+                      copyright, and authenticity.
+                    </p>
+                  </div>
+
+                  <h3 className="font-sans text-xl font-semibold mt-8 mb-4">Synthesis: Toward the Information Age</h3>
+
+                  <p>
+                    By 1940, the conceptual pieces were in place for what would become artificial intelligence:
+                  </p>
+
+                  <ul>
+                    <li><strong>Statistical methods</strong> for analyzing patterns in data (Galton, Pearson)</li>
+                    <li><strong>Evolutionary theories</strong> suggesting mind emerges from material processes</li>
+                    <li><strong>Psychological models</strong> treating cognition as information processing</li>
+                    <li><strong>Communication technologies</strong> that moved information faster than thought</li>
+                    <li><strong>Cultural anxieties</strong> about automation, overload, and loss of human agency</li>
+                    <li><strong>Philosophical debates</strong> about consciousness, free will, and the boundaries between human and machine</li>
+                  </ul>
+
+                  <p>
+                    What was missing was the hardware and the formal theory—problems that Shannon, Turing, and Wiener would soon address.
+                    But the questions AI would grapple with were already fully articulated: Can intelligence be measured? Can machines think?
+                    What happens when information flows overwhelm human cognitive capacity? How do we maintain human agency in increasingly
+                    automated systems?
+                  </p>
+
+                  <p>
+                    This prehistory matters because it reveals that our contemporary debates about AI aren't new. We've been thinking about
+                    thinking machines, quantified intelligence, and information overload for over a century. Understanding this longer history
+                    helps us recognize patterns—and avoid repeating past mistakes, like uncritically embracing scientific racism disguised as
+                    objective measurement.
                   </p>
 
                   <h2 id="computing-pioneers" className="font-serif scroll-mt-24">Computing Pioneers (1843-1909)</h2>
