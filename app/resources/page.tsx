@@ -34,7 +34,16 @@ interface Resource {
 }
 
 const resources: Resource[] = [
-  // Historical Primary Sources (1843-1999)
+  // Historical Primary Sources (1747-1999)
+  {
+    title: "Man a Machine",
+    authors: "Julien Offray de La Mettrie",
+    year: 1747,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Radical materialist treatise arguing humans are complex machines, anticipating debates about consciousness, determinism, and artificial intelligence by centuries.",
+    url: "https://www.earlymoderntexts.com/assets/pdfs/lamettrie1748.pdf"
+  },
   {
     title: "Notes on the Analytical Engine",
     authors: "Ada Lovelace",
@@ -44,6 +53,53 @@ const resources: Resource[] = [
     description: "Translation and notes on Babbage's Analytical Engine, including Note G—the first computer algorithm.",
     url: "https://www.computerhistory.org/babbage/adalovelace/",
     journal: "Taylor's Scientific Memoirs"
+  },
+  {
+    title: "Darwin Among the Machines",
+    authors: "Samuel Butler",
+    year: 1863,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Satirical essay speculating that machines might evolve consciousness and supplant humanity—an early science fiction exploration of machine intelligence.",
+    url: "https://www.gutenberg.org/files/1906/1906-h/1906-h.htm",
+    journal: "The Press (New Zealand)"
+  },
+  {
+    title: "Are We Automata?",
+    authors: "William James",
+    year: 1879,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Philosophical examination of consciousness, free will, and whether humans are mere mechanical automata. Directly relevant to debates about AI consciousness.",
+    url: "https://archive.org/details/jstor-2246397",
+    journal: "Mind"
+  },
+  {
+    title: "The Machine Stops",
+    authors: "E.M. Forster",
+    year: 1909,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Dystopian short story about humanity's total dependence on an all-encompassing Machine. Prescient critique of technological dependence and digital isolation.",
+    url: "https://www.cs.ucdavis.edu/~koehl/Teaching/ECS188/PDF_files/Machine_stops.pdf"
+  },
+  {
+    title: "The Work of Art in the Age of Mechanical Reproduction",
+    authors: "Walter Benjamin",
+    year: 1935,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Examines how reproducibility changes art's aura and authenticity. Foundational for understanding AI-generated content and authorship questions.",
+    url: "https://web.mit.edu/allanmc/www/benjamin.pdf"
+  },
+  {
+    title: "The Analytical Language of John Wilkins",
+    authors: "Jorge Luis Borges",
+    year: 1942,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Examines artificial classification systems and their arbitrariness, featuring the famous Celestial Emporium taxonomy. Relevant to AI categorization and knowledge graphs.",
+    url: "https://www.alamut.com/subj/artiface/language/johnWilkins.html"
   },
   {
     title: "As We May Think",
@@ -94,6 +150,24 @@ const resources: Resource[] = [
     journal: "Mind"
   },
   {
+    title: "The Mechanical Bride: Folklore of Industrial Man",
+    authors: "Marshall McLuhan",
+    year: 1951,
+    type: "book",
+    category: "Historical Primary Sources",
+    description: "Pioneering media criticism examining how advertising and mass media mechanize human consciousness. Early exploration of technology's effect on thought patterns.",
+    url: "https://archive.org/details/mechanicalbridef00mclu"
+  },
+  {
+    title: "The Question Concerning Technology",
+    authors: "Martin Heidegger",
+    year: 1954,
+    type: "article",
+    category: "Historical Primary Sources",
+    description: "Philosophical inquiry into technology's essence as 'enframing'—a way of revealing that transforms everything into standing-reserve. Foundational for philosophy of technology.",
+    url: "https://monoskop.org/images/4/44/Heidegger_Martin_The_Question_Concerning_Technology_and_Other_Essays.pdf"
+  },
+  {
     title: "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence",
     authors: "John McCarthy, Marvin Minsky, Nathaniel Rochester, Claude Shannon",
     year: 1955,
@@ -101,6 +175,15 @@ const resources: Resource[] = [
     category: "Historical Primary Sources",
     description: "Historic proposal coining 'artificial intelligence' and launching AI as an academic discipline.",
     url: "https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html"
+  },
+  {
+    title: "Augmenting Human Intellect: A Conceptual Framework",
+    authors: "Douglas Engelbart",
+    year: 1962,
+    type: "paper",
+    category: "Historical Primary Sources",
+    description: "Visionary framework proposing computers as tools to augment rather than replace human intelligence. Foundational for human-computer interaction and collaborative systems.",
+    url: "https://www.dougengelbart.org/content/view/138"
   },
   {
     title: "Computer Power and Human Reason: From Judgment to Calculation",
@@ -977,7 +1060,7 @@ export default function ResourcesPage() {
   }
 
   const categoryDescriptions: Record<ResourceCategory, string> = {
-    'Historical Primary Sources': 'Seminal texts from 1843-1999 establishing foundations of computing, AI, cybernetics, hypertext, and digital humanities',
+    'Historical Primary Sources': 'Seminal texts from 1747-1999 tracing the evolution of thinking about machines, consciousness, automation, computing, AI, cybernetics, hypertext, and digital humanities',
     'Critical AI Theory': 'Foundational texts examining AI systems through lenses of power, bias, labor, and social justice',
     'Humanities Pedagogy': 'Teaching approaches integrating AI in humanities courses with critical, humanistic frameworks',
     'Writing & Composition': 'Rhetoric and composition scholarship on AI writing tools in writing instruction',
