@@ -35,7 +35,8 @@ const guides: Guide[] = [
     href: '/guides/claude-code-basics',
     category: 'Technical',
     icon: Code,
-    status: 'available'
+    status: 'available',
+    thumbnail: '/thumbnails/claude-code-basics.png'
   },
   {
     id: 'prompt-engineering',
@@ -44,7 +45,8 @@ const guides: Guide[] = [
     href: '/guides/prompt-engineering',
     category: 'Technical',
     icon: FileText,
-    status: 'available'
+    status: 'available',
+    thumbnail: '/thumbnails/prompt-engineering.png'
   },
   {
     id: 'history-machine-intelligence',
@@ -53,7 +55,8 @@ const guides: Guide[] = [
     href: '/guides/history-machine-intelligence',
     category: 'Research',
     icon: BookOpen,
-    status: 'available'
+    status: 'available',
+    thumbnail: '/thumbnails/history-machine-intelligence.png'
   },
   {
     id: 'building-simulations',
@@ -62,7 +65,8 @@ const guides: Guide[] = [
     href: '/guides/building-simulations',
     category: 'Pedagogical',
     icon: Sparkles,
-    status: 'coming-soon'
+    status: 'coming-soon',
+    thumbnail: '/thumbnails/building-simulations.png'
   },
   {
     id: 'ai-assignments',
@@ -71,7 +75,8 @@ const guides: Guide[] = [
     href: '/guides/ai-assignments',
     category: 'Pedagogical',
     icon: GraduationCap,
-    status: 'coming-soon'
+    status: 'coming-soon',
+    thumbnail: '/thumbnails/ai-assignments.png'
   },
   {
     id: 'ai-historical-research',
@@ -80,7 +85,8 @@ const guides: Guide[] = [
     href: '/guides/ai-historical-research',
     category: 'Research',
     icon: Microscope,
-    status: 'available'
+    status: 'available',
+    thumbnail: '/thumbnails/ai-historical-research.png'
   },
   {
     id: 'critical-pedagogy',
@@ -89,7 +95,8 @@ const guides: Guide[] = [
     href: '/guides/critical-pedagogy',
     category: 'Pedagogical',
     icon: BookOpen,
-    status: 'coming-soon'
+    status: 'coming-soon',
+    thumbnail: '/thumbnails/critical-pedagogy.png'
   },
   {
     id: 'responsible-ai-classroom',
@@ -98,7 +105,8 @@ const guides: Guide[] = [
     href: '/guides/responsible-ai-classroom',
     category: 'Best Practices',
     icon: Lightbulb,
-    status: 'available'
+    status: 'available',
+    thumbnail: '/thumbnails/responsible-ai-classroom.png'
   }
 ]
 
