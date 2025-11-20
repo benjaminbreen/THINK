@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
+import { GuideBanner } from '@/components/ui/guide-banner'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, AlertCircle, CheckCircle, Code } from 'lucide-react'
 
@@ -19,6 +20,12 @@ export default function PromptEngineeringGuide() {
       ]} />
       <Section className="pt-8 pb-16">
         <Container>
+          <GuideBanner
+            thumbnailPath="/thumbnails/prompt-engineering.png"
+            guideTitle="Prompt Engineering for Humanities"
+            guideId="prompt-engineering"
+          />
+
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
               <Link href="/#guides">

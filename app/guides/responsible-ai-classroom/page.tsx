@@ -5,6 +5,7 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
+import { GuideBanner } from '@/components/ui/guide-banner'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
@@ -18,6 +19,12 @@ export default function ResponsibleAIClassroomGuide() {
       ]} />
       <Section className="pt-8 pb-16">
         <Container>
+          <GuideBanner
+            thumbnailPath="/thumbnails/responsible-ai-classroom.png"
+            guideTitle="Responsible AI Use in the Classroom"
+            guideId="responsible-ai-classroom"
+          />
+
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
               <Link href="/#guides">

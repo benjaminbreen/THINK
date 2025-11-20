@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
+import { GuideBanner } from '@/components/ui/guide-banner'
 import Link from 'next/link'
 import { ArrowLeft, Lightbulb, BookOpen, ExternalLink, Calendar, AlertCircle } from 'lucide-react'
 
@@ -19,6 +20,12 @@ export default function HistoryMachineIntelligenceGuide() {
       ]} />
       <Section className="pt-8 pb-16">
         <Container>
+          <GuideBanner
+            thumbnailPath="/thumbnails/history-machine-intelligence.png"
+            guideTitle="History of Machine Intelligence"
+            guideId="history-machine-intelligence"
+          />
+
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
               <Link href="/#guides">
