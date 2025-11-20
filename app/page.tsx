@@ -364,7 +364,7 @@ export default function HomePage() {
               </Button>
               <Button asChild variant="outline">
                 <Link href="/team">
-                  Meet the team
+                  Team
                 </Link>
               </Button>
               <Button asChild variant="outline">
