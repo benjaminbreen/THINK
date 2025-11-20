@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Code, Sparkles, GraduationCap, Microscope, FileText, BookOpen,
   Grid3x3, List, ArrowUpDown, Lightbulb
@@ -23,6 +24,7 @@ interface Guide {
   category: 'Technical' | 'Pedagogical' | 'Research' | 'Best Practices'
   icon: any
   status: 'available' | 'coming-soon'
+  thumbnail?: string // Optional thumbnail path in /public folder
 }
 
 const guides: Guide[] = [
@@ -180,17 +182,35 @@ export default function GuidesPage() {
                 return (
                   <Card
                     key={guide.id}
-                    className={`group hover-lift-glow transition-all ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
+                    className={`group hover-lift-glow transition-all overflow-hidden ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
                   >
-                    <CardHeader>
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center">
-                          <Icon className="h-5 w-5 text-amber-600" />
+                    {guide.thumbnail ? (
+                      <div className="relative w-full h-48 bg-muted">
+                        <Image
+                          src={guide.thumbnail}
+                          alt={guide.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute top-3 right-3">
+                          <Badge className={categoryColors[guide.category]}>
+                            {guide.category}
+                          </Badge>
                         </div>
-                        <Badge className={categoryColors[guide.category]}>
-                          {guide.category}
-                        </Badge>
                       </div>
+                    ) : null}
+                    <CardHeader>
+                      {!guide.thumbnail && (
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center">
+                            <Icon className="h-5 w-5 text-amber-600" />
+                          </div>
+                          <Badge className={categoryColors[guide.category]}>
+                            {guide.category}
+                          </Badge>
+                        </div>
+                      )}
                       <CardTitle className="text-lg mb-2">{guide.title}</CardTitle>
                       <CardDescription className="text-sm">
                         {guide.description}
@@ -224,13 +244,25 @@ export default function GuidesPage() {
                 return (
                   <Card
                     key={guide.id}
-                    className={`hover:shadow-md transition-shadow ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
+                    className={`hover:shadow-md transition-shadow overflow-hidden ${guide.status === 'coming-soon' ? 'opacity-60' : ''}`}
                   >
                     <CardHeader>
                       <div className="flex items-start gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-amber-600/10 flex items-center justify-center flex-shrink-0">
-                          <Icon className="h-6 w-6 text-amber-600" />
-                        </div>
+                        {guide.thumbnail ? (
+                          <div className="relative w-32 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                            <Image
+                              src={guide.thumbnail}
+                              alt={guide.title}
+                              fill
+                              className="object-cover"
+                              sizes="128px"
+                            />
+                          </div>
+                        ) : (
+                          <div className="h-12 w-12 rounded-lg bg-amber-600/10 flex items-center justify-center flex-shrink-0">
+                            <Icon className="h-6 w-6 text-amber-600" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-4 mb-2">
                             <CardTitle className="text-xl">{guide.title}</CardTitle>
