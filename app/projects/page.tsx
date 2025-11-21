@@ -1,219 +1,251 @@
+'use client'
+
+import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { ProjectCard } from '@/components/ui/project-card'
 import Link from 'next/link'
-import { ArrowRight, ExternalLink, Users, BookOpen } from 'lucide-react'
+import { Filter, Code } from 'lucide-react'
+
+type FilterType = 'all' | 'assignment' | 'course' | 'research' | 'history' | 'literature' | 'linguistics'
 
 export default function ProjectsPage() {
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all')
+
+  const projects = [
+    {
+      title: "Young Darwin",
+      description: "Interactive simulation of Darwin's Galápagos expedition with specimen collection",
+      href: "/projects/young-darwin",
+      slug: "young-darwin",
+      type: "Simulation",
+      year: "2024",
+      tags: ['History', 'Classroom Assignment'],
+      filters: ['assignment', 'history'] as FilterType[]
+    },
+    {
+      title: "Apothecary Simulator",
+      description: "17th century medical practice using authentic early modern recipes",
+      href: "/projects/apothecary-simulator",
+      slug: "apothecary-simulator",
+      type: "Simulation",
+      year: "2024",
+      tags: ['History', 'Classroom Assignment'],
+      filters: ['assignment', 'history'] as FilterType[]
+    },
+    {
+      title: "History Simulator",
+      description: "Generate historically plausible scenarios and figures for exploration",
+      href: "/projects/history-simulator",
+      slug: "history-simulator",
+      type: "Generator",
+      year: "2024",
+      tags: ['History', 'Research Tool'],
+      filters: ['research', 'history'] as FilterType[]
+    },
+    {
+      title: "Historical Figure Generator",
+      description: "Create randomized but plausible historical figures from different eras",
+      href: "/projects/historical-figure-generator",
+      slug: "historical-figure-generator",
+      type: "Generator",
+      year: "2024",
+      tags: ['History', 'Research Tool'],
+      filters: ['research', 'history'] as FilterType[]
+    }
+  ]
+
+  const filteredProjects = projects.filter(project => {
+    if (activeFilter === 'all') return true
+    return project.filters.includes(activeFilter)
+  })
+
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Section className="pt-24 pb-8">
         <Container>
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Project Examples</h1>
+          <div className="mx-auto max-w-3xl text-center mb-8">
+            <h1 className="text-4xl font-serif font-bold mb-4">Project Gallery</h1>
             <p className="text-lg text-muted-foreground">
-              Experimental tools and simulations for humanities teaching and research.
-              All freely shared as starting points for your own work.
+              Experimental AI tools for humanities teaching and research. All projects are part of the HistoryLens pedagogical framework, which combines primary sources with interactive simulations.
             </p>
           </div>
 
-          {/* HistoryLens as one project among others */}
-          <div className="mx-auto max-w-4xl mb-12">
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card className="group hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    HistoryLens
-                  </CardTitle>
-                  <CardDescription>
-                    Interactive historical simulations combining primary sources with LLM prompts.
-                    Students explore dynamically generated historical scenarios and develop critical thinking
-                    skills through hands-on engagement with the past.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline">Primary Sources</Badge>
-                    <Badge variant="outline">Interactive</Badge>
-                    <Badge variant="outline">Critical Thinking</Badge>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button asChild variant="default" size="sm">
-                      <Link href="/projects/historylens">
-                        Learn more <ArrowRight className="ml-2 h-3 w-3" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="sm">
-                      <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-3 w-3" /> Try it
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="group hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    Young Darwin
-                  </CardTitle>
-                  <CardDescription>
-                    An example HistoryLens simulation exploring Charles Darwin's formative years
-                    and his historic voyage on HMS Beagle.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline">Biography</Badge>
-                    <Badge variant="outline">Science History</Badge>
-                    <Badge variant="outline">19th Century</Badge>
-                  </div>
-                  <Button asChild variant="default" size="sm">
-                    <Link href="/projects/young-darwin">
-                      Learn more <ArrowRight className="ml-2 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="group hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    History Simulator
-                  </CardTitle>
-                  <CardDescription>
-                    Explore historically plausible scenarios and counterfactual histories
-                    grounded in real historical contexts. A tool for thinking about contingency and causation.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline">Counterfactuals</Badge>
-                    <Badge variant="outline">Simulation</Badge>
-                    <Badge variant="outline">Critical Thinking</Badge>
-                  </div>
-                  <Button asChild variant="default" size="sm">
-                    <Link href="/projects/history-simulator">
-                      Learn more <ArrowRight className="ml-2 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="group hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    Apothecary Simulator
-                  </CardTitle>
-                  <CardDescription>
-                    Experience historical medicine and pharmacy practices from different
-                    eras and cultural contexts. Explore the material culture of healing.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline">Medicine</Badge>
-                    <Badge variant="outline">Social History</Badge>
-                    <Badge variant="outline">Material Culture</Badge>
-                  </div>
-                  <Button asChild variant="default" size="sm">
-                    <Link href="/projects/apothecary-simulator">
-                      Learn more <ArrowRight className="ml-2 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="group hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    Historical Figure Generator
-                  </CardTitle>
-                  <CardDescription>
-                    Generate plausible historical figures with realistic backgrounds and life stories
-                    based on specific time periods and locations. Useful for research and teaching.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline">Generator</Badge>
-                    <Badge variant="outline">Social History</Badge>
-                    <Badge variant="outline">Research Tool</Badge>
-                  </div>
-                  <Button asChild variant="default" size="sm">
-                    <Link href="/projects/historical-figure-generator">
-                      Learn more <ArrowRight className="ml-2 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+          {/* Filter Section */}
+          <div className="mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Filter className="h-4 w-4" />
+                <span>Filter by type</span>
+              </div>
             </div>
+
+            <div className="flex flex-wrap gap-2 justify-center">
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'all'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'all' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('all')}
+              >
+                All Projects
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'assignment'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'assignment' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('assignment')}
+              >
+                Classroom Assignment
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'course'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'course' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('course')}
+              >
+                Full Course
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'research'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'research' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('research')}
+              >
+                Research Tool
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'history'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'history' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('history')}
+              >
+                History
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'literature'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'literature' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('literature')}
+              >
+                Literature
+              </Badge>
+              <Badge
+                className={`cursor-pointer transition-colors ${
+                  activeFilter === 'linguistics'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                }`}
+                variant={activeFilter === 'linguistics' ? 'default' : 'outline'}
+                onClick={() => setActiveFilter('linguistics')}
+              >
+                Linguistics
+              </Badge>
+            </div>
+          </div>
+
+          {/* Projects Grid */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project, index) => (
+              <ProjectCard
+                key={project.slug}
+                title={project.title}
+                description={project.description}
+                href={project.href}
+                slug={project.slug}
+                type={project.type}
+                year={project.year}
+                tags={project.tags}
+                animationDelay={((index + 1) * 100).toString()}
+              />
+            ))}
+
+            {/* Placeholder for community contributions */}
+            <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors">
+              <CardHeader>
+                <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
+                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                    <Code className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="text-center">
+                    <CardTitle className="text-lg mb-2">Share Your Project</CardTitle>
+                    <CardDescription className="text-sm">
+                      Built something interesting? We'd love to feature it here.
+                    </CardDescription>
+                  </div>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="mailto:bbreen@ucsc.edu">Get in touch</a>
+                  </Button>
+                </div>
+              </CardHeader>
+            </Card>
           </div>
         </Container>
       </Section>
 
-      {/* Community and Sharing Section */}
-      <Section className="bg-muted/40">
+      {/* HistoryLens Framework Section */}
+      <Section className="bg-muted/40 border-t">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <div className="text-center mb-8">
-              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h2 className="text-3xl font-serif font-bold mb-4">A Collaborative Space</h2>
-              <p className="text-muted-foreground">
-                This is a clearinghouse for sharing experimental tools and pedagogical approaches.
-                All materials are freely available, and we welcome contributions from educators and
-                researchers working with AI in the humanities.
+            <h2 className="text-3xl font-serif font-bold mb-4 text-center">About the HistoryLens Framework</h2>
+            <div className="prose prose-lg max-w-none text-muted-foreground">
+              <p className="leading-relaxed">
+                All projects featured here are built using the <strong>HistoryLens</strong> pedagogical framework, which combines interactive historical simulations with authentic primary sources. Rather than treating AI as a source of knowledge, HistoryLens encourages students to test AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways.
+              </p>
+              <p className="leading-relaxed">
+                This approach develops critical thinking skills while teaching students about both history and the limitations of AI systems. Students learn by doing—collecting specimens with Young Darwin, mixing remedies in the Apothecary Simulator, or generating plausible historical scenarios—always with an emphasis on source criticism and historical evidence.
               </p>
             </div>
-
-            <div className="grid gap-6 md:grid-cols-2 mt-8">
-              <Card>
-                <CardHeader>
-                  <BookOpen className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Open Resources</CardTitle>
-                  <CardDescription>
-                    All lesson plans, prompts, and materials are freely shared. Adapt them for your own
-                    classroom or research, no strings attached.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Users className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Community Contributions</CardTitle>
-                  <CardDescription>
-                    Have a project to share? We're building a community of practice around AI in humanities
-                    education. Your work could help others.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+            <div className="flex gap-4 justify-center mt-6">
+              <Button asChild variant="outline">
+                <Link href="/projects/historylens">
+                  Learn more about HistoryLens
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/pedagogy">
+                  Teaching Approach
+                </Link>
+              </Button>
             </div>
           </div>
         </Container>
       </Section>
 
       {/* Get Started Section */}
-      <Section>
+      <Section className="border-t">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-serif font-bold mb-4">Use or Adapt These Projects</h2>
             <p className="text-muted-foreground mb-8">
-              Browse our teaching guides to see how these tools work in practice, or dive into the
-              modules themselves. Everything here is designed to be modified and built upon.
+              All materials are freely available. Browse our teaching guides to see how these tools work in practice, or dive into the modules themselves. Everything here is designed to be modified and built upon.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Button asChild size="lg">
                 <Link href="/guides">How-To Guides</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/pedagogy">Teaching Approach</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" /> Browse Modules
-                </a>
+                <Link href="/about">About THINK</Link>
               </Button>
             </div>
           </div>
