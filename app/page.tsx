@@ -6,6 +6,7 @@ import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
 import { GuideCard } from '@/components/ui/guide-card'
+import { BorgesianMaze } from '@/components/ui/borgesian-maze'
 import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter, Lightbulb } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
 import { LiteraryTransformer } from '@/components/ui/literary-transformer'
@@ -264,6 +265,31 @@ export default function HomePage() {
                   Read the blog
                 </Link>
               </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Borgesian Maze Footer */}
+      <Section className="bg-slate-900 border-t border-slate-800 py-0">
+        <Container className="max-w-7xl px-0">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+            {/* Info Column - 2/3 width on large screens */}
+            <div className="lg:col-span-2 p-8 flex flex-col justify-center">
+              <h3 className="text-2xl font-serif font-bold text-white mb-4">The Garden of Forking Paths</h3>
+              <p className="text-slate-300 mb-4 leading-relaxed">
+                Explore a Borges-inspired labyrinth. Navigate with arrow keys to find three artifacts from the master's work:
+                a volume from the Library of Babel, the Key to the Garden, and the Mirror of Tlön.
+                Collect all three to unlock the exit and escape the maze.
+              </p>
+              <p className="text-slate-400 text-sm">
+                Click the expand button to play in full-screen mode, or play here in the compact view.
+              </p>
+            </div>
+
+            {/* Maze Column - 1/3 width on large screens */}
+            <div className="lg:col-span-1 h-[400px] lg:h-auto">
+              <BorgesianMaze />
             </div>
           </div>
         </Container>
