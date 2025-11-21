@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/container'
-import { Github, ExternalLink } from 'lucide-react'
+import { Github } from 'lucide-react'
+import { BorgesianMaze } from '@/components/ui/borgesian-maze'
 
 const footerLinks = {
   projects: [
@@ -11,14 +12,11 @@ const footerLinks = {
   ],
   resources: [
     { name: 'Pedagogy', href: '/pedagogy' },
-    { name: 'External Resources', href: '/resources' },
+    { name: 'Resources', href: '/resources' },
     { name: 'Guides', href: '/guides' },
     { name: 'Blog', href: '/blog' },
-  ],
-  about: [
-    { name: 'About THINK', href: '/about' },
-    { name: 'UCSC', href: 'https://www.ucsc.edu', external: true },
-    { name: 'NEH', href: 'https://www.neh.gov', external: true },
+    { name: 'About', href: '/about' },
+    { name: 'Team', href: '/team' },
   ],
 }
 
@@ -27,9 +25,9 @@ export function Footer() {
     <footer className="border-t mixed-mode-dark">
       <Container>
         <div className="py-12 md:py-16">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
             {/* Brand */}
-            <div className="md:col-span-1">
+            <div className="md:col-span-3">
               <Link href="/" className="flex items-center space-x-1 group">
                 <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
                   THINK
@@ -54,7 +52,7 @@ export function Footer() {
             </div>
 
             {/* Projects */}
-            <div>
+            <div className="md:col-span-2">
               <h3 className="text-sm font-bold mb-4">Projects</h3>
               <ul className="space-y-3">
                 {footerLinks.projects.map((link) => (
@@ -71,7 +69,7 @@ export function Footer() {
             </div>
 
             {/* Resources */}
-            <div>
+            <div className="md:col-span-2">
               <h3 className="text-sm font-bold mb-4">Resources</h3>
               <ul className="space-y-3">
                 {footerLinks.resources.map((link) => (
@@ -87,33 +85,9 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* About */}
-            <div>
-              <h3 className="text-sm font-bold mb-4">About</h3>
-              <ul className="space-y-3">
-                {footerLinks.about.map((link) => (
-                  <li key={link.name}>
-                    {link.external ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors group"
-                      >
-                        <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
-                      >
-                        {link.name}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
+            {/* Borgesian Maze */}
+            <div className="md:col-span-5 h-[300px] md:h-[350px]">
+              <BorgesianMaze />
             </div>
           </div>
 

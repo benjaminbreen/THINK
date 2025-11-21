@@ -6,7 +6,6 @@ import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
 import { GuideCard } from '@/components/ui/guide-card'
-import { BorgesianMaze } from '@/components/ui/borgesian-maze'
 import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter, Lightbulb } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
 import { LiteraryTransformer } from '@/components/ui/literary-transformer'
@@ -227,70 +226,19 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Community & Collaboration */}
-      <Section className="bg-muted/40 border-t">
+      {/* Newsletter Signup */}
+      <Section className="bg-muted/40 border-t py-8">
         <Container>
-          <div className="mx-auto max-w-3xl">
-            <h2 className="text-2xl font-serif font-bold mb-4">About This Resource</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground">
-              <p className="leading-relaxed">
-                This is a collaborative clearinghouse for experimental AI tools in the humanities, maintained by faculty
-                and students at UC Santa Cruz with support from the National Endowment for the Humanities.
-              </p>
-              <p className="leading-relaxed">
-                We believe that humanists should be building their own AI tools rather than relying solely on
-                commercial products. In 1963, Margaret Mead argued that automation could free humans for creative thinking—but
-                only if we didn't mistake drudgery-elimination for intellectual offloading. Six decades later, that distinction
-                matters more than ever. The projects featured here demonstrate what's possible when educators and researchers
-                take an active, critical, and creative role in shaping how AI gets used in teaching and scholarship.
-              </p>
-              <p className="leading-relaxed">
-                All materials are freely available. We welcome contributions from the wider community—if you've built
-                something interesting or have ideas to share, please get in touch.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-4 mt-8">
-              <Button asChild variant="outline">
-                <Link href="/about">
-                  Read more about THINK
-                </Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/team">
-                  Team
-                </Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/blog">
-                  Read the blog
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Borgesian Maze Footer */}
-      <Section className="bg-slate-900 border-t border-slate-800 py-0">
-        <Container className="max-w-7xl px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-            {/* Info Column - 2/3 width on large screens */}
-            <div className="lg:col-span-2 p-8 flex flex-col justify-center">
-              <h3 className="text-2xl font-serif font-bold text-white mb-4">The Garden of Forking Paths</h3>
-              <p className="text-slate-300 mb-4 leading-relaxed">
-                Explore a Borges-inspired labyrinth. Navigate with arrow keys to find three artifacts from the master's work:
-                a volume from the Library of Babel, the Key to the Garden, and the Mirror of Tlön.
-                Collect all three to unlock the exit and escape the maze.
-              </p>
-              <p className="text-slate-400 text-sm">
-                Click the expand button to play in full-screen mode, or play here in the compact view.
-              </p>
-            </div>
-
-            {/* Maze Column - 1/3 width on large screens */}
-            <div className="lg:col-span-1 h-[400px] lg:h-auto">
-              <BorgesianMaze />
-            </div>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-xl font-serif font-bold mb-3">Stay Updated</h2>
+            <p className="text-sm text-muted-foreground mb-5">
+              Get occasional updates about new projects, guides, and resources for teaching with AI in the humanities.
+            </p>
+            <Button asChild size="lg" className="gap-2">
+              <a href="mailto:bbreen@ucsc.edu?subject=THINK Newsletter Signup">
+                Sign Up for Our Newsletter
+              </a>
+            </Button>
           </div>
         </Container>
       </Section>
