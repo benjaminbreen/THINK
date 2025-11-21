@@ -1,157 +1,70 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { X, Maximize2, Minimize2 } from 'lucide-react'
-
-// Borges quotes for atmosphere
-const BORGES_FRAGMENTS = [
-  'Time forks perpetually toward innumerable futures...',
-  'The visible universe was an illusion or a sophism...',
-  'The composition of vast books is a laborious and impoverishing extravagance...',
-  'Mirrors and copulation are abominable, for they multiply the numbers of man...',
-  'I foresee that man will resign himself each day to new abominations...',
-  'In that single gigantic instant I saw millions of acts...',
-  'The Aleph was probably two or three centimeters in diameter...',
-  'Every language is an alphabet of symbols...',
-  'Writing is nothing more than a guided dream...',
-  'Reality favors symmetries and slight anachronisms...'
-]
+import { useEffect, useRef } from 'react'
 
 export function BorgesianMaze() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [isExpanded, setIsExpanded] = useState(false)
+  const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
 
-  // Enhanced labyrinth state with two levels
+  // Labyrinth state
   const labyrinth = useRef({
     playerX: 1,
     playerY: 1,
-    currentLevel: 0, // 0 = surface, 1 = depths
-    mazeUpper: [] as number[][],
-    mazeLower: [] as number[][],
+    maze: [] as number[][],
     collected: new Set<string>(),
-    foundFragments: new Set<string>(),
-
-    // Artifacts
-    hasBook: false,
     hasKey: false,
+    hasBook: false,
     hasMirror: false,
-    hasAleph: false,
-    hasClock: false,
-    hasInfiniteBook: false,
-
-    // State
     solved: false,
-    message: 'The labyrinth awaits. Two levels. Six artifacts. One truth.',
-    messageTime: 0,
-    currentFragment: '',
-    fragmentTime: 0
+    message: 'Navigate the Garden of Forking Paths...',
+    messageTime: 0
   })
 
-  // Generate more complex maze
-  const generateMaze = (width: number, height: number, complexity = 0.7) => {
-    const maze: number[][] = Array(height).fill(0).map(() => Array(width).fill(1))
+  // Borges words panel state
+  const wordsPanel = useRef({
+    words: [] as Array<{ text: string; y: number; speed: number; id: number }>,
+    nextId: 0,
+    lastSpawn: 0
+  })
 
-    // Recursive backtracking with occasional loops
-    const carve = (x: number, y: number, createLoops = false) => {
-      const dirs = [[0, -2], [2, 0], [0, 2], [-2, 0]].sort(() => Math.random() - 0.5)
-      maze[y][x] = 0
+  // Collected words (left panel)
+  const collectedWords = useRef<Array<{ text: string; id: number }>>([])
 
-      for (const [dx, dy] of dirs) {
-        const nx = x + dx
-        const ny = y + dy
-        if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1) {
-          if (maze[ny][nx] === 1 || (createLoops && Math.random() < 0.15)) {
-            maze[y + dy/2][x + dx/2] = 0
-            if (maze[ny][nx] === 1) {
-              carve(nx, ny, createLoops)
-            }
-          }
-        }
-      }
-    }
+  // Drag state for throwing words
+  const dragState = useRef<{
+    isDragging: boolean
+    wordId: number | null
+    startX: number
+    startY: number
+    currentX: number
+    currentY: number
+  }>({
+    isDragging: false,
+    wordId: null,
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0
+  })
 
-    carve(1, 1, complexity > 0.5)
-
-    // Add some open areas for atmosphere
-    const openAreas = Math.floor(complexity * 3)
-    for (let i = 0; i < openAreas; i++) {
-      const cx = Math.floor(Math.random() * (width - 6)) + 3
-      const cy = Math.floor(Math.random() * (height - 6)) + 3
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          if (cx + dx > 0 && cx + dx < width - 1 && cy + dy > 0 && cy + dy < height - 1) {
-            maze[cy + dy][cx + dx] = 0
-          }
-        }
-      }
-    }
-
-    return maze
-  }
-
-  // Initialize the two-level labyrinth
-  const initLabyrinth = () => {
-    const width = 35
-    const height = 23
-
-    // Generate both levels with different complexity
-    const mazeUpper = generateMaze(width, height, 0.6)
-    const mazeLower = generateMaze(width, height, 0.8)
-
-    // Place items on UPPER level
-    // 2 = Book, 3 = Key, 4 = Mirror, 6 = Stairs Down, 7 = Literary Fragment
-    const placeItem = (maze: number[][], value: number, count = 1) => {
-      let placed = 0
-      let attempts = 0
-      while (placed < count && attempts < 100) {
-        attempts++
-        const x = Math.floor(Math.random() * (width - 4)) + 2
-        const y = Math.floor(Math.random() * (height - 4)) + 2
-        if (maze[y][x] === 0 && (x !== 1 || y !== 1)) {
-          maze[y][x] = value
-          placed++
-        }
-      }
-    }
-
-    // Upper level items
-    placeItem(mazeUpper, 2) // Library of Babel book
-    placeItem(mazeUpper, 3) // Key
-    placeItem(mazeUpper, 4) // Mirror
-    placeItem(mazeUpper, 6, 2) // Stairs down (2 locations)
-    placeItem(mazeUpper, 7, 5) // Literary fragments
-
-    // Lower level items
-    // 8 = Aleph, 9 = Infinite Book, 10 = Clock (Tlön), 11 = Stairs Up, 12 = Exit
-    placeItem(mazeLower, 8) // The Aleph
-    placeItem(mazeLower, 9) // Infinite Book
-    placeItem(mazeLower, 10) // Time-Clock
-    placeItem(mazeLower, 11, 2) // Stairs up
-    placeItem(mazeLower, 7, 5) // More fragments
-
-    // Place exit in lower level
-    mazeLower[height - 2][width - 2] = 12
-
-    labyrinth.current.mazeUpper = mazeUpper
-    labyrinth.current.mazeLower = mazeLower
-    labyrinth.current.playerX = 1
-    labyrinth.current.playerY = 1
-    labyrinth.current.currentLevel = 0
-    labyrinth.current.collected = new Set()
-    labyrinth.current.foundFragments = new Set()
-    labyrinth.current.hasBook = false
-    labyrinth.current.hasKey = false
-    labyrinth.current.hasMirror = false
-    labyrinth.current.hasAleph = false
-    labyrinth.current.hasClock = false
-    labyrinth.current.hasInfiniteBook = false
-    labyrinth.current.solved = false
-    labyrinth.current.message = 'Surface level. Seek the stairs to descend into the depths...'
-    labyrinth.current.messageTime = Date.now()
-    labyrinth.current.currentFragment = ''
-    labyrinth.current.fragmentTime = 0
-  }
+  // Borges vocabulary from his works
+  const borgesWords = [
+    'labyrinth', 'infinity', 'mirror', 'time', 'eternity', 'library', 'babel',
+    'aleph', 'circular', 'ruins', 'garden', 'forking', 'paths', 'tlön', 'uqbar',
+    'orbis', 'tertius', 'ficciones', 'dream', 'dreamer', 'tiger', 'immortal',
+    'book', 'sand', 'infinite', 'paradox', 'knife', 'memory', 'oblivion', 'chess',
+    'universe', 'hexagon', 'endless', 'stairway', 'sphinx', 'double', 'reflection',
+    'lotus', 'god', 'heresiarch', 'rose', 'compass', 'labyrinthine', 'babylon',
+    'lottery', 'circular', 'zahir', 'dead', 'man', 'detective', 'death', 'compass',
+    'secret', 'miracle', 'form', 'sword', 'encyclopaedia', 'exactitude', 'science',
+    'rigor', 'empire', 'myth', 'legend', 'fable', 'chronicle', 'annals', 'history',
+    'philosophy', 'theology', 'metaphysics', 'cosmology', 'ontology', 'epistemology',
+    'eternal', 'return', 'cyclical', 'repetition', 'variation', 'permutation',
+    'combination', 'geometry', 'algebra', 'arithmetic', 'number', 'symbol', 'sign',
+    'letter', 'word', 'sentence', 'paragraph', 'page', 'volume', 'shelf', 'gallery',
+    'vestibule', 'staircase', 'mirror', 'window', 'door', 'key', 'lock', 'passage'
+  ]
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -160,6 +73,7 @@ export function BorgesianMaze() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Set canvas size
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
@@ -167,102 +81,189 @@ export function BorgesianMaze() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Keyboard handler
+    // Mouse movement handler
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mousePos.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      }
+
+      // Update drag position
+      if (dragState.current.isDragging) {
+        dragState.current.currentX = mousePos.current.x
+        dragState.current.currentY = mousePos.current.y
+      }
+    }
+    canvas.addEventListener('mousemove', handleMouseMove)
+
+    // Mouse click handler
+    const handleMouseClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const clickX = e.clientX - rect.left
+      const clickY = e.clientY - rect.top
+
+      // Check if clicking on words in right panel
+      const rightPanelX = canvas.width * 0.75
+      if (clickX >= rightPanelX) {
+        wordsPanel.current.words.forEach((word) => {
+          const wordX = rightPanelX + 10
+          const wordY = word.y
+          const wordWidth = ctx.measureText(word.text).width
+          const wordHeight = 16
+
+          if (
+            clickX >= wordX &&
+            clickX <= wordX + wordWidth &&
+            clickY >= wordY - wordHeight &&
+            clickY <= wordY
+          ) {
+            // Add to collected words
+            collectedWords.current.push({ text: word.text, id: word.id })
+            // Remove from falling words
+            wordsPanel.current.words = wordsPanel.current.words.filter(
+              (w) => w.id !== word.id
+            )
+          }
+        })
+      }
+
+      // Check if clicking on collected words (left panel)
+      const leftPanelWidth = canvas.width * 0.2
+      if (clickX <= leftPanelWidth) {
+        let currentY = 40
+        for (let i = 0; i < collectedWords.current.length; i++) {
+          const word = collectedWords.current[i]
+          const wordHeight = 20
+          if (clickY >= currentY && clickY <= currentY + wordHeight) {
+            // Start dragging this word
+            dragState.current.isDragging = true
+            dragState.current.wordId = word.id
+            dragState.current.startX = clickX
+            dragState.current.startY = clickY
+            dragState.current.currentX = clickX
+            dragState.current.currentY = clickY
+            break
+          }
+          currentY += wordHeight + 5
+        }
+      }
+    }
+    canvas.addEventListener('click', handleMouseClick)
+
+    // Mouse up handler (for releasing thrown words)
+    const handleMouseUp = (e: MouseEvent) => {
+      if (dragState.current.isDragging && dragState.current.wordId !== null) {
+        // Calculate velocity
+        const vx = dragState.current.currentX - dragState.current.startX
+        const vy = dragState.current.currentY - dragState.current.startY
+        const velocity = Math.sqrt(vx * vx + vy * vy)
+
+        // Check if thrown with enough force toward maze
+        if (velocity > 50) {
+          // Calculate maze area
+          const lab = labyrinth.current
+          const cellSize = 25
+          const leftPanelWidth = canvas.width * 0.2
+          const rightPanelX = canvas.width * 0.75
+          const mazeWidth = rightPanelX - leftPanelWidth - 40
+          const actualMazeWidth = lab.maze[0]?.length * cellSize || 0
+          const actualMazeHeight = lab.maze.length * cellSize || 0
+          const offsetX = leftPanelWidth + 20 + (mazeWidth - actualMazeWidth) / 2
+          const offsetY = (canvas.height - actualMazeHeight) / 2
+
+          // Check if throw direction is toward maze
+          const throwX = dragState.current.currentX
+          const throwY = dragState.current.currentY
+
+          if (
+            throwX >= offsetX &&
+            throwX <= offsetX + actualMazeWidth &&
+            throwY >= offsetY &&
+            throwY <= offsetY + actualMazeHeight
+          ) {
+            // Calculate which cell was hit
+            const cellX = Math.floor((throwX - offsetX) / cellSize)
+            const cellY = Math.floor((throwY - offsetY) / cellSize)
+
+            // Break wall if it's a wall
+            if (
+              lab.maze[cellY] &&
+              lab.maze[cellY][cellX] === 1 &&
+              cellX > 0 &&
+              cellX < lab.maze[0].length - 1 &&
+              cellY > 0 &&
+              cellY < lab.maze.length - 1
+            ) {
+              lab.maze[cellY][cellX] = 0 // Remove wall
+              lab.message = `Wall shattered by the word "${
+                collectedWords.current.find((w) => w.id === dragState.current.wordId)?.text
+              }"!`
+              lab.messageTime = Date.now()
+
+              // Remove word from collected
+              collectedWords.current = collectedWords.current.filter(
+                (w) => w.id !== dragState.current.wordId
+              )
+            }
+          }
+        }
+
+        // Reset drag state
+        dragState.current.isDragging = false
+        dragState.current.wordId = null
+      }
+    }
+    canvas.addEventListener('mouseup', handleMouseUp)
+
+    // Keyboard handler for labyrinth movement
     const handleKeyDown = (e: KeyboardEvent) => {
       const lab = labyrinth.current
-      const currentMaze = lab.currentLevel === 0 ? lab.mazeUpper : lab.mazeLower
       let newX = lab.playerX
       let newY = lab.playerY
 
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        newY--
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        newY++
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault()
-        newX--
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault()
-        newX++
-      } else if (e.key === 'Escape' && isExpanded) {
-        e.preventDefault()
-        setIsExpanded(false)
-        return
-      } else {
-        return
-      }
+      if (e.key === 'ArrowUp') newY--
+      else if (e.key === 'ArrowDown') newY++
+      else if (e.key === 'ArrowLeft') newX--
+      else if (e.key === 'ArrowRight') newX++
+      else return
 
-      // Check if move is valid
-      if (currentMaze[newY] && currentMaze[newY][newX] !== 1) {
+      e.preventDefault()
+
+      // Check if move is valid (not wall)
+      if (lab.maze[newY] && lab.maze[newY][newX] !== 1) {
         lab.playerX = newX
         lab.playerY = newY
 
-        const pos = `${lab.currentLevel}-${newX},${newY}`
-        const cell = currentMaze[newY][newX]
-
-        // Upper level items
-        if (cell === 2 && !lab.collected.has(pos)) {
+        // Check for items
+        const pos = `${newX},${newY}`
+        if (lab.maze[newY][newX] === 2 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasBook = true
-          lab.message = 'A volume from the infinite Library. It contains all possible books...'
+          lab.message = 'Found: A volume from the Library of Babel!'
           lab.messageTime = Date.now()
-        } else if (cell === 3 && !lab.collected.has(pos)) {
+          // Spawn words when finding an artifact
+          spawnWordBurst()
+        } else if (lab.maze[newY][newX] === 3 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasKey = true
-          lab.message = 'The Key to the Garden of Forking Paths.'
+          lab.message = 'Found: The Key to the Garden!'
           lab.messageTime = Date.now()
-        } else if (cell === 4 && !lab.collected.has(pos)) {
+          spawnWordBurst()
+        } else if (lab.maze[newY][newX] === 4 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasMirror = true
-          lab.message = 'A mirror from Tlön—it multiplies reality itself.'
+          lab.message = 'Found: The Mirror of Tlön!'
           lab.messageTime = Date.now()
-        } else if (cell === 6) {
-          // Stairs down
-          lab.currentLevel = 1
-          lab.message = 'Descending... The air grows thick with possibility.'
-          lab.messageTime = Date.now()
-        } else if (cell === 7 && !lab.foundFragments.has(pos)) {
-          // Literary fragment
-          lab.foundFragments.add(pos)
-          lab.currentFragment = BORGES_FRAGMENTS[Math.floor(Math.random() * BORGES_FRAGMENTS.length)]
-          lab.fragmentTime = Date.now()
-          lab.message = 'You found a fragment of text...'
-          lab.messageTime = Date.now()
-        }
-        // Lower level items
-        else if (cell === 8 && !lab.collected.has(pos)) {
-          lab.collected.add(pos)
-          lab.hasAleph = true
-          lab.message = 'The Aleph! Point of infinite space where all places converge...'
-          lab.messageTime = Date.now()
-        } else if (cell === 9 && !lab.collected.has(pos)) {
-          lab.collected.add(pos)
-          lab.hasInfiniteBook = true
-          lab.message = 'The Book of Sand—infinite pages, never the same twice.'
-          lab.messageTime = Date.now()
-        } else if (cell === 10 && !lab.collected.has(pos)) {
-          lab.collected.add(pos)
-          lab.hasClock = true
-          lab.message = 'A clock from Tlön. Time here flows... differently.'
-          lab.messageTime = Date.now()
-        } else if (cell === 11) {
-          // Stairs up
-          lab.currentLevel = 0
-          lab.message = 'Ascending to the surface...'
-          lab.messageTime = Date.now()
-        } else if (cell === 12) {
+          spawnWordBurst()
+        } else if (lab.maze[newY][newX] === 5) {
           // Exit
-          const allUpper = lab.hasBook && lab.hasKey && lab.hasMirror
-          const allLower = lab.hasAleph && lab.hasInfiniteBook && lab.hasClock
-          if (allUpper && allLower) {
+          if (lab.hasBook && lab.hasKey && lab.hasMirror) {
             lab.solved = true
-            lab.message = '★ The labyrinth yields. You have found all paths. ★'
+            lab.message = '★ You have escaped the Labyrinth! ★'
             lab.messageTime = Date.now()
           } else {
-            const missing = 6 - [lab.hasBook, lab.hasKey, lab.hasMirror, lab.hasAleph, lab.hasInfiniteBook, lab.hasClock].filter(Boolean).length
-            lab.message = `Exit locked. Still seeking ${missing} artifacts...`
+            lab.message = 'The exit is locked. Find all three artifacts...'
             lab.messageTime = Date.now()
           }
         }
@@ -270,134 +271,107 @@ export function BorgesianMaze() {
     }
     window.addEventListener('keydown', handleKeyDown)
 
-    // Rendering
-    const drawLabyrinth = () => {
-      // Background
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, canvas.width / 1.5
-      )
-      if (labyrinth.current.currentLevel === 0) {
-        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
-        gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
-      } else {
-        gradient.addColorStop(0, 'rgba(10, 5, 25, 0.98)')
-        gradient.addColorStop(1, 'rgba(5, 0, 15, 1)')
-      }
-      ctx.fillStyle = gradient
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      const lab = labyrinth.current
-      const currentMaze = lab.currentLevel === 0 ? lab.mazeUpper : lab.mazeLower
-
-      if (currentMaze.length === 0) {
-        initLabyrinth()
-        return
-      }
-
-      const cellSize = isExpanded ? 20 : 12
-      const offsetX = (canvas.width - currentMaze[0].length * cellSize) / 2
-      const offsetY = (canvas.height - currentMaze.length * cellSize) / 2
-
-      const fontSize = isExpanded ? 14 : 8
-      ctx.font = `bold ${fontSize}px monospace`
-
-      // Draw maze
-      for (let y = 0; y < currentMaze.length; y++) {
-        for (let x = 0; x < currentMaze[y].length; x++) {
-          const px = offsetX + x * cellSize
-          const py = offsetY + y * cellSize
-          const cell = currentMaze[y][x]
-          const pos = `${lab.currentLevel}-${x},${y}`
-
-          if (cell === 1) {
-            ctx.fillStyle = lab.currentLevel === 0 ? 'rgba(59, 130, 246, 0.25)' : 'rgba(139, 92, 246, 0.3)'
-            ctx.fillRect(px, py, cellSize, cellSize)
-          } else if (cell === 2 && !lab.collected.has(pos)) {
-            ctx.fillText('📖', px, py + cellSize - 2)
-          } else if (cell === 3 && !lab.collected.has(pos)) {
-            ctx.fillText('🗝', px, py + cellSize - 2)
-          } else if (cell === 4 && !lab.collected.has(pos)) {
-            ctx.fillText('🪞', px, py + cellSize - 2)
-          } else if (cell === 6) {
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.6)'
-            ctx.fillText('▼', px + 2, py + cellSize - 2)
-          } else if (cell === 7 && !lab.foundFragments.has(pos)) {
-            ctx.fillStyle = 'rgba(147, 197, 253, 0.5)'
-            ctx.fillText('∞', px + 2, py + cellSize - 2)
-          } else if (cell === 8 && !lab.collected.has(pos)) {
-            ctx.fillText('⊙', px + 2, py + cellSize - 2)
-          } else if (cell === 9 && !lab.collected.has(pos)) {
-            ctx.fillText('📜', px, py + cellSize - 2)
-          } else if (cell === 10 && !lab.collected.has(pos)) {
-            ctx.fillText('⌚', px, py + cellSize - 2)
-          } else if (cell === 11) {
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.6)'
-            ctx.fillText('▲', px + 2, py + cellSize - 2)
-          } else if (cell === 12) {
-            ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.7)'
-            ctx.fillText('🚪', px, py + cellSize - 2)
-          }
-        }
-      }
-
-      // Draw player
-      const playerPx = offsetX + lab.playerX * cellSize
-      const playerPy = offsetY + lab.playerY * cellSize
-      ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : 'rgba(59, 130, 246, 1)'
-      ctx.fillText('@', playerPx + 2, playerPy + cellSize - 2)
-
-      // UI
-      ctx.font = `${isExpanded ? 12 : 8}px monospace`
-      ctx.fillStyle = 'rgba(147, 197, 253, 0.9)'
-      const levelText = lab.currentLevel === 0 ? 'SURFACE' : 'DEPTHS'
-      ctx.fillText(`Level: ${levelText}`, 20, 25)
-
-      let invY = 45
-      const count = [lab.hasBook, lab.hasKey, lab.hasMirror, lab.hasAleph, lab.hasInfiniteBook, lab.hasClock].filter(Boolean).length
-      ctx.fillText(`Artifacts: ${count}/6`, 20, invY)
-      ctx.fillText(`Fragments: ${lab.foundFragments.size}`, 20, invY + 15)
-
-      // Messages
-      if (Date.now() - lab.messageTime < 3500) {
-        ctx.font = `bold ${isExpanded ? 12 : 8}px monospace`
-        ctx.fillStyle = 'rgba(251, 191, 36, 1)'
-        ctx.fillText(lab.message, 20, canvas.height - 40)
-      }
-
-      // Fragment display
-      if (Date.now() - lab.fragmentTime < 5000 && lab.currentFragment) {
-        ctx.font = `italic ${isExpanded ? 11 : 7}px monospace`
-        ctx.fillStyle = 'rgba(147, 197, 253, 0.8)'
-        const maxWidth = canvas.width - 40
-        const words = lab.currentFragment.split(' ')
-        let line = ''
-        let y = canvas.height - 80
-        for (const word of words) {
-          const testLine = line + word + ' '
-          if (ctx.measureText(testLine).width > maxWidth && line) {
-            ctx.fillText(line, 20, y)
-            line = word + ' '
-            y += 15
-          } else {
-            line = testLine
-          }
-        }
-        ctx.fillText(line, 20, y)
-      }
-
-      // Victory
-      if (lab.solved) {
-        ctx.font = `bold ${isExpanded ? 20 : 12}px monospace`
-        ctx.fillStyle = 'rgba(34, 197, 94, 1)'
-        const msg = '★ ALL PATHS CONVERGE ★'
-        const w = ctx.measureText(msg).width
-        ctx.fillText(msg, (canvas.width - w) / 2, 50)
+    // Spawn multiple words when finding artifact
+    const spawnWordBurst = () => {
+      for (let i = 0; i < 10; i++) {
+        const word = borgesWords[Math.floor(Math.random() * borgesWords.length)]
+        wordsPanel.current.words.push({
+          text: word,
+          y: -i * 50,
+          speed: 0.5 + Math.random() * 1.5,
+          id: wordsPanel.current.nextId++
+        })
       }
     }
 
-    const animate = () => {
-      drawLabyrinth()
+    // Initialize labyrinth
+    const initLabyrinth = () => {
+      const width = 25
+      const height = 17
+      const maze: number[][] = Array(height)
+        .fill(0)
+        .map(() => Array(width).fill(1))
+
+      // Recursive backtracking maze generation
+      const carve = (x: number, y: number) => {
+        const dirs = [
+          [0, -1],
+          [1, 0],
+          [0, 1],
+          [-1, 0],
+        ].sort(() => Math.random() - 0.5)
+        maze[y][x] = 0
+
+        for (const [dx, dy] of dirs) {
+          const nx = x + dx * 2
+          const ny = y + dy * 2
+          if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1 && maze[ny][nx] === 1) {
+            maze[y + dy][x + dx] = 0
+            carve(nx, ny)
+          }
+        }
+      }
+
+      carve(1, 1)
+
+      // Place special items
+      let placed = 0
+      while (placed < 3) {
+        const x = Math.floor(Math.random() * (width - 2)) + 1
+        const y = Math.floor(Math.random() * (height - 2)) + 1
+        if (maze[y][x] === 0 && (x !== 1 || y !== 1)) {
+          maze[y][x] = placed + 2
+          placed++
+        }
+      }
+
+      // Place exit
+      maze[height - 2][width - 2] = 5
+
+      labyrinth.current.maze = maze
+      labyrinth.current.playerX = 1
+      labyrinth.current.playerY = 1
+      labyrinth.current.collected = new Set()
+      labyrinth.current.hasKey = false
+      labyrinth.current.hasBook = false
+      labyrinth.current.hasMirror = false
+      labyrinth.current.solved = false
+      labyrinth.current.message = 'Navigate the Garden of Forking Paths... Find 3 artifacts.'
+      labyrinth.current.messageTime = Date.now()
+    }
+
+    // Initialize maze
+    if (labyrinth.current.maze.length === 0) {
+      initLabyrinth()
+    }
+
+    // Animation loop
+    const animate = (time: number) => {
+      // Update words panel - spawn new words occasionally
+      if (time - wordsPanel.current.lastSpawn > 2000) {
+        const word = borgesWords[Math.floor(Math.random() * borgesWords.length)]
+        wordsPanel.current.words.push({
+          text: word,
+          y: 0,
+          speed: 0.5 + Math.random() * 1.5,
+          id: wordsPanel.current.nextId++
+        })
+        wordsPanel.current.lastSpawn = time
+      }
+
+      // Update word positions
+      wordsPanel.current.words.forEach((word) => {
+        word.y += word.speed
+      })
+
+      // Remove words that fell off screen
+      wordsPanel.current.words = wordsPanel.current.words.filter(
+        (word) => word.y < canvas.height + 20
+      )
+
+      // Draw everything
+      draw(ctx, canvas)
+
       animationFrameId.current = requestAnimationFrame(animate)
     }
 
@@ -405,61 +379,206 @@ export function BorgesianMaze() {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
+      canvas.removeEventListener('mousemove', handleMouseMove)
+      canvas.removeEventListener('click', handleMouseClick)
+      canvas.removeEventListener('mouseup', handleMouseUp)
       window.removeEventListener('keydown', handleKeyDown)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [isExpanded])
+  }, [])
 
-  const resetMaze = () => {
-    labyrinth.current.mazeUpper = []
-    labyrinth.current.mazeLower = []
-    initLabyrinth()
+  const draw = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+    const lab = labyrinth.current
+
+    // Dark background
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // Calculate panel dimensions
+    const leftPanelWidth = canvas.width * 0.2
+    const rightPanelX = canvas.width * 0.75
+    const mazeWidth = rightPanelX - leftPanelWidth - 40
+
+    // Draw left panel (collected words)
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.8)'
+    ctx.fillRect(0, 0, leftPanelWidth, canvas.height)
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+    ctx.lineWidth = 2
+    ctx.strokeRect(0, 0, leftPanelWidth, canvas.height)
+
+    ctx.font = 'bold 14px monospace'
+    ctx.fillStyle = 'rgba(147, 197, 253, 1)'
+    ctx.fillText('Collected Words', 10, 25)
+
+    ctx.font = '12px monospace'
+    let wordY = 40
+    collectedWords.current.forEach((word, i) => {
+      // Highlight if being dragged
+      if (dragState.current.isDragging && dragState.current.wordId === word.id) {
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.3)'
+        ctx.fillRect(5, wordY - 15, leftPanelWidth - 10, 20)
+      }
+
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.9)'
+      ctx.fillText(`• ${word.text}`, 10, wordY)
+      wordY += 25
+    })
+
+    // Instructions
+    ctx.font = '10px monospace'
+    ctx.fillStyle = 'rgba(148, 163, 184, 0.7)'
+    const instrY = canvas.height - 40
+    ctx.fillText('Click words', 10, instrY)
+    ctx.fillText('to collect', 10, instrY + 12)
+    ctx.fillText('Drag & throw', 10, instrY + 24)
+    ctx.fillText('to break walls', 10, instrY + 36)
+
+    // Draw right panel (falling Borges words - Matrix style)
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.8)'
+    ctx.fillRect(rightPanelX, 0, canvas.width - rightPanelX, canvas.height)
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+    ctx.lineWidth = 2
+    ctx.strokeRect(rightPanelX, 0, canvas.width - rightPanelX, canvas.height)
+
+    ctx.font = 'bold 14px monospace'
+    ctx.fillStyle = 'rgba(147, 197, 253, 1)'
+    ctx.fillText('Borges', rightPanelX + 10, 25)
+
+    // Draw falling words
+    ctx.font = '13px monospace'
+    wordsPanel.current.words.forEach((word) => {
+      const opacity = Math.max(0.3, Math.min(1, 1 - word.y / canvas.height))
+      ctx.fillStyle = `rgba(34, 197, 94, ${opacity})`
+      ctx.fillText(word.text, rightPanelX + 10, word.y)
+
+      // Glow effect for top words
+      if (word.y < 100) {
+        ctx.shadowBlur = 10
+        ctx.shadowColor = 'rgba(34, 197, 94, 0.5)'
+        ctx.fillText(word.text, rightPanelX + 10, word.y)
+        ctx.shadowBlur = 0
+      }
+    })
+
+    // Draw maze in center
+    const cellSize = 25
+    const actualMazeWidth = lab.maze[0]?.length * cellSize || 0
+    const actualMazeHeight = lab.maze.length * cellSize || 0
+    const offsetX = leftPanelWidth + 20 + (mazeWidth - actualMazeWidth) / 2
+    const offsetY = (canvas.height - actualMazeHeight) / 2
+
+    ctx.font = 'bold 16px monospace'
+    for (let y = 0; y < lab.maze.length; y++) {
+      for (let x = 0; x < lab.maze[y].length; x++) {
+        const px = offsetX + x * cellSize
+        const py = offsetY + y * cellSize
+        const cell = lab.maze[y][x]
+
+        if (cell === 1) {
+          // Wall
+          ctx.fillStyle = 'rgba(59, 130, 246, 0.3)'
+          ctx.fillRect(px, py, cellSize, cellSize)
+          ctx.fillStyle = 'rgba(59, 130, 246, 0.6)'
+          ctx.fillText('█', px + 5, py + 18)
+        } else if (cell === 2 && !lab.collected.has(`${x},${y}`)) {
+          // Book
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.8)'
+          ctx.fillText('📖', px + 4, py + 18)
+        } else if (cell === 3 && !lab.collected.has(`${x},${y}`)) {
+          // Key
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.8)'
+          ctx.fillText('🗝', px + 4, py + 18)
+        } else if (cell === 4 && !lab.collected.has(`${x},${y}`)) {
+          // Mirror
+          ctx.fillStyle = 'rgba(147, 197, 253, 0.8)'
+          ctx.fillText('🪞', px + 4, py + 18)
+        } else if (cell === 5) {
+          // Exit
+          const exitColor = lab.solved
+            ? 'rgba(34, 197, 94, 0.9)'
+            : 'rgba(239, 68, 68, 0.7)'
+          ctx.fillStyle = exitColor
+          ctx.fillText('🚪', px + 4, py + 18)
+        }
+      }
+    }
+
+    // Draw player
+    const playerPx = offsetX + lab.playerX * cellSize
+    const playerPy = offsetY + lab.playerY * cellSize
+    ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : 'rgba(59, 130, 246, 1)'
+    ctx.fillText('@', playerPx + 7, playerPy + 18)
+
+    // Draw inventory above maze
+    ctx.font = '12px monospace'
+    ctx.fillStyle = 'rgba(147, 197, 253, 0.9)'
+    const invX = offsetX
+    const invY = offsetY - 60
+    ctx.fillText('Inventory:', invX, invY)
+    let invOffset = 0
+    if (lab.hasBook) {
+      ctx.fillText('📖', invX + invOffset, invY + 18)
+      invOffset += 25
+    }
+    if (lab.hasKey) {
+      ctx.fillText('🗝', invX + invOffset, invY + 18)
+      invOffset += 25
+    }
+    if (lab.hasMirror) {
+      ctx.fillText('🪞', invX + invOffset, invY + 18)
+      invOffset += 25
+    }
+
+    // Draw message
+    if (Date.now() - lab.messageTime < 3000) {
+      ctx.font = 'bold 13px monospace'
+      ctx.fillStyle = 'rgba(251, 191, 36, 1)'
+      const msgWidth = ctx.measureText(lab.message).width
+      ctx.fillText(lab.message, (canvas.width - msgWidth) / 2, offsetY + actualMazeHeight + 40)
+    }
+
+    // Draw instructions below maze
+    ctx.font = '11px monospace'
+    ctx.fillStyle = 'rgba(148, 163, 184, 0.6)'
+    const instructText = 'Arrow keys to move | Find 3 artifacts | Click falling words to collect | Throw words at walls to break them'
+    const instructWidth = ctx.measureText(instructText).width
+    ctx.fillText(instructText, (canvas.width - instructWidth) / 2, canvas.height - 20)
+
+    // Draw dragged word if dragging
+    if (dragState.current.isDragging && dragState.current.wordId !== null) {
+      const word = collectedWords.current.find((w) => w.id === dragState.current.wordId)
+      if (word) {
+        ctx.font = 'bold 20px monospace'
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.8)'
+        ctx.fillText(word.text, dragState.current.currentX, dragState.current.currentY)
+
+        // Draw trajectory line
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)'
+        ctx.lineWidth = 2
+        ctx.beginPath()
+        ctx.moveTo(dragState.current.startX, dragState.current.startY)
+        ctx.lineTo(dragState.current.currentX, dragState.current.currentY)
+        ctx.stroke()
+      }
+    }
+
+    // Victory message
+    if (lab.solved) {
+      ctx.font = 'bold 20px monospace'
+      ctx.fillStyle = 'rgba(34, 197, 94, 1)'
+      const victoryMsg = '★ THE LABYRINTH YIELDS ITS SECRETS ★'
+      const victoryWidth = ctx.measureText(victoryMsg).width
+      ctx.fillText(victoryMsg, (canvas.width - victoryWidth) / 2, offsetY - 90)
+    }
   }
 
   return (
-    <>
-      {isExpanded && (
-        <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
-          onClick={() => setIsExpanded(false)}
-        />
-      )}
-
-      <div className={isExpanded ? "fixed bottom-0 left-0 right-0 z-50 h-[70vh]" : "relative w-full h-full"}>
-        <div className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden">
-          <div className="absolute top-2 right-2 z-10 flex gap-2">
-            <button
-              onClick={resetMaze}
-              className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
-            >
-              Reset
-            </button>
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="w-8 h-8 rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white flex items-center justify-center"
-              aria-label={isExpanded ? "Minimize" : "Maximize"}
-            >
-              {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-            </button>
-            {isExpanded && (
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="w-8 h-8 rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white flex items-center justify-center"
-                aria-label="Close"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full"
-          />
-        </div>
-      </div>
-    </>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ touchAction: 'none' }}
+    />
   )
 }
