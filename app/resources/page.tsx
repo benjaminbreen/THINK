@@ -21,6 +21,7 @@ type ResourceCategory =
   | 'Policy & Guidance'
   | 'Tools & Platforms'
   | 'Data Ethics'
+  | 'AI and Humanities Weirdness'
 
 interface Resource {
   title: string
@@ -978,6 +979,158 @@ const resources: Resource[] = [
     category: "Data Ethics",
     description: "Directory of scholars and organizations working toward equitable, accountable AI systems.",
     url: "https://www.ajl.org/"
+  },
+
+  // AI and Humanities Weirdness
+  {
+    title: "Adversarial Poetry as a Universal Single-Turn Jailbreak Mechanism in Large Language Models",
+    authors: "Rylan Schaeffer, Aviral Kumar, Sanmi Koyejo",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Discovers that specially crafted poetry can reliably jailbreak LLMs in a single turn, revealing how aesthetic and literary forms exploit vulnerabilities in AI safety mechanisms.",
+    url: "https://arxiv.org/pdf/2511.15304",
+    journal: "arXiv"
+  },
+  {
+    title: "Do Androids Dream of Electric Sheep? LLMs and the Interpretation of Metaphor",
+    authors: "Rui Mao, Kai He, Yida Bao, Zhemin Xun",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Examines how language models struggle with metaphorical language in ways that reveal fundamental misunderstandings of literary interpretation and embodied meaning.",
+    url: "https://arxiv.org/abs/2410.09084",
+    journal: "arXiv"
+  },
+  {
+    title: "The Generative AI Paradox: What It Can Create, It May Not Understand",
+    authors: "Peter West, Ximing Lu, Nouha Dziri, et al.",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Demonstrates that LLMs can produce sophisticated creative writing while failing basic comprehension tests about the same content, revealing strange asymmetries in their capabilities.",
+    url: "https://arxiv.org/abs/2311.00059",
+    journal: "arXiv"
+  },
+  {
+    title: "Hallucination is Inevitable: An Innate Limitation of Large Language Models",
+    authors: "Ziwei Xu, Sanjay Jain, Mohan Kankanhalli",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Proves mathematically that hallucinations are not bugs but inevitable features of LLMs, reframing them as generators of plausible fictions rather than truth machines.",
+    url: "https://arxiv.org/abs/2401.11817",
+    journal: "arXiv"
+  },
+  {
+    title: "AI Achieves Silver-Medal Performance in International Mathematical Olympiad",
+    authors: "AlphaProof & AlphaGeometry teams",
+    year: 2024,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "DeepMind's AI systems solve olympiad-level math problems through formal reasoning, yet struggle with basic commonsense tasks children master easily—revealing the alien nature of machine intelligence.",
+    url: "https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/",
+    journal: "DeepMind Blog"
+  },
+  {
+    title: "GPT-4 Passes the Turing Test",
+    authors: "Cameron Jones, Benjamin Bergen",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Documents GPT-4 fooling human judges in Turing test scenarios, but through unexpected strategies—not by seeming intelligent, but by exploiting human social expectations and conversational norms.",
+    url: "https://arxiv.org/abs/2310.20216",
+    journal: "arXiv"
+  },
+  {
+    title: "Large Language Models as Simulated Economic Agents",
+    authors: "John J. Horton",
+    year: 2023,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Uses LLMs to simulate human economic behavior with startling accuracy, raising questions about whether AI can model (or understand) human social and economic reasoning.",
+    url: "https://arxiv.org/abs/2301.07543",
+    journal: "arXiv"
+  },
+  {
+    title: "Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task",
+    authors: "Kenneth Li, Aspen K. Hopkins, David Bau, et al.",
+    year: 2023,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Discovers that a language model trained only to predict chess moves spontaneously develops an internal spatial representation of the board—suggesting LLMs may build implicit 'world models' we don't understand.",
+    url: "https://arxiv.org/abs/2210.13382",
+    journal: "arXiv"
+  },
+  {
+    title: "The Curious Case of Neural Text Degeneration",
+    authors: "Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, Yejin Choi",
+    year: 2020,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Analyzes why neural language models devolve into repetitive, incoherent text—a phenomenon with implications for understanding creativity, novelty, and the aesthetics of machine-generated writing.",
+    url: "https://arxiv.org/abs/1904.09751",
+    journal: "ICLR 2020"
+  },
+  {
+    title: "Can Language Models Explain Their Own Classification Behavior?",
+    authors: "Vijit Malik, Sunipa Dev, Akihiro Nishi, Nanyun Peng, Kai-Wei Chang",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Finds that when LLMs explain their reasoning, the explanations are often post-hoc confabulations unrelated to actual decision-making processes—revealing fundamental opacity in AI 'understanding.'",
+    url: "https://arxiv.org/abs/2405.07626",
+    journal: "arXiv"
+  },
+  {
+    title: "Evaluating LLMs on Document-Based Question-Answering with Detailed Rubrics and Insights from Human Assessors",
+    authors: "Tam Nguyen, Hai Nguyen, et al.",
+    year: 2024,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Reveals that LLMs generate answers that sound authoritative but contain subtle factual errors human experts recognize immediately—the 'uncanny valley' of historical and literary analysis.",
+    url: "https://arxiv.org/abs/2412.01728",
+    journal: "arXiv"
+  },
+  {
+    title: "Language Models Show Human-Like Content Effects on Reasoning Tasks",
+    authors: "Ishita Dasgupta, Andrew K. Lampinen, Stephanie C.Y. Chan, et al.",
+    year: 2023,
+    type: "paper",
+    category: "AI and Humanities Weirdness",
+    description: "Discovers LLMs exhibit classic human cognitive biases and fallacies, suggesting they may model (or mimic) human irrationality in unexpected ways.",
+    url: "https://arxiv.org/abs/2207.07051",
+    journal: "arXiv"
+  },
+  {
+    title: "AI Art Is Challenging the Boundaries of Curation",
+    authors: "Ahmed Elgammal",
+    year: 2024,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "Art expert examines how AI-generated art has fooled museum curators and collectors, forcing reconsideration of aesthetic judgment, authorship, and what makes art 'authentic.'",
+    url: "https://www.nature.com/articles/d41586-024-00211-5",
+    journal: "Nature"
+  },
+  {
+    title: "Glitch Poetics: The Posthumanities of Error",
+    authors: "Various Authors",
+    year: 2023,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "Explores how AI errors, hallucinations, and failures create new aesthetic categories and forms of 'accidental' poetry and literature.",
+    url: "https://electronicbookreview.com/essay/glitch-poetics/",
+    journal: "Electronic Book Review"
+  },
+  {
+    title: "ChatGPT Creates Fictional Citations to Real-Sounding Academic Papers",
+    authors: "Waleed Ammar, Various Researchers",
+    year: 2023,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "Documents how LLMs generate plausible-sounding but completely fabricated academic citations, author names, and paper titles—'hallucinated scholarship' that reveals creativity at the cost of truth.",
+    url: "https://www.nature.com/articles/d41586-023-00641-9",
+    journal: "Nature"
   }
 ]
 
@@ -1070,7 +1223,8 @@ export default function ResourcesPage() {
     'AI Literacy': 'Teaching students and educators to use, critique, and understand AI systems',
     'Policy & Guidance': 'Institutional frameworks and policy recommendations for AI in education',
     'Tools & Platforms': 'Practical AI tools designed for educators and classroom use',
-    'Data Ethics': 'Critical perspectives on algorithmic bias, fairness, and ethical data practices'
+    'Data Ethics': 'Critical perspectives on algorithmic bias, fairness, and ethical data practices',
+    'AI and Humanities Weirdness': 'Unusual, unexpected, and fascinating research at the strange edges where AI meets literature, art, history, and creative expression'
   }
 
   const scrollToCategory = (category: ResourceCategory) => {
