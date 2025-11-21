@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { Button } from './button'
 
 interface GuideBannerProps {
@@ -12,11 +12,23 @@ interface GuideBannerProps {
 }
 
 export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [hasGuessed, setHasGuessed] = useState(false)
   const [showToast, setShowToast] = useState(false)
 
   const isNonAIImage = guideId === 'responsible-ai-classroom'
+
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        setIsModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [isModalOpen])
 
   const handleGuess = (guess: 'ai' | 'non-ai') => {
     if (hasGuessed) return
@@ -35,48 +47,26 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
     <div className="mb-8">
       {/* Banner Image */}
       <div
-        className={`relative w-full bg-muted rounded-lg overflow-hidden group cursor-pointer transition-all duration-500 ${
-          isExpanded ? 'h-auto' : 'h-48 md:h-64'
-        }`}
-        onClick={() => setIsExpanded(!isExpanded)}
+        className="relative w-full h-48 md:h-64 bg-muted rounded-lg overflow-hidden group cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setIsModalOpen(true)}
       >
-        {isExpanded ? (
-          <div className="relative w-full">
-            <Image
-              src={thumbnailPath}
-              alt={guideTitle}
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-              priority
-            />
-          </div>
-        ) : (
-          <Image
-            src={thumbnailPath}
-            alt={guideTitle}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="gap-2"
-          >
-            {isExpanded ? (
-              <>
-                <ChevronUp className="h-4 w-4" />
-                Collapse Image
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-4 w-4" />
-                View Full Image
-              </>
-            )}
+        <Image
+          src={thumbnailPath}
+          alt={guideTitle}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div
+          className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4 transition-opacity duration-300 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <Button variant="secondary" size="sm" className="gap-2">
+            <ChevronDown className="h-4 w-4" />
+            View Full Image
           </Button>
         </div>
       </div>
@@ -137,6 +127,34 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh] w-full">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="relative w-full h-full overflow-auto rounded-lg">
+              <Image
+                src={thumbnailPath}
+                alt={guideTitle}
+                width={1200}
+                height={800}
+                className="w-full h-auto rounded-lg"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast Notification */}
       {showToast && (
