@@ -126,17 +126,52 @@ export function Footer() {
             </div>
 
             <div className="mt-12 pt-8 border-t border-border/50">
-              <p className="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the{' '}
+              <p className="text-sm text-muted-foreground text-center">
+                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the Humanities.
+              </p>
+
+              {/* Hidden Maze Easter Egg Trigger */}
+              <div className="flex justify-center mt-6">
                 <button
                   onClick={() => setShowMaze(true)}
-                  className="hover:text-amber-600 transition-colors underline decoration-dotted underline-offset-2 cursor-pointer"
-                  aria-label="Open hidden maze"
+                  className="group cursor-pointer opacity-40 hover:opacity-100 transition-opacity duration-300"
+                  aria-label="Open hidden labyrinth"
+                  title="The Garden of Forking Paths"
                 >
-                  Humanities
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="transform group-hover:scale-110 transition-transform duration-300"
+                  >
+                    {/* Outer maze structure */}
+                    <rect x="4" y="4" width="40" height="40" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+
+                    {/* Maze paths - intricate pattern */}
+                    <path d="M4 12 L16 12" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M20 4 L20 20" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M28 8 L28 16" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M36 4 L36 12" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M12 20 L28 20" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M32 16 L44 16" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M12 28 L20 28" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M28 24 L28 36" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M36 20 L36 32" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M4 36 L12 36" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M20 32 L36 32" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M40 24 L44 24" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M12 44 L12 36" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M20 40 L32 40" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+                    <path d="M40 36 L44 36" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground group-hover:text-amber-600 transition-colors" />
+
+                    {/* Center symbol - stylized @ for player */}
+                    <circle cx="24" cy="24" r="3" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-amber-600 opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <circle cx="24" cy="24" r="1.5" fill="currentColor" className="text-amber-600 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </svg>
                 </button>
-                .
-              </p>
+              </div>
             </div>
           </div>
         </Container>

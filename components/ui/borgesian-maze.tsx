@@ -3,74 +3,154 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
 
+// Borges quotes for atmosphere
+const BORGES_FRAGMENTS = [
+  'Time forks perpetually toward innumerable futures...',
+  'The visible universe was an illusion or a sophism...',
+  'The composition of vast books is a laborious and impoverishing extravagance...',
+  'Mirrors and copulation are abominable, for they multiply the numbers of man...',
+  'I foresee that man will resign himself each day to new abominations...',
+  'In that single gigantic instant I saw millions of acts...',
+  'The Aleph was probably two or three centimeters in diameter...',
+  'Every language is an alphabet of symbols...',
+  'Writing is nothing more than a guided dream...',
+  'Reality favors symmetries and slight anachronisms...'
+]
+
 export function BorgesianMaze() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const animationFrameId = useRef<number | undefined>(undefined)
 
-  // Labyrinth state (Borges-themed maze)
+  // Enhanced labyrinth state with two levels
   const labyrinth = useRef({
     playerX: 1,
     playerY: 1,
-    maze: [] as number[][],
+    currentLevel: 0, // 0 = surface, 1 = depths
+    mazeUpper: [] as number[][],
+    mazeLower: [] as number[][],
     collected: new Set<string>(),
-    hasKey: false,
+    foundFragments: new Set<string>(),
+
+    // Artifacts
     hasBook: false,
+    hasKey: false,
     hasMirror: false,
+    hasAleph: false,
+    hasClock: false,
+    hasInfiniteBook: false,
+
+    // State
     solved: false,
-    message: 'Use arrow keys to navigate the Garden of Forking Paths...',
-    messageTime: 0
+    message: 'The labyrinth awaits. Two levels. Six artifacts. One truth.',
+    messageTime: 0,
+    currentFragment: '',
+    fragmentTime: 0
   })
 
-  // Initialize labyrinth - Borges-themed maze
-  const initLabyrinth = () => {
-    // Create a maze using recursive backtracking
-    const width = 25
-    const height = 17
+  // Generate more complex maze
+  const generateMaze = (width: number, height: number, complexity = 0.7) => {
     const maze: number[][] = Array(height).fill(0).map(() => Array(width).fill(1))
 
-    // Simple maze generation - create corridors
-    const carve = (x: number, y: number) => {
-      const dirs = [[0, -1], [1, 0], [0, 1], [-1, 0]].sort(() => Math.random() - 0.5)
+    // Recursive backtracking with occasional loops
+    const carve = (x: number, y: number, createLoops = false) => {
+      const dirs = [[0, -2], [2, 0], [0, 2], [-2, 0]].sort(() => Math.random() - 0.5)
       maze[y][x] = 0
 
       for (const [dx, dy] of dirs) {
-        const nx = x + dx * 2
-        const ny = y + dy * 2
-        if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1 && maze[ny][nx] === 1) {
-          maze[y + dy][x + dx] = 0
-          carve(nx, ny)
+        const nx = x + dx
+        const ny = y + dy
+        if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1) {
+          if (maze[ny][nx] === 1 || (createLoops && Math.random() < 0.15)) {
+            maze[y + dy/2][x + dx/2] = 0
+            if (maze[ny][nx] === 1) {
+              carve(nx, ny, createLoops)
+            }
+          }
         }
       }
     }
 
-    carve(1, 1)
+    carve(1, 1, complexity > 0.5)
 
-    // Place special items (Borges references)
-    // 2 = Book (Library of Babel), 3 = Key, 4 = Mirror (Tlön), 5 = Exit
-    let placed = 0
-    while (placed < 3) {
-      const x = Math.floor(Math.random() * (width - 2)) + 1
-      const y = Math.floor(Math.random() * (height - 2)) + 1
-      if (maze[y][x] === 0 && (x !== 1 || y !== 1)) {
-        maze[y][x] = placed + 2
-        placed++
+    // Add some open areas for atmosphere
+    const openAreas = Math.floor(complexity * 3)
+    for (let i = 0; i < openAreas; i++) {
+      const cx = Math.floor(Math.random() * (width - 6)) + 3
+      const cy = Math.floor(Math.random() * (height - 6)) + 3
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (cx + dx > 0 && cx + dx < width - 1 && cy + dy > 0 && cy + dy < height - 1) {
+            maze[cy + dy][cx + dx] = 0
+          }
+        }
       }
     }
 
-    // Place exit
-    maze[height - 2][width - 2] = 5
+    return maze
+  }
 
-    labyrinth.current.maze = maze
+  // Initialize the two-level labyrinth
+  const initLabyrinth = () => {
+    const width = 35
+    const height = 23
+
+    // Generate both levels with different complexity
+    const mazeUpper = generateMaze(width, height, 0.6)
+    const mazeLower = generateMaze(width, height, 0.8)
+
+    // Place items on UPPER level
+    // 2 = Book, 3 = Key, 4 = Mirror, 6 = Stairs Down, 7 = Literary Fragment
+    const placeItem = (maze: number[][], value: number, count = 1) => {
+      let placed = 0
+      let attempts = 0
+      while (placed < count && attempts < 100) {
+        attempts++
+        const x = Math.floor(Math.random() * (width - 4)) + 2
+        const y = Math.floor(Math.random() * (height - 4)) + 2
+        if (maze[y][x] === 0 && (x !== 1 || y !== 1)) {
+          maze[y][x] = value
+          placed++
+        }
+      }
+    }
+
+    // Upper level items
+    placeItem(mazeUpper, 2) // Library of Babel book
+    placeItem(mazeUpper, 3) // Key
+    placeItem(mazeUpper, 4) // Mirror
+    placeItem(mazeUpper, 6, 2) // Stairs down (2 locations)
+    placeItem(mazeUpper, 7, 5) // Literary fragments
+
+    // Lower level items
+    // 8 = Aleph, 9 = Infinite Book, 10 = Clock (Tlön), 11 = Stairs Up, 12 = Exit
+    placeItem(mazeLower, 8) // The Aleph
+    placeItem(mazeLower, 9) // Infinite Book
+    placeItem(mazeLower, 10) // Time-Clock
+    placeItem(mazeLower, 11, 2) // Stairs up
+    placeItem(mazeLower, 7, 5) // More fragments
+
+    // Place exit in lower level
+    mazeLower[height - 2][width - 2] = 12
+
+    labyrinth.current.mazeUpper = mazeUpper
+    labyrinth.current.mazeLower = mazeLower
     labyrinth.current.playerX = 1
     labyrinth.current.playerY = 1
+    labyrinth.current.currentLevel = 0
     labyrinth.current.collected = new Set()
-    labyrinth.current.hasKey = false
+    labyrinth.current.foundFragments = new Set()
     labyrinth.current.hasBook = false
+    labyrinth.current.hasKey = false
     labyrinth.current.hasMirror = false
+    labyrinth.current.hasAleph = false
+    labyrinth.current.hasClock = false
+    labyrinth.current.hasInfiniteBook = false
     labyrinth.current.solved = false
-    labyrinth.current.message = 'Navigate the Garden of Forking Paths... Find 3 artifacts to escape.'
+    labyrinth.current.message = 'Surface level. Seek the stairs to descend into the depths...'
     labyrinth.current.messageTime = Date.now()
+    labyrinth.current.currentFragment = ''
+    labyrinth.current.fragmentTime = 0
   }
 
   useEffect(() => {
@@ -80,7 +160,6 @@ export function BorgesianMaze() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Set canvas size
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
@@ -88,9 +167,10 @@ export function BorgesianMaze() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Keyboard handler for labyrinth
+    // Keyboard handler
     const handleKeyDown = (e: KeyboardEvent) => {
       const lab = labyrinth.current
+      const currentMaze = lab.currentLevel === 0 ? lab.mazeUpper : lab.mazeLower
       let newX = lab.playerX
       let newY = lab.playerY
 
@@ -111,39 +191,78 @@ export function BorgesianMaze() {
         setIsExpanded(false)
         return
       } else {
-        return // Don't prevent default for non-arrow keys
+        return
       }
 
-      // Check if move is valid (not wall)
-      if (lab.maze[newY] && lab.maze[newY][newX] !== 1) {
+      // Check if move is valid
+      if (currentMaze[newY] && currentMaze[newY][newX] !== 1) {
         lab.playerX = newX
         lab.playerY = newY
 
-        // Check for items
-        const pos = `${newX},${newY}`
-        if (lab.maze[newY][newX] === 2 && !lab.collected.has(pos)) {
+        const pos = `${lab.currentLevel}-${newX},${newY}`
+        const cell = currentMaze[newY][newX]
+
+        // Upper level items
+        if (cell === 2 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasBook = true
-          lab.message = 'Found: A volume from the Library of Babel!'
+          lab.message = 'A volume from the infinite Library. It contains all possible books...'
           lab.messageTime = Date.now()
-        } else if (lab.maze[newY][newX] === 3 && !lab.collected.has(pos)) {
+        } else if (cell === 3 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasKey = true
-          lab.message = 'Found: The Key to the Garden!'
+          lab.message = 'The Key to the Garden of Forking Paths.'
           lab.messageTime = Date.now()
-        } else if (lab.maze[newY][newX] === 4 && !lab.collected.has(pos)) {
+        } else if (cell === 4 && !lab.collected.has(pos)) {
           lab.collected.add(pos)
           lab.hasMirror = true
-          lab.message = 'Found: The Mirror of Tlön!'
+          lab.message = 'A mirror from Tlön—it multiplies reality itself.'
           lab.messageTime = Date.now()
-        } else if (lab.maze[newY][newX] === 5) {
-          // Exit - check if puzzle solved
-          if (lab.hasBook && lab.hasKey && lab.hasMirror) {
+        } else if (cell === 6) {
+          // Stairs down
+          lab.currentLevel = 1
+          lab.message = 'Descending... The air grows thick with possibility.'
+          lab.messageTime = Date.now()
+        } else if (cell === 7 && !lab.foundFragments.has(pos)) {
+          // Literary fragment
+          lab.foundFragments.add(pos)
+          lab.currentFragment = BORGES_FRAGMENTS[Math.floor(Math.random() * BORGES_FRAGMENTS.length)]
+          lab.fragmentTime = Date.now()
+          lab.message = 'You found a fragment of text...'
+          lab.messageTime = Date.now()
+        }
+        // Lower level items
+        else if (cell === 8 && !lab.collected.has(pos)) {
+          lab.collected.add(pos)
+          lab.hasAleph = true
+          lab.message = 'The Aleph! Point of infinite space where all places converge...'
+          lab.messageTime = Date.now()
+        } else if (cell === 9 && !lab.collected.has(pos)) {
+          lab.collected.add(pos)
+          lab.hasInfiniteBook = true
+          lab.message = 'The Book of Sand—infinite pages, never the same twice.'
+          lab.messageTime = Date.now()
+        } else if (cell === 10 && !lab.collected.has(pos)) {
+          lab.collected.add(pos)
+          lab.hasClock = true
+          lab.message = 'A clock from Tlön. Time here flows... differently.'
+          lab.messageTime = Date.now()
+        } else if (cell === 11) {
+          // Stairs up
+          lab.currentLevel = 0
+          lab.message = 'Ascending to the surface...'
+          lab.messageTime = Date.now()
+        } else if (cell === 12) {
+          // Exit
+          const allUpper = lab.hasBook && lab.hasKey && lab.hasMirror
+          const allLower = lab.hasAleph && lab.hasInfiniteBook && lab.hasClock
+          if (allUpper && allLower) {
             lab.solved = true
-            lab.message = '★ You have escaped the Labyrinth! ★'
+            lab.message = '★ The labyrinth yields. You have found all paths. ★'
             lab.messageTime = Date.now()
           } else {
-            lab.message = 'The exit is locked. Find all three artifacts...'
+            const missing = 6 - [lab.hasBook, lab.hasKey, lab.hasMirror, lab.hasAleph, lab.hasInfiniteBook, lab.hasClock].filter(Boolean).length
+            lab.message = `Exit locked. Still seeking ${missing} artifacts...`
             lab.messageTime = Date.now()
           }
         }
@@ -151,66 +270,73 @@ export function BorgesianMaze() {
     }
     window.addEventListener('keydown', handleKeyDown)
 
-    // Labyrinth/Maze rendering
+    // Rendering
     const drawLabyrinth = () => {
-      // Dark background with subtle gradient
+      // Background
       const gradient = ctx.createRadialGradient(
         canvas.width / 2, canvas.height / 2, 0,
         canvas.width / 2, canvas.height / 2, canvas.width / 1.5
       )
-      gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
-      gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
+      if (labyrinth.current.currentLevel === 0) {
+        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
+        gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
+      } else {
+        gradient.addColorStop(0, 'rgba(10, 5, 25, 0.98)')
+        gradient.addColorStop(1, 'rgba(5, 0, 15, 1)')
+      }
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Border frame
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
-      ctx.lineWidth = 2
-      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20)
-
       const lab = labyrinth.current
+      const currentMaze = lab.currentLevel === 0 ? lab.mazeUpper : lab.mazeLower
 
-      // Initialize maze if needed
-      if (lab.maze.length === 0) {
+      if (currentMaze.length === 0) {
         initLabyrinth()
+        return
       }
 
-      const cellSize = isExpanded ? 25 : 15
-      const offsetX = (canvas.width - lab.maze[0].length * cellSize) / 2
-      const offsetY = (canvas.height - lab.maze.length * cellSize) / 2
+      const cellSize = isExpanded ? 20 : 12
+      const offsetX = (canvas.width - currentMaze[0].length * cellSize) / 2
+      const offsetY = (canvas.height - currentMaze.length * cellSize) / 2
+
+      const fontSize = isExpanded ? 14 : 8
+      ctx.font = `bold ${fontSize}px monospace`
 
       // Draw maze
-      const fontSize = isExpanded ? 16 : 10
-      ctx.font = `bold ${fontSize}px monospace`
-      for (let y = 0; y < lab.maze.length; y++) {
-        for (let x = 0; x < lab.maze[y].length; x++) {
+      for (let y = 0; y < currentMaze.length; y++) {
+        for (let x = 0; x < currentMaze[y].length; x++) {
           const px = offsetX + x * cellSize
           const py = offsetY + y * cellSize
-          const cell = lab.maze[y][x]
+          const cell = currentMaze[y][x]
+          const pos = `${lab.currentLevel}-${x},${y}`
 
           if (cell === 1) {
-            // Wall
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.3)'
+            ctx.fillStyle = lab.currentLevel === 0 ? 'rgba(59, 130, 246, 0.25)' : 'rgba(139, 92, 246, 0.3)'
             ctx.fillRect(px, py, cellSize, cellSize)
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.6)'
-            ctx.fillText('█', px + (isExpanded ? 5 : 2), py + (isExpanded ? 18 : 11))
-          } else if (cell === 2 && !lab.collected.has(`${x},${y}`)) {
-            // Book (Library of Babel)
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
-            ctx.fillText('📖', px + (isExpanded ? 4 : 1), py + (isExpanded ? 18 : 11))
-          } else if (cell === 3 && !lab.collected.has(`${x},${y}`)) {
-            // Key
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
-            ctx.fillText('🗝', px + (isExpanded ? 4 : 1), py + (isExpanded ? 18 : 11))
-          } else if (cell === 4 && !lab.collected.has(`${x},${y}`)) {
-            // Mirror (Tlön)
-            ctx.fillStyle = 'rgba(147, 197, 253, 0.8)' // blue-300
-            ctx.fillText('🪞', px + (isExpanded ? 4 : 1), py + (isExpanded ? 18 : 11))
-          } else if (cell === 5) {
-            // Exit
-            const exitColor = lab.solved ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.7)'
-            ctx.fillStyle = exitColor
-            ctx.fillText('🚪', px + (isExpanded ? 4 : 1), py + (isExpanded ? 18 : 11))
+          } else if (cell === 2 && !lab.collected.has(pos)) {
+            ctx.fillText('📖', px, py + cellSize - 2)
+          } else if (cell === 3 && !lab.collected.has(pos)) {
+            ctx.fillText('🗝', px, py + cellSize - 2)
+          } else if (cell === 4 && !lab.collected.has(pos)) {
+            ctx.fillText('🪞', px, py + cellSize - 2)
+          } else if (cell === 6) {
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.6)'
+            ctx.fillText('▼', px + 2, py + cellSize - 2)
+          } else if (cell === 7 && !lab.foundFragments.has(pos)) {
+            ctx.fillStyle = 'rgba(147, 197, 253, 0.5)'
+            ctx.fillText('∞', px + 2, py + cellSize - 2)
+          } else if (cell === 8 && !lab.collected.has(pos)) {
+            ctx.fillText('⊙', px + 2, py + cellSize - 2)
+          } else if (cell === 9 && !lab.collected.has(pos)) {
+            ctx.fillText('📜', px, py + cellSize - 2)
+          } else if (cell === 10 && !lab.collected.has(pos)) {
+            ctx.fillText('⌚', px, py + cellSize - 2)
+          } else if (cell === 11) {
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.6)'
+            ctx.fillText('▲', px + 2, py + cellSize - 2)
+          } else if (cell === 12) {
+            ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.7)'
+            ctx.fillText('🚪', px, py + cellSize - 2)
           }
         }
       }
@@ -219,52 +345,57 @@ export function BorgesianMaze() {
       const playerPx = offsetX + lab.playerX * cellSize
       const playerPy = offsetY + lab.playerY * cellSize
       ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : 'rgba(59, 130, 246, 1)'
-      ctx.fillText('@', playerPx + (isExpanded ? 7 : 3), playerPy + (isExpanded ? 18 : 11))
+      ctx.fillText('@', playerPx + 2, playerPy + cellSize - 2)
 
-      // Draw inventory
-      ctx.font = `${isExpanded ? 14 : 10}px monospace`
+      // UI
+      ctx.font = `${isExpanded ? 12 : 8}px monospace`
       ctx.fillStyle = 'rgba(147, 197, 253, 0.9)'
-      const inventoryY = 30
-      ctx.fillText('Inventory:', 20, inventoryY)
-      let invY = inventoryY + (isExpanded ? 20 : 15)
-      if (lab.hasBook) {
-        ctx.fillText('📖 Library of Babel volume', 20, invY)
-        invY += isExpanded ? 18 : 13
-      }
-      if (lab.hasKey) {
-        ctx.fillText('🗝 Garden Key', 20, invY)
-        invY += isExpanded ? 18 : 13
-      }
-      if (lab.hasMirror) {
-        ctx.fillText('🪞 Mirror of Tlön', 20, invY)
-        invY += isExpanded ? 18 : 13
-      }
+      const levelText = lab.currentLevel === 0 ? 'SURFACE' : 'DEPTHS'
+      ctx.fillText(`Level: ${levelText}`, 20, 25)
 
-      // Draw message
-      if (Date.now() - lab.messageTime < 3000) {
-        ctx.font = `bold ${isExpanded ? 14 : 10}px monospace`
+      let invY = 45
+      const count = [lab.hasBook, lab.hasKey, lab.hasMirror, lab.hasAleph, lab.hasInfiniteBook, lab.hasClock].filter(Boolean).length
+      ctx.fillText(`Artifacts: ${count}/6`, 20, invY)
+      ctx.fillText(`Fragments: ${lab.foundFragments.size}`, 20, invY + 15)
+
+      // Messages
+      if (Date.now() - lab.messageTime < 3500) {
+        ctx.font = `bold ${isExpanded ? 12 : 8}px monospace`
         ctx.fillStyle = 'rgba(251, 191, 36, 1)'
-        const msgWidth = ctx.measureText(lab.message).width
-        ctx.fillText(lab.message, (canvas.width - msgWidth) / 2, canvas.height - 60)
+        ctx.fillText(lab.message, 20, canvas.height - 40)
       }
 
-      // Draw instructions
-      ctx.font = `${isExpanded ? 12 : 9}px monospace`
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'
-      const instructions = 'Arrow keys to move | Find 3 artifacts to unlock exit'
-      ctx.fillText(instructions, 20, canvas.height - 20)
+      // Fragment display
+      if (Date.now() - lab.fragmentTime < 5000 && lab.currentFragment) {
+        ctx.font = `italic ${isExpanded ? 11 : 7}px monospace`
+        ctx.fillStyle = 'rgba(147, 197, 253, 0.8)'
+        const maxWidth = canvas.width - 40
+        const words = lab.currentFragment.split(' ')
+        let line = ''
+        let y = canvas.height - 80
+        for (const word of words) {
+          const testLine = line + word + ' '
+          if (ctx.measureText(testLine).width > maxWidth && line) {
+            ctx.fillText(line, 20, y)
+            line = word + ' '
+            y += 15
+          } else {
+            line = testLine
+          }
+        }
+        ctx.fillText(line, 20, y)
+      }
 
-      // Victory message
+      // Victory
       if (lab.solved) {
-        ctx.font = `bold ${isExpanded ? 24 : 14}px monospace`
+        ctx.font = `bold ${isExpanded ? 20 : 12}px monospace`
         ctx.fillStyle = 'rgba(34, 197, 94, 1)'
-        const victoryMsg = '★ THE LABYRINTH YIELDS ITS SECRETS ★'
-        const victoryWidth = ctx.measureText(victoryMsg).width
-        ctx.fillText(victoryMsg, (canvas.width - victoryWidth) / 2, 60)
+        const msg = '★ ALL PATHS CONVERGE ★'
+        const w = ctx.measureText(msg).width
+        ctx.fillText(msg, (canvas.width - w) / 2, 50)
       }
     }
 
-    // Animation loop
     const animate = () => {
       drawLabyrinth()
       animationFrameId.current = requestAnimationFrame(animate)
@@ -282,13 +413,13 @@ export function BorgesianMaze() {
   }, [isExpanded])
 
   const resetMaze = () => {
-    labyrinth.current.maze = []
+    labyrinth.current.mazeUpper = []
+    labyrinth.current.mazeLower = []
     initLabyrinth()
   }
 
   return (
     <>
-      {/* Backdrop - only when expanded */}
       {isExpanded && (
         <div
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
@@ -296,10 +427,8 @@ export function BorgesianMaze() {
         />
       )}
 
-      {/* Maze Container */}
       <div className={isExpanded ? "fixed bottom-0 left-0 right-0 z-50 h-[70vh]" : "relative w-full h-full"}>
         <div className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden">
-          {/* Controls */}
           <div className="absolute top-2 right-2 z-10 flex gap-2">
             <button
               onClick={resetMaze}
@@ -325,7 +454,6 @@ export function BorgesianMaze() {
             )}
           </div>
 
-          {/* Canvas */}
           <canvas
             ref={canvasRef}
             className="absolute inset-0 w-full h-full"
