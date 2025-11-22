@@ -1,111 +1,131 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, memo } from 'react'
 
-// Generate a simple 5x5 maze using randomized DFS
-function generateMaze(): number[][] {
-  const size = 5
-  const maze: number[][] = Array(size).fill(0).map(() => Array(size).fill(1))
-
-  const stack: [number, number][] = []
-  const visited = new Set<string>()
-
-  // Start from (0, 0)
-  const start: [number, number] = [0, 0]
-  stack.push(start)
-  visited.add('0,0')
-  maze[0][0] = 0
-
-  const directions = [
-    [0, -1], [1, 0], [0, 1], [-1, 0]
-  ]
-
-  while (stack.length > 0) {
-    const [x, y] = stack[stack.length - 1]
-
-    // Shuffle directions
-    const shuffled = [...directions].sort(() => Math.random() - 0.5)
-    let moved = false
-
-    for (const [dx, dy] of shuffled) {
-      const nx = x + dx
-      const ny = y + dy
-
-      if (nx >= 0 && nx < size && ny >= 0 && ny < size && !visited.has(`${nx},${ny}`)) {
-        visited.add(`${nx},${ny}`)
-        maze[ny][nx] = 0
-        stack.push([nx, ny])
-        moved = true
-        break
-      }
-    }
-
-    if (!moved) {
-      stack.pop()
-    }
+// Hand-crafted 4x4 maze templates with guaranteed solvable paths
+// 0 = path, 1 = wall
+// Coordinates: [column, row] = [x, y]
+const MAZE_TEMPLATES = [
+  {
+    name: 'S-curve',
+    maze: [
+      [0, 0, 1, 1],
+      [1, 0, 1, 1],
+      [1, 0, 0, 0],
+      [1, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [1,1], [2,1], [2,2], [3,2], [3,3]]
+  },
+  {
+    name: 'Right-down',
+    maze: [
+      [0, 0, 0, 1],
+      [1, 1, 0, 1],
+      [1, 1, 0, 0],
+      [1, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [2,0], [2,1], [2,2], [3,2], [3,3]]
+  },
+  {
+    name: 'Zigzag',
+    maze: [
+      [0, 0, 0, 1],
+      [1, 1, 0, 1],
+      [1, 0, 0, 1],
+      [1, 0, 1, 0]
+    ],
+    path: [[0,0], [1,0], [2,0], [2,1], [2,2], [1,2], [1,3], [3,3]]
+  },
+  {
+    name: 'L-path',
+    maze: [
+      [0, 1, 1, 1],
+      [0, 1, 1, 1],
+      [0, 0, 0, 1],
+      [1, 1, 0, 0]
+    ],
+    path: [[0,0], [0,1], [0,2], [1,2], [2,2], [2,3], [3,3]]
+  },
+  {
+    name: 'T-junction',
+    maze: [
+      [0, 0, 1, 1],
+      [1, 0, 0, 0],
+      [1, 1, 1, 0],
+      [1, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [1,1], [2,1], [3,1], [3,2], [3,3]]
+  },
+  {
+    name: 'Spiral',
+    maze: [
+      [0, 0, 0, 1],
+      [1, 1, 0, 1],
+      [0, 0, 0, 1],
+      [0, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [2,0], [2,1], [2,2], [1,2], [0,2], [0,3], [3,3]]
+  },
+  {
+    name: 'Diagonal',
+    maze: [
+      [0, 0, 1, 1],
+      [1, 0, 0, 1],
+      [1, 1, 0, 0],
+      [1, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [1,1], [2,1], [2,2], [3,2], [3,3]]
+  },
+  {
+    name: 'Corridor',
+    maze: [
+      [0, 0, 0, 0],
+      [1, 1, 1, 0],
+      [1, 1, 1, 0],
+      [1, 1, 1, 0]
+    ],
+    path: [[0,0], [1,0], [2,0], [3,0], [3,1], [3,2], [3,3]]
   }
+]
 
-  return maze
-}
-
-// Find a path through the maze from top-left to bottom-right
-function findPath(maze: number[][]): [number, number][] {
-  const size = maze.length
-  const queue: { pos: [number, number], path: [number, number][] }[] = []
-  const visited = new Set<string>()
-
-  queue.push({ pos: [0, 0], path: [[0, 0]] })
-  visited.add('0,0')
-
-  const directions = [[0, -1], [1, 0], [0, 1], [-1, 0]]
-
-  while (queue.length > 0) {
-    const { pos: [x, y], path } = queue.shift()!
-
-    // If we reached the end, return the path
-    if (x === size - 1 && y === size - 1) {
-      return path
-    }
-
-    for (const [dx, dy] of directions) {
-      const nx = x + dx
-      const ny = y + dy
-      const key = `${nx},${ny}`
-
-      if (
-        nx >= 0 && nx < size &&
-        ny >= 0 && ny < size &&
-        maze[ny][nx] === 0 &&
-        !visited.has(key)
-      ) {
-        visited.add(key)
-        queue.push({ pos: [nx, ny], path: [...path, [nx, ny]] })
-      }
-    }
-  }
-
-  // Fallback: just return a simple path if no path found
-  return [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]
-}
-
-export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
-  const [maze, setMaze] = useState<number[][]>([])
-  const [path, setPath] = useState<[number, number][]>([])
+function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
+  const [template, setTemplate] = useState(MAZE_TEMPLATES[0])
+  const [isHovered, setIsHovered] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const animateXRef = useRef<SVGAnimateElement>(null)
+  const animateYRef = useRef<SVGAnimateElement>(null)
 
   useEffect(() => {
-    const newMaze = generateMaze()
-    setMaze(newMaze)
-    setPath(findPath(newMaze))
+    // Select random maze template on mount
+    const randomTemplate = MAZE_TEMPLATES[Math.floor(Math.random() * MAZE_TEMPLATES.length)]
+    setTemplate(randomTemplate)
   }, [])
 
-  if (maze.length === 0) return null
+  // Control animation on hover change
+  useEffect(() => {
+    if (isHovered) {
+      // Start animation on hover
+      animateXRef.current?.beginElement()
+      animateYRef.current?.beginElement()
+      setHasAnimated(true)
+    } else if (hasAnimated) {
+      // Freeze animation when hover ends (only if it has started)
+      animateXRef.current?.endElement()
+      animateYRef.current?.endElement()
+    }
+  }, [isHovered, hasAnimated])
 
-  const cellSize = 4
+  const { maze, path } = template
+  const size = 4 // 4x4 grid
+  const cellSize = 5 // Larger cells for better visibility
   const offset = 2
 
   // Generate keyframe values for smooth animation
-  const pathX = path.map(p => offset + p[0] * cellSize + cellSize / 2).join(';')
-  const pathY = path.map(p => offset + p[1] * cellSize + cellSize / 2).join(';')
+  const pathX = path.map(([x]) => offset + x * cellSize + cellSize / 2).join(';')
+  const pathY = path.map(([, y]) => offset + y * cellSize + cellSize / 2).join(';')
+
+  // Animation duration: ~0.7s per step for natural movement
+  const duration = path.length * 0.7
 
   return (
     <svg
@@ -113,9 +133,20 @@ export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      aria-label="THINK maze logo"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Background */}
-      <rect x="0" y="0" width="24" height="24" fill="currentColor" fillOpacity="0.08" />
+      {/* Subtle background */}
+      <rect
+        x="0"
+        y="0"
+        width="24"
+        height="24"
+        fill="currentColor"
+        fillOpacity="0.06"
+        rx="1"
+      />
 
       {/* Draw maze walls as solid blocks */}
       {maze.map((row, y) =>
@@ -128,31 +159,54 @@ export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
               width={cellSize}
               height={cellSize}
               fill="currentColor"
-              fillOpacity="0.85"
+              fillOpacity="0.9"
+              rx="0.5"
             />
           ) : null
         )
       )}
 
-      {/* Animated yellow circle moving along path */}
-      {path.length > 1 && (
-        <circle r="1.3" fill="#eab308" opacity="1">
-          <animate
-            attributeName="cx"
-            values={pathX}
-            dur="6s"
-            repeatCount="indefinite"
-            calcMode="linear"
-          />
-          <animate
-            attributeName="cy"
-            values={pathY}
-            dur="6s"
-            repeatCount="indefinite"
-            calcMode="linear"
-          />
-        </circle>
-      )}
+      {/* Animated ball following the path - hidden by default, blue on hover */}
+      <circle
+        r="1.5"
+        fill="#3b82f6"
+        opacity={hasAnimated ? "1" : "0"}
+        filter="url(#glow)"
+        style={{ transition: 'opacity 0.2s ease' }}
+      >
+        <animate
+          ref={animateXRef}
+          attributeName="cx"
+          values={pathX}
+          dur={`${duration}s`}
+          repeatCount="indefinite"
+          calcMode="linear"
+          begin="indefinite"
+        />
+        <animate
+          ref={animateYRef}
+          attributeName="cy"
+          values={pathY}
+          dur={`${duration}s`}
+          repeatCount="indefinite"
+          calcMode="linear"
+          begin="indefinite"
+        />
+      </circle>
+
+      {/* Subtle glow effect for the ball */}
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="0.5" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
     </svg>
   )
 }
+
+// Memoize to prevent unnecessary re-renders
+export const MazeLogo = memo(MazeLogoComponent)

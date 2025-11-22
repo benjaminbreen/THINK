@@ -32,42 +32,44 @@ export function ProjectCard({
   const thumbnailPath = `/thumbnails/${slug}.png`
 
   return (
-    <Card className={`group hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay}`}>
-      <CardHeader>
-        {hasImage ? (
-          <div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
-            <Image
-              src={thumbnailPath}
-              alt={title}
-              fill
-              className="object-cover"
-              onError={() => setHasImage(false)}
-            />
-          </div>
-        ) : null}
-        <div className="flex items-start justify-between mb-2">
-          <Badge className="text-xs bg-amber-600 hover:bg-amber-700 text-white">
-            {type}
-          </Badge>
-          <span className="text-xs text-muted-foreground">{year}</span>
-        </div>
-        <CardTitle className="text-xl mb-2">{title}</CardTitle>
-        <CardDescription className="text-sm mb-2 leading-snug">
-          {description}
-        </CardDescription>
-        <div className="flex flex-wrap gap-1.5">
-          {tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="text-xs">
-              {tag}
+    <Link href={href} className="block group">
+      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer`}>
+        <CardHeader>
+          {hasImage ? (
+            <div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
+              <Image
+                src={thumbnailPath}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={() => setHasImage(false)}
+              />
+            </div>
+          ) : null}
+          <div className="flex items-start justify-between mb-2">
+            <Badge className="text-xs bg-amber-600 group-hover:bg-amber-700 text-white transition-colors">
+              {type}
             </Badge>
-          ))}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Link href={href} className="text-sm text-primary hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform">
-          View project <ArrowRight className="ml-1 h-3 w-3" />
-        </Link>
-      </CardContent>
-    </Card>
+            <span className="text-xs text-muted-foreground">{year}</span>
+          </div>
+          <CardTitle className="text-xl mb-2 group-hover:text-amber-600 transition-colors">{title}</CardTitle>
+          <CardDescription className="text-sm mb-2 leading-snug">
+            {description}
+          </CardDescription>
+          <div className="flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <Badge key={tag} variant="outline" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <span className="text-sm text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">
+            View project <ArrowRight className="ml-1 h-3 w-3" />
+          </span>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 
 // Literary style transformations for main page content
 const styleTransformations = {
@@ -156,7 +156,7 @@ const styleTransformations = {
   },
 }
 
-export function LiteraryTransformer() {
+function LiteraryTransformerComponent() {
   const [currentStyle, setCurrentStyle] = useState<string | null>(null)
   const [originalContent, setOriginalContent] = useState<Record<string, string>>({})
 
@@ -241,3 +241,6 @@ export function LiteraryTransformer() {
 
   return null // This is a utility component with no UI
 }
+
+// Memoize to prevent unnecessary re-renders
+export const LiteraryTransformer = memo(LiteraryTransformerComponent)
