@@ -5,23 +5,51 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { FileText, Lightbulb, Download, ExternalLink, Users } from 'lucide-react'
+import { PedagogyBackground } from '@/components/ui/pedagogy-background'
+import { pageThemes } from '@/lib/page-themes'
+
+const theme = pageThemes.pedagogy
 
 export default function PedagogyPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
-        <Container>
+      {/* Hero Section with Interactive Background */}
+      <Section className="pt-24 pb-16 relative overflow-hidden mixed-mode-dark">
+        <PedagogyBackground />
+        <Container className="relative z-10">
           <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Pedagogy Materials</h1>
-            <p className="text-lg text-muted-foreground">
+            <Badge
+              variant="outline"
+              className="mb-4 text-sm border-2"
+              style={{
+                borderColor: theme.accent,
+                color: theme.accent
+              }}
+            >
+              {theme.description}
+            </Badge>
+            <h1
+              className="text-4xl sm:text-5xl font-serif font-bold mb-4 drop-shadow-lg"
+              style={{ color: theme.accent }}
+            >
+              Pedagogy Materials
+            </h1>
+            <p className="text-lg text-white/90 drop-shadow-md">
               Curriculum, resources, and best practices for teaching with and about AI in humanities classes
             </p>
+            <p className="text-sm text-white/70 mt-4 italic drop-shadow-sm">
+              💡 Click the falling blocks to reveal pedagogical concepts
+            </p>
           </div>
+        </Container>
+      </Section>
 
+      <Section className="py-16">
+        <Container>
           {/* HistoryLens Materials */}
           <div className="mx-auto max-w-4xl mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <Lightbulb className="h-6 w-6 text-primary" />
+              <Lightbulb className="h-6 w-6" style={{ color: theme.accent }} />
               <h2 className="text-3xl font-serif font-bold">HistoryLens Modules</h2>
             </div>
             <Card className="hover:shadow-lg transition-shadow mb-6">
@@ -92,7 +120,7 @@ export default function PedagogyPage() {
           {/* Sample Assignments */}
           <div className="mx-auto max-w-4xl mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <FileText className="h-6 w-6 text-primary" />
+              <FileText className="h-6 w-6" style={{ color: theme.accent }} />
               <h2 className="text-3xl font-serif font-bold">Sample Assignments</h2>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
@@ -176,7 +204,7 @@ export default function PedagogyPage() {
       <Section className="bg-muted/40">
         <Container>
           <div className="mx-auto max-w-3xl text-center mb-8">
-            <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+            <Users className="h-12 w-12 mx-auto mb-4" style={{ color: theme.accent }} />
             <h2 className="text-3xl font-serif font-bold mb-4">Modular Curriculum Extracts</h2>
             <p className="text-muted-foreground mb-6">
               Working with the Bay Area Community College Consortium (BACCC), we are developing modular
