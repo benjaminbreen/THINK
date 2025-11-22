@@ -27,6 +27,7 @@ interface Block {
   tag: string
   destroyed: boolean
   destroyedTime?: number
+  grounded: boolean
 }
 
 interface Particle {
@@ -39,7 +40,11 @@ interface Particle {
   size: number
 }
 
-export function PedagogyBackground() {
+interface PedagogyBackgroundProps {
+  isHovered?: boolean
+}
+
+export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const blocks = useRef<Block[]>([])
   const particles = useRef<Particle[]>([])
@@ -108,7 +113,7 @@ export function PedagogyBackground() {
           x,
           y,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
+          vy: Math.sin(angle) * speed - 2, // Initial upward velocity
           life: 1,
           maxLife: 60 + Math.random() * 30,
           size: 2 + Math.random() * 3
@@ -129,10 +134,19 @@ export function PedagogyBackground() {
           rotationSpeed: (Math.random() - 0.5) * 0.02,
           size: 20 + Math.random() * 10,
           tag,
-          destroyed: false
+          destroyed: false,
+          grounded: false
         })
         lastSpawnTime.current = time
       }
+    }
+
+    // Check collision with other blocks
+    const checkCollision = (block: Block, otherBlock: Block): boolean => {
+      const dx = block.x - otherBlock.x
+      const dy = block.y - otherBlock.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      return distance < (block.size + otherBlock.size) / 2
     }
 
     // Animation loop
@@ -142,32 +156,71 @@ export function PedagogyBackground() {
 
       spawnBlock(time)
 
+      const gravity = 0.2
+
       // Update and draw blocks
       blocks.current = blocks.current.filter(block => {
         if (block.destroyed) return false
-        if (block.y > canvas.height + 50) return false
 
-        // Update position
-        block.x += block.vx
-        block.y += block.vy
-        block.rotation += block.rotationSpeed
+        if (!block.grounded) {
+          // Apply physics
+          block.vy += gravity
+          block.x += block.vx
+          block.y += block.vy
+          block.rotation += block.rotationSpeed
 
-        // Bounce off sides
-        if (block.x < block.size || block.x > canvas.width - block.size) {
-          block.vx *= -1
+          // Bounce off sides
+          if (block.x - block.size / 2 < 0) {
+            block.x = block.size / 2
+            block.vx *= -0.5
+          }
+          if (block.x + block.size / 2 > canvas.width) {
+            block.x = canvas.width - block.size / 2
+            block.vx *= -0.5
+          }
+
+          // Check ground collision
+          if (block.y + block.size / 2 >= canvas.height) {
+            block.y = canvas.height - block.size / 2
+            block.vy = 0
+            block.vx *= 0.8
+            block.grounded = true
+            block.rotationSpeed = 0
+          }
+
+          // Check collision with other grounded blocks
+          blocks.current.forEach(otherBlock => {
+            if (otherBlock !== block && otherBlock.grounded && !block.grounded) {
+              if (checkCollision(block, otherBlock)) {
+                // Stack on top
+                const overlap = (block.size + otherBlock.size) / 2 - Math.sqrt(
+                  Math.pow(block.x - otherBlock.x, 2) + Math.pow(block.y - otherBlock.y, 2)
+                )
+                if (overlap > 0) {
+                  block.y = otherBlock.y - (block.size + otherBlock.size) / 2
+                  block.vy = 0
+                  block.vx *= 0.8
+                  block.grounded = true
+                  block.rotationSpeed = 0
+                }
+              }
+            }
+          })
         }
 
-        // Draw block (maze-style blue block)
+        // Draw block (maze-style block - blue or purple based on hover)
         ctx.save()
         ctx.translate(block.x, block.y)
         ctx.rotate(block.rotation)
 
-        // Blue maze block
-        ctx.fillStyle = 'rgba(59, 130, 246, 0.8)'
+        const blockColor = isHovered ? 'rgba(139, 92, 246, 0.8)' : 'rgba(59, 130, 246, 0.8)'
+        const borderColor = isHovered ? 'rgba(139, 92, 246, 1)' : 'rgba(59, 130, 246, 1)'
+
+        ctx.fillStyle = blockColor
         ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
         // Border
-        ctx.strokeStyle = 'rgba(59, 130, 246, 1)'
+        ctx.strokeStyle = borderColor
         ctx.lineWidth = 2
         ctx.strokeRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
@@ -208,7 +261,7 @@ export function PedagogyBackground() {
         .filter(b => b.destroyed)
         .slice(-8) // Keep last 8 revealed tags
 
-      revealedTags.forEach((block, i) => {
+      revealedTags.forEach((block) => {
         const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
 
         // Draw text with a subtle shadow for better visibility
@@ -232,13 +285,13 @@ export function PedagogyBackground() {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [])
+  }, [isHovered])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.3 }}
+      className="absolute inset-0 w-full h-full"
+      style={{ opacity: 0.4 }}
     />
   )
 }

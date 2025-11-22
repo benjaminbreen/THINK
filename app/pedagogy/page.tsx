@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -7,23 +9,33 @@ import Link from 'next/link'
 import { FileText, Lightbulb, Download, ExternalLink, Users } from 'lucide-react'
 import { PedagogyBackground } from '@/components/ui/pedagogy-background'
 import { pageThemes } from '@/lib/page-themes'
+import { useState } from 'react'
 
 const theme = pageThemes.pedagogy
 
 export default function PedagogyPage() {
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+
   return (
     <>
       {/* Header with subtle accent color */}
-      <Section className="pt-20 pb-12 relative">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <PedagogyBackground />
+      <Section className="pt-20 pb-8 relative">
+        <div className="absolute inset-0 overflow-hidden">
+          <PedagogyBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl">
+          <div
+            className="mx-auto max-w-3xl"
+            onMouseEnter={() => setIsHeaderHovered(true)}
+            onMouseLeave={() => setIsHeaderHovered(false)}
+          >
             <h1 className="text-4xl font-serif font-bold mb-3">Pedagogy Materials</h1>
             <div
-              className="w-16 h-0.5 mb-3"
-              style={{ backgroundColor: theme.accent }}
+              className="h-0.5 mb-3 transition-all duration-300"
+              style={{
+                backgroundColor: theme.accent,
+                width: isHeaderHovered ? '100%' : '4rem'
+              }}
             />
             <p className="text-lg text-muted-foreground">
               Curriculum, resources, and best practices for teaching with and about AI in humanities classes
@@ -32,7 +44,7 @@ export default function PedagogyPage() {
         </Container>
       </Section>
 
-      <Section className="py-12">
+      <Section className="py-8">
         <Container>
           {/* HistoryLens Materials */}
           <div className="mx-auto max-w-4xl mb-16">
