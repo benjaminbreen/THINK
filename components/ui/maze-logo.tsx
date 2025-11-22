@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, memo } from 'react'
+import { useEffect, useState, useRef, memo } from 'react'
 
 // Hand-crafted 4x4 maze templates with guaranteed solvable paths
 // 0 = path, 1 = wall
@@ -91,12 +91,29 @@ const MAZE_TEMPLATES = [
 function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
   const [template, setTemplate] = useState(MAZE_TEMPLATES[0])
   const [isHovered, setIsHovered] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const animateXRef = useRef<SVGAnimateElement>(null)
+  const animateYRef = useRef<SVGAnimateElement>(null)
 
   useEffect(() => {
     // Select random maze template on mount
     const randomTemplate = MAZE_TEMPLATES[Math.floor(Math.random() * MAZE_TEMPLATES.length)]
     setTemplate(randomTemplate)
   }, [])
+
+  // Control animation on hover change
+  useEffect(() => {
+    if (isHovered) {
+      // Start animation on hover
+      animateXRef.current?.beginElement()
+      animateYRef.current?.beginElement()
+      setHasAnimated(true)
+    } else if (hasAnimated) {
+      // Freeze animation when hover ends (only if it has started)
+      animateXRef.current?.endElement()
+      animateYRef.current?.endElement()
+    }
+  }, [isHovered, hasAnimated])
 
   const { maze, path } = template
   const size = 4 // 4x4 grid
@@ -149,29 +166,31 @@ function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
         )
       )}
 
-      {/* Animated ball following the path - yellow by default, blue on hover */}
+      {/* Animated ball following the path - hidden by default, blue on hover */}
       <circle
         r="1.5"
-        fill={isHovered ? "#3b82f6" : "#eab308"}
-        opacity="1"
+        fill="#3b82f6"
+        opacity={hasAnimated ? "1" : "0"}
         filter="url(#glow)"
-        style={{ transition: 'fill 0.2s ease' }}
+        style={{ transition: 'opacity 0.2s ease' }}
       >
         <animate
+          ref={animateXRef}
           attributeName="cx"
           values={pathX}
           dur={`${duration}s`}
           repeatCount="indefinite"
           calcMode="linear"
-          begin={isHovered ? "0s" : "indefinite"}
+          begin="indefinite"
         />
         <animate
+          ref={animateYRef}
           attributeName="cy"
           values={pathY}
           dur={`${duration}s`}
           repeatCount="indefinite"
           calcMode="linear"
-          begin={isHovered ? "0s" : "indefinite"}
+          begin="indefinite"
         />
       </circle>
 
