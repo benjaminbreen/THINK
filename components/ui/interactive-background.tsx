@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, memo } from 'react'
 
 type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca'
 
@@ -10,7 +10,7 @@ const getRandomMode = (): BackgroundMode => {
   return modes[Math.floor(Math.random() * modes.length)]
 }
 
-export function InteractiveBackground() {
+function InteractiveBackgroundComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [mode, setMode] = useState<BackgroundMode>(getRandomMode())
   const mousePos = useRef({ x: 0, y: 0 })
@@ -1465,3 +1465,6 @@ export function InteractiveBackground() {
     </>
   )
 }
+
+// Memoize to prevent unnecessary re-renders
+export const InteractiveBackground = memo(InteractiveBackgroundComponent)

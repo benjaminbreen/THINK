@@ -7,8 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
 import { GuideCard } from '@/components/ui/guide-card'
 import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Lightbulb } from 'lucide-react'
-import { InteractiveBackground } from '@/components/ui/interactive-background'
-import { LiteraryTransformer } from '@/components/ui/literary-transformer'
+import { InteractiveBackground, LiteraryTransformer } from '@/components/page-wrapper'
 
 export default function HomePage() {
   return (
