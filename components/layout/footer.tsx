@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/container'
 import { Github, ExternalLink } from 'lucide-react'
 import { BorgesianMaze } from '@/components/ui/borgesian-maze'
+import { MazeLogo } from '@/components/ui/maze-logo'
 
 const footerLinks = {
   projects: [
@@ -38,7 +39,8 @@ export function Footer() {
             <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
               {/* Brand */}
               <div className="md:col-span-1">
-                <Link href="/" className="flex items-center space-x-1 group">
+                <Link href="/" className="flex items-center space-x-2 group">
+                  <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-600 transition-colors" />
                   <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
                     THINK
                   </span>
