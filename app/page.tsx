@@ -6,7 +6,7 @@ import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
 import { GuideCard } from '@/components/ui/guide-card'
-import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Filter, Lightbulb } from 'lucide-react'
+import { ArrowRight, BookOpen, Code, FileText, GraduationCap, Microscope, Sparkles, Lightbulb } from 'lucide-react'
 import { InteractiveBackground } from '@/components/ui/interactive-background'
 import { LiteraryTransformer } from '@/components/ui/literary-transformer'
 
@@ -52,45 +52,38 @@ export default function HomePage() {
         </Container>
       </Section>
 
+      {/* About THINK Section */}
+      <Section className="bg-[#f5f1e8] dark:bg-slate-800/40 border-y border-amber-200/20 dark:border-slate-700/40 py-12">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xl leading-relaxed text-foreground/95 font-sans">
+              THINK is an NEH-funded project at UC Santa Cruz offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
+              <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
+                AI Pedagogy Project
+              </a>{' '}
+              from metaLAB and the Berkman Klein Center,{' '}
+              <a href="https://mitsloanedtech.mit.edu/ai/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
+                MIT Sloan's Teaching with Generative AI Resource Hub
+              </a>, and{' '}
+              <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
+                Brown University's framework for intentional pedagogy with AI
+              </a>, along with other pioneering work in educational technology and critical AI studies. We welcome contributions from educators across all fields.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
       {/* Project Gallery */}
       <Section id="projects" className="bg-muted/40 py-8">
         <Container>
           <div className="mb-6">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
-                <p className="text-muted-foreground" data-literary="projects-description">
-                  Experimental AI tools for humanities teaching and research
-                </p>
-              </div>
-              <Button variant="outline" size="sm">
-                <Filter className="mr-2 h-4 w-4" /> Filter by type
-              </Button>
-            </div>
-
-            {/* Filter tags */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              <Badge className="cursor-pointer bg-amber-600 hover:bg-amber-700 text-white transition-colors">All Projects</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Classroom Assignment</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Full Course</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Research Tool</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">History</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Literature</Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">Linguistics</Badge>
-            </div>
+            <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
+            <p className="text-muted-foreground" data-literary="projects-description">
+              Experimental AI tools for humanities teaching and research
+            </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <ProjectCard
-              title="HistoryLens"
-              description="A suite of educational games and simulations built around open-ended 'sandbox' learning enabled by LLM-generated roleplaying—but backstopped by real primary sources. Students learn history by testing AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways."
-              href="/projects/historylens"
-              slug="historylens"
-              type="Framework"
-              year="2024"
-              tags={['History', 'Full Course', 'Assignment']}
-              animationDelay="100"
-            />
 
             <ProjectCard
               title="Young Darwin"
@@ -100,7 +93,7 @@ export default function HomePage() {
               type="Simulation"
               year="2024"
               tags={['History', 'Classroom Assignment']}
-              animationDelay="200"
+              animationDelay="100"
             />
 
             <ProjectCard
@@ -111,7 +104,7 @@ export default function HomePage() {
               type="Simulation"
               year="2024"
               tags={['History', 'Classroom Assignment']}
-              animationDelay="300"
+              animationDelay="200"
             />
 
             <ProjectCard
@@ -122,7 +115,7 @@ export default function HomePage() {
               type="Generator"
               year="2024"
               tags={['History', 'Research Tool']}
-              animationDelay="400"
+              animationDelay="300"
             />
 
             <ProjectCard
@@ -133,7 +126,7 @@ export default function HomePage() {
               type="Generator"
               year="2024"
               tags={['History', 'Research Tool']}
-              animationDelay="500"
+              animationDelay="400"
             />
 
             {/* Placeholder for community contributions */}

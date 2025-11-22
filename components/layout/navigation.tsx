@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Container } from '@/components/ui/container'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { MazeLogo } from '@/components/ui/maze-logo'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
@@ -27,7 +28,8 @@ export function Navigation() {
       <Container>
         <nav className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-1 group">
+            <Link href="/" className="flex items-center space-x-2 group">
+              <MazeLogo className="h-7 w-7 text-primary group-hover:text-amber-600 transition-colors" />
               <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
                 THINK
               </span>
