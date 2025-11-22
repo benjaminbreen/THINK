@@ -90,6 +90,7 @@ const MAZE_TEMPLATES = [
 
 function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
   const [template, setTemplate] = useState(MAZE_TEMPLATES[0])
+  const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
     // Select random maze template on mount
@@ -116,6 +117,8 @@ function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-label="THINK maze logo"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Subtle background */}
       <rect
@@ -146,12 +149,13 @@ function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
         )
       )}
 
-      {/* Animated yellow ball following the path */}
+      {/* Animated ball following the path - yellow by default, blue on hover */}
       <circle
         r="1.5"
-        fill="#eab308"
+        fill={isHovered ? "#3b82f6" : "#eab308"}
         opacity="1"
         filter="url(#glow)"
+        style={{ transition: 'fill 0.2s ease' }}
       >
         <animate
           attributeName="cx"
@@ -159,6 +163,7 @@ function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
           dur={`${duration}s`}
           repeatCount="indefinite"
           calcMode="linear"
+          begin={isHovered ? "0s" : "indefinite"}
         />
         <animate
           attributeName="cy"
@@ -166,6 +171,7 @@ function MazeLogoComponent({ className = "h-6 w-6" }: { className?: string }) {
           dur={`${duration}s`}
           repeatCount="indefinite"
           calcMode="linear"
+          begin={isHovered ? "0s" : "indefinite"}
         />
       </circle>
 
