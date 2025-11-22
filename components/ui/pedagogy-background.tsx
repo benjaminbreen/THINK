@@ -156,7 +156,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       spawnBlock(time)
 
-      const gravity = 0.2
+      const gravity = 0.3
+      const bounce = 0.6 // Bounce coefficient (springiness)
 
       // Update and draw blocks
       blocks.current = blocks.current.filter(block => {
@@ -167,9 +168,16 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           block.vy += gravity
           block.x += block.vx
           block.y += block.vy
-          block.rotation += block.rotationSpeed
 
-          // Bounce off sides
+          // Gradually align rotation to nearest 90 degrees when approaching ground
+          if (block.vy > 0) {
+            const targetRotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
+            const rotDiff = targetRotation - block.rotation
+            block.rotation += rotDiff * 0.1
+            block.rotationSpeed *= 0.95
+          }
+
+          // Bounce off sides with energy loss
           if (block.x - block.size / 2 < 0) {
             block.x = block.size / 2
             block.vx *= -0.5
@@ -179,29 +187,47 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
             block.vx *= -0.5
           }
 
-          // Check ground collision
+          // Check ground collision with bounce
           if (block.y + block.size / 2 >= canvas.height) {
             block.y = canvas.height - block.size / 2
-            block.vy = 0
-            block.vx *= 0.8
-            block.grounded = true
-            block.rotationSpeed = 0
+
+            // Bounce if velocity is high enough, otherwise settle
+            if (Math.abs(block.vy) > 0.5) {
+              block.vy *= -bounce // Bounce with energy loss
+              block.vx *= 0.9
+            } else {
+              block.vy = 0
+              block.vx *= 0.8
+              block.grounded = true
+              block.rotationSpeed = 0
+              // Snap to nearest 90-degree angle
+              block.rotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
+            }
           }
 
           // Check collision with other grounded blocks
           blocks.current.forEach(otherBlock => {
             if (otherBlock !== block && otherBlock.grounded && !block.grounded) {
               if (checkCollision(block, otherBlock)) {
-                // Stack on top
+                // Stack on top with bounce
                 const overlap = (block.size + otherBlock.size) / 2 - Math.sqrt(
                   Math.pow(block.x - otherBlock.x, 2) + Math.pow(block.y - otherBlock.y, 2)
                 )
-                if (overlap > 0) {
+                if (overlap > 0 && block.y < otherBlock.y) {
                   block.y = otherBlock.y - (block.size + otherBlock.size) / 2
-                  block.vy = 0
-                  block.vx *= 0.8
-                  block.grounded = true
-                  block.rotationSpeed = 0
+
+                  // Bounce off other blocks
+                  if (Math.abs(block.vy) > 0.5) {
+                    block.vy *= -bounce * 0.8
+                    block.vx *= 0.9
+                  } else {
+                    block.vy = 0
+                    block.vx *= 0.8
+                    block.grounded = true
+                    block.rotationSpeed = 0
+                    // Snap to nearest 90-degree angle
+                    block.rotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
+                  }
                 }
               }
             }
