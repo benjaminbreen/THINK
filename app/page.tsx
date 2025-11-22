@@ -53,39 +53,44 @@ export default function HomePage() {
       </Section>
 
       {/* About THINK Section */}
-      <Section className="bg-gradient-to-b from-amber-50/30 to-background dark:from-amber-950/10 dark:to-background border-y border-amber-200/30 dark:border-amber-900/20 py-12">
+      <Section className="bg-gradient-to-b from-amber-50/40 to-background dark:from-amber-950/15 dark:to-background border-y border-amber-200/40 dark:border-amber-900/30 py-16">
         <Container>
-          <div className="mx-auto max-w-4xl">
-            <h2 className="text-2xl font-serif font-bold mb-4 text-center">About THINK</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground">
-              <p className="text-base leading-relaxed text-center mb-4">
-                THINK is an NEH-funded project at UC Santa Cruz offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. While this project is somewhat idiosyncratic in its emphasis on humanities pedagogy and research, we also welcome contributions from educators across all fields.
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-3xl font-serif font-bold mb-6 text-center">About THINK</h2>
+            <div className="prose prose-xl max-w-none">
+              <p className="text-lg leading-relaxed text-center mb-6 text-foreground/90">
+                THINK is an <span className="font-semibold">NEH-funded project at UC Santa Cruz</span> offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on <span className="font-semibold">humanistic disciplines</span>, emphasizing critical engagement and experimental approaches to educational technology. While this project is somewhat idiosyncratic in its emphasis on humanities pedagogy and research, we also welcome contributions from educators across all fields.
               </p>
-              <div className="text-center mt-6">
-                <p className="text-sm font-semibold mb-3">Related Resources & Influences</p>
-                <div className="flex flex-wrap gap-3 justify-center items-center">
-                  <Button variant="outline" size="sm" asChild className="text-xs">
+              <div className="text-center mt-8">
+                <p className="text-base font-semibold mb-4 text-foreground">Related Resources & Influences</p>
+                <div className="flex flex-wrap gap-3 justify-center items-center mb-4">
+                  <Button variant="outline" size="default" asChild>
                     <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer">
                       AI Pedagogy Project (Harvard)
                     </a>
                   </Button>
-                  <Button variant="outline" size="sm" asChild className="text-xs">
+                  <Button variant="outline" size="default" asChild>
+                    <a href="https://teachingwithllms.org" target="_blank" rel="noopener noreferrer">
+                      Teaching with LLMs
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="default" asChild>
                     <Link href="/about">
                       About THINK
                     </Link>
                   </Button>
-                  <Button variant="outline" size="sm" asChild className="text-xs">
+                  <Button variant="outline" size="default" asChild>
                     <Link href="/pedagogy">
                       Teaching Philosophy
                     </Link>
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground/70 mt-3 max-w-2xl mx-auto">
-                  This project draws inspiration from Harvard's{' '}
-                  <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-600">
+                <p className="text-sm text-muted-foreground/80 mt-4 max-w-3xl mx-auto leading-relaxed">
+                  This project draws particular inspiration from Harvard's{' '}
+                  <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-600 font-medium">
                     AI Pedagogy Project
                   </a>{' '}
-                  from metaLAB and the Berkman Klein Center, along with other pioneering work in educational technology.
+                  from metaLAB and the Berkman Klein Center, along with other pioneering work in educational technology and critical AI studies.
                 </p>
               </div>
             </div>
