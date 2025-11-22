@@ -13,38 +13,24 @@ const theme = pageThemes.pedagogy
 export default function PedagogyPage() {
   return (
     <>
-      {/* Hero Section with Interactive Background */}
-      <Section className="pt-24 pb-16 relative overflow-hidden mixed-mode-dark">
+      {/* Header with subtle accent color */}
+      <Section className="pt-20 pb-12 relative overflow-hidden">
         <PedagogyBackground />
         <Container className="relative z-10">
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <Badge
-              variant="outline"
-              className="mb-4 text-sm border-2"
-              style={{
-                borderColor: theme.accent,
-                color: theme.accent
-              }}
-            >
-              {theme.description}
-            </Badge>
-            <h1
-              className="text-4xl sm:text-5xl font-serif font-bold mb-4 drop-shadow-lg"
-              style={{ color: theme.accent }}
-            >
-              Pedagogy Materials
-            </h1>
-            <p className="text-lg text-white/90 drop-shadow-md">
+          <div className="mx-auto max-w-3xl">
+            <h1 className="text-4xl font-serif font-bold mb-3">Pedagogy Materials</h1>
+            <div
+              className="w-16 h-0.5 mb-3"
+              style={{ backgroundColor: theme.accent }}
+            />
+            <p className="text-lg text-muted-foreground">
               Curriculum, resources, and best practices for teaching with and about AI in humanities classes
-            </p>
-            <p className="text-sm text-white/70 mt-4 italic drop-shadow-sm">
-              💡 Click the falling blocks to reveal pedagogical concepts
             </p>
           </div>
         </Container>
       </Section>
 
-      <Section className="py-16">
+      <Section className="py-12">
         <Container>
           {/* HistoryLens Materials */}
           <div className="mx-auto max-w-4xl mb-16">

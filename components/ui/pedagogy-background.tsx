@@ -200,19 +200,24 @@ export function PedagogyBackground() {
       })
 
       // Draw revealed tags (from destroyed blocks)
-      ctx.font = 'bold 14px sans-serif'
+      ctx.font = 'bold 18px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
-      // Keep track of revealed tags in a separate array
+      // Keep track of revealed tags
       const revealedTags = blocks.current
         .filter(b => b.destroyed)
-        .slice(-5) // Keep last 5 revealed tags
+        .slice(-8) // Keep last 8 revealed tags
 
       revealedTags.forEach((block, i) => {
         const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
-        ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn * 0.9})`
+
+        // Draw text with a subtle shadow for better visibility
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+        ctx.shadowBlur = 4
+        ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn})`
         ctx.fillText(block.tag, block.x, block.y)
+        ctx.shadowBlur = 0
       })
 
       animationFrameId.current = requestAnimationFrame(animate)
