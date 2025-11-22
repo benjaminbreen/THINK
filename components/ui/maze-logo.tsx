@@ -100,8 +100,12 @@ export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
 
   if (maze.length === 0) return null
 
-  const cellSize = 4.4
+  const cellSize = 4
   const offset = 2
+
+  // Generate keyframe values for smooth animation
+  const pathX = path.map(p => offset + p[0] * cellSize + cellSize / 2).join(';')
+  const pathY = path.map(p => offset + p[1] * cellSize + cellSize / 2).join(';')
 
   return (
     <svg
@@ -111,9 +115,9 @@ export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
       className={className}
     >
       {/* Background */}
-      <rect x="0" y="0" width="24" height="24" fill="currentColor" fillOpacity="0.05" />
+      <rect x="0" y="0" width="24" height="24" fill="currentColor" fillOpacity="0.08" />
 
-      {/* Draw maze walls */}
+      {/* Draw maze walls as solid blocks */}
       {maze.map((row, y) =>
         row.map((cell, x) =>
           cell === 1 ? (
@@ -124,38 +128,28 @@ export function MazeLogo({ className = "h-6 w-6" }: { className?: string }) {
               width={cellSize}
               height={cellSize}
               fill="currentColor"
-              opacity="0.7"
+              fillOpacity="0.85"
             />
           ) : null
         )
       )}
 
       {/* Animated yellow circle moving along path */}
-      {path.length > 0 && (
-        <circle r="1.2" fill="#eab308" opacity="0.9">
-          <animateMotion
-            dur="8s"
-            repeatCount="indefinite"
-            path={path.map((point, i) => {
-              const x = offset + point[0] * cellSize + cellSize / 2
-              const y = offset + point[1] * cellSize + cellSize / 2
-              return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`
-            }).join(' ')}
-          >
-            <mpath href="#maze-path" />
-          </animateMotion>
-          {/* Create the path for the circle to follow */}
+      {path.length > 1 && (
+        <circle r="1.3" fill="#eab308" opacity="1">
           <animate
             attributeName="cx"
-            values={path.map(p => offset + p[0] * cellSize + cellSize / 2).join(';')}
-            dur="8s"
+            values={pathX}
+            dur="6s"
             repeatCount="indefinite"
+            calcMode="linear"
           />
           <animate
             attributeName="cy"
-            values={path.map(p => offset + p[1] * cellSize + cellSize / 2).join(';')}
-            dur="8s"
+            values={pathY}
+            dur="6s"
             repeatCount="indefinite"
+            calcMode="linear"
           />
         </circle>
       )}
