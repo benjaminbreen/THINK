@@ -137,9 +137,8 @@ export function PedagogyBackground() {
 
     // Animation loop
     const animate = (time: number) => {
-      // Clear canvas with semi-transparent fill for trail effect
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      // Clear canvas with transparent fill
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       spawnBlock(time)
 
@@ -238,8 +237,8 @@ export function PedagogyBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.6 }}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.3 }}
     />
   )
 }

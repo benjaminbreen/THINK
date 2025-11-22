@@ -14,9 +14,11 @@ export default function PedagogyPage() {
   return (
     <>
       {/* Header with subtle accent color */}
-      <Section className="pt-20 pb-12 relative overflow-hidden">
-        <PedagogyBackground />
-        <Container className="relative z-10">
+      <Section className="pt-20 pb-12 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <PedagogyBackground />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl">
             <h1 className="text-4xl font-serif font-bold mb-3">Pedagogy Materials</h1>
             <div
