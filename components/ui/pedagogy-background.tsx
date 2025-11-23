@@ -161,7 +161,13 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       // Update and draw blocks
       blocks.current = blocks.current.filter(block => {
-        if (block.destroyed) return false
+        // Remove destroyed blocks after 10 seconds
+        if (block.destroyed && block.destroyedTime && Date.now() - block.destroyedTime > 10000) {
+          return false
+        }
+
+        // Skip physics and drawing for destroyed blocks, but keep them for text display
+        if (block.destroyed) return true
 
         if (!block.grounded) {
           // Apply physics

@@ -1312,8 +1312,16 @@ function InteractiveBackgroundComponent() {
 
       // Update and draw blocks
       fallingBlocks.current = fallingBlocks.current.filter(block => {
-        if (block.destroyed) return false
-        if (block.y > canvas.height + 50) return false
+        // Remove destroyed blocks after 10 seconds
+        if (block.destroyed && block.destroyedTime && Date.now() - block.destroyedTime > 10000) {
+          return false
+        }
+
+        // Remove blocks that fell off screen (but only if not destroyed)
+        if (!block.destroyed && block.y > canvas.height + 50) return false
+
+        // Skip physics and drawing for destroyed blocks
+        if (block.destroyed) return true
 
         // Update position
         block.x += block.vx
