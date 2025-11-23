@@ -38,19 +38,17 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     window.addEventListener('resize', resizeCanvas)
     canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Two evolution sequences: circular and angular
+    // Two evolution sequences: circular and angular (no emojis)
     // Each evolves from small/simple to large/complex
     const circularChain = [
-      '·', '˙', '˚', '°', '∙', '*', '⁎', '⁕', '⁜', '⁑', '✢', '✣',
-      '✤', '✥', '✦', '✧', '✨', '✩', '✪', '✫', '✬', '✭', '✮', '✯',
-      '✰', '✱', '✲', '✳', '✴', '✵', '✶', '✷', '✸', '✹', '✺', '✻', '✼'
+      '·', '˙', '˚', '°', '∙', '*', '⁎', '⁕', '⁜', '⁑',
+      '◌', '◦', '○', '◍', '◎', '◉', '●', '⬤'
     ]
 
     const angularChain = [
       '.', ':', '·', '˙', '⁚', '⁝', '⁞', '⁘', '⁙', '▪', '▫', '▢',
       '▣', '▤', '▥', '▦', '▧', '▨', '▩', '◰', '◱', '◲', '◳', '◻',
-      '◼', '◽', '◾', '■', '▀', '▄', '█', '◆', '◇', '◈', '✦', '✧',
-      '✩', '✪', '✫', '✬', '✭', '✮', '✯', '✸', '✹', '✺'
+      '◼', '◽', '◾', '■', '▀', '▄', '█', '◆', '◇', '◈'
     ]
 
     const gridSize = 60
@@ -77,13 +75,17 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       timeRef.current = time
 
       const hoverRadius = 200
-      const baseOpacity = 0.2
+      const baseOpacity = 0.12 // Lower opacity for more transparency
 
       // Performance optimization: skip if not hovered
       if (!isHovered && !isHeaderHovered) {
         animationFrameId.current = requestAnimationFrame(draw)
         return
       }
+
+      // Cache canvas dimensions
+      const canvasHalfHeight = canvas.height * 0.5
+      const canvasHeight = canvas.height
 
       // When header is hovered, show full background; otherwise show localized
       let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
@@ -110,7 +112,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
 
           if (isHeaderHovered) {
             // Full background mode - fade based on vertical position
-            const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
             finalOpacity = verticalFade * baseOpacity
           } else {
             // Localized mode - fade based on distance from cursor
@@ -121,7 +123,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
             if (distanceFromCursor >= hoverRadius) continue
 
             const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
-            const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
             finalOpacity = verticalFade * baseOpacity * cursorProximity
           }
 
@@ -132,14 +134,14 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
 
             // Vertical speed gradient: faster at top, current speed at middle, slower at bottom
             // Top (y=0): 3x speed, Middle (y=50%): 1x speed, Bottom (y=100%): 0.3x speed
-            const verticalPosition = y / canvas.height
-            let speedMultiplier = 1
+            const verticalPosition = y / canvasHeight
+            let speedMultiplier
             if (verticalPosition < 0.5) {
               // Top half: interpolate from 3x to 1x
-              speedMultiplier = 3 - (verticalPosition / 0.5) * 2
+              speedMultiplier = 3 - (verticalPosition * 4)
             } else {
               // Bottom half: interpolate from 1x to 0.3x
-              speedMultiplier = 1 - ((verticalPosition - 0.5) / 0.5) * 0.7
+              speedMultiplier = 1 - ((verticalPosition - 0.5) * 1.4)
             }
 
             // Apply speed multiplier to evolution rate
