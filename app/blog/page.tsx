@@ -36,13 +36,18 @@ const blogPosts = [
 
 export default function BlogPage() {
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const [isBackgroundHovered, setIsBackgroundHovered] = useState(false)
 
   return (
     <>
-      <Section className="pt-16 pb-12 relative">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <BlogBackground />
-        </div>
+      <div
+        onMouseEnter={() => setIsBackgroundHovered(true)}
+        onMouseLeave={() => setIsBackgroundHovered(false)}
+      >
+        <Section className="pt-16 pb-12 relative">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <BlogBackground isHovered={isBackgroundHovered} />
+          </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-8">
             <div
@@ -121,6 +126,7 @@ export default function BlogPage() {
           )}
         </Container>
       </Section>
+      </div>
     </>
   )
 }

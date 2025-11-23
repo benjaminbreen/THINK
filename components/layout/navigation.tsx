@@ -46,9 +46,10 @@ export function Navigation() {
                 className={cn(
                   'relative px-4 py-2 text-sm font-medium transition-colors rounded-md',
                   pathname === item.href
-                    ? 'text-primary'
+                    ? ''
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 )}
+                style={pathname === item.href ? { color: item.color } : undefined}
               >
                 {item.name}
                 {pathname === item.href && (

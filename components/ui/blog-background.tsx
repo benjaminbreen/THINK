@@ -2,7 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 
-export function BlogBackground() {
+interface BlogBackgroundProps {
+  isHovered?: boolean
+}
+
+export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
@@ -29,13 +33,13 @@ export function BlogBackground() {
       '\u00AB', '\u00BB', '\u2039', '\u203A', '[', ']', '{', '}', '\u2042', '\u203B'
     ]
 
-    const gridSize = 25
+    const gridSize = 50 // Much bigger grid (was 25)
     const cols = Math.ceil(canvas.width / gridSize)
     const rows = Math.ceil(canvas.height / gridSize)
 
-    // Store change rates for each cell (different speeds)
+    // Store change rates for each cell (much slower)
     const changeRates = Array(cols).fill(0).map(() =>
-      Array(rows).fill(0).map(() => 0.0005 + Math.random() * 0.002)
+      Array(rows).fill(0).map(() => 0.0001 + Math.random() * 0.0003) // Much slower (was 0.0005-0.002)
     )
 
     const draw = (time: number) => {
@@ -43,11 +47,14 @@ export function BlogBackground() {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.font = '14px Georgia, serif'
+      ctx.font = '28px Georgia, serif' // Much bigger font (was 14px)
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
       timeRef.current = time
+
+      // Only show if hovered
+      const hoverOpacity = isHovered ? 1 : 0
 
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
@@ -59,22 +66,20 @@ export function BlogBackground() {
           const maxDistance = Math.sqrt(cols * cols + rows * rows)
 
           // Fade based on distance from upper left
-          // Symbols appear animated from upper left, then fade progressively
-          const fadeDistance = maxDistance * 0.4 // Fade after 40% of the way
+          const fadeDistance = maxDistance * 0.4
           let baseFade = 1.0
 
           if (distanceFromOrigin > fadeDistance) {
-            // Progressive fade after a few lines
             baseFade = Math.max(0, 1 - ((distanceFromOrigin - fadeDistance) / (maxDistance - fadeDistance)))
           }
 
           // Wave animation from upper left
-          const waveDelay = (i + j) * 100 // Delay based on position
+          const waveDelay = (i + j) * 100
           const waveProgress = Math.max(0, (time - waveDelay) / 1000)
-          const waveOpacity = Math.min(1, waveProgress) // Fade in from 0 to 1
+          const waveOpacity = Math.min(1, waveProgress)
 
-          // Combine both opacity effects
-          const finalOpacity = baseFade * waveOpacity * 0.4
+          // Combine all opacity effects including hover
+          const finalOpacity = baseFade * waveOpacity * 0.4 * hoverOpacity
 
           if (finalOpacity > 0.01) {
             // Each cell changes at its own rate
@@ -100,7 +105,7 @@ export function BlogBackground() {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [])
+  }, [isHovered])
 
   return (
     <canvas
