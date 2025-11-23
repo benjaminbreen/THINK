@@ -2,7 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 
-export function GuidesBackground() {
+interface GuidesBackgroundProps {
+  isHovered?: boolean
+}
+
+export function GuidesBackground({ isHovered = false }: GuidesBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
   const offset = useRef(0)
@@ -82,10 +86,19 @@ export function GuidesBackground() {
         ctx.stroke()
       }
 
-      // Slowly move the pattern from right to left
-      offset.current -= 0.2
-      if (offset.current < -80) {
-        offset.current = 0
+      // Move pattern - reverse direction and speed up on hover
+      if (isHovered) {
+        // Left to right, faster on hover
+        offset.current += 0.6
+        if (offset.current > 80) {
+          offset.current = 0
+        }
+      } else {
+        // Right to left, normal speed
+        offset.current -= 0.2
+        if (offset.current < -80) {
+          offset.current = 0
+        }
       }
 
       animationFrameId.current = requestAnimationFrame(draw)
@@ -99,7 +112,7 @@ export function GuidesBackground() {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [])
+  }, [isHovered])
 
   return (
     <canvas

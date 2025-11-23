@@ -118,6 +118,7 @@ export default function GuidesPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('cards')
   const [sortBy, setSortBy] = useState<SortBy>('default')
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const [isBackgroundHovered, setIsBackgroundHovered] = useState(false)
 
   const sortedGuides = [...guides].sort((a, b) => {
     if (sortBy === 'title') {
@@ -138,10 +139,14 @@ export default function GuidesPage() {
 
   return (
     <>
-      <Section className="pt-16 pb-12 relative">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <GuidesBackground />
-        </div>
+      <div
+        onMouseEnter={() => setIsBackgroundHovered(true)}
+        onMouseLeave={() => setIsBackgroundHovered(false)}
+      >
+        <Section className="pt-16 pb-12 relative">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <GuidesBackground isHovered={isBackgroundHovered} />
+          </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-8">
             <div
@@ -354,6 +359,7 @@ export default function GuidesPage() {
           </div>
         </Container>
       </Section>
+      </div>
 
       {/* Additional Resources */}
       <Section className="bg-muted/40 border-t">
