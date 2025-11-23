@@ -1322,8 +1322,8 @@ function InteractiveBackgroundComponent() {
         popAllBlocks.current = false
       }
 
-      // Reset after 10 seconds of popping
-      if (popTime.current > 0 && Date.now() - popTime.current > 10000) {
+      // Reset after 20 seconds of popping
+      if (popTime.current > 0 && Date.now() - popTime.current > 20000) {
         fallingBlocks.current = []
         blockParticles.current = []
         popTime.current = 0
