@@ -140,7 +140,7 @@ export default function GuidesPage() {
     <>
       <Section className="pt-16 pb-12 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <GuidesBackground />
+          <GuidesBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-8">

@@ -11,9 +11,9 @@ export const pageThemes = {
   },
   guides: {
     name: 'Guides',
-    accent: '#10b981', // Emerald - growth, learning, progress
-    accentRgb: '16, 185, 129',
-    tailwind: 'emerald-500',
+    accent: '#3b82f6', // Blue - clarity, guidance, knowledge
+    accentRgb: '59, 130, 246',
+    tailwind: 'blue-500',
     description: 'How-to guides and tutorials'
   },
   about: {

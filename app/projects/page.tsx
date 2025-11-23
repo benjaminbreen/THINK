@@ -72,7 +72,7 @@ export default function ProjectsPage() {
     <>
       <Section className="pt-16 pb-6 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <ProjectsBackground />
+          <ProjectsBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-6">

@@ -2,22 +2,16 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Quote {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  type: 'open' | 'close' | 'single' | 'em-dash' | 'ellipsis'
-  opacity: number
-  rotation: number
-  rotationSpeed: number
+interface BlogBackgroundProps {
+  isHovered?: boolean
+  isHeaderHovered?: boolean
 }
 
-export function BlogBackground() {
+export function BlogBackground({ isHovered = false, isHeaderHovered = false }: BlogBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const quotes = useRef<Quote[]>([])
-  const lastSpawnTime = useRef(0)
+  const timeRef = useRef(0)
+  const mousePos = useRef({ x: -1000, y: -1000 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -26,6 +20,15 @@ export function BlogBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Track mouse position
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mousePos.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      }
+    }
+
     // Set canvas size
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth
@@ -33,113 +36,145 @@ export function BlogBackground() {
     }
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
+    canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Initialize some quotes
-    for (let i = 0; i < 8; i++) {
-      const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
-      quotes.current.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * 100,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: Math.random() * 0.2 + 0.1,
-        type: types[Math.floor(Math.random() * types.length)],
-        opacity: 0.3 + Math.random() * 0.2,
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.01
-      })
-    }
+    // Two evolution sequences: circular and angular (no emojis)
+    // Each evolves from small/simple to large/complex
+    const circularChain = [
+      '·', '˙', '˚', '°', '∙', '*', '⁎', '⁕', '⁜', '⁑',
+      '◌', '◦', '○', '◍', '◎', '◉', '●', '⬤'
+    ]
 
-    // Draw floating quotes
+    const angularChain = [
+      '.', ':', '·', '˙', '⁚', '⁝', '⁞', '⁘', '⁙', '▪', '▫', '▢',
+      '▣', '▤', '▥', '▦', '▧', '▨', '▩', '◰', '◱', '◲', '◳', '◻',
+      '◼', '◽', '◾', '■', '▀', '▄', '█', '◆', '◇', '◈'
+    ]
+
+    const gridSize = 60
+    const cols = Math.ceil(canvas.width / gridSize)
+    const rows = Math.ceil(canvas.height / gridSize)
+
+    // Assign each cell to one of the two chains with unique evolution rate
+    const cellChains = Array(cols).fill(0).map(() =>
+      Array(rows).fill(0).map(() => ({
+        useCircular: Math.random() > 0.5,
+        evolutionRate: 0.00005 + Math.random() * 0.0002
+      }))
+    )
+
     const draw = (time: number) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Semi-transparent background for fade effect
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Spawn new quote occasionally
-      if (time - lastSpawnTime.current > 3000 + Math.random() * 2000) {
-        const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
-        quotes.current.push({
-          x: Math.random() * canvas.width,
-          y: -20,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: Math.random() * 0.2 + 0.1,
-          type: types[Math.floor(Math.random() * types.length)],
-          opacity: 0.3 + Math.random() * 0.2,
-          rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.01
-        })
-        lastSpawnTime.current = time
-      }
-
-      // Use rose color
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.4)'
-      ctx.font = '24px Georgia, serif'
+      ctx.font = 'bold 36px Georgia, serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
-      // Update and draw quotes
-      quotes.current = quotes.current.filter(quote => {
-        // Update position
-        quote.x += quote.vx
-        quote.y += quote.vy
-        quote.rotation += quote.rotationSpeed
+      timeRef.current = time
 
-        // Wrap horizontally
-        if (quote.x < -50) quote.x = canvas.width + 50
-        if (quote.x > canvas.width + 50) quote.x = -50
+      const hoverRadius = 200
+      const baseOpacity = 0.12 // Lower opacity for more transparency
 
-        // Remove if too far down
-        if (quote.y > canvas.height + 50) {
-          return false
+      // Performance optimization: skip if not hovered
+      if (!isHovered && !isHeaderHovered) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+
+      // Cache canvas dimensions
+      const canvasHalfHeight = canvas.height * 0.5
+      const canvasHeight = canvas.height
+
+      // When header is hovered, show full background; otherwise show localized
+      let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
+
+      if (!isHeaderHovered) {
+        // Calculate cell range to check (only near cursor)
+        const mouseCellX = Math.floor(mousePos.current.x / gridSize)
+        const mouseCellY = Math.floor(mousePos.current.y / gridSize)
+        const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
+
+        minI = Math.max(0, mouseCellX - cellRadius)
+        maxI = Math.min(cols - 1, mouseCellX + cellRadius)
+        minJ = Math.max(0, mouseCellY - cellRadius)
+        maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
+      }
+
+      for (let i = minI; i <= maxI; i++) {
+        for (let j = minJ; j <= maxJ; j++) {
+          const x = i * gridSize + gridSize / 2
+          const y = j * gridSize + gridSize / 2
+
+          // Calculate opacity based on mode
+          let finalOpacity = 0
+
+          if (isHeaderHovered) {
+            // Full background mode - fade based on vertical position
+            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
+            finalOpacity = verticalFade * baseOpacity
+          } else {
+            // Localized mode - fade based on distance from cursor
+            const dx = mousePos.current.x - x
+            const dy = mousePos.current.y - y
+            const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
+
+            if (distanceFromCursor >= hoverRadius) continue
+
+            const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
+            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
+            finalOpacity = verticalFade * baseOpacity * cursorProximity
+          }
+
+          if (finalOpacity > 0.01) {
+            // Get the evolution chain for this cell
+            const cellData = cellChains[i][j]
+            const chain = cellData.useCircular ? circularChain : angularChain
+
+            // Vertical speed gradient: faster at top, current speed at middle, slower at bottom
+            // Top (y=0): 3x speed, Middle (y=50%): 1x speed, Bottom (y=100%): 0.3x speed
+            const verticalPosition = y / canvasHeight
+            let speedMultiplier
+            if (verticalPosition < 0.5) {
+              // Top half: interpolate from 3x to 1x
+              speedMultiplier = 3 - (verticalPosition * 4)
+            } else {
+              // Bottom half: interpolate from 1x to 0.3x
+              speedMultiplier = 1 - ((verticalPosition - 0.5) * 1.4)
+            }
+
+            // Apply speed multiplier to evolution rate
+            const effectiveRate = cellData.evolutionRate * speedMultiplier
+            const evolutionProgress = (time * effectiveRate) % chain.length
+            const symbolIndex = Math.floor(evolutionProgress)
+            const symbol = chain[symbolIndex]
+
+            // Rose color theme
+            ctx.fillStyle = `rgba(244, 63, 94, ${finalOpacity})`
+            ctx.fillText(symbol, x, y)
+          }
         }
+      }
 
-        // Draw with rotation
-        ctx.save()
-        ctx.translate(quote.x, quote.y)
-        ctx.rotate(quote.rotation)
-        ctx.globalAlpha = quote.opacity
-
-        let symbol = ''
-        switch (quote.type) {
-          case 'open':
-            symbol = '"'
-            break
-          case 'close':
-            symbol = '"'
-            break
-          case 'single':
-            symbol = "'"
-            break
-          case 'em-dash':
-            symbol = '—'
-            break
-          case 'ellipsis':
-            symbol = '…'
-            break
-        }
-
-        ctx.fillText(symbol, 0, 0)
-        ctx.restore()
-
-        return true
-      })
-
-      ctx.globalAlpha = 1
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
-    draw(0)
+    animationFrameId.current = requestAnimationFrame(draw)
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
+      canvas.removeEventListener('mousemove', handleMouseMove)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [])
+  }, [isHovered, isHeaderHovered])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
+      className="absolute inset-0 w-full h-full pointer-events-auto"
       style={{ opacity: 1 }}
     />
   )
