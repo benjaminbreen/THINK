@@ -52,11 +52,11 @@ export default function HomePage() {
       </Section>
 
       {/* About THINK Section */}
-      <Section className="bg-[#f5f1e8] dark:bg-slate-800/40 border-y border-amber-200/20 dark:border-slate-700/40 py-12">
+      <Section className="bg-[#f5f1e8] dark:bg-slate-800/40 border-y border-amber-200/20 dark:border-slate-700/40 py-8">
         <Container>
           <div className="max-w-4xl mx-auto">
             <p className="text-xl leading-relaxed text-foreground/95 font-sans">
-              THINK is an NEH-funded project at UC Santa Cruz offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
+              <strong>THINK is an NEH-funded project at UC Santa Cruz offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education.</strong> Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
               <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
                 AI Pedagogy Project
               </a>{' '}
@@ -66,7 +66,11 @@ export default function HomePage() {
               </a>, and{' '}
               <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
                 Brown University's framework for intentional pedagogy with AI
-              </a>, along with other pioneering work in educational technology and critical AI studies. We welcome contributions from educators across all fields.
+              </a>.{' '}
+              <Link href="/contact" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
+                We welcome contributions
+              </Link>{' '}
+              from educators across all fields.
             </p>
           </div>
         </Container>
