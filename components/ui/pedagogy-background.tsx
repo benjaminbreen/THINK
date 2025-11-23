@@ -128,10 +128,10 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         blocks.current.push({
           x: Math.random() * canvas.width,
           y: -30,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: 0.5 + Math.random() * 0.5,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: 0.3 + Math.random() * 0.3,
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.02,
+          rotationSpeed: (Math.random() - 0.5) * 0.01,
           size: 20 + Math.random() * 10,
           tag,
           destroyed: false,
@@ -156,7 +156,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       spawnBlock(time)
 
-      const gravity = 0.3
+      const gravity = 0.2
       const bounce = 0.6 // Bounce coefficient (springiness)
 
       // Update and draw blocks

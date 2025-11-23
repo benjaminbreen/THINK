@@ -1299,10 +1299,10 @@ function InteractiveBackgroundComponent() {
         fallingBlocks.current.push({
           x: Math.random() * canvas.width,
           y: -30,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: 1 + Math.random() * 0.5,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: 0.4 + Math.random() * 0.3,
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.02,
+          rotationSpeed: (Math.random() - 0.5) * 0.01,
           size: 20 + Math.random() * 10,
           word,
           destroyed: false
@@ -1429,6 +1429,7 @@ function InteractiveBackgroundComponent() {
       if (current === 'particles') return 'terminal'
       if (current === 'terminal') return 'labyrinth'
       if (current === 'labyrinth') return 'bibliotheca'
+      if (current === 'bibliotheca') return 'blocks'
       return 'ascii'
     })
 
