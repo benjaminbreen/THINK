@@ -118,62 +118,106 @@ export default function PedagogyPage() {
     }
   ]
 
-  // External resources - syllabi and assignments from elsewhere
+  // External resources - syllabi and assignments from elsewhere (real resources)
   const externalResources: ExternalResource[] = [
     {
       id: '1',
-      title: 'Teaching with AI: History Course Syllabus',
-      author: 'Dr. Sarah Johnson',
-      institution: 'Stanford University',
+      title: 'Humanities in the Age of AI',
+      author: 'Dr. Anastasia Salter',
+      institution: 'University of Central Florida',
       source: 'University',
       type: 'syllabus',
-      url: '#',
-      description: 'Full syllabus for upper-division history course incorporating AI tools throughout',
-      tags: ['History', 'Undergraduate']
+      url: 'http://anastasiasalter.net/HumanitiesAISyllabus/',
+      description: 'Fall 2024 syllabus exploring critical perspectives on AI using texts like "Algorithms of Oppression" and hands-on experiments with AI tools',
+      tags: ['Critical Theory', 'Digital Humanities', 'Undergraduate']
     },
     {
       id: '2',
-      title: 'Critical Digital Humanities Assignment',
-      author: 'Prof. Michael Chen',
-      institution: 'MIT',
+      title: 'AI and the Humanities Syllabus',
+      author: 'University of Chicago',
+      institution: 'University of Chicago',
       source: 'University',
-      type: 'assignment',
-      url: '#',
-      description: 'Assignment focused on critiquing AI-generated historical narratives',
-      tags: ['Digital Humanities', 'Critical Thinking']
+      type: 'syllabus',
+      url: 'https://home.uchicago.edu/~jcarlsen/academics/downloads/Tharsen%20DIGS%2020006-30006%20AI%20and%20the%20Humanities%20Syllabus%202025_final3.pdf',
+      description: '2025 course syllabus including feminist AI perspectives and critical engagement with intelligent machines',
+      tags: ['Philosophy', 'Ethics', 'Graduate']
     },
     {
       id: '3',
-      title: 'AI Literacy for Community Colleges',
-      author: 'Bay Area Community College Consortium',
-      institution: 'BACCC',
-      source: 'Community College',
-      type: 'guide',
-      url: '#',
-      description: 'Comprehensive guide for introducing AI literacy in humanities courses',
-      tags: ['AI Literacy', 'Community College']
+      title: 'Digital Humanities & Artificial Intelligence',
+      author: 'Dr. Anastasia Salter',
+      institution: 'University of Central Florida',
+      source: 'University',
+      type: 'syllabus',
+      url: 'http://anastasiasalter.net/markdown_dhsi/',
+      description: 'Spring 2025 course exploring how AI enhances humanistic inquiry while critically engaging with limitations and ethics',
+      tags: ['Digital Humanities', 'Data Visualization', 'Text Analysis']
     },
     {
       id: '4',
-      title: 'Literature and AI: Course Materials',
-      author: 'Dr. Emily Roberts',
-      institution: 'UC Berkeley',
-      source: 'University',
-      type: 'syllabus',
-      url: '#',
-      description: 'Syllabus and assignments for literature course exploring AI-generated text',
-      tags: ['Literature', 'Creative Writing']
-    },
-    {
-      id: '5',
-      title: 'Responsible AI Research Assignment',
-      author: 'Prof. James Wilson',
+      title: 'AI Pedagogy Project Assignment Collection',
+      author: 'Sarah Newman & metaLAB Team',
       institution: 'Harvard University',
       source: 'University',
       type: 'assignment',
-      url: '#',
-      description: 'Research assignment examining ethical implications of AI in academia',
-      tags: ['Ethics', 'Research Methods']
+      url: 'https://aipedagogy.org/assignments/',
+      description: 'Searchable collection of educator-designed assignments for integrating AI into humanities syllabi responsibly and critically',
+      tags: ['Assignments', 'Best Practices', 'Curated Resources']
+    },
+    {
+      id: '5',
+      title: 'Introduction to Digital Humanities',
+      author: 'Prof. Stewart',
+      institution: 'Purdue University',
+      source: 'University',
+      type: 'syllabus',
+      url: 'https://www.cla.purdue.edu/academic/history/documents/syllabus-spring-documents/2024/spring-2024-hist-302-syllabus-stewart.pdf',
+      description: 'Spring 2024 history course introducing digital methods and AI tools for historical research',
+      tags: ['History', 'Digital Methods', 'Undergraduate']
+    },
+    {
+      id: '6',
+      title: 'AI and Pedagogy Workshop Series',
+      author: 'Laura Wittman & Digital Humanities Team',
+      institution: 'Stanford University',
+      source: 'University',
+      type: 'guide',
+      url: 'https://digitalhumanities.stanford.edu/ai-and-pedagogy-workshop/',
+      description: 'Three-part workshop on understanding LLMs, pedagogy, and creating assignments with AI tools',
+      tags: ['Professional Development', 'LLMs', 'Workshop']
+    },
+    {
+      id: '7',
+      title: 'The AI Pedagogy Project',
+      author: 'metaLAB (at) Harvard',
+      institution: 'Harvard University, Berkman Klein Center',
+      source: 'University',
+      type: 'guide',
+      url: 'https://aipedagogy.org/',
+      description: 'Comprehensive resource for educators in humanities and non-technical fields with assignments, concepts, and recommendations',
+      tags: ['Best Practices', 'Humanities', 'Curated Resources']
+    },
+    {
+      id: '8',
+      title: 'Teaching in the Age of AI',
+      author: 'Derek Bok Center for Teaching and Learning',
+      institution: 'Harvard University',
+      source: 'University',
+      type: 'guide',
+      url: 'https://bokcenter.harvard.edu/artificial-intelligence',
+      description: 'Harvard teaching center resources on incorporating AI thoughtfully into course design and assignments',
+      tags: ['Best Practices', 'Course Design', 'Teaching Resources']
+    },
+    {
+      id: '9',
+      title: 'AI Teaching Strategies',
+      author: 'Center for Teaching and Learning',
+      institution: 'Stanford University',
+      source: 'University',
+      type: 'guide',
+      url: 'https://ctl.stanford.edu/aimes/ai-teaching-strategies',
+      description: 'AIMES initiative resources including examples from Stanford instructors and critical AI literacy for educators',
+      tags: ['Teaching Strategies', 'AI Literacy', 'Faculty Resources']
     }
   ]
 

@@ -50,7 +50,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
   const particles = useRef<Particle[]>([])
   const animationFrameId = useRef<number | undefined>(undefined)
   const mousePos = useRef({ x: 0, y: 0 })
-  const lastSpawnTime = useRef(0)
+  const lastSpawnTime = useRef(-5000) // Delay first spawn by 5 seconds
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -128,10 +128,10 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         blocks.current.push({
           x: Math.random() * canvas.width,
           y: -30,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: 0.3 + Math.random() * 0.3,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: 0.2 + Math.random() * 0.2,
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.01,
+          rotationSpeed: (Math.random() - 0.5) * 0.008,
           size: 20 + Math.random() * 10,
           tag,
           destroyed: false,
@@ -156,7 +156,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       spawnBlock(time)
 
-      const gravity = 0.2
+      const gravity = 0.15
       const bounce = 0.6 // Bounce coefficient (springiness)
 
       // Update and draw blocks
@@ -176,18 +176,22 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           block.y += block.vy
           block.rotation += block.rotationSpeed
 
+          // Cap rotation speed to prevent rapid spinning
+          const maxRotationSpeed = 0.05
+          block.rotationSpeed = Math.max(-maxRotationSpeed, Math.min(maxRotationSpeed, block.rotationSpeed))
+
           // Bounce off sides with energy loss
           if (block.x - block.size / 2 < 0) {
             block.x = block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce
-            block.rotationSpeed += (Math.random() - 0.5) * 0.05
+            // Add spin on side bounce (reduced)
+            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
           if (block.x + block.size / 2 > canvas.width) {
             block.x = canvas.width - block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce
-            block.rotationSpeed += (Math.random() - 0.5) * 0.05
+            // Add spin on side bounce (reduced)
+            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
 
           // Check ground collision with bounce
@@ -198,8 +202,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
             if (Math.abs(block.vy) > 0.5) {
               block.vy *= -bounce // Bounce with energy loss
               block.vx *= 0.9
-              // Add rotation variation on bounce
-              block.rotationSpeed += (Math.random() - 0.5) * 0.08
+              // Add rotation variation on bounce (reduced)
+              block.rotationSpeed += (Math.random() - 0.5) * 0.03
             } else {
               // Settling - snap to flat side
               block.vy = 0
@@ -226,8 +230,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
                   if (Math.abs(block.vy) > 0.5) {
                     block.vy *= -bounce * 0.8
                     block.vx *= 0.9
-                    // Add rotation on block collision
-                    block.rotationSpeed += (Math.random() - 0.5) * 0.1
+                    // Add rotation on block collision (reduced to prevent rapid spinning)
+                    block.rotationSpeed += (Math.random() - 0.5) * 0.02
                   } else {
                     // Settling on another block - snap to flat side
                     block.vy = 0
