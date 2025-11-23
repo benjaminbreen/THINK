@@ -2,21 +2,21 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Mark {
+interface Quote {
   x: number
   y: number
-  type: 'dash' | 'asterisk' | 'underline' | 'caret' | 'bracket'
+  vx: number
+  vy: number
+  type: 'open' | 'close' | 'single' | 'em-dash' | 'ellipsis'
   opacity: number
-  maxOpacity: number
-  fadingIn: boolean
-  age: number
-  maxAge: number
+  rotation: number
+  rotationSpeed: number
 }
 
 export function BlogBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const marks = useRef<Mark[]>([])
+  const quotes = useRef<Quote[]>([])
   const lastSpawnTime = useRef(0)
 
   useEffect(() => {
@@ -34,110 +34,95 @@ export function BlogBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Draw editorial marks
+    // Initialize some quotes
+    for (let i = 0; i < 8; i++) {
+      const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
+      quotes.current.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * 100,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: Math.random() * 0.2 + 0.1,
+        type: types[Math.floor(Math.random() * types.length)],
+        opacity: 0.3 + Math.random() * 0.2,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.01
+      })
+    }
+
+    // Draw floating quotes
     const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Spawn new mark every 2-3 seconds
-      if (time - lastSpawnTime.current > 2000 + Math.random() * 1000) {
-        const types: Mark['type'][] = ['dash', 'asterisk', 'underline', 'caret', 'bracket']
-        marks.current.push({
+      // Spawn new quote occasionally
+      if (time - lastSpawnTime.current > 3000 + Math.random() * 2000) {
+        const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
+        quotes.current.push({
           x: Math.random() * canvas.width,
-          y: 20 + Math.random() * 60,
+          y: -20,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: Math.random() * 0.2 + 0.1,
           type: types[Math.floor(Math.random() * types.length)],
-          opacity: 0,
-          maxOpacity: 0.3 + Math.random() * 0.1,
-          fadingIn: true,
-          age: 0,
-          maxAge: 180 + Math.random() * 60 // frames
+          opacity: 0.3 + Math.random() * 0.2,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.01
         })
         lastSpawnTime.current = time
       }
 
       // Use rose color
-      ctx.strokeStyle = 'rgba(244, 63, 94, 0.35)'
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.35)'
-      ctx.lineWidth = 1.5
-      ctx.lineCap = 'round'
+      ctx.fillStyle = 'rgba(244, 63, 94, 0.4)'
+      ctx.font = '24px Georgia, serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
 
-      // Update and draw marks
-      marks.current = marks.current.filter(mark => {
-        mark.age++
+      // Update and draw quotes
+      quotes.current = quotes.current.filter(quote => {
+        // Update position
+        quote.x += quote.vx
+        quote.y += quote.vy
+        quote.rotation += quote.rotationSpeed
 
-        // Fade in
-        if (mark.fadingIn && mark.opacity < mark.maxOpacity) {
-          mark.opacity += 0.01
-          if (mark.opacity >= mark.maxOpacity) {
-            mark.fadingIn = false
-          }
-        }
+        // Wrap horizontally
+        if (quote.x < -50) quote.x = canvas.width + 50
+        if (quote.x > canvas.width + 50) quote.x = -50
 
-        // Fade out after reaching max age
-        if (!mark.fadingIn && mark.age > mark.maxAge * 0.6) {
-          mark.opacity -= 0.005
-        }
-
-        // Remove if too old or fully faded
-        if (mark.opacity <= 0 || mark.age >= mark.maxAge) {
+        // Remove if too far down
+        if (quote.y > canvas.height + 50) {
           return false
         }
 
-        // Set opacity for this mark
-        ctx.globalAlpha = mark.opacity
+        // Draw with rotation
+        ctx.save()
+        ctx.translate(quote.x, quote.y)
+        ctx.rotate(quote.rotation)
+        ctx.globalAlpha = quote.opacity
 
-        // Draw based on type
-        switch (mark.type) {
-          case 'dash':
-            ctx.beginPath()
-            ctx.moveTo(mark.x, mark.y)
-            ctx.lineTo(mark.x + 12, mark.y)
-            ctx.stroke()
+        let symbol = ''
+        switch (quote.type) {
+          case 'open':
+            symbol = '"'
             break
-
-          case 'asterisk':
-            ctx.beginPath()
-            // Draw asterisk with 6 lines
-            for (let i = 0; i < 6; i++) {
-              const angle = (Math.PI / 3) * i
-              const x1 = mark.x + Math.cos(angle) * 3
-              const y1 = mark.y + Math.sin(angle) * 3
-              const x2 = mark.x + Math.cos(angle) * 6
-              const y2 = mark.y + Math.sin(angle) * 6
-              ctx.moveTo(x1, y1)
-              ctx.lineTo(x2, y2)
-            }
-            ctx.stroke()
+          case 'close':
+            symbol = '"'
             break
-
-          case 'underline':
-            ctx.beginPath()
-            ctx.moveTo(mark.x, mark.y + 2)
-            ctx.lineTo(mark.x + 16, mark.y + 2)
-            ctx.stroke()
+          case 'single':
+            symbol = "'"
             break
-
-          case 'caret':
-            ctx.beginPath()
-            ctx.moveTo(mark.x, mark.y + 5)
-            ctx.lineTo(mark.x + 4, mark.y)
-            ctx.lineTo(mark.x + 8, mark.y + 5)
-            ctx.stroke()
+          case 'em-dash':
+            symbol = '—'
             break
-
-          case 'bracket':
-            ctx.beginPath()
-            ctx.moveTo(mark.x + 2, mark.y - 4)
-            ctx.lineTo(mark.x, mark.y - 4)
-            ctx.lineTo(mark.x, mark.y + 4)
-            ctx.lineTo(mark.x + 2, mark.y + 4)
-            ctx.stroke()
+          case 'ellipsis':
+            symbol = '…'
             break
         }
 
-        ctx.globalAlpha = 1
+        ctx.fillText(symbol, 0, 0)
+        ctx.restore()
+
         return true
       })
 
+      ctx.globalAlpha = 1
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
@@ -155,7 +140,7 @@ export function BlogBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.8 }}
+      style={{ opacity: 1 }}
     />
   )
 }

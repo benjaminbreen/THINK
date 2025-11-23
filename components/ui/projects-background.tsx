@@ -33,45 +33,34 @@ export function ProjectsBackground() {
       ctx.strokeStyle = 'rgba(6, 182, 212, 0.18)'
       ctx.lineWidth = 0.5
 
-      // Vertical lines
+      // Vertical lines with gradient from top to bottom
       for (let x = 0; x <= canvas.width; x += gridSize) {
-        const key = `v${x}`
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
 
-        // Some sections fade in/out over time
+        // Darker at top, fading to invisible by halfway
         const fadePhase = Math.sin(time.current * 0.0005 + x * 0.01)
-        let opacity = 0.18 + (fadePhase * 0.08)
+        const baseOpacity = 0.18 + (fadePhase * 0.08)
 
-        // Store and update opacity
-        if (!gridOpacity.current.has(key)) {
-          gridOpacity.current.set(key, opacity)
-        } else {
-          const currentOpacity = gridOpacity.current.get(key)!
-          // Smooth transition
-          opacity = currentOpacity + (opacity - currentOpacity) * 0.05
-          gridOpacity.current.set(key, opacity)
-        }
+        gradient.addColorStop(0, `rgba(6, 182, 212, ${baseOpacity * 1.2})`)
+        gradient.addColorStop(0.3, `rgba(6, 182, 212, ${baseOpacity * 0.6})`)
+        gradient.addColorStop(0.5, 'rgba(6, 182, 212, 0)')
+        gradient.addColorStop(1, 'rgba(6, 182, 212, 0)')
 
-        ctx.strokeStyle = `rgba(6, 182, 212, ${opacity})`
+        ctx.strokeStyle = gradient
         ctx.beginPath()
         ctx.moveTo(x, 0)
         ctx.lineTo(x, canvas.height)
         ctx.stroke()
       }
 
-      // Horizontal lines
+      // Horizontal lines with fade based on vertical position
       for (let y = 0; y <= canvas.height; y += gridSize) {
-        const key = `h${y}`
-
         const fadePhase = Math.sin(time.current * 0.0005 + y * 0.01)
-        let opacity = 0.18 + (fadePhase * 0.08)
+        let baseOpacity = 0.18 + (fadePhase * 0.08)
 
-        if (!gridOpacity.current.has(key)) {
-          gridOpacity.current.set(key, opacity)
-        } else {
-          const currentOpacity = gridOpacity.current.get(key)!
-          opacity = currentOpacity + (opacity - currentOpacity) * 0.05
-          gridOpacity.current.set(key, opacity)
-        }
+        // Fade out based on vertical position (invisible by halfway)
+        const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+        const opacity = baseOpacity * verticalFade * 1.2
 
         ctx.strokeStyle = `rgba(6, 182, 212, ${opacity})`
         ctx.beginPath()
@@ -80,13 +69,17 @@ export function ProjectsBackground() {
         ctx.stroke()
       }
 
-      // Draw subtle corner marks at grid intersections (blueprint style)
-      ctx.fillStyle = 'rgba(6, 182, 212, 0.22)'
+      // Draw subtle corner marks at grid intersections (blueprint style) with fade
       for (let x = gridSize; x < canvas.width; x += gridSize * 2) {
         for (let y = gridSize; y < canvas.height; y += gridSize * 2) {
           const markPhase = Math.sin(time.current * 0.0003 + x * 0.005 + y * 0.005)
           const size = 1 + (markPhase * 0.5)
 
+          // Fade out based on vertical position
+          const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+          const opacity = 0.22 * verticalFade * 1.2
+
+          ctx.fillStyle = `rgba(6, 182, 212, ${opacity})`
           ctx.beginPath()
           ctx.arc(x, y, size, 0, Math.PI * 2)
           ctx.fill()
