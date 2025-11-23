@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
 import Link from 'next/link'
 import { Filter, Code } from 'lucide-react'
+import { ProjectsBackground } from '@/components/ui/projects-background'
 
 type FilterType = 'all' | 'assignment' | 'course' | 'research' | 'history' | 'literature' | 'linguistics'
 
@@ -65,8 +66,11 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-8">
-        <Container>
+      <Section className="pt-24 pb-8 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <ProjectsBackground />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-8">
             <h1 className="text-4xl font-serif font-bold mb-4">Project Gallery</h1>
             <p className="text-lg text-muted-foreground">

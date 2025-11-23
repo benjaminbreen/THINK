@@ -12,6 +12,7 @@ import {
   Code, Sparkles, GraduationCap, Microscope, FileText, BookOpen,
   Grid3x3, List, ArrowUpDown, Lightbulb
 } from 'lucide-react'
+import { GuidesBackground } from '@/components/ui/guides-background'
 
 type ViewMode = 'cards' | 'list'
 type SortBy = 'default' | 'title' | 'category'
@@ -133,8 +134,11 @@ export default function GuidesPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-16">
-        <Container>
+      <Section className="pt-24 pb-16 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <GuidesBackground />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-12">
             <h1 className="text-4xl font-serif font-bold mb-4">How-to Guides</h1>
             <p className="text-lg text-muted-foreground">

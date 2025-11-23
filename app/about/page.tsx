@@ -4,12 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { ExternalLink, Users, Target, Lightbulb, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
+import { AboutBackground } from '@/components/ui/about-background'
 
 export default function AboutPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
-        <Container>
+      <Section className="pt-24 pb-16 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <AboutBackground />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl">
             <h1 className="text-4xl font-serif font-bold mb-6 text-center">About THINK</h1>
 

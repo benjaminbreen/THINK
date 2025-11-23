@@ -4,6 +4,7 @@ import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { BlogBackground } from '@/components/ui/blog-background'
 
 // This is sample data - in production, you'd fetch from MDX files
 const blogPosts = [
@@ -30,8 +31,11 @@ const blogPosts = [
 export default function BlogPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
-        <Container>
+      <Section className="pt-24 pb-16 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <BlogBackground />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-12">
             <h1 className="text-4xl font-serif font-bold mb-4">Blog</h1>
             <p className="text-lg text-muted-foreground">
