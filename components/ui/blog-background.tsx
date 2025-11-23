@@ -2,13 +2,13 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Bloom {
+interface Mark {
   x: number
   y: number
-  radius: number
-  maxRadius: number
-  alpha: number
-  growing: boolean
+  type: 'dash' | 'asterisk' | 'underline' | 'caret' | 'bracket'
+  opacity: number
+  maxOpacity: number
+  fadingIn: boolean
   age: number
   maxAge: number
 }
@@ -16,7 +16,7 @@ interface Bloom {
 export function BlogBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const blooms = useRef<Bloom[]>([])
+  const marks = useRef<Mark[]>([])
   const lastSpawnTime = useRef(0)
 
   useEffect(() => {
@@ -34,79 +34,107 @@ export function BlogBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Draw ink blooms
+    // Draw editorial marks
     const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Spawn new bloom every 8-12 seconds
-      if (time - lastSpawnTime.current > 8000 + Math.random() * 4000) {
-        blooms.current.push({
+      // Spawn new mark every 2-3 seconds
+      if (time - lastSpawnTime.current > 2000 + Math.random() * 1000) {
+        const types: Mark['type'][] = ['dash', 'asterisk', 'underline', 'caret', 'bracket']
+        marks.current.push({
           x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: 0,
-          maxRadius: 80 + Math.random() * 60,
-          alpha: 0.25,
-          growing: true,
+          y: 20 + Math.random() * 60,
+          type: types[Math.floor(Math.random() * types.length)],
+          opacity: 0,
+          maxOpacity: 0.15 + Math.random() * 0.05,
+          fadingIn: true,
           age: 0,
-          maxAge: 300 // frames
+          maxAge: 180 + Math.random() * 60 // frames
         })
         lastSpawnTime.current = time
       }
 
-      // Update and draw blooms
-      blooms.current = blooms.current.filter(bloom => {
-        bloom.age++
+      // Use rose color
+      ctx.strokeStyle = 'rgba(244, 63, 94, 0.15)'
+      ctx.fillStyle = 'rgba(244, 63, 94, 0.15)'
+      ctx.lineWidth = 1.5
+      ctx.lineCap = 'round'
 
-        if (bloom.growing && bloom.radius < bloom.maxRadius) {
-          bloom.radius += 0.3 // Slow growth
-          if (bloom.radius >= bloom.maxRadius) {
-            bloom.growing = false
+      // Update and draw marks
+      marks.current = marks.current.filter(mark => {
+        mark.age++
+
+        // Fade in
+        if (mark.fadingIn && mark.opacity < mark.maxOpacity) {
+          mark.opacity += 0.01
+          if (mark.opacity >= mark.maxOpacity) {
+            mark.fadingIn = false
           }
         }
 
-        // Fade out after reaching max radius
-        if (!bloom.growing) {
-          bloom.alpha -= 0.0015
+        // Fade out after reaching max age
+        if (!mark.fadingIn && mark.age > mark.maxAge * 0.6) {
+          mark.opacity -= 0.005
         }
 
         // Remove if too old or fully faded
-        if (bloom.alpha <= 0 || bloom.age >= bloom.maxAge) {
+        if (mark.opacity <= 0 || mark.age >= mark.maxAge) {
           return false
         }
 
-        // Draw bloom with radial gradient (watercolor effect)
-        const gradient = ctx.createRadialGradient(
-          bloom.x, bloom.y, 0,
-          bloom.x, bloom.y, bloom.radius
-        )
+        // Set opacity for this mark
+        ctx.globalAlpha = mark.opacity
 
-        // Rose color with varying opacity
-        gradient.addColorStop(0, `rgba(244, 63, 94, ${bloom.alpha * 0.15})`)
-        gradient.addColorStop(0.4, `rgba(244, 63, 94, ${bloom.alpha * 0.08})`)
-        gradient.addColorStop(0.7, `rgba(244, 63, 94, ${bloom.alpha * 0.03})`)
-        gradient.addColorStop(1, 'rgba(244, 63, 94, 0)')
+        // Draw based on type
+        switch (mark.type) {
+          case 'dash':
+            ctx.beginPath()
+            ctx.moveTo(mark.x, mark.y)
+            ctx.lineTo(mark.x + 12, mark.y)
+            ctx.stroke()
+            break
 
-        ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.arc(bloom.x, bloom.y, bloom.radius, 0, Math.PI * 2)
-        ctx.fill()
+          case 'asterisk':
+            ctx.beginPath()
+            // Draw asterisk with 6 lines
+            for (let i = 0; i < 6; i++) {
+              const angle = (Math.PI / 3) * i
+              const x1 = mark.x + Math.cos(angle) * 3
+              const y1 = mark.y + Math.sin(angle) * 3
+              const x2 = mark.x + Math.cos(angle) * 6
+              const y2 = mark.y + Math.sin(angle) * 6
+              ctx.moveTo(x1, y1)
+              ctx.lineTo(x2, y2)
+            }
+            ctx.stroke()
+            break
 
-        // Add subtle texture with smaller inner circle
-        if (bloom.radius > 20) {
-          const innerGradient = ctx.createRadialGradient(
-            bloom.x + 5, bloom.y - 5, 0,
-            bloom.x + 5, bloom.y - 5, bloom.radius * 0.6
-          )
+          case 'underline':
+            ctx.beginPath()
+            ctx.moveTo(mark.x, mark.y + 2)
+            ctx.lineTo(mark.x + 16, mark.y + 2)
+            ctx.stroke()
+            break
 
-          innerGradient.addColorStop(0, `rgba(244, 63, 94, ${bloom.alpha * 0.1})`)
-          innerGradient.addColorStop(1, 'rgba(244, 63, 94, 0)')
+          case 'caret':
+            ctx.beginPath()
+            ctx.moveTo(mark.x, mark.y + 5)
+            ctx.lineTo(mark.x + 4, mark.y)
+            ctx.lineTo(mark.x + 8, mark.y + 5)
+            ctx.stroke()
+            break
 
-          ctx.fillStyle = innerGradient
-          ctx.beginPath()
-          ctx.arc(bloom.x + 5, bloom.y - 5, bloom.radius * 0.6, 0, Math.PI * 2)
-          ctx.fill()
+          case 'bracket':
+            ctx.beginPath()
+            ctx.moveTo(mark.x + 2, mark.y - 4)
+            ctx.lineTo(mark.x, mark.y - 4)
+            ctx.lineTo(mark.x, mark.y + 4)
+            ctx.lineTo(mark.x + 2, mark.y + 4)
+            ctx.stroke()
+            break
         }
 
+        ctx.globalAlpha = 1
         return true
       })
 
@@ -127,7 +155,7 @@ export function BlogBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.5 }}
+      style={{ opacity: 0.4 }}
     />
   )
 }

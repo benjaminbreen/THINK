@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 export function AboutBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const time = useRef(0)
+  const offset = useRef(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -22,56 +22,89 @@ export function AboutBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Create breathing gradient orbs
+    // Define constellation points
+    interface Point {
+      x: number
+      y: number
+      baseX: number
+      baseY: number
+    }
+
+    const points: Point[] = []
+    const numPoints = 12
+
+    // Initialize points across the top area
+    for (let i = 0; i < numPoints; i++) {
+      const x = (i * 120) + 50
+      const y = 30 + Math.random() * 40
+      points.push({
+        x,
+        y,
+        baseX: x,
+        baseY: y
+      })
+    }
+
+    // Draw constellation threads
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Three overlapping gradient orbs at different positions and speeds
-      const orbs = [
-        {
-          x: canvas.width * 0.2,
-          y: canvas.height * 0.3,
-          baseRadius: 200,
-          speed: 0.0008,
-          phase: 0
-        },
-        {
-          x: canvas.width * 0.7,
-          y: canvas.height * 0.5,
-          baseRadius: 250,
-          speed: 0.001,
-          phase: Math.PI / 3
-        },
-        {
-          x: canvas.width * 0.5,
-          y: canvas.height * 0.7,
-          baseRadius: 180,
-          speed: 0.0012,
-          phase: Math.PI * 2 / 3
-        }
-      ]
+      // Use indigo color with low opacity
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)' // Indigo with 15% opacity
+      ctx.fillStyle = 'rgba(99, 102, 241, 0.2)'
+      ctx.lineWidth = 1
+      ctx.lineCap = 'round'
 
-      orbs.forEach(orb => {
-        // Gentle breathing effect - radius expands and contracts
-        const breathe = Math.sin(time.current * orb.speed + orb.phase)
-        const radius = orb.baseRadius + (breathe * 30)
-
-        // Create radial gradient
-        const gradient = ctx.createRadialGradient(
-          orb.x, orb.y, 0,
-          orb.x, orb.y, radius
-        )
-
-        // Indigo color with very low opacity
-        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.08)')
-        gradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.03)')
-        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)')
-
-        ctx.fillStyle = gradient
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
+      // Update point positions with gentle drift
+      points.forEach((point, i) => {
+        const driftX = Math.sin(offset.current * 0.01 + i * 0.5) * 3
+        const driftY = Math.cos(offset.current * 0.01 + i * 0.3) * 2
+        point.x = point.baseX + driftX - offset.current
+        point.y = point.baseY + driftY
       })
 
-      time.current += 1
+      // Draw connecting lines between nearby points
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const p1 = points[i]
+          const p2 = points[j]
+          const distance = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
+
+          // Only connect points that are reasonably close
+          if (distance < 150) {
+            // Opacity fades with distance
+            const opacity = 0.15 * (1 - distance / 150)
+            ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`
+
+            ctx.beginPath()
+            // Curved line between points
+            const midX = (p1.x + p2.x) / 2
+            const midY = (p1.y + p2.y) / 2 + Math.sin(offset.current * 0.02) * 5
+
+            ctx.moveTo(p1.x, p1.y)
+            ctx.quadraticCurveTo(midX, midY, p2.x, p2.y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      // Draw dots at each point
+      points.forEach(point => {
+        ctx.beginPath()
+        ctx.arc(point.x, point.y, 2, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      // Slowly move the pattern from right to left
+      offset.current += 0.2
+      if (offset.current > 120) {
+        // Reset positions
+        points.forEach((point, i) => {
+          point.baseX = (i * 120) + 50
+        })
+        offset.current = 0
+      }
+
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
@@ -89,7 +122,7 @@ export function AboutBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.4 }}
     />
   )
 }
