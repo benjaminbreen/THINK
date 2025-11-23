@@ -45,7 +45,7 @@ export default function BlogPage() {
         onMouseLeave={() => setIsBackgroundHovered(false)}
       >
         <Section className="pt-16 pb-12 relative">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden">
             <BlogBackground isHovered={isBackgroundHovered} />
           </div>
         <Container className="relative">

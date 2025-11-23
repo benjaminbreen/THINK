@@ -10,6 +10,7 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
+  const mousePos = useRef({ x: -1000, y: -1000 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -18,6 +19,15 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Track mouse position
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mousePos.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      }
+    }
+
     // Set canvas size
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth
@@ -25,67 +35,106 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
     }
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
+    canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Editorial and typographic symbols
-    const symbols = [
-      '\u201C', '\u201D', '\u2018', '\u2019', '\u2014', '\u2013', '\u2026', '/', '\\', '|',
-      '*', '\u2020', '\u2021', '\u00A7', '\u00B6', '\u2022', '\u25E6', '\u00B0', '~', '^',
-      '\u00AB', '\u00BB', '\u2039', '\u203A', '[', ']', '{', '}', '\u2042', '\u203B'
+    // Symbol evolution chains - symbols evolve based on visual complexity/size
+    const evolutionChains = [
+      // Dots evolving to larger circles
+      ['.', '·', '°', '◦', '•', '●'],
+      // Commas to colons to ellipsis
+      [',', ';', ':', '‥', '…'],
+      // Single to double vertical lines
+      ['|', '‖', '│', '║'],
+      // Brackets opening wider
+      ['(', '[', '{', '⟨', '«'],
+      [')' ,']', '}', '⟩', '»'],
+      // Dashes growing longer
+      ['-', '–', '—', '═'],
+      // Crosses growing more complex
+      ['+', '†', '‡', '✕', '✖'],
+      // Quote marks
+      ["'", '"', '‹', '›', '«', '»'],
+      // Asterisks blooming
+      ['*', '⁎', '✱', '✳', '✺', '✻'],
+      // Slashes
+      ['/', '⁄', '⧸'],
+      ['\\', '⧹'],
+      // Underscores to lines
+      ['_', '‗', '═'],
+      // Carets and angles
+      ['^', '∧', '⌃'],
+      ['~', '∼', '≈'],
+      // Paragraph marks
+      ['¶', '§', '⁋'],
+      // Daggers
+      ['†', '‡', '⁑'],
+      // Bullets
+      ['·', '•', '◦', '○', '◉'],
+      // Mathematical
+      ['=', '≈', '≡'],
+      ['<', '⟨', '«'],
+      ['>', '⟩', '»']
     ]
 
-    const gridSize = 50 // Much bigger grid (was 25)
+    const gridSize = 60 // Bigger grid
     const cols = Math.ceil(canvas.width / gridSize)
     const rows = Math.ceil(canvas.height / gridSize)
 
-    // Store change rates for each cell (much slower)
-    const changeRates = Array(cols).fill(0).map(() =>
-      Array(rows).fill(0).map(() => 0.0001 + Math.random() * 0.0003) // Much slower (was 0.0005-0.002)
+    // Assign each cell to an evolution chain and give it a unique evolution rate
+    const cellChains = Array(cols).fill(0).map(() =>
+      Array(rows).fill(0).map(() => ({
+        chainIndex: Math.floor(Math.random() * evolutionChains.length),
+        evolutionRate: 0.00005 + Math.random() * 0.0002 // Different rates, very slow
+      }))
     )
 
     const draw = (time: number) => {
       // Semi-transparent background for fade effect
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.font = '28px Georgia, serif' // Much bigger font (was 14px)
+      ctx.font = 'bold 36px Georgia, serif' // Much bigger font
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
       timeRef.current = time
 
-      // Only show if hovered
-      const hoverOpacity = isHovered ? 1 : 0
+      const hoverRadius = 200 // Localized area around cursor
 
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
           const x = i * gridSize + gridSize / 2
           const y = j * gridSize + gridSize / 2
 
-          // Calculate distance from upper left (0,0)
-          const distanceFromOrigin = Math.sqrt(i * i + j * j)
-          const maxDistance = Math.sqrt(cols * cols + rows * rows)
+          // Distance from cursor
+          const dx = mousePos.current.x - x
+          const dy = mousePos.current.y - y
+          const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
 
-          // Fade based on distance from upper left
-          const fadeDistance = maxDistance * 0.4
-          let baseFade = 1.0
-
-          if (distanceFromOrigin > fadeDistance) {
-            baseFade = Math.max(0, 1 - ((distanceFromOrigin - fadeDistance) / (maxDistance - fadeDistance)))
+          // Only show in localized area around cursor when hovered
+          let cursorProximity = 0
+          if (isHovered && distanceFromCursor < hoverRadius) {
+            cursorProximity = 1 - (distanceFromCursor / hoverRadius)
           }
 
-          // Wave animation from upper left
-          const waveDelay = (i + j) * 100
-          const waveProgress = Math.max(0, (time - waveDelay) / 1000)
-          const waveOpacity = Math.min(1, waveProgress)
+          // Fade based on vertical position - invisible by halfway
+          const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
 
-          // Combine all opacity effects including hover
-          const finalOpacity = baseFade * waveOpacity * 0.4 * hoverOpacity
+          // Half opacity even at top
+          const baseOpacity = 0.5
+
+          // Combine all opacity effects
+          const finalOpacity = verticalFade * baseOpacity * cursorProximity
 
           if (finalOpacity > 0.01) {
-            // Each cell changes at its own rate
-            const timeOffset = (time * changeRates[i][j]) % symbols.length
-            const symbolIndex = Math.floor(timeOffset)
-            const symbol = symbols[symbolIndex]
+            // Get the evolution chain for this cell
+            const cellData = cellChains[i][j]
+            const chain = evolutionChains[cellData.chainIndex]
+
+            // Calculate evolution progress for this specific cell
+            const evolutionProgress = (time * cellData.evolutionRate) % chain.length
+            const symbolIndex = Math.floor(evolutionProgress)
+            const symbol = chain[symbolIndex]
 
             // Rose color theme
             ctx.fillStyle = `rgba(244, 63, 94, ${finalOpacity})`
@@ -101,6 +150,7 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
+      canvas.removeEventListener('mousemove', handleMouseMove)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
       }
@@ -110,7 +160,7 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
+      className="absolute inset-0 w-full h-full pointer-events-auto"
       style={{ opacity: 1 }}
     />
   )
