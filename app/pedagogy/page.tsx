@@ -229,8 +229,8 @@ export default function PedagogyPage() {
   return (
     <>
       {/* Header with pedagogy background */}
-      <Section className="pt-24 pb-8 relative">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <Section className="pt-20 pb-4 relative">
+        <div className="absolute inset-0 overflow-hidden">
           <PedagogyBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
@@ -255,7 +255,7 @@ export default function PedagogyPage() {
       </Section>
 
       {/* Sample Assignments Grid - reduced padding */}
-      <Section className="pt-6 pb-8">
+      <Section className="pt-4 pb-8">
         <Container>
           <div className="mb-6">
             <h2 className="text-3xl font-serif font-bold mb-2 text-center">Sample Assignments</h2>

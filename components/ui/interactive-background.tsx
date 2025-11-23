@@ -103,6 +103,8 @@ function InteractiveBackgroundComponent() {
     size: number
   }>>([])
   const lastBlockSpawn = useRef(0)
+  const popAllBlocks = useRef(false)
+  const popTime = useRef(0)
 
   // Humanistic quotes from across cultures and time
   const humanisticQuotes = [
@@ -1293,6 +1295,41 @@ function InteractiveBackgroundComponent() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+      // Handle pop all blocks action
+      if (popAllBlocks.current) {
+        fallingBlocks.current.forEach(block => {
+          if (!block.destroyed) {
+            block.destroyed = true
+            block.destroyedTime = Date.now()
+
+            // Create particle explosion for each block
+            const particleCount = 20 + Math.random() * 10
+            for (let i = 0; i < particleCount; i++) {
+              const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5
+              const speed = 2 + Math.random() * 3
+              blockParticles.current.push({
+                x: block.x,
+                y: block.y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 2,
+                life: 1,
+                maxLife: 60 + Math.random() * 30,
+                size: 2 + Math.random() * 3
+              })
+            }
+          }
+        })
+        popAllBlocks.current = false
+      }
+
+      // Reset after 10 seconds of popping
+      if (popTime.current > 0 && Date.now() - popTime.current > 10000) {
+        fallingBlocks.current = []
+        blockParticles.current = []
+        popTime.current = 0
+        lastBlockSpawn.current = time
+      }
+
       // Spawn new blocks
       if (time - lastBlockSpawn.current > 2000) {
         const word = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)].text.split(' ').slice(0, 2).join(' ')
@@ -1535,6 +1572,18 @@ function InteractiveBackgroundComponent() {
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
             <button onClick={(e) => { e.stopPropagation(); refreshBooks.current = true; }} className={buttonClass}>
               Refresh Books
+            </button>
+          </div>
+        )}
+
+        {mode === 'blocks' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => {
+              e.stopPropagation();
+              popAllBlocks.current = true;
+              popTime.current = Date.now();
+            }} className={buttonClass}>
+              💥 Pop All
             </button>
           </div>
         )}
