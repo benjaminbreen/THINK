@@ -2,22 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Quote {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  type: 'open' | 'close' | 'single' | 'em-dash' | 'ellipsis'
-  opacity: number
-  rotation: number
-  rotationSpeed: number
-}
-
 export function BlogBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const quotes = useRef<Quote[]>([])
-  const lastSpawnTime = useRef(0)
+  const timeRef = useRef(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -34,99 +22,77 @@ export function BlogBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Initialize some quotes
-    for (let i = 0; i < 8; i++) {
-      const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
-      quotes.current.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * 100,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: Math.random() * 0.2 + 0.1,
-        type: types[Math.floor(Math.random() * types.length)],
-        opacity: 0.3 + Math.random() * 0.2,
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.01
-      })
-    }
+    // Editorial and typographic symbols
+    const symbols = [
+      '\u201C', '\u201D', '\u2018', '\u2019', '\u2014', '\u2013', '\u2026', '/', '\\', '|',
+      '*', '\u2020', '\u2021', '\u00A7', '\u00B6', '\u2022', '\u25E6', '\u00B0', '~', '^',
+      '\u00AB', '\u00BB', '\u2039', '\u203A', '[', ']', '{', '}', '\u2042', '\u203B'
+    ]
 
-    // Draw floating quotes
+    const gridSize = 25
+    const cols = Math.ceil(canvas.width / gridSize)
+    const rows = Math.ceil(canvas.height / gridSize)
+
+    // Store change rates for each cell (different speeds)
+    const changeRates = Array(cols).fill(0).map(() =>
+      Array(rows).fill(0).map(() => 0.0005 + Math.random() * 0.002)
+    )
+
     const draw = (time: number) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Semi-transparent background for fade effect
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Spawn new quote occasionally
-      if (time - lastSpawnTime.current > 3000 + Math.random() * 2000) {
-        const types: Quote['type'][] = ['open', 'close', 'single', 'em-dash', 'ellipsis']
-        quotes.current.push({
-          x: Math.random() * canvas.width,
-          y: -20,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: Math.random() * 0.2 + 0.1,
-          type: types[Math.floor(Math.random() * types.length)],
-          opacity: 0.3 + Math.random() * 0.2,
-          rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.01
-        })
-        lastSpawnTime.current = time
-      }
-
-      // Use rose color
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.4)'
-      ctx.font = '24px Georgia, serif'
+      ctx.font = '14px Georgia, serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
-      // Update and draw quotes
-      quotes.current = quotes.current.filter(quote => {
-        // Update position
-        quote.x += quote.vx
-        quote.y += quote.vy
-        quote.rotation += quote.rotationSpeed
+      timeRef.current = time
 
-        // Wrap horizontally
-        if (quote.x < -50) quote.x = canvas.width + 50
-        if (quote.x > canvas.width + 50) quote.x = -50
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * gridSize + gridSize / 2
+          const y = j * gridSize + gridSize / 2
 
-        // Remove if too far down
-        if (quote.y > canvas.height + 50) {
-          return false
+          // Calculate distance from upper left (0,0)
+          const distanceFromOrigin = Math.sqrt(i * i + j * j)
+          const maxDistance = Math.sqrt(cols * cols + rows * rows)
+
+          // Fade based on distance from upper left
+          // Symbols appear animated from upper left, then fade progressively
+          const fadeDistance = maxDistance * 0.4 // Fade after 40% of the way
+          let baseFade = 1.0
+
+          if (distanceFromOrigin > fadeDistance) {
+            // Progressive fade after a few lines
+            baseFade = Math.max(0, 1 - ((distanceFromOrigin - fadeDistance) / (maxDistance - fadeDistance)))
+          }
+
+          // Wave animation from upper left
+          const waveDelay = (i + j) * 100 // Delay based on position
+          const waveProgress = Math.max(0, (time - waveDelay) / 1000)
+          const waveOpacity = Math.min(1, waveProgress) // Fade in from 0 to 1
+
+          // Combine both opacity effects
+          const finalOpacity = baseFade * waveOpacity * 0.4
+
+          if (finalOpacity > 0.01) {
+            // Each cell changes at its own rate
+            const timeOffset = (time * changeRates[i][j]) % symbols.length
+            const symbolIndex = Math.floor(timeOffset)
+            const symbol = symbols[symbolIndex]
+
+            // Rose color theme
+            ctx.fillStyle = `rgba(244, 63, 94, ${finalOpacity})`
+            ctx.fillText(symbol, x, y)
+          }
         }
+      }
 
-        // Draw with rotation
-        ctx.save()
-        ctx.translate(quote.x, quote.y)
-        ctx.rotate(quote.rotation)
-        ctx.globalAlpha = quote.opacity
-
-        let symbol = ''
-        switch (quote.type) {
-          case 'open':
-            symbol = '"'
-            break
-          case 'close':
-            symbol = '"'
-            break
-          case 'single':
-            symbol = "'"
-            break
-          case 'em-dash':
-            symbol = '—'
-            break
-          case 'ellipsis':
-            symbol = '…'
-            break
-        }
-
-        ctx.fillText(symbol, 0, 0)
-        ctx.restore()
-
-        return true
-      })
-
-      ctx.globalAlpha = 1
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
-    draw(0)
+    animationFrameId.current = requestAnimationFrame(draw)
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
