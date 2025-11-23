@@ -10,13 +10,13 @@ import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Pedagogy', href: '/pedagogy' },
-  { name: 'Resources', href: '/resources' },
-  { name: 'Guides', href: '/guides' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'About', href: '/about' },
+  { name: 'Home', href: '/', color: '#eab308' }, // Amber
+  { name: 'Projects', href: '/projects', color: '#06b6d4' }, // Cyan
+  { name: 'Pedagogy', href: '/pedagogy', color: '#8b5cf6' }, // Violet
+  { name: 'Resources', href: '/resources', color: '#eab308' }, // Amber
+  { name: 'Guides', href: '/guides', color: '#3b82f6' }, // Blue
+  { name: 'Blog', href: '/blog', color: '#f43f5e' }, // Rose
+  { name: 'About', href: '/about', color: '#6366f1' }, // Indigo
 ]
 
 export function Navigation() {
@@ -52,7 +52,10 @@ export function Navigation() {
               >
                 {item.name}
                 {pathname === item.href && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-amber-600 rounded-full" />
+                  <span
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  />
                 )}
               </Link>
             ))}

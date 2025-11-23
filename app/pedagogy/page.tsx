@@ -229,25 +229,27 @@ export default function PedagogyPage() {
   return (
     <>
       {/* Header with pedagogy background */}
-      <Section className="pt-20 pb-4 relative">
+      <Section className="pt-16 pb-2 relative">
         <div className="absolute inset-0 overflow-hidden">
           <PedagogyBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <div
-            className="mx-auto max-w-3xl text-center"
-            onMouseEnter={() => setIsHeaderHovered(true)}
-            onMouseLeave={() => setIsHeaderHovered(false)}
-          >
-            <h1 className="text-4xl font-serif font-bold mb-3">Pedagogy Materials</h1>
+          <div className="mx-auto max-w-3xl text-center">
             <div
-              className="h-0.5 mb-3 mx-auto transition-all duration-300"
-              style={{
-                backgroundColor: theme.accent,
-                width: isHeaderHovered ? '100%' : '4rem'
-              }}
-            />
-            <p className="text-lg text-muted-foreground">
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-4xl font-serif font-bold mb-1">Pedagogy Materials</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
+            <p className="text-lg text-muted-foreground mt-3">
               Sample assignments, syllabi, and resources for teaching with and about AI in the humanities
             </p>
           </div>

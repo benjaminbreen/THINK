@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -5,6 +8,9 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
 import { BlogBackground } from '@/components/ui/blog-background'
+import { pageThemes } from '@/lib/page-themes'
+
+const theme = pageThemes.blog
 
 // This is sample data - in production, you'd fetch from MDX files
 const blogPosts = [
@@ -29,16 +35,31 @@ const blogPosts = [
 ]
 
 export default function BlogPage() {
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+
   return (
     <>
-      <Section className="pt-24 pb-16 relative">
+      <Section className="pt-16 pb-12 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <BlogBackground />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Blog</h1>
-            <p className="text-lg text-muted-foreground">
+          <div className="mx-auto max-w-3xl text-center mb-8">
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-4xl font-serif font-bold mb-1">Blog</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
+            <p className="text-lg text-muted-foreground mt-3">
               Updates, insights, and stories from the THINK project
             </p>
           </div>

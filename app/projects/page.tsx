@@ -10,11 +10,15 @@ import { ProjectCard } from '@/components/ui/project-card'
 import Link from 'next/link'
 import { Filter, Code } from 'lucide-react'
 import { ProjectsBackground } from '@/components/ui/projects-background'
+import { pageThemes } from '@/lib/page-themes'
+
+const theme = pageThemes.projects
 
 type FilterType = 'all' | 'assignment' | 'course' | 'research' | 'history' | 'literature' | 'linguistics'
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
 
   const projects = [
     {
@@ -66,14 +70,27 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-8 relative">
+      <Section className="pt-16 pb-6 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <ProjectsBackground />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl text-center mb-8">
-            <h1 className="text-4xl font-serif font-bold mb-4">Project Gallery</h1>
-            <p className="text-lg text-muted-foreground">
+          <div className="mx-auto max-w-3xl text-center mb-6">
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-4xl font-serif font-bold mb-1">Project Gallery</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
+            <p className="text-lg text-muted-foreground mt-3">
               Experimental AI tools for humanities teaching and research. All projects are part of the HistoryLens pedagogical framework, which combines primary sources with interactive simulations.
             </p>
           </div>
@@ -91,8 +108,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'all'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'all' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('all')}
@@ -102,8 +119,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'assignment'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'assignment' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('assignment')}
@@ -113,8 +130,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'course'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'course' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('course')}
@@ -124,8 +141,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'research'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'research' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('research')}
@@ -135,8 +152,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'history'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'history' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('history')}
@@ -146,8 +163,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'literature'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'literature' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('literature')}
@@ -157,8 +174,8 @@ export default function ProjectsPage() {
               <Badge
                 className={`cursor-pointer transition-colors ${
                   activeFilter === 'linguistics'
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-background hover:bg-amber-600/10 hover:border-amber-600/50 hover:text-amber-700 dark:hover:text-amber-400'
+                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
                 }`}
                 variant={activeFilter === 'linguistics' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('linguistics')}

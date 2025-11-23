@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -5,20 +8,38 @@ import { Button } from '@/components/ui/button'
 import { ExternalLink, Users, Target, Lightbulb, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 import { AboutBackground } from '@/components/ui/about-background'
+import { pageThemes } from '@/lib/page-themes'
+
+const theme = pageThemes.about
 
 export default function AboutPage() {
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+
   return (
     <>
-      <Section className="pt-24 pb-16 relative">
+      <Section className="pt-16 pb-12 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <AboutBackground />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl">
-            <h1 className="text-4xl font-serif font-bold mb-6 text-center">About THINK</h1>
+          <div className="mx-auto max-w-3xl text-center">
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-4xl font-serif font-bold mb-1">About THINK</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
 
-            <div className="prose prose-lg max-w-none mb-12">
-              <p className="text-xl text-muted-foreground text-center mb-8">
+            <div className="prose prose-lg max-w-none mt-3 mb-8">
+              <p className="text-xl text-muted-foreground text-center mb-6">
                 Technology + Humanities Integrated Knowledge
               </p>
 
