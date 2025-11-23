@@ -4,9 +4,10 @@ import { useEffect, useRef } from 'react'
 
 interface BlogBackgroundProps {
   isHovered?: boolean
+  isHeaderHovered?: boolean
 }
 
-export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
+export function BlogBackground({ isHovered = false, isHeaderHovered = false }: BlogBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
@@ -40,8 +41,9 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
     // Two evolution sequences: circular and angular
     // Each evolves from small/simple to large/complex
     const circularChain = [
-      '.', '·', '˙', '˚', '°', '∙', '•', '⁃', '⁘', '⁙', '⁚', '⁝', '⁞',
-      '∘', '◌', '◦', '○', '◍', '◎', '◉', '●', '⬤', '⚫'
+      '·', '˙', '˚', '°', '∙', '*', '⁎', '⁕', '⁜', '⁑', '✢', '✣',
+      '✤', '✥', '✦', '✧', '✨', '✩', '✪', '✫', '✬', '✭', '✮', '✯',
+      '✰', '✱', '✲', '✳', '✴', '✵', '✶', '✷', '✸', '✹', '✺', '✻', '✼'
     ]
 
     const angularChain = [
@@ -75,52 +77,74 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
       timeRef.current = time
 
       const hoverRadius = 200
-      const baseOpacity = 0.2 // Much lower base opacity
+      const baseOpacity = 0.2
 
       // Performance optimization: skip if not hovered
-      if (!isHovered) {
+      if (!isHovered && !isHeaderHovered) {
         animationFrameId.current = requestAnimationFrame(draw)
         return
       }
 
-      // Calculate cell range to check (only near cursor)
-      const mouseCellX = Math.floor(mousePos.current.x / gridSize)
-      const mouseCellY = Math.floor(mousePos.current.y / gridSize)
-      const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
+      // When header is hovered, show full background; otherwise show localized
+      let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
 
-      const minI = Math.max(0, mouseCellX - cellRadius)
-      const maxI = Math.min(cols - 1, mouseCellX + cellRadius)
-      const minJ = Math.max(0, mouseCellY - cellRadius)
-      const maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
+      if (!isHeaderHovered) {
+        // Calculate cell range to check (only near cursor)
+        const mouseCellX = Math.floor(mousePos.current.x / gridSize)
+        const mouseCellY = Math.floor(mousePos.current.y / gridSize)
+        const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
+
+        minI = Math.max(0, mouseCellX - cellRadius)
+        maxI = Math.min(cols - 1, mouseCellX + cellRadius)
+        minJ = Math.max(0, mouseCellY - cellRadius)
+        maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
+      }
 
       for (let i = minI; i <= maxI; i++) {
         for (let j = minJ; j <= maxJ; j++) {
           const x = i * gridSize + gridSize / 2
           const y = j * gridSize + gridSize / 2
 
-          // Distance from cursor
-          const dx = mousePos.current.x - x
-          const dy = mousePos.current.y - y
-          const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
+          // Calculate opacity based on mode
+          let finalOpacity = 0
 
-          // Skip if outside hover radius
-          if (distanceFromCursor >= hoverRadius) continue
+          if (isHeaderHovered) {
+            // Full background mode - fade based on vertical position
+            const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+            finalOpacity = verticalFade * baseOpacity
+          } else {
+            // Localized mode - fade based on distance from cursor
+            const dx = mousePos.current.x - x
+            const dy = mousePos.current.y - y
+            const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
 
-          const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
+            if (distanceFromCursor >= hoverRadius) continue
 
-          // Fade based on vertical position - invisible by halfway
-          const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
-
-          // Combine all opacity effects
-          const finalOpacity = verticalFade * baseOpacity * cursorProximity
+            const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
+            const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))
+            finalOpacity = verticalFade * baseOpacity * cursorProximity
+          }
 
           if (finalOpacity > 0.01) {
             // Get the evolution chain for this cell
             const cellData = cellChains[i][j]
             const chain = cellData.useCircular ? circularChain : angularChain
 
-            // Calculate evolution progress for this specific cell
-            const evolutionProgress = (time * cellData.evolutionRate) % chain.length
+            // Vertical speed gradient: faster at top, current speed at middle, slower at bottom
+            // Top (y=0): 3x speed, Middle (y=50%): 1x speed, Bottom (y=100%): 0.3x speed
+            const verticalPosition = y / canvas.height
+            let speedMultiplier = 1
+            if (verticalPosition < 0.5) {
+              // Top half: interpolate from 3x to 1x
+              speedMultiplier = 3 - (verticalPosition / 0.5) * 2
+            } else {
+              // Bottom half: interpolate from 1x to 0.3x
+              speedMultiplier = 1 - ((verticalPosition - 0.5) / 0.5) * 0.7
+            }
+
+            // Apply speed multiplier to evolution rate
+            const effectiveRate = cellData.evolutionRate * speedMultiplier
+            const evolutionProgress = (time * effectiveRate) % chain.length
             const symbolIndex = Math.floor(evolutionProgress)
             const symbol = chain[symbolIndex]
 
@@ -143,7 +167,7 @@ export function BlogBackground({ isHovered = false }: BlogBackgroundProps) {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [isHovered])
+  }, [isHovered, isHeaderHovered])
 
   return (
     <canvas
