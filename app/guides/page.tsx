@@ -12,6 +12,10 @@ import {
   Code, Sparkles, GraduationCap, Microscope, FileText, BookOpen,
   Grid3x3, List, ArrowUpDown, Lightbulb
 } from 'lucide-react'
+import { GuidesBackground } from '@/components/ui/guides-background'
+import { pageThemes } from '@/lib/page-themes'
+
+const theme = pageThemes.guides
 
 type ViewMode = 'cards' | 'list'
 type SortBy = 'default' | 'title' | 'category'
@@ -113,6 +117,7 @@ const guides: Guide[] = [
 export default function GuidesPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('cards')
   const [sortBy, setSortBy] = useState<SortBy>('default')
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
 
   const sortedGuides = [...guides].sort((a, b) => {
     if (sortBy === 'title') {
@@ -133,11 +138,27 @@ export default function GuidesPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-16">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">How-to Guides</h1>
-            <p className="text-lg text-muted-foreground">
+      <Section className="pt-16 pb-12 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <GuidesBackground />
+        </div>
+        <Container className="relative">
+          <div className="mx-auto max-w-3xl text-center mb-8">
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-4xl font-serif font-bold mb-1">How-to Guides</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
+            <p className="text-lg text-muted-foreground mt-3">
               Comprehensive guides for building AI tools, designing assignments, and integrating AI thoughtfully into humanities teaching and research
             </p>
           </div>

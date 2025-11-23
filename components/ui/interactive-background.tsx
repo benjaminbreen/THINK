@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState, memo } from 'react'
 
-type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca'
+type BackgroundMode = 'ascii' | 'matrix' | 'particles' | 'terminal' | 'labyrinth' | 'bibliotheca' | 'blocks'
 
 // Get random starting mode
 const getRandomMode = (): BackgroundMode => {
-  const modes: BackgroundMode[] = ['ascii', 'matrix', 'particles', 'terminal', 'labyrinth', 'bibliotheca']
+  const modes: BackgroundMode[] = ['ascii', 'matrix', 'particles', 'terminal', 'labyrinth', 'bibliotheca', 'blocks']
   return modes[Math.floor(Math.random() * modes.length)]
 }
 
@@ -79,6 +79,32 @@ function InteractiveBackgroundComponent() {
   // Matrix animation state for pause functionality
   const matrixChars = useRef<string[]>([])
   const matrixLastChange = useRef<number[]>([])
+
+  // Blocks mode state
+  const fallingBlocks = useRef<Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    rotation: number
+    rotationSpeed: number
+    size: number
+    word: string
+    destroyed: boolean
+    destroyedTime?: number
+  }>>([])
+  const blockParticles = useRef<Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    life: number
+    maxLife: number
+    size: number
+  }>>([])
+  const lastBlockSpawn = useRef(0)
+  const popAllBlocks = useRef(false)
+  const popTime = useRef(0)
 
   // Humanistic quotes from across cultures and time
   const humanisticQuotes = [
@@ -184,9 +210,44 @@ function InteractiveBackgroundComponent() {
     }
     canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Mouse click handler (reserved for future use)
+    // Mouse click handler
     const handleMouseClick = (e: MouseEvent) => {
-      // Click to cycle modes handled in onClick prop
+      if (mode === 'blocks') {
+        const rect = canvas.getBoundingClientRect()
+        const clickX = e.clientX - rect.left
+        const clickY = e.clientY - rect.top
+
+        // Check if click hit any blocks
+        fallingBlocks.current.forEach(block => {
+          if (block.destroyed) return
+
+          const dx = clickX - block.x
+          const dy = clickY - block.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
+
+          if (distance < block.size) {
+            // Destroy block and create particle explosion
+            block.destroyed = true
+            block.destroyedTime = Date.now()
+
+            // Create particle explosion
+            const particleCount = 20 + Math.random() * 10
+            for (let i = 0; i < particleCount; i++) {
+              const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5
+              const speed = 2 + Math.random() * 3
+              blockParticles.current.push({
+                x: block.x,
+                y: block.y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 2,
+                life: 1,
+                maxLife: 60 + Math.random() * 30,
+                size: 2 + Math.random() * 3
+              })
+            }
+          }
+        })
+      }
     }
     canvas.addEventListener('click', handleMouseClick)
 
@@ -1227,6 +1288,148 @@ function InteractiveBackgroundComponent() {
     }
 
     // Animation loop
+    // Falling blocks mode with particle explosions
+    const drawBlocks = (time: number) => {
+      const ctx = canvasRef.current?.getContext('2d')
+      if (!ctx) return
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Handle pop all blocks action
+      if (popAllBlocks.current) {
+        fallingBlocks.current.forEach(block => {
+          if (!block.destroyed) {
+            block.destroyed = true
+            block.destroyedTime = Date.now()
+
+            // Create particle explosion for each block
+            const particleCount = 20 + Math.random() * 10
+            for (let i = 0; i < particleCount; i++) {
+              const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5
+              const speed = 2 + Math.random() * 3
+              blockParticles.current.push({
+                x: block.x,
+                y: block.y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 2,
+                life: 1,
+                maxLife: 60 + Math.random() * 30,
+                size: 2 + Math.random() * 3
+              })
+            }
+          }
+        })
+        popAllBlocks.current = false
+      }
+
+      // Reset after 20 seconds of popping
+      if (popTime.current > 0 && Date.now() - popTime.current > 20000) {
+        fallingBlocks.current = []
+        blockParticles.current = []
+        popTime.current = 0
+        lastBlockSpawn.current = time
+      }
+
+      // Spawn new blocks
+      if (time - lastBlockSpawn.current > 2000) {
+        const word = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)].text.split(' ').slice(0, 2).join(' ')
+        fallingBlocks.current.push({
+          x: Math.random() * canvas.width,
+          y: -30,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: 0.4 + Math.random() * 0.3,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.01,
+          size: 20 + Math.random() * 10,
+          word,
+          destroyed: false
+        })
+        lastBlockSpawn.current = time
+      }
+
+      // Update and draw blocks
+      fallingBlocks.current = fallingBlocks.current.filter(block => {
+        // Remove destroyed blocks after 10 seconds
+        if (block.destroyed && block.destroyedTime && Date.now() - block.destroyedTime > 10000) {
+          return false
+        }
+
+        // Remove blocks that fell off screen (but only if not destroyed)
+        if (!block.destroyed && block.y > canvas.height + 50) return false
+
+        // Skip physics and drawing for destroyed blocks
+        if (block.destroyed) return true
+
+        // Update position
+        block.x += block.vx
+        block.y += block.vy
+        block.rotation += block.rotationSpeed
+
+        // Bounce off sides
+        if (block.x < block.size || block.x > canvas.width - block.size) {
+          block.vx *= -1
+        }
+
+        // Draw block (blue maze-style block)
+        ctx.save()
+        ctx.translate(block.x, block.y)
+        ctx.rotate(block.rotation)
+
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.7)'
+        ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
+
+        // Border
+        ctx.strokeStyle = 'rgba(59, 130, 246, 1)'
+        ctx.lineWidth = 2
+        ctx.strokeRect(-block.size / 2, -block.size / 2, block.size, block.size)
+
+        ctx.restore()
+
+        return true
+      })
+
+      // Update and draw particles
+      blockParticles.current = blockParticles.current.filter(particle => {
+        particle.x += particle.vx
+        particle.y += particle.vy
+        particle.vy += 0.1 // Gravity
+        particle.vx *= 0.99
+        particle.vy *= 0.99
+        particle.life++
+
+        if (particle.life >= particle.maxLife) return false
+
+        const alpha = 1 - (particle.life / particle.maxLife)
+
+        // Amber particles
+        ctx.fillStyle = `rgba(234, 179, 8, ${alpha})`
+        ctx.beginPath()
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fill()
+
+        return true
+      })
+
+      // Draw revealed words
+      ctx.font = 'bold 16px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+
+      const revealedWords = fallingBlocks.current
+        .filter(b => b.destroyed)
+        .slice(-8)
+
+      revealedWords.forEach((block) => {
+        const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
+
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+        ctx.shadowBlur = 4
+        ctx.fillStyle = `rgba(234, 179, 8, ${fadeIn})`
+        ctx.fillText(block.word, block.x, block.y)
+        ctx.shadowBlur = 0
+      })
+    }
+
     let lastTime = 0
     const animate = (time: number) => {
       const deltaTime = time - lastTime
@@ -1244,6 +1447,8 @@ function InteractiveBackgroundComponent() {
         drawLabyrinth(time)
       } else if (mode === 'bibliotheca') {
         drawBibliotheca(time)
+      } else if (mode === 'blocks') {
+        drawBlocks(time)
       }
 
       animationFrameId.current = requestAnimationFrame(animate)
@@ -1269,6 +1474,7 @@ function InteractiveBackgroundComponent() {
       if (current === 'particles') return 'terminal'
       if (current === 'terminal') return 'labyrinth'
       if (current === 'labyrinth') return 'bibliotheca'
+      if (current === 'bibliotheca') return 'blocks'
       return 'ascii'
     })
 
@@ -1366,6 +1572,18 @@ function InteractiveBackgroundComponent() {
           <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
             <button onClick={(e) => { e.stopPropagation(); refreshBooks.current = true; }} className={buttonClass}>
               Refresh Books
+            </button>
+          </div>
+        )}
+
+        {mode === 'blocks' && (
+          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+            <button onClick={(e) => {
+              e.stopPropagation();
+              popAllBlocks.current = true;
+              popTime.current = Date.now();
+            }} className={buttonClass}>
+              💥 Pop All
             </button>
           </div>
         )}
