@@ -168,23 +168,20 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           block.vy += gravity
           block.x += block.vx
           block.y += block.vy
-
-          // Gradually align rotation to nearest 90 degrees when approaching ground
-          if (block.vy > 0) {
-            const targetRotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
-            const rotDiff = targetRotation - block.rotation
-            block.rotation += rotDiff * 0.1
-            block.rotationSpeed *= 0.95
-          }
+          block.rotation += block.rotationSpeed
 
           // Bounce off sides with energy loss
           if (block.x - block.size / 2 < 0) {
             block.x = block.size / 2
             block.vx *= -0.5
+            // Add spin on side bounce
+            block.rotationSpeed += (Math.random() - 0.5) * 0.05
           }
           if (block.x + block.size / 2 > canvas.width) {
             block.x = canvas.width - block.size / 2
             block.vx *= -0.5
+            // Add spin on side bounce
+            block.rotationSpeed += (Math.random() - 0.5) * 0.05
           }
 
           // Check ground collision with bounce
@@ -195,12 +192,15 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
             if (Math.abs(block.vy) > 0.5) {
               block.vy *= -bounce // Bounce with energy loss
               block.vx *= 0.9
+              // Add rotation variation on bounce
+              block.rotationSpeed += (Math.random() - 0.5) * 0.08
             } else {
+              // Settling - snap to flat side
               block.vy = 0
               block.vx *= 0.8
               block.grounded = true
               block.rotationSpeed = 0
-              // Snap to nearest 90-degree angle
+              // Snap to nearest 90-degree angle for flat landing
               block.rotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
             }
           }
@@ -220,12 +220,15 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
                   if (Math.abs(block.vy) > 0.5) {
                     block.vy *= -bounce * 0.8
                     block.vx *= 0.9
+                    // Add rotation on block collision
+                    block.rotationSpeed += (Math.random() - 0.5) * 0.1
                   } else {
+                    // Settling on another block - snap to flat side
                     block.vy = 0
                     block.vx *= 0.8
                     block.grounded = true
                     block.rotationSpeed = 0
-                    // Snap to nearest 90-degree angle
+                    // Snap to nearest 90-degree angle for stable stacking
                     block.rotation = Math.round(block.rotation / (Math.PI / 2)) * (Math.PI / 2)
                   }
                 }
