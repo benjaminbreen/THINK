@@ -19,7 +19,6 @@ type FilterType = 'all' | 'assignment' | 'course' | 'research' | 'history' | 'li
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
-  const [isBackgroundHovered, setIsBackgroundHovered] = useState(false)
 
   const projects = [
     {
@@ -71,14 +70,10 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <div
-        onMouseEnter={() => setIsBackgroundHovered(true)}
-        onMouseLeave={() => setIsBackgroundHovered(false)}
-      >
-        <Section className="pt-16 pb-6 relative">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <ProjectsBackground isHovered={isBackgroundHovered} />
-          </div>
+      <Section className="pt-16 pb-6 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <ProjectsBackground isHovered={isHeaderHovered} />
+        </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center mb-6">
             <div
@@ -228,7 +223,6 @@ export default function ProjectsPage() {
           </div>
         </Container>
       </Section>
-      </div>
 
       {/* HistoryLens Framework Section */}
       <Section className="bg-muted/40 border-t">

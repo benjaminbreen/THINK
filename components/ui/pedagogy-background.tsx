@@ -28,6 +28,7 @@ interface Block {
   destroyed: boolean
   destroyedTime?: number
   grounded: boolean
+  autoRevealed?: boolean
 }
 
 interface Particle {
@@ -154,6 +155,13 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
       // Clear canvas with transparent fill
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+      // Auto-reveal all non-destroyed blocks on hover
+      blocks.current.forEach(block => {
+        if (!block.destroyed) {
+          block.autoRevealed = isHovered
+        }
+      })
+
       spawnBlock(time)
 
       const gravity = 0.15
@@ -247,23 +255,26 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           })
         }
 
-        // Draw block (maze-style block - blue or purple based on hover)
-        ctx.save()
-        ctx.translate(block.x, block.y)
-        ctx.rotate(block.rotation)
+        // Draw block only if not destroyed and not auto-revealed
+        if (!block.autoRevealed) {
+          ctx.save()
+          ctx.translate(block.x, block.y)
+          ctx.rotate(block.rotation)
 
-        const blockColor = isHovered ? 'rgba(139, 92, 246, 0.8)' : 'rgba(59, 130, 246, 0.8)'
-        const borderColor = isHovered ? 'rgba(139, 92, 246, 1)' : 'rgba(59, 130, 246, 1)'
+          // Purple (pedagogy accent color) as default
+          const blockColor = 'rgba(139, 92, 246, 0.8)'
+          const borderColor = 'rgba(139, 92, 246, 1)'
 
-        ctx.fillStyle = blockColor
-        ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
+          ctx.fillStyle = blockColor
+          ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
-        // Border
-        ctx.strokeStyle = borderColor
-        ctx.lineWidth = 2
-        ctx.strokeRect(-block.size / 2, -block.size / 2, block.size, block.size)
+          // Border
+          ctx.strokeStyle = borderColor
+          ctx.lineWidth = 2
+          ctx.strokeRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
-        ctx.restore()
+          ctx.restore()
+        }
 
         return true
       })
@@ -290,17 +301,22 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         return true
       })
 
-      // Draw revealed tags (from destroyed blocks)
+      // Draw revealed tags (from destroyed or auto-revealed blocks)
       ctx.font = 'bold 18px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
-      // Keep track of revealed tags
-      const revealedTags = blocks.current
+      // Show tags for destroyed blocks (last 8) and all auto-revealed blocks
+      const destroyedTags = blocks.current
         .filter(b => b.destroyed)
-        .slice(-8) // Keep last 8 revealed tags
+        .slice(-8)
 
-      revealedTags.forEach((block) => {
+      const autoRevealedTags = blocks.current
+        .filter(b => b.autoRevealed && !b.destroyed)
+
+      const allRevealedTags = [...destroyedTags, ...autoRevealedTags]
+
+      allRevealedTags.forEach((block) => {
         const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
 
         // Draw text with a subtle shadow for better visibility
