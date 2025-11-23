@@ -46,7 +46,7 @@ export function BlogBackground() {
           y: 20 + Math.random() * 60,
           type: types[Math.floor(Math.random() * types.length)],
           opacity: 0,
-          maxOpacity: 0.15 + Math.random() * 0.05,
+          maxOpacity: 0.3 + Math.random() * 0.1,
           fadingIn: true,
           age: 0,
           maxAge: 180 + Math.random() * 60 // frames
@@ -55,8 +55,8 @@ export function BlogBackground() {
       }
 
       // Use rose color
-      ctx.strokeStyle = 'rgba(244, 63, 94, 0.15)'
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.15)'
+      ctx.strokeStyle = 'rgba(244, 63, 94, 0.35)'
+      ctx.fillStyle = 'rgba(244, 63, 94, 0.35)'
       ctx.lineWidth = 1.5
       ctx.lineCap = 'round'
 
@@ -155,7 +155,7 @@ export function BlogBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.8 }}
     />
   )
 }

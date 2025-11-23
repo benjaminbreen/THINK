@@ -29,8 +29,8 @@ export function ProjectsBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Cyan grid lines with low opacity
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.12)'
+      // Cyan grid lines
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.18)'
       ctx.lineWidth = 0.5
 
       // Vertical lines
@@ -39,7 +39,7 @@ export function ProjectsBackground() {
 
         // Some sections fade in/out over time
         const fadePhase = Math.sin(time.current * 0.0005 + x * 0.01)
-        let opacity = 0.12 + (fadePhase * 0.08)
+        let opacity = 0.18 + (fadePhase * 0.08)
 
         // Store and update opacity
         if (!gridOpacity.current.has(key)) {
@@ -63,7 +63,7 @@ export function ProjectsBackground() {
         const key = `h${y}`
 
         const fadePhase = Math.sin(time.current * 0.0005 + y * 0.01)
-        let opacity = 0.12 + (fadePhase * 0.08)
+        let opacity = 0.18 + (fadePhase * 0.08)
 
         if (!gridOpacity.current.has(key)) {
           gridOpacity.current.set(key, opacity)
@@ -81,7 +81,7 @@ export function ProjectsBackground() {
       }
 
       // Draw subtle corner marks at grid intersections (blueprint style)
-      ctx.fillStyle = 'rgba(6, 182, 212, 0.15)'
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.22)'
       for (let x = gridSize; x < canvas.width; x += gridSize * 2) {
         for (let y = gridSize; y < canvas.height; y += gridSize * 2) {
           const markPhase = Math.sin(time.current * 0.0003 + x * 0.005 + y * 0.005)
@@ -111,7 +111,7 @@ export function ProjectsBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.55 }}
     />
   )
 }

@@ -49,9 +49,9 @@ export function AboutBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Use indigo color with low opacity
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)' // Indigo with 15% opacity
-      ctx.fillStyle = 'rgba(99, 102, 241, 0.2)'
+      // Use indigo color
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.35)' // Indigo with 35% opacity
+      ctx.fillStyle = 'rgba(99, 102, 241, 0.4)'
       ctx.lineWidth = 1
       ctx.lineCap = 'round'
 
@@ -73,7 +73,7 @@ export function AboutBackground() {
           // Only connect points that are reasonably close
           if (distance < 150) {
             // Opacity fades with distance
-            const opacity = 0.15 * (1 - distance / 150)
+            const opacity = 0.35 * (1 - distance / 150)
             ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`
 
             ctx.beginPath()
@@ -122,7 +122,7 @@ export function AboutBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.8 }}
     />
   )
 }
