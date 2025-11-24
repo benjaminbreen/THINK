@@ -1,12 +1,19 @@
-import KeystaticApp from './keystatic'
+import { Metadata } from 'next'
 
-export default function KeystaticLayout() {
+export const metadata: Metadata = {
+  title: 'THINK Blog Editor',
+  robots: 'noindex, nofollow',
+}
+
+export default function KeystaticLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html>
+    <html lang="en">
       <head />
-      <body>
-        <KeystaticApp />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

@@ -6,9 +6,7 @@ export default config({
     kind: process.env.NODE_ENV === 'development' ? 'local' : 'cloud',
   },
   cloud: {
-    // This enables Keystatic Cloud for easy GitHub auth
-    // Sign up at https://keystatic.cloud and create a project
-    project: 'think/think-blog',
+    project: 'thinkucsc/think',
   },
   collections: {
     posts: collection({
