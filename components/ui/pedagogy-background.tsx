@@ -166,6 +166,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       const gravity = 0.15
       const bounce = 0.6 // Bounce coefficient (springiness)
+      const blockBounce = 0.3 // Reduced bounce for block-to-block collisions
 
       // Update and draw blocks
       blocks.current = blocks.current.filter(block => {
@@ -192,14 +193,10 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           if (block.x - block.size / 2 < 0) {
             block.x = block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce (reduced)
-            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
           if (block.x + block.size / 2 > canvas.width) {
             block.x = canvas.width - block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce (reduced)
-            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
 
           // Check ground collision with bounce
@@ -207,15 +204,13 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
             block.y = canvas.height - block.size / 2
 
             // Bounce if velocity is high enough, otherwise settle
-            if (Math.abs(block.vy) > 0.5) {
+            if (Math.abs(block.vy) > 1.5) {
               block.vy *= -bounce // Bounce with energy loss
-              block.vx *= 0.9
-              // Add rotation variation on bounce (reduced)
-              block.rotationSpeed += (Math.random() - 0.5) * 0.03
+              block.vx *= 0.85
             } else {
               // Settling - snap to flat side
               block.vy = 0
-              block.vx *= 0.8
+              block.vx *= 0.5 // Strong horizontal damping when settling
               block.grounded = true
               block.rotationSpeed = 0
               // Snap to nearest 90-degree angle for flat landing
@@ -227,23 +222,21 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           blocks.current.forEach(otherBlock => {
             if (otherBlock !== block && otherBlock.grounded && !block.grounded) {
               if (checkCollision(block, otherBlock)) {
-                // Stack on top with bounce
+                // Stack on top with reduced bounce
                 const overlap = (block.size + otherBlock.size) / 2 - Math.sqrt(
                   Math.pow(block.x - otherBlock.x, 2) + Math.pow(block.y - otherBlock.y, 2)
                 )
                 if (overlap > 0 && block.y < otherBlock.y) {
                   block.y = otherBlock.y - (block.size + otherBlock.size) / 2
 
-                  // Bounce off other blocks
-                  if (Math.abs(block.vy) > 0.5) {
-                    block.vy *= -bounce * 0.8
-                    block.vx *= 0.9
-                    // Add rotation on block collision (reduced to prevent rapid spinning)
-                    block.rotationSpeed += (Math.random() - 0.5) * 0.02
+                  // Bounce off other blocks with reduced energy
+                  if (Math.abs(block.vy) > 1.5) {
+                    block.vy *= -blockBounce // Much less bouncy on block collisions
+                    block.vx *= 0.7 // More horizontal damping
                   } else {
                     // Settling on another block - snap to flat side
                     block.vy = 0
-                    block.vx *= 0.8
+                    block.vx *= 0.3 // Strong horizontal damping to prevent shifting
                     block.grounded = true
                     block.rotationSpeed = 0
                     // Snap to nearest 90-degree angle for stable stacking
@@ -253,6 +246,14 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
               }
             }
           })
+        } else {
+          // Apply strong friction to grounded blocks to prevent shifting
+          block.vx *= 0.85
+          block.x += block.vx
+          // Stop completely when velocity is very small
+          if (Math.abs(block.vx) < 0.01) {
+            block.vx = 0
+          }
         }
 
         // Draw block only if not destroyed and not auto-revealed
