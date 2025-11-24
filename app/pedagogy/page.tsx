@@ -129,7 +129,7 @@ export default function PedagogyPage() {
       type: 'syllabus',
       url: 'http://anastasiasalter.net/HumanitiesAISyllabus/',
       description: 'Fall 2024 syllabus exploring critical perspectives on AI using texts like "Algorithms of Oppression" and hands-on experiments with AI tools',
-      tags: ['Critical Theory', 'Digital Humanities', 'Undergraduate']
+      tags: ['Critical Thinking', 'Experiential Learning', 'Undergraduate']
     },
     {
       id: '2',
@@ -140,7 +140,7 @@ export default function PedagogyPage() {
       type: 'syllabus',
       url: 'https://home.uchicago.edu/~jcarlsen/academics/downloads/Tharsen%20DIGS%2020006-30006%20AI%20and%20the%20Humanities%20Syllabus%202025_final3.pdf',
       description: '2025 course syllabus including feminist AI perspectives and critical engagement with intelligent machines',
-      tags: ['Philosophy', 'Ethics', 'Graduate']
+      tags: ['Inquiry-Based', 'Socratic Method', 'Graduate']
     },
     {
       id: '3',
@@ -151,7 +151,7 @@ export default function PedagogyPage() {
       type: 'syllabus',
       url: 'http://anastasiasalter.net/markdown_dhsi/',
       description: 'Spring 2025 course exploring how AI enhances humanistic inquiry while critically engaging with limitations and ethics',
-      tags: ['Digital Humanities', 'Data Visualization', 'Text Analysis']
+      tags: ['Project-Based', 'Active Learning', 'Scaffolding']
     },
     {
       id: '4',
@@ -162,7 +162,7 @@ export default function PedagogyPage() {
       type: 'assignment',
       url: 'https://aipedagogy.org/assignments/',
       description: 'Searchable collection of educator-designed assignments for integrating AI into humanities syllabi responsibly and critically',
-      tags: ['Assignments', 'Best Practices', 'Curated Resources']
+      tags: ['Student Agency', 'Collaborative', 'Assessment Design']
     },
     {
       id: '5',
@@ -173,7 +173,7 @@ export default function PedagogyPage() {
       type: 'syllabus',
       url: 'https://www.cla.purdue.edu/academic/history/documents/syllabus-spring-documents/2024/spring-2024-hist-302-syllabus-stewart.pdf',
       description: 'Spring 2024 history course introducing digital methods and AI tools for historical research',
-      tags: ['History', 'Digital Methods', 'Undergraduate']
+      tags: ['Metacognition', 'Hands-On', 'Primary Sources']
     },
     {
       id: '6',
@@ -184,7 +184,7 @@ export default function PedagogyPage() {
       type: 'guide',
       url: 'https://digitalhumanities.stanford.edu/ai-and-pedagogy-workshop/',
       description: 'Three-part workshop on understanding LLMs, pedagogy, and creating assignments with AI tools',
-      tags: ['Professional Development', 'LLMs', 'Workshop']
+      tags: ['Faculty Development', 'Instructional Design', 'Workshop']
     },
     {
       id: '7',
@@ -195,7 +195,7 @@ export default function PedagogyPage() {
       type: 'guide',
       url: 'https://aipedagogy.org/',
       description: 'Comprehensive resource for educators in humanities and non-technical fields with assignments, concepts, and recommendations',
-      tags: ['Best Practices', 'Humanities', 'Curated Resources']
+      tags: ['Pedagogical Framework', 'Best Practices', 'Digital Humanities']
     },
     {
       id: '8',
@@ -206,7 +206,7 @@ export default function PedagogyPage() {
       type: 'guide',
       url: 'https://bokcenter.harvard.edu/artificial-intelligence',
       description: 'Harvard teaching center resources on incorporating AI thoughtfully into course design and assignments',
-      tags: ['Best Practices', 'Course Design', 'Teaching Resources']
+      tags: ['Universal Design', 'Course Design', 'Backward Design']
     },
     {
       id: '9',
@@ -217,7 +217,73 @@ export default function PedagogyPage() {
       type: 'guide',
       url: 'https://ctl.stanford.edu/aimes/ai-teaching-strategies',
       description: 'AIMES initiative resources including examples from Stanford instructors and critical AI literacy for educators',
-      tags: ['Teaching Strategies', 'AI Literacy', 'Faculty Resources']
+      tags: ['Formative Assessment', 'AI Literacy', 'Peer Learning']
+    },
+    {
+      id: '10',
+      title: 'Critical AI Pedagogy Framework',
+      author: 'Dr. Jesse Stommel',
+      institution: 'University of Mary Washington',
+      source: 'University',
+      type: 'guide',
+      url: 'https://www.jessestommel.com/how-to-ungrade/',
+      description: 'Framework for centering student agency and critical engagement with technology in teaching',
+      tags: ['Ungrading', 'Student-Centered', 'Critical Pedagogy']
+    },
+    {
+      id: '11',
+      title: 'Transparent Assignment Design',
+      author: 'TILT Higher Ed',
+      institution: 'Multi-Institutional Collaboration',
+      source: 'University',
+      type: 'guide',
+      url: 'https://tilthighered.com/',
+      description: 'Resources for designing assignments that make purpose, task, and criteria transparent to students',
+      tags: ['Transparency', 'Inclusive Teaching', 'Learning Goals']
+    },
+    {
+      id: '12',
+      title: 'Problem-Based Learning with AI',
+      author: 'Dr. Elizabeth Barre',
+      institution: 'MIT',
+      source: 'University',
+      type: 'assignment',
+      url: 'https://tll.mit.edu/teaching-resources/inclusive-classroom/problem-based-learning/',
+      description: 'Guide to implementing problem-based learning approaches using AI as a research and reflection tool',
+      tags: ['Problem-Based', 'Authentic Assessment', 'Deep Learning']
+    },
+    {
+      id: '13',
+      title: 'Flipped Classroom with AI Tools',
+      author: 'Faculty Innovation Center',
+      institution: 'UT Austin',
+      source: 'University',
+      type: 'guide',
+      url: 'https://facultyinnovate.utexas.edu/flipped-classroom',
+      description: 'Strategies for using AI to enhance flipped classroom models and active learning',
+      tags: ['Flipped Classroom', 'Active Learning', 'Video Learning']
+    },
+    {
+      id: '14',
+      title: 'Contemplative Pedagogy & Technology',
+      author: 'The Center for Contemplative Mind in Society',
+      institution: 'Independent',
+      source: 'Independent',
+      type: 'guide',
+      url: 'https://www.contemplativemind.org/programs/acmhe',
+      description: 'Resources for integrating mindful practices with technology use in higher education',
+      tags: ['Contemplative Practice', 'Reflection', 'Holistic Learning']
+    },
+    {
+      id: '15',
+      title: 'Specification Grading for AI Assignments',
+      author: 'Dr. Linda Nilson',
+      institution: 'Clemson University',
+      source: 'University',
+      type: 'guide',
+      url: 'https://www.styluspub.com/Books/BookDetail.aspx?productID=371834',
+      description: 'Framework for specifications grading that works well with AI-enhanced assignments',
+      tags: ['Specification Grading', 'Mastery Learning', 'Clear Criteria']
     }
   ]
 
@@ -226,12 +292,15 @@ export default function PedagogyPage() {
     return resource.type === activeFilter
   })
 
+  // Extract unique tags from all resources for the background visualization
+  const allTags = Array.from(new Set(externalResources.flatMap(resource => resource.tags)))
+
   return (
     <>
       {/* Header with pedagogy background */}
       <Section className="pt-16 pb-2 relative">
         <div className="absolute inset-0 overflow-hidden">
-          <PedagogyBackground isHovered={isHeaderHovered} />
+          <PedagogyBackground isHovered={isHeaderHovered} tags={allTags} />
         </div>
         <Container className="relative">
           <div className="mx-auto max-w-3xl text-center">
@@ -288,7 +357,7 @@ export default function PedagogyPage() {
       <Section className="bg-muted/40 border-t py-12">
         <Container>
           <div className="mb-8">
-            <h2 className="text-3xl font-serif font-bold mb-2 text-center">Community Resources</h2>
+            <h2 className="text-3xl font-serif font-bold mb-2 text-center">Teaching Resources</h2>
             <p className="text-muted-foreground text-center">
               Syllabi, assignments, and guides from educators across institutions
             </p>

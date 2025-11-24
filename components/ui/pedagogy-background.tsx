@@ -2,20 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-// Default pedagogy tags - will be replaced with real tags later
-const PEDAGOGY_TAGS = [
-  'Critical Thinking',
-  'Active Learning',
-  'Student Agency',
-  'Collaborative',
-  'Inquiry-Based',
-  'Experiential',
-  'Socratic Method',
-  'Project-Based',
-  'Scaffolding',
-  'Metacognition'
-]
-
 interface Block {
   x: number
   y: number
@@ -44,9 +30,10 @@ interface Particle {
 
 interface PedagogyBackgroundProps {
   isHovered?: boolean
+  tags?: string[]
 }
 
-export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProps) {
+export function PedagogyBackground({ isHovered = false, tags = [] }: PedagogyBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const blocks = useRef<Block[]>([])
   const particles = useRef<Particle[]>([])
@@ -125,8 +112,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
     // Spawn new blocks periodically
     const spawnBlock = (time: number) => {
-      if (time - lastSpawnTime.current > 2000) { // Every 2 seconds
-        const tag = PEDAGOGY_TAGS[Math.floor(Math.random() * PEDAGOGY_TAGS.length)]
+      if (time - lastSpawnTime.current > 2000 && tags.length > 0) { // Every 2 seconds
+        const tag = tags[Math.floor(Math.random() * tags.length)]
         blocks.current.push({
           x: Math.random() * canvas.width,
           y: -30,
@@ -356,7 +343,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [isHovered])
+  }, [isHovered, tags])
 
   return (
     <canvas
