@@ -41,7 +41,7 @@ export default function ResponsibleAIClassroomGuide() {
               How humanities faculty are approaching AI integration in 2025
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-xl max-w-none">
               <p className="lead">
                 This guide summarizes current thinking among humanities professors about AI in the classroom, drawing on recent research, professional discussions, and institutional policies from 2024-2025.
               </p>

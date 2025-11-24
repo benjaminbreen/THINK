@@ -25,7 +25,7 @@ export default function AIAssignmentsGuide() {
               Best practices for creating effective AI-enhanced assignments
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-xl max-w-none">
               <p className="text-muted-foreground">
                 <em>This guide is currently under development.</em>
               </p>

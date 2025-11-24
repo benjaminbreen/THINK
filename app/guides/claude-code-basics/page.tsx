@@ -81,7 +81,7 @@ export default function ClaudeCodeBasicsGuide() {
                   A complete beginner's guide to building AI tools for humanities teaching and research—no technical background required
                 </p>
 
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-xl max-w-none">
                   <p className="lead">
                     This guide will walk you through everything you need to know to start building your own AI-powered tools for teaching and research. We'll start from the very beginning—explaining what the "terminal" even is—and take you all the way through creating your first interactive projects.
                   </p>

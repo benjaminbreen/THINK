@@ -86,7 +86,7 @@ export default function HistoryMachineIntelligenceGuide() {
                   From 18th-century mechanist philosophy to contemporary AI—a humanities perspective on the long history of thinking machines
                 </p>
 
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-xl max-w-none">
                   <div className="my-8 p-6 bg-amber-50 dark:bg-amber-950/20 border-l-4 border-amber-600 rounded-r-lg">
                     <div className="flex gap-3">
                       <Lightbulb className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />

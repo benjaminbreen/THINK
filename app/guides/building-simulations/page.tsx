@@ -25,7 +25,7 @@ export default function BuildingSimulationsGuide() {
               Step-by-step guide to creating AI-powered historical simulations
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-xl max-w-none">
               <p className="text-muted-foreground">
                 <em>This guide is currently under development. Check back soon for a comprehensive walkthrough of building historical simulations.</em>
               </p>
