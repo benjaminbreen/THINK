@@ -61,10 +61,14 @@ export default function AboutPage() {
               <h2 className="text-3xl font-serif font-bold mb-4 mt-8">The Challenge</h2>
               <p>
                 Despite growing work in Critical AI studies, current approaches to AI education continue to neglect
-                the crucial perspectives that the humanities offer. There is vanishingly little substantive training
-                in the humanities for responsible use of contemporary tools like LLMs, and virtually none that
-                historically grounds these technologies or meaningfully connects them with the interrelations of
-                sociopolitical power, financial capital, and social prestige.
+                the crucial perspectives that the humanities offer. Co-PI Zac Zimmer's research exemplifies this gap:
+                his work examining the Enron email corpus—a dataset of corporate fraud used to train countless workplace
+                surveillance tools and natural language systems—reveals how "a generation of algorithms trained on data
+                sets like this federally subpoenaed mash of fraudulent activity and banal corporate pleasantries" carries
+                hidden ethical implications we haven't fully considered. There is vanishingly little substantive training
+                in the humanities for this kind of critical engagement with LLMs, and virtually none that historically
+                grounds these technologies or meaningfully connects them with the interrelations of sociopolitical power,
+                financial capital, and social prestige.
               </p>
 
               <h2 className="text-3xl font-serif font-bold mb-4 mt-8">Our Approach</h2>
