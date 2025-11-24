@@ -66,9 +66,6 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     )
 
     const draw = (time: number) => {
-      // Clear canvas completely to prevent flickering
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
       // Smooth fade in/out animation (300ms = 18 frames at 60fps)
       const isActive = isHovered || isHeaderHovered
       const fadeSpeed = 1 / 18
@@ -78,11 +75,14 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
         fadeProgress.current = Math.max(0, fadeProgress.current - fadeSpeed)
       }
 
-      // Skip rendering if fully faded out
+      // Clear canvas and stop animation if fully faded out
       if (fadeProgress.current === 0) {
-        animationFrameId.current = requestAnimationFrame(draw)
-        return
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        return // Stop the loop - don't request another frame
       }
+
+      // Clear canvas for next frame
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Performance: only update time if enough time has passed (16ms = 60fps)
       const deltaTime = time - lastFrameTime.current
@@ -168,13 +168,22 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
-    animationFrameId.current = requestAnimationFrame(draw)
+    // Start animation loop initially
+    if (!animationFrameId.current) {
+      animationFrameId.current = requestAnimationFrame(draw)
+    }
+
+    // Restart animation when hover state changes to active
+    if ((isHovered || isHeaderHovered) && !animationFrameId.current) {
+      animationFrameId.current = requestAnimationFrame(draw)
+    }
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
       canvas.removeEventListener('mousemove', handleMouseMove)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
+        animationFrameId.current = undefined
       }
     }
   }, [isHovered, isHeaderHovered])
