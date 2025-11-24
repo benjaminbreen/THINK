@@ -53,10 +53,10 @@ export default function HomePage() {
 
       {/* About THINK Section */}
       <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-y border-amber-200/30 dark:border-slate-700/40 py-0">
-        <Container className="py-1">
+        <Container className="py-0.5">
           <div className="max-w-5xl mx-auto">
-            <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-8 py-4 shadow-md border border-amber-200/30 dark:border-slate-700/40">
-              <p className="text-xl leading-relaxed text-foreground/95 font-sans">
+            <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-10 py-7 shadow-md border border-amber-200/30 dark:border-slate-700/40">
+              <p className="text-xl leading-loose text-foreground/95 font-sans">
                 <span className="font-bold text-2xl text-amber-800 dark:text-amber-400">THINK</span> <span className="font-medium">is an NEH-funded project at UC Santa Cruz</span> offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
                 <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-semibold">
                   AI Pedagogy Project
