@@ -30,6 +30,7 @@ const footerLinks = {
 
 export function Footer() {
   const [showMaze, setShowMaze] = useState(false)
+  const [showColophon, setShowColophon] = useState(false)
 
   return (
     <>
@@ -129,7 +130,15 @@ export function Footer() {
 
             <div className="mt-12 pt-8 border-t border-border/50">
               <p className="text-sm text-muted-foreground text-center">
-                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the Humanities.
+                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the Humanities and the Humanities Institute, UC Santa Cruz.
+              </p>
+              <p className="text-sm text-muted-foreground text-center mt-2">
+                <button
+                  onClick={() => setShowColophon(true)}
+                  className="hover:text-primary transition-colors underline underline-offset-2"
+                >
+                  Colophon
+                </button>
               </p>
 
               {/* Hidden Maze Easter Egg Trigger */}
@@ -197,6 +206,49 @@ export function Footer() {
               </button>
               <div className="absolute inset-0">
                 <BorgesianMaze />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Colophon Modal */}
+      {showColophon && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={() => setShowColophon(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-background border rounded-lg shadow-xl max-w-md w-full p-6 relative">
+              <button
+                onClick={() => setShowColophon(false)}
+                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-serif font-bold mb-4">Colophon</h2>
+              <div className="prose prose-sm text-muted-foreground">
+                <p className="mb-3">
+                  This website was designed and built by{' '}
+                  <strong className="text-foreground">Claude Sonnet 4.5</strong>, an AI assistant developed by Anthropic.
+                </p>
+                <p className="mb-3">
+                  Oversight, design guidance, and testing by{' '}
+                  <strong className="text-foreground">Benjamin Breen</strong>, Assistant Professor of History at UC Santa Cruz.
+                </p>
+                <p className="text-xs mt-4 pt-4 border-t border-border/50">
+                  Built with Next.js, Tailwind CSS, and shadcn/ui. Source code available on{' '}
+                  <a
+                    href="https://github.com/benjaminbreen/THINK"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    GitHub
+                  </a>.
+                </p>
               </div>
             </div>
           </div>

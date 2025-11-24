@@ -10,7 +10,7 @@ interface BlogBackgroundProps {
 export function BlogBackground({ isHovered = false, isHeaderHovered = false }: BlogBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
-  const timeRef = useRef(0)
+  const lastFrameTime = useRef(0)
   const mousePos = useRef({ x: -1000, y: -1000 })
 
   useEffect(() => {
@@ -38,8 +38,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     window.addEventListener('resize', resizeCanvas)
     canvas.addEventListener('mousemove', handleMouseMove)
 
-    // Two evolution sequences: circular and angular (no emojis)
-    // Each evolves from small/simple to large/complex
+    // Symbol chains for evolution
     const circularChain = [
       '·', '˙', '˚', '°', '∙', '*', '⁎', '⁕', '⁜', '⁑',
       '◌', '◦', '○', '◍', '◎', '◉', '●', '⬤'
@@ -63,35 +62,41 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       }))
     )
 
-    const draw = (time: number) => {
-      // Semi-transparent background for fade effect
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+    // Target 30fps for smoother animation
+    const targetFPS = 30
+    const frameInterval = 1000 / targetFPS
 
-      ctx.font = 'bold 36px Georgia, serif'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
+    const draw = (timestamp: number) => {
+      // Throttle to target FPS
+      const elapsed = timestamp - lastFrameTime.current
+      if (elapsed < frameInterval) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+      lastFrameTime.current = timestamp - (elapsed % frameInterval)
 
-      timeRef.current = time
+      // Clear canvas completely instead of semi-transparent overlay (prevents flickering)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      const hoverRadius = 200
-      const baseOpacity = 0.12 // Lower opacity for more transparency
-
-      // Performance optimization: skip if not hovered
+      // Skip drawing if not hovered
       if (!isHovered && !isHeaderHovered) {
         animationFrameId.current = requestAnimationFrame(draw)
         return
       }
 
-      // Cache canvas dimensions
+      ctx.font = 'bold 36px Georgia, serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+
+      const hoverRadius = 200
+      const baseOpacity = 0.12
       const canvasHalfHeight = canvas.height * 0.5
       const canvasHeight = canvas.height
 
-      // When header is hovered, show full background; otherwise show localized
+      // Determine render bounds
       let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
 
       if (!isHeaderHovered) {
-        // Calculate cell range to check (only near cursor)
         const mouseCellX = Math.floor(mousePos.current.x / gridSize)
         const mouseCellY = Math.floor(mousePos.current.y / gridSize)
         const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
@@ -107,15 +112,12 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
           const x = i * gridSize + gridSize / 2
           const y = j * gridSize + gridSize / 2
 
-          // Calculate opacity based on mode
           let finalOpacity = 0
 
           if (isHeaderHovered) {
-            // Full background mode - fade based on vertical position
             const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
             finalOpacity = verticalFade * baseOpacity
           } else {
-            // Localized mode - fade based on distance from cursor
             const dx = mousePos.current.x - x
             const dy = mousePos.current.y - y
             const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
@@ -128,29 +130,23 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
           }
 
           if (finalOpacity > 0.01) {
-            // Get the evolution chain for this cell
-            const cellData = cellChains[i][j]
-            const chain = cellData.useCircular ? circularChain : angularChain
+            const cellData = cellChains[i]?.[j]
+            if (!cellData) continue
 
-            // Vertical speed gradient: faster at top, current speed at middle, slower at bottom
-            // Top (y=0): 3x speed, Middle (y=50%): 1x speed, Bottom (y=100%): 0.3x speed
+            const chain = cellData.useCircular ? circularChain : angularChain
             const verticalPosition = y / canvasHeight
             let speedMultiplier
             if (verticalPosition < 0.5) {
-              // Top half: interpolate from 3x to 1x
               speedMultiplier = 3 - (verticalPosition * 4)
             } else {
-              // Bottom half: interpolate from 1x to 0.3x
               speedMultiplier = 1 - ((verticalPosition - 0.5) * 1.4)
             }
 
-            // Apply speed multiplier to evolution rate
             const effectiveRate = cellData.evolutionRate * speedMultiplier
-            const evolutionProgress = (time * effectiveRate) % chain.length
+            const evolutionProgress = (timestamp * effectiveRate) % chain.length
             const symbolIndex = Math.floor(evolutionProgress)
             const symbol = chain[symbolIndex]
 
-            // Rose color theme
             ctx.fillStyle = `rgba(244, 63, 94, ${finalOpacity})`
             ctx.fillText(symbol, x, y)
           }
@@ -175,7 +171,6 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-auto"
-      style={{ opacity: 1 }}
     />
   )
 }

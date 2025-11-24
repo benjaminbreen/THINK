@@ -2,18 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { Container } from '@/components/ui/container'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { MazeLogo } from '@/components/ui/maze-logo'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const navigation = [
-  { name: 'Home', href: '/', color: '#eab308' }, // Amber
+  { name: 'Home', href: '/', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
   { name: 'Projects', href: '/projects', color: '#06b6d4' }, // Cyan
   { name: 'Pedagogy', href: '/pedagogy', color: '#8b5cf6' }, // Violet
-  { name: 'Resources', href: '/resources', color: '#eab308' }, // Amber
+  { name: 'Resources', href: '/resources', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
   { name: 'Guides', href: '/guides', color: '#3b82f6' }, // Blue
   { name: 'Blog', href: '/blog', color: '#f43f5e' }, // Rose
   { name: 'About', href: '/about', color: '#6366f1' }, // Indigo
@@ -22,6 +23,20 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const getItemColor = (item: typeof navigation[0]) => {
+    if (!mounted) return item.color
+    if (item.darkColor && resolvedTheme === 'dark') {
+      return item.darkColor
+    }
+    return item.color
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 shadow-sm">
@@ -49,13 +64,13 @@ export function Navigation() {
                     ? ''
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 )}
-                style={pathname === item.href ? { color: item.color } : undefined}
+                style={pathname === item.href ? { color: getItemColor(item) } : undefined}
               >
                 {item.name}
                 {pathname === item.href && (
                   <span
                     className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
-                    style={{ backgroundColor: item.color }}
+                    style={{ backgroundColor: getItemColor(item) }}
                   />
                 )}
               </Link>

@@ -20,7 +20,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-4xl">
             <div className="inline-block mb-3 animate-fade-in">
               <Badge variant="outline" className="text-sm font-normal border-amber-600/30 text-amber-100">
-                <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
+                <span data-literary="hero-badge">Beta version</span>
               </Badge>
             </div>
             <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" data-literary="hero-title">
