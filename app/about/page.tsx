@@ -45,26 +45,28 @@ export default function AboutPage() {
 
               <h2 className="text-3xl font-serif font-bold mb-4">Our Mission</h2>
               <p>
-                THINK is a transformative curriculum at UC Santa Cruz, funded by the National Endowment
-                for the Humanities. Our mission is to equip undergraduate and early graduate students in the
-                humanities with both the practical skills and critical perspectives needed to engage with AI
-                technologies thoughtfully, creatively, and ethically.
+                THINK is an NEH-funded curriculum at UC Santa Cruz teaching undergraduate and graduate students
+                in the humanities how to work with AI critically and build their own tools.
               </p>
 
               <p>
-                As large language models like ChatGPT become increasingly powerful and pervasive, it is essential
-                that students—particularly in humanities disciplines that rely on the interpretation of text—cultivate
-                the skills needed to work with these tools while maintaining a critical understanding of their social,
-                cultural, and political dimensions.
+                Large language models like ChatGPT are fundamentally textual technologies—they depend entirely
+                on language, genre, and rhetoric. Yet most AI education treats humanities perspectives as optional.
+                THINK flips that assumption: humanists should be leading conversations about these tools, not
+                scrambling to catch up.
               </p>
 
               <h2 className="text-3xl font-serif font-bold mb-4 mt-8">The Challenge</h2>
               <p>
                 Despite growing work in Critical AI studies, current approaches to AI education continue to neglect
-                the crucial perspectives that the humanities offer. There is vanishingly little substantive training
-                in the humanities for responsible use of contemporary tools like LLMs, and virtually none that
-                historically grounds these technologies or meaningfully connects them with the interrelations of
-                sociopolitical power, financial capital, and social prestige.
+                the crucial perspectives that the humanities offer. Co-PI Zac Zimmer's research exemplifies this gap:
+                his work examining the Enron email corpus—a dataset of corporate fraud used to train countless workplace
+                surveillance tools and natural language systems—reveals how "a generation of algorithms trained on data
+                sets like this federally subpoenaed mash of fraudulent activity and banal corporate pleasantries" carries
+                hidden ethical implications we haven't fully considered. There is vanishingly little substantive training
+                in the humanities for this kind of critical engagement with LLMs, and virtually none that historically
+                grounds these technologies or meaningfully connects them with the interrelations of sociopolitical power,
+                financial capital, and social prestige.
               </p>
 
               <h2 className="text-3xl font-serif font-bold mb-4 mt-8">Our Approach</h2>
@@ -98,9 +100,9 @@ export default function AboutPage() {
                 marginalize humanistic perspectives, treating them as afterthoughts to technical skills.
               </p>
               <p>
-                THINK inverts that equation: what if the best people to teach, critique, and build with LLMs aren't just
-                computer scientists, but historians who know how archives get made, linguists who understand how meaning
-                emerges from context, literary scholars who recognize pastiche and genre-mimicry when they see it?
+                THINK starts from a different premise. The best people to work with LLMs aren't just computer
+                scientists—they're historians who know how archives get made, linguists who understand how meaning
+                emerges from context, and literary scholars who recognize pastiche and imitation when they see it.
               </p>
               <p>
                 These aren't supplementary skills—they're foundational. When ChatGPT hallucinates a primary source that
@@ -119,8 +121,8 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Students develop metacognitive awareness of how AI systems shape knowledge production
-                    while learning to identify their limitations and biases.
+                    Students spot AI hallucinations, trace training data biases, and learn why plausible-sounding
+                    outputs can be dangerously wrong.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -132,8 +134,8 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Through experiential projects like auditing training datasets and building historical
-                    simulations, students gain real-world AI skills grounded in humanistic frameworks.
+                    Students audit the datasets used to train AI systems, build their own historical simulations,
+                    and create tools for their research—no coding experience required.
                   </CardDescription>
                 </CardContent>
               </Card>

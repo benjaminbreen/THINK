@@ -30,8 +30,8 @@ export default function TeamPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm mb-4">
-                    Associate Professor of History at UC Santa Cruz, creator of HistoryLens, and expert in
-                    early modern history, digital humanities, and AI-enabled pedagogy.
+                    Associate Professor of History specializing in early modern science and medicine. Created
+                    HistoryLens and has been experimenting with AI in history courses since 2019.
                   </p>
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
@@ -89,14 +89,15 @@ export default function TeamPage() {
             <div className="prose prose-lg max-w-none mx-auto">
               <h3 className="text-xl font-serif font-bold mb-4">About the Team</h3>
               <p>
-                The THINK team brings together complementary expertise in history, linguistics, and literature,
-                united by a shared commitment to critical, humanistic engagement with AI technologies. All three
-                PIs are program faculty in <strong>Humanizing Technology (HumTech)</strong>, UCSC's NEH-supported
-                initiative that infuses humanistic approaches into undergraduate engineering curriculum.
+                Benjamin Breen (History), Pranav Anand (Linguistics), and Zac Zimmer (Literature) have been
+                working together through UCSC's Humanizing Technology initiative since 2022, bringing humanistic
+                perspectives into engineering and CS curricula.
               </p>
               <p>
-                This interdisciplinary collaboration ensures that THINK courses address AI from multiple angles:
-                historical context, linguistic and technical foundations, and cultural and literary implications.
+                For THINK, that collaboration inverted: instead of adding humanities to technical courses, we're
+                building full humanities courses that teach students to build with and critique AI systems. Each PI
+                brings a different angle—historical context, linguistic foundations, critical data studies—creating
+                courses that work from humanistic strengths rather than treating them as afterthoughts.
               </p>
             </div>
           </div>

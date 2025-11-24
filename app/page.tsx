@@ -231,15 +231,14 @@ export default function HomePage() {
             <h2 className="text-2xl font-serif font-bold mb-4">About This Resource</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="leading-relaxed">
-                This is a collaborative clearinghouse for experimental AI tools in the humanities, maintained by faculty
-                and students at UC Santa Cruz with support from the National Endowment for the Humanities.
+                This site collects experimental AI tools built by humanists for teaching and research. It's maintained
+                by faculty and students at UC Santa Cruz with NEH support, but we welcome contributions from anyone.
               </p>
               <p className="leading-relaxed">
-                We believe that humanists should be building their own AI tools rather than relying solely on
-                commercial products. In 1963, Margaret Mead argued that automation could free humans for creative thinking—but
-                only if we didn't mistake drudgery-elimination for intellectual offloading. Six decades later, that distinction
-                matters more than ever. The projects featured here demonstrate what's possible when educators and researchers
-                take an active, critical, and creative role in shaping how AI gets used in teaching and scholarship.
+                The premise: humanists should build their own AI tools, not just adapt commercial products. In 1963,
+                Margaret Mead argued that automation works when it frees humans for creative thinking—but fails when
+                we mistake eliminating drudgery for eliminating thought. That distinction matters more than ever.
+                The projects here show what happens when educators build tools on their own terms.
               </p>
               <p className="leading-relaxed">
                 All materials are freely available. We welcome contributions from the wider community—if you've built
