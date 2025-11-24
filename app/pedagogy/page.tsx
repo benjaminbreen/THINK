@@ -240,21 +240,7 @@ export default function PedagogyPage() {
               onMouseEnter={() => setIsHeaderHovered(true)}
               onMouseLeave={() => setIsHeaderHovered(false)}
             >
-              <h1 className="text-4xl font-serif font-bold mb-1">
-                {'Pedagogy Materials'.split('').map((char, index) => (
-                  <span
-                    key={index}
-                    className="inline-block transition-all duration-300 ease-in-out"
-                    style={{
-                      opacity: isHeaderHovered ? 1 : 0.3,
-                      transform: isHeaderHovered ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.95)',
-                      transitionDelay: `${index * 20}ms`,
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </span>
-                ))}
-              </h1>
+              <h1 className="text-4xl font-serif font-bold mb-1">Pedagogy Materials</h1>
               <div
                 className="h-0.5 mx-auto transition-all duration-300"
                 style={{

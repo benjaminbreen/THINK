@@ -29,6 +29,7 @@ interface Block {
   destroyedTime?: number
   grounded: boolean
   autoRevealed?: boolean
+  revealProgress: number // 0 to 1 for smooth fade-in animation
 }
 
 interface Particle {
@@ -136,7 +137,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           size: 20 + Math.random() * 10,
           tag,
           destroyed: false,
-          grounded: false
+          grounded: false,
+          revealProgress: 0
         })
         lastSpawnTime.current = time
       }
@@ -155,10 +157,17 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
       // Clear canvas with transparent fill
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Auto-reveal all non-destroyed blocks on hover
+      // Auto-reveal all non-destroyed blocks on hover with smooth transition
       blocks.current.forEach(block => {
         if (!block.destroyed) {
           block.autoRevealed = isHovered
+          // Smooth fade in/out over 300ms (at 60fps, that's 18 frames)
+          const fadeSpeed = 1 / 18
+          if (isHovered && block.revealProgress < 1) {
+            block.revealProgress = Math.min(1, block.revealProgress + fadeSpeed)
+          } else if (!isHovered && block.revealProgress > 0) {
+            block.revealProgress = Math.max(0, block.revealProgress - fadeSpeed)
+          }
         }
       })
 
@@ -256,15 +265,16 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           }
         }
 
-        // Draw block only if not destroyed and not auto-revealed
-        if (!block.autoRevealed) {
+        // Draw block with opacity based on reveal progress
+        const blockOpacity = 1 - block.revealProgress
+        if (blockOpacity > 0) {
           ctx.save()
           ctx.translate(block.x, block.y)
           ctx.rotate(block.rotation)
 
-          // Purple (pedagogy accent color) as default
-          const blockColor = 'rgba(139, 92, 246, 0.8)'
-          const borderColor = 'rgba(139, 92, 246, 1)'
+          // Purple (pedagogy accent color) with dynamic opacity
+          const blockColor = `rgba(139, 92, 246, ${0.8 * blockOpacity})`
+          const borderColor = `rgba(139, 92, 246, ${blockOpacity})`
 
           ctx.fillStyle = blockColor
           ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
@@ -313,19 +323,24 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         .slice(-8)
 
       const autoRevealedTags = blocks.current
-        .filter(b => b.autoRevealed && !b.destroyed)
+        .filter(b => b.revealProgress > 0 && !b.destroyed)
 
       const allRevealedTags = [...destroyedTags, ...autoRevealedTags]
 
       allRevealedTags.forEach((block) => {
-        const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
+        // Use smooth reveal progress for auto-revealed, instant for destroyed
+        const fadeIn = block.destroyedTime
+          ? Math.min(1, (Date.now() - block.destroyedTime) / 1000)
+          : block.revealProgress
 
-        // Draw text with a subtle shadow for better visibility
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
-        ctx.shadowBlur = 4
-        ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn})`
-        ctx.fillText(block.tag, block.x, block.y)
-        ctx.shadowBlur = 0
+        if (fadeIn > 0) {
+          // Draw text with a subtle shadow for better visibility
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+          ctx.shadowBlur = 4
+          ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn})`
+          ctx.fillText(block.tag, block.x, block.y)
+          ctx.shadowBlur = 0
+        }
       })
 
       animationFrameId.current = requestAnimationFrame(animate)

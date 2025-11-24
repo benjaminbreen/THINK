@@ -64,8 +64,9 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     )
 
     const draw = (time: number) => {
-      // Semi-transparent background for fade effect
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
+      // Semi-transparent background for fade effect - adapt to dark mode
+      const isDark = document.documentElement.classList.contains('dark')
+      ctx.fillStyle = isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       ctx.font = 'bold 36px Georgia, serif'
