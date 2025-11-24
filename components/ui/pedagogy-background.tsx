@@ -2,20 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-// Default pedagogy tags - will be replaced with real tags later
-const PEDAGOGY_TAGS = [
-  'Critical Thinking',
-  'Active Learning',
-  'Student Agency',
-  'Collaborative',
-  'Inquiry-Based',
-  'Experiential',
-  'Socratic Method',
-  'Project-Based',
-  'Scaffolding',
-  'Metacognition'
-]
-
 interface Block {
   x: number
   y: number
@@ -29,6 +15,7 @@ interface Block {
   destroyedTime?: number
   grounded: boolean
   autoRevealed?: boolean
+  revealProgress: number // 0 to 1 for smooth fade-in animation
 }
 
 interface Particle {
@@ -43,9 +30,10 @@ interface Particle {
 
 interface PedagogyBackgroundProps {
   isHovered?: boolean
+  tags?: string[]
 }
 
-export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProps) {
+export function PedagogyBackground({ isHovered = false, tags = [] }: PedagogyBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const blocks = useRef<Block[]>([])
   const particles = useRef<Particle[]>([])
@@ -124,8 +112,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
     // Spawn new blocks periodically
     const spawnBlock = (time: number) => {
-      if (time - lastSpawnTime.current > 2000) { // Every 2 seconds
-        const tag = PEDAGOGY_TAGS[Math.floor(Math.random() * PEDAGOGY_TAGS.length)]
+      if (time - lastSpawnTime.current > 2000 && tags.length > 0) { // Every 2 seconds
+        const tag = tags[Math.floor(Math.random() * tags.length)]
         blocks.current.push({
           x: Math.random() * canvas.width,
           y: -30,
@@ -136,7 +124,8 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           size: 20 + Math.random() * 10,
           tag,
           destroyed: false,
-          grounded: false
+          grounded: false,
+          revealProgress: 0
         })
         lastSpawnTime.current = time
       }
@@ -155,10 +144,17 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
       // Clear canvas with transparent fill
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Auto-reveal all non-destroyed blocks on hover
+      // Auto-reveal all non-destroyed blocks on hover with smooth transition
       blocks.current.forEach(block => {
         if (!block.destroyed) {
           block.autoRevealed = isHovered
+          // Smooth fade in/out over 300ms (at 60fps, that's 18 frames)
+          const fadeSpeed = 1 / 18
+          if (isHovered && block.revealProgress < 1) {
+            block.revealProgress = Math.min(1, block.revealProgress + fadeSpeed)
+          } else if (!isHovered && block.revealProgress > 0) {
+            block.revealProgress = Math.max(0, block.revealProgress - fadeSpeed)
+          }
         }
       })
 
@@ -166,6 +162,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
 
       const gravity = 0.15
       const bounce = 0.6 // Bounce coefficient (springiness)
+      const blockBounce = 0.3 // Reduced bounce for block-to-block collisions
 
       // Update and draw blocks
       blocks.current = blocks.current.filter(block => {
@@ -192,14 +189,10 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           if (block.x - block.size / 2 < 0) {
             block.x = block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce (reduced)
-            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
           if (block.x + block.size / 2 > canvas.width) {
             block.x = canvas.width - block.size / 2
             block.vx *= -0.5
-            // Add spin on side bounce (reduced)
-            block.rotationSpeed += (Math.random() - 0.5) * 0.02
           }
 
           // Check ground collision with bounce
@@ -207,15 +200,13 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
             block.y = canvas.height - block.size / 2
 
             // Bounce if velocity is high enough, otherwise settle
-            if (Math.abs(block.vy) > 0.5) {
+            if (Math.abs(block.vy) > 1.5) {
               block.vy *= -bounce // Bounce with energy loss
-              block.vx *= 0.9
-              // Add rotation variation on bounce (reduced)
-              block.rotationSpeed += (Math.random() - 0.5) * 0.03
+              block.vx *= 0.85
             } else {
               // Settling - snap to flat side
               block.vy = 0
-              block.vx *= 0.8
+              block.vx *= 0.5 // Strong horizontal damping when settling
               block.grounded = true
               block.rotationSpeed = 0
               // Snap to nearest 90-degree angle for flat landing
@@ -227,23 +218,21 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
           blocks.current.forEach(otherBlock => {
             if (otherBlock !== block && otherBlock.grounded && !block.grounded) {
               if (checkCollision(block, otherBlock)) {
-                // Stack on top with bounce
+                // Stack on top with reduced bounce
                 const overlap = (block.size + otherBlock.size) / 2 - Math.sqrt(
                   Math.pow(block.x - otherBlock.x, 2) + Math.pow(block.y - otherBlock.y, 2)
                 )
                 if (overlap > 0 && block.y < otherBlock.y) {
                   block.y = otherBlock.y - (block.size + otherBlock.size) / 2
 
-                  // Bounce off other blocks
-                  if (Math.abs(block.vy) > 0.5) {
-                    block.vy *= -bounce * 0.8
-                    block.vx *= 0.9
-                    // Add rotation on block collision (reduced to prevent rapid spinning)
-                    block.rotationSpeed += (Math.random() - 0.5) * 0.02
+                  // Bounce off other blocks with reduced energy
+                  if (Math.abs(block.vy) > 1.5) {
+                    block.vy *= -blockBounce // Much less bouncy on block collisions
+                    block.vx *= 0.7 // More horizontal damping
                   } else {
                     // Settling on another block - snap to flat side
                     block.vy = 0
-                    block.vx *= 0.8
+                    block.vx *= 0.3 // Strong horizontal damping to prevent shifting
                     block.grounded = true
                     block.rotationSpeed = 0
                     // Snap to nearest 90-degree angle for stable stacking
@@ -253,17 +242,26 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
               }
             }
           })
+        } else {
+          // Apply strong friction to grounded blocks to prevent shifting
+          block.vx *= 0.85
+          block.x += block.vx
+          // Stop completely when velocity is very small
+          if (Math.abs(block.vx) < 0.01) {
+            block.vx = 0
+          }
         }
 
-        // Draw block only if not destroyed and not auto-revealed
-        if (!block.autoRevealed) {
+        // Draw block with opacity based on reveal progress
+        const blockOpacity = 1 - block.revealProgress
+        if (blockOpacity > 0) {
           ctx.save()
           ctx.translate(block.x, block.y)
           ctx.rotate(block.rotation)
 
-          // Purple (pedagogy accent color) as default
-          const blockColor = 'rgba(139, 92, 246, 0.8)'
-          const borderColor = 'rgba(139, 92, 246, 1)'
+          // Purple (pedagogy accent color) with dynamic opacity
+          const blockColor = `rgba(139, 92, 246, ${0.8 * blockOpacity})`
+          const borderColor = `rgba(139, 92, 246, ${blockOpacity})`
 
           ctx.fillStyle = blockColor
           ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
@@ -312,19 +310,24 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         .slice(-8)
 
       const autoRevealedTags = blocks.current
-        .filter(b => b.autoRevealed && !b.destroyed)
+        .filter(b => b.revealProgress > 0 && !b.destroyed)
 
       const allRevealedTags = [...destroyedTags, ...autoRevealedTags]
 
       allRevealedTags.forEach((block) => {
-        const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
+        // Use smooth reveal progress for auto-revealed, instant for destroyed
+        const fadeIn = block.destroyedTime
+          ? Math.min(1, (Date.now() - block.destroyedTime) / 1000)
+          : block.revealProgress
 
-        // Draw text with a subtle shadow for better visibility
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
-        ctx.shadowBlur = 4
-        ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn})`
-        ctx.fillText(block.tag, block.x, block.y)
-        ctx.shadowBlur = 0
+        if (fadeIn > 0) {
+          // Draw text with a subtle shadow for better visibility
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+          ctx.shadowBlur = 4
+          ctx.fillStyle = `rgba(139, 92, 246, ${fadeIn})`
+          ctx.fillText(block.tag, block.x, block.y)
+          ctx.shadowBlur = 0
+        }
       })
 
       animationFrameId.current = requestAnimationFrame(animate)
@@ -340,7 +343,7 @@ export function PedagogyBackground({ isHovered = false }: PedagogyBackgroundProp
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [isHovered])
+  }, [isHovered, tags])
 
   return (
     <canvas

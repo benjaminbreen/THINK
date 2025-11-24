@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface BlogBackgroundProps {
   isHovered?: boolean
@@ -12,6 +12,24 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
   const animationFrameId = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
   const mousePos = useRef({ x: -1000, y: -1000 })
+  const fadeProgress = useRef(0)
+  const lastFrameTime = useRef(0)
+  const isHoveredRef = useRef(isHovered)
+  const isHeaderHoveredRef = useRef(isHeaderHovered)
+
+  // Store a reference to the draw function so it can be called from the hover effect
+  const drawFnRef = useRef<((time: number) => void) | null>(null)
+
+  // Update hover refs when props change (without re-running main effect)
+  useEffect(() => {
+    isHoveredRef.current = isHovered
+    isHeaderHoveredRef.current = isHeaderHovered
+
+    // Start animation if becoming active and not already running
+    if ((isHovered || isHeaderHovered) && !animationFrameId.current && drawFnRef.current) {
+      animationFrameId.current = requestAnimationFrame(drawFnRef.current)
+    }
+  }, [isHovered, isHeaderHovered])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -64,9 +82,31 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     )
 
     const draw = (time: number) => {
-      // Semi-transparent background for fade effect
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      // Smooth fade in/out animation (300ms = 18 frames at 60fps)
+      const isActive = isHoveredRef.current || isHeaderHoveredRef.current
+      const fadeSpeed = 1 / 18
+      if (isActive && fadeProgress.current < 1) {
+        fadeProgress.current = Math.min(1, fadeProgress.current + fadeSpeed)
+      } else if (!isActive && fadeProgress.current > 0) {
+        fadeProgress.current = Math.max(0, fadeProgress.current - fadeSpeed)
+      }
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Stop animation if fully faded out and not active
+      if (fadeProgress.current === 0 && !isActive) {
+        animationFrameId.current = undefined
+        return
+      }
+
+      // Performance: only update time if enough time has passed (16ms = 60fps)
+      const deltaTime = time - lastFrameTime.current
+      if (deltaTime < 16) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+      lastFrameTime.current = time
 
       ctx.font = 'bold 36px Georgia, serif'
       ctx.textAlign = 'center'
@@ -75,57 +115,41 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       timeRef.current = time
 
       const hoverRadius = 200
-      const baseOpacity = 0.12 // Lower opacity for more transparency
-
-      // Performance optimization: skip if not hovered
-      if (!isHovered && !isHeaderHovered) {
-        animationFrameId.current = requestAnimationFrame(draw)
-        return
-      }
+      const headerHoverRadius = 400 // Larger radius when header is hovered
+      const baseOpacity = 0.18 // Increased opacity for better visibility
 
       // Cache canvas dimensions
       const canvasHalfHeight = canvas.height * 0.5
       const canvasHeight = canvas.height
 
-      // When header is hovered, show full background; otherwise show localized
-      let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
+      // Always use localized mode, but with different radius based on header hover
+      const activeRadius = isHeaderHoveredRef.current ? headerHoverRadius : hoverRadius
 
-      if (!isHeaderHovered) {
-        // Calculate cell range to check (only near cursor)
-        const mouseCellX = Math.floor(mousePos.current.x / gridSize)
-        const mouseCellY = Math.floor(mousePos.current.y / gridSize)
-        const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
+      // Calculate cell range to check (only near cursor)
+      const mouseCellX = Math.floor(mousePos.current.x / gridSize)
+      const mouseCellY = Math.floor(mousePos.current.y / gridSize)
+      const cellRadius = Math.ceil(activeRadius / gridSize) + 1
 
-        minI = Math.max(0, mouseCellX - cellRadius)
-        maxI = Math.min(cols - 1, mouseCellX + cellRadius)
-        minJ = Math.max(0, mouseCellY - cellRadius)
-        maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
-      }
+      const minI = Math.max(0, mouseCellX - cellRadius)
+      const maxI = Math.min(cols - 1, mouseCellX + cellRadius)
+      const minJ = Math.max(0, mouseCellY - cellRadius)
+      const maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
 
       for (let i = minI; i <= maxI; i++) {
         for (let j = minJ; j <= maxJ; j++) {
           const x = i * gridSize + gridSize / 2
           const y = j * gridSize + gridSize / 2
 
-          // Calculate opacity based on mode
-          let finalOpacity = 0
+          // Calculate opacity based on distance from cursor
+          const dx = mousePos.current.x - x
+          const dy = mousePos.current.y - y
+          const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
 
-          if (isHeaderHovered) {
-            // Full background mode - fade based on vertical position
-            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
-            finalOpacity = verticalFade * baseOpacity
-          } else {
-            // Localized mode - fade based on distance from cursor
-            const dx = mousePos.current.x - x
-            const dy = mousePos.current.y - y
-            const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
+          if (distanceFromCursor >= activeRadius) continue
 
-            if (distanceFromCursor >= hoverRadius) continue
-
-            const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
-            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
-            finalOpacity = verticalFade * baseOpacity * cursorProximity
-          }
+          const cursorProximity = 1 - (distanceFromCursor / activeRadius)
+          const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
+          const finalOpacity = verticalFade * baseOpacity * cursorProximity * fadeProgress.current
 
           if (finalOpacity > 0.01) {
             // Get the evolution chain for this cell
@@ -160,16 +184,23 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
-    animationFrameId.current = requestAnimationFrame(draw)
+    // Store draw function reference for hover effect
+    drawFnRef.current = draw
+
+    // Only start animation if initially hovered
+    if (isHovered || isHeaderHovered) {
+      animationFrameId.current = requestAnimationFrame(draw)
+    }
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
       canvas.removeEventListener('mousemove', handleMouseMove)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
+        animationFrameId.current = undefined
       }
     }
-  }, [isHovered, isHeaderHovered])
+  }, []) // Only run once on mount
 
   return (
     <canvas

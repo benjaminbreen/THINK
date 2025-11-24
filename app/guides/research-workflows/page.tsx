@@ -25,7 +25,7 @@ export default function ResearchWorkflowsGuide() {
               Using LLMs for historical research, translation, and data analysis
             </p>
 
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-xl max-w-none">
               <p className="text-muted-foreground">
                 <em>This guide is currently under development.</em>
               </p>

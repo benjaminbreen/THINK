@@ -80,7 +80,7 @@ export default function PromptEngineeringGuide() {
                   How to communicate effectively with AI when building educational tools and augmenting research workflows
                 </p>
 
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-xl max-w-none">
                   <p className="lead">
                     Prompt engineering is the art of communicating clearly with AI systems to get the results you want. This guide focuses on prompts for <strong>building educational tools</strong> and <strong>augmenting research workflows</strong>—not replacing the intellectual work that makes humanities scholarship valuable.
                   </p>

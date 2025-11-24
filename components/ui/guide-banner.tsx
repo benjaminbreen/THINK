@@ -16,6 +16,8 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [hasGuessed, setHasGuessed] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [isAttributionVisible, setIsAttributionVisible] = useState(false)
+  const [isAttributionDismissed, setIsAttributionDismissed] = useState(false)
 
   const isNonAIImage = guideId === 'responsible-ai-classroom'
 
@@ -48,7 +50,12 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
       {/* Banner Image */}
       <div
         className="relative w-full h-48 md:h-64 bg-muted rounded-lg overflow-hidden group cursor-pointer"
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={() => {
+          setIsHovered(true)
+          if (!isAttributionDismissed) {
+            setIsAttributionVisible(true)
+          }
+        }}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsModalOpen(true)}
       >
@@ -71,9 +78,17 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
         </div>
       </div>
 
-      {/* Attribution Content - Always visible below image */}
-      <div className="mt-4 p-6 bg-muted/50 rounded-lg border">
-        <h3 className="font-sans text-lg font-semibold mb-4">Image Attribution & Mini-Game</h3>
+      {/* Attribution Content - Shows on hover, stays visible until dismissed */}
+      {isAttributionVisible && !isAttributionDismissed && (
+        <div className="mt-4 p-6 bg-muted/50 rounded-lg border relative animate-in fade-in slide-in-from-top-2 duration-300">
+          <button
+            onClick={() => setIsAttributionDismissed(true)}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-muted-foreground/10 flex items-center justify-center transition-colors group"
+            aria-label="Dismiss"
+          >
+            <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+          </button>
+          <h3 className="font-sans text-lg font-semibold mb-4 pr-8">Image Attribution & Mini-Game</h3>
 
         <div className="prose prose-sm max-w-none mb-6">
           <p>
@@ -126,7 +141,8 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
             </p>
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (
