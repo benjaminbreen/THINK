@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Navigation } from '@/components/layout/navigation'
-import { Footer } from '@/components/layout/footer'
 import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
@@ -24,11 +22,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col">
-            <Navigation />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

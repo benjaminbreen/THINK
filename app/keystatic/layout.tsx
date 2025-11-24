@@ -10,10 +10,6 @@ export default function KeystaticLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <head />
-      <body>{children}</body>
-    </html>
-  )
+  // Minimal layout - no nav/footer, just the Keystatic UI
+  return <>{children}</>
 }
