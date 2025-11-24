@@ -53,7 +53,7 @@ export default function HomePage() {
 
       {/* About THINK Section */}
       <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-y border-amber-200/30 dark:border-slate-700/40 py-0">
-        <Container className="py-0.5">
+        <Container className="-my-2">
           <div className="max-w-5xl mx-auto">
             <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-10 py-7 shadow-md border border-amber-200/30 dark:border-slate-700/40">
               <p className="text-xl leading-loose text-foreground/95 font-sans">
