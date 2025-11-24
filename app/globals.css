@@ -484,7 +484,15 @@ html {
 }
 
 .prose pre {
-  @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+  @apply p-4 rounded-lg overflow-x-auto mb-4;
+  background-color: rgb(15 23 42) !important;
+  color: rgb(226 232 240) !important;
+}
+
+.prose pre code {
+  background-color: transparent !important;
+  color: inherit !important;
+  padding: 0;
 }
 
 .prose blockquote {
