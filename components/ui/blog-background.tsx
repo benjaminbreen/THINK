@@ -14,6 +14,22 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
   const mousePos = useRef({ x: -1000, y: -1000 })
   const fadeProgress = useRef(0)
   const lastFrameTime = useRef(0)
+  const isHoveredRef = useRef(isHovered)
+  const isHeaderHoveredRef = useRef(isHeaderHovered)
+
+  // Store a reference to the draw function so it can be called from the hover effect
+  const drawFnRef = useRef<((time: number) => void) | null>(null)
+
+  // Update hover refs when props change (without re-running main effect)
+  useEffect(() => {
+    isHoveredRef.current = isHovered
+    isHeaderHoveredRef.current = isHeaderHovered
+
+    // Start animation if becoming active and not already running
+    if ((isHovered || isHeaderHovered) && !animationFrameId.current && drawFnRef.current) {
+      animationFrameId.current = requestAnimationFrame(drawFnRef.current)
+    }
+  }, [isHovered, isHeaderHovered])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -67,7 +83,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
 
     const draw = (time: number) => {
       // Smooth fade in/out animation (300ms = 18 frames at 60fps)
-      const isActive = isHovered || isHeaderHovered
+      const isActive = isHoveredRef.current || isHeaderHoveredRef.current
       const fadeSpeed = 1 / 18
       if (isActive && fadeProgress.current < 1) {
         fadeProgress.current = Math.min(1, fadeProgress.current + fadeSpeed)
@@ -75,14 +91,14 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
         fadeProgress.current = Math.max(0, fadeProgress.current - fadeSpeed)
       }
 
-      // Clear canvas and stop animation if fully faded out
-      if (fadeProgress.current === 0) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        return // Stop the loop - don't request another frame
-      }
-
-      // Clear canvas for next frame
+      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Stop animation if fully faded out and not active
+      if (fadeProgress.current === 0 && !isActive) {
+        animationFrameId.current = undefined
+        return
+      }
 
       // Performance: only update time if enough time has passed (16ms = 60fps)
       const deltaTime = time - lastFrameTime.current
@@ -107,7 +123,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       const canvasHeight = canvas.height
 
       // Always use localized mode, but with different radius based on header hover
-      const activeRadius = isHeaderHovered ? headerHoverRadius : hoverRadius
+      const activeRadius = isHeaderHoveredRef.current ? headerHoverRadius : hoverRadius
 
       // Calculate cell range to check (only near cursor)
       const mouseCellX = Math.floor(mousePos.current.x / gridSize)
@@ -168,13 +184,11 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
-    // Start animation loop initially
-    if (!animationFrameId.current) {
-      animationFrameId.current = requestAnimationFrame(draw)
-    }
+    // Store draw function reference for hover effect
+    drawFnRef.current = draw
 
-    // Restart animation when hover state changes to active
-    if ((isHovered || isHeaderHovered) && !animationFrameId.current) {
+    // Only start animation if initially hovered
+    if (isHovered || isHeaderHovered) {
       animationFrameId.current = requestAnimationFrame(draw)
     }
 
@@ -186,7 +200,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
         animationFrameId.current = undefined
       }
     }
-  }, [isHovered, isHeaderHovered])
+  }, []) // Only run once on mount
 
   return (
     <canvas
