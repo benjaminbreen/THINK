@@ -52,26 +52,31 @@ export default function HomePage() {
       </Section>
 
       {/* About THINK Section */}
-      <Section className="bg-[#f5f1e8] dark:bg-slate-800/40 border-y border-amber-200/20 dark:border-slate-700/40 py-8">
+      <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-y border-amber-200/30 dark:border-slate-700/40 py-5">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <p className="text-xl leading-relaxed text-foreground/95 font-sans">
-              <strong>THINK is an NEH-funded project at UC Santa Cruz offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education.</strong> Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
-              <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
-                AI Pedagogy Project
-              </a>{' '}
-              from metaLAB and the Berkman Klein Center,{' '}
-              <a href="https://mitsloanedtech.mit.edu/ai/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
-                MIT Sloan's Teaching with Generative AI Resource Hub
-              </a>, and{' '}
-              <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
-                Brown University's framework for intentional pedagogy with AI
-              </a>.{' '}
-              <Link href="/contact" className="text-amber-700 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-400 underline decoration-amber-600/30 hover:decoration-amber-600/60 underline-offset-2 transition-colors">
-                We welcome contributions
-              </Link>{' '}
-              from educators across all fields.
-            </p>
+            <div className="bg-white/60 dark:bg-slate-900/20 rounded-lg p-6 shadow-sm border border-amber-200/20 dark:border-slate-700/30">
+              <p className="text-lg leading-relaxed text-foreground/90 font-sans">
+                <span className="font-semibold text-amber-800 dark:text-amber-400">THINK is an NEH-funded project at UC Santa Cruz</span> offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology.
+              </p>
+              <p className="text-base leading-relaxed text-foreground/80 font-sans mt-3">
+                This project draws inspiration from Harvard's{' '}
+                <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 underline decoration-amber-600/40 hover:decoration-amber-600/70 underline-offset-2 transition-colors font-medium">
+                  AI Pedagogy Project
+                </a>{' '}
+                from metaLAB and the Berkman Klein Center,{' '}
+                <a href="https://mitsloanedtech.mit.edu/ai/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 underline decoration-amber-600/40 hover:decoration-amber-600/70 underline-offset-2 transition-colors font-medium">
+                  MIT Sloan's Teaching with Generative AI Resource Hub
+                </a>, and{' '}
+                <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 underline decoration-amber-600/40 hover:decoration-amber-600/70 underline-offset-2 transition-colors font-medium">
+                  Brown University's framework for intentional pedagogy with AI
+                </a>.{' '}
+                <Link href="/contact" className="text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 underline decoration-amber-600/40 hover:decoration-amber-600/70 underline-offset-2 transition-colors font-medium">
+                  We welcome contributions
+                </Link>{' '}
+                from educators across all fields.
+              </p>
+            </div>
           </div>
         </Container>
       </Section>
