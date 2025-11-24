@@ -27,31 +27,32 @@ export function GuideCard({
 
   return (
     <Link href={href} className="block group">
-      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer`}>
-        <CardHeader>
+      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 ease-out cursor-pointer border-border/60 hover:border-primary/30`}>
+        <CardHeader className="pb-3">
           {hasImage && thumbnailPath ? (
-            <div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
+            <div className="relative w-full h-36 rounded-lg overflow-hidden mb-3 bg-muted/30">
               <Image
                 src={thumbnailPath}
                 alt={title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-all duration-500 ease-out group-hover:scale-[1.03]"
                 onError={() => setHasImage(false)}
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           ) : (
-            <div className="h-10 w-10 rounded-lg bg-amber-600/10 flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-amber-600/20 group-hover:scale-110">
+            <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center mb-3 transition-all duration-300 ease-out group-hover:bg-primary/15 group-hover:scale-105">
               {icon}
             </div>
           )}
-          <CardTitle className="text-lg mb-2 group-hover:text-amber-600 transition-colors">{title}</CardTitle>
-          <CardDescription className="text-sm">
+          <CardTitle className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-200">{title}</CardTitle>
+          <CardDescription className="text-sm leading-relaxed text-muted-foreground/90">
             {description}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <span className="text-sm text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">
-            Read guide <ArrowRight className="ml-1 h-3 w-3" />
+        <CardContent className="pt-0">
+          <span className="text-sm font-medium text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+            Read guide <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </span>
         </CardContent>
       </Card>

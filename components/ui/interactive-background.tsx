@@ -10,18 +10,50 @@ const getRandomMode = (): BackgroundMode => {
   return modes[Math.floor(Math.random() * modes.length)]
 }
 
+// Light mode color palettes
+const lightColors = {
+  background: 'rgba(253, 251, 247, 0.4)', // Warm cream with transparency
+  backgroundSolid: 'rgb(253, 251, 247)',
+  primary: '180, 83, 9', // Amber-700
+  primaryLight: '217, 119, 6', // Amber-600
+  secondary: '146, 64, 14', // Amber-800
+  accent: '120, 53, 15', // Amber-900
+  muted: '161, 98, 7', // Amber-700
+  text: '41, 37, 36', // Stone-800
+  sage: '22, 101, 52', // Green-800
+  terracotta: '185, 28, 28', // Red-700
+}
+
+// Dark mode color palettes (original)
+const darkColors = {
+  background: 'rgba(15, 23, 42, 0.5)',
+  backgroundSolid: 'rgb(15, 23, 42)',
+  primary: '59, 130, 246', // Blue
+  primaryLight: '96, 165, 250',
+  secondary: '34, 197, 94', // Green
+  accent: '217, 119, 6', // Amber
+  muted: '100, 116, 139',
+  text: '226, 232, 240',
+  sage: '34, 197, 94',
+  terracotta: '239, 68, 68',
+}
+
 function InteractiveBackgroundComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [mode, setMode] = useState<BackgroundMode>(getRandomMode())
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
 
+  // Get current color palette based on dark mode
+  const colors = isDarkMode ? darkColors : lightColors
+
   // Interactive controls state - using refs for real-time updates without re-render
   const matrixPaused = useRef(false)
-  const matrixColor = useRef<'blue' | 'green' | 'amber'>('blue')
+  const matrixColor = useRef<'blue' | 'green' | 'amber'>('amber')
   const showWhitman = useRef(true)
   const terminalExpanded = useRef(false)
-  const terminalColorScheme = useRef<'blue' | 'green' | 'amber'>('blue')
+  const terminalColorScheme = useRef<'blue' | 'green' | 'amber'>('amber')
   const labyrinthExpanded = useRef(false)
   const particleRainbow = useRef(false)
   const particlePaused = useRef(false)
@@ -177,6 +209,22 @@ function InteractiveBackgroundComponent() {
     { text: "After great pain, a formal feeling comes", author: "Dickinson" },
     { text: "I dwell in Possibility", author: "Dickinson" },
   ]
+
+  // Detect dark mode changes
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'))
+    }
+
+    // Initial check
+    checkDarkMode()
+
+    // Watch for changes
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -491,9 +539,9 @@ function InteractiveBackgroundComponent() {
 
     // Initialize labyrinth - Borges-themed maze
     const initLabyrinth = () => {
-      // Create a maze using recursive backtracking
-      const width = 25
-      const height = 17
+      // Create a maze using recursive backtracking - narrower maze
+      const width = 17  // Reduced from 25
+      const height = 13 // Reduced from 17
       const maze: number[][] = Array(height).fill(0).map(() => Array(width).fill(1))
 
       // Simple maze generation - create corridors
@@ -580,7 +628,9 @@ function InteractiveBackgroundComponent() {
 
     // ASCII Grid Effect
     const drawAsciiGrid = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
+      // Light mode: warm cream background, Dark mode: slate
+      const bgColor = isDarkMode ? 'rgba(15, 23, 42, 0.5)' : 'rgba(253, 251, 247, 0.6)'
+      ctx.fillStyle = bgColor
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       const chars = ['0', '1', '+', '-', '*', '/', '=', '<', '>', '~', '^', '.', ':', ';']
@@ -595,6 +645,9 @@ function InteractiveBackgroundComponent() {
         asciiTimeRef.current = time
       }
 
+      // Light mode: amber/terracotta tones, Dark mode: blue
+      const primaryRgb = isDarkMode ? '59, 130, 246' : '180, 83, 9'
+
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
           const x = i * gridSize
@@ -608,7 +661,7 @@ function InteractiveBackgroundComponent() {
           const timeOffset = (i + j + asciiTimeRef.current * 0.001) % chars.length
           const char = chars[Math.floor(timeOffset)]
 
-          ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
+          ctx.fillStyle = `rgba(${primaryRgb}, ${opacity})`
           ctx.fillText(char, x, y)
         }
       }
@@ -664,28 +717,28 @@ function InteractiveBackgroundComponent() {
     ]
 
     const drawMatrix = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
+      // Light mode: warm cream, Dark mode: slate
+      const bgColor = isDarkMode ? 'rgba(15, 23, 42, 0.5)' : 'rgba(253, 251, 247, 0.6)'
+      ctx.fillStyle = bgColor
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       ctx.font = '15px monospace'
       const binaryChars = '01アイウエオカキクケコサシスセソタチツテト'
 
-      // Color based on setting
-      const colorMap = {
-        blue: '59, 130, 246',
-        green: '34, 197, 94',
-        amber: '217, 119, 6'
-      }
+      // Color based on setting - adjusted for light/dark mode
+      const colorMap = isDarkMode
+        ? { blue: '59, 130, 246', green: '34, 197, 94', amber: '217, 119, 6' }
+        : { blue: '30, 64, 175', green: '22, 101, 52', amber: '146, 64, 14' }
       const matrixRgb = colorMap[matrixColor.current]
 
-      // Calculate speed based on cursor Y position
-      // Top of screen (y=0): barely moving (0.01)
-      // Bottom of screen (y=canvas.height): moderate speed (0.35)
+      // Calculate speed based on cursor Y position - SLOWED DOWN
+      // Top of screen (y=0): barely moving (0.005)
+      // Bottom of screen (y=canvas.height): slow-moderate speed (0.15)
       const cursorHeightRatio = Math.max(0, Math.min(1, mousePos.current.y / canvas.height))
-      const baseSpeed = matrixPaused.current ? 0 : 0.01 + (cursorHeightRatio * 0.34) // Range from 0.01 to 0.35
+      const baseSpeed = matrixPaused.current ? 0 : 0.005 + (cursorHeightRatio * 0.145) // Range from 0.005 to 0.15 (slowed)
 
-      // Character change interval based on cursor position (slower at top)
-      const changeInterval = matrixPaused.current ? Infinity : 100 + (1 - cursorHeightRatio) * 400 // 100-500ms
+      // Character change interval based on cursor position (slower overall)
+      const changeInterval = matrixPaused.current ? Infinity : 200 + (1 - cursorHeightRatio) * 600 // 200-800ms (slower)
 
       for (let i = 0; i < matrixDrops.length; i++) {
         const columnX = i * 20
@@ -755,8 +808,13 @@ function InteractiveBackgroundComponent() {
     initParticles()
 
     const drawParticles = (time: number) => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.5)' // slate-900 with transparency
+      // Light mode: warm cream, Dark mode: slate
+      const bgColor = isDarkMode ? 'rgba(15, 23, 42, 0.5)' : 'rgba(253, 251, 247, 0.6)'
+      ctx.fillStyle = bgColor
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Default particle color based on mode
+      const defaultColor = isDarkMode ? '59, 130, 246' : '180, 83, 9'
 
       particles.forEach((particle, i) => {
         if (!particlePaused.current) {
@@ -784,10 +842,11 @@ function InteractiveBackgroundComponent() {
         const opacity = Math.min(0.8, 0.3 + (Math.abs(particle.vx) + Math.abs(particle.vy)) * 2)
 
         // Rainbow mode: cycle through hues based on position
-        let color = '59, 130, 246' // default blue
+        let color = defaultColor
         if (particleRainbow.current) {
           const hue = ((particle.x + particle.y + time * 0.05) % 360)
-          const rgb = hslToRgb(hue / 360, 0.7, 0.6)
+          const lightness = isDarkMode ? 0.6 : 0.45
+          const rgb = hslToRgb(hue / 360, 0.7, lightness)
           color = `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`
         }
 
@@ -841,17 +900,19 @@ function InteractiveBackgroundComponent() {
     const drawTerminal = (time: number) => {
       const isExpanded = terminalExpanded.current
 
-      // Terminal color based on setting
-      const terminalColorMap = {
-        blue: '59, 130, 246',
-        green: '34, 197, 94',
-        amber: '217, 119, 6'
-      }
+      // Terminal color based on setting - adjusted for light/dark mode
+      const terminalColorMap = isDarkMode
+        ? { blue: '59, 130, 246', green: '34, 197, 94', amber: '217, 119, 6' }
+        : { blue: '30, 64, 175', green: '22, 101, 52', amber: '146, 64, 14' }
       const terminalRgb = terminalColorMap[terminalColorScheme.current]
+
+      // Background colors for light/dark mode
+      const bgExpanded = isDarkMode ? 'rgba(5, 10, 20, 0.95)' : 'rgba(253, 251, 247, 0.95)'
+      const bgNormal = isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(253, 251, 247, 0.85)'
 
       if (isExpanded) {
         // Expanded mode - full screen retro terminal
-        ctx.fillStyle = 'rgba(5, 10, 20, 0.95)' // Very dark background
+        ctx.fillStyle = bgExpanded
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         // Retro terminal border
@@ -916,23 +977,46 @@ function InteractiveBackgroundComponent() {
 
       } else {
         // Normal mode - standard terminal view
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // darker background for readability
+        ctx.fillStyle = bgNormal
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         ctx.font = '14px monospace'
         ctx.fillStyle = `rgba(${terminalRgb}, 0.9)`
 
-        const lineHeight = 20
+        const lineHeight = 18
         const startY = 30
         const padding = 20
+        const maxWidth = canvas.width - padding * 2 - 10
 
-        // Draw history
-        terminalHistory.current.forEach((line: string, i: number) => {
-          ctx.fillText(line, padding, startY + i * lineHeight)
+        // Helper to wrap text
+        const wrapText = (text: string, maxW: number): string[] => {
+          const words = text.split(' ')
+          const lines: string[] = []
+          let currentLine = ''
+          for (const word of words) {
+            const testLine = currentLine ? `${currentLine} ${word}` : word
+            if (ctx.measureText(testLine).width > maxW && currentLine) {
+              lines.push(currentLine)
+              currentLine = word
+            } else {
+              currentLine = testLine
+            }
+          }
+          if (currentLine) lines.push(currentLine)
+          return lines.length ? lines : ['']
+        }
+
+        // Draw history with text wrapping
+        let currentY = startY
+        terminalHistory.current.forEach((line: string) => {
+          const wrappedLines = wrapText(line, maxWidth)
+          wrappedLines.forEach((wrappedLine: string) => {
+            ctx.fillText(wrappedLine, padding, currentY)
+            currentY += lineHeight
+          })
         })
 
         // Draw current input with cursor
-        const currentY = startY + terminalHistory.current.length * lineHeight
         const inputLine = `> ${terminalInput.current}`
         ctx.fillText(inputLine, padding, currentY)
 
@@ -944,20 +1028,22 @@ function InteractiveBackgroundComponent() {
         }
 
         // Hint text
-        ctx.font = '12px monospace'
+        ctx.font = '11px monospace'
         ctx.fillStyle = `rgba(${terminalRgb}, 0.4)`
-        ctx.fillText('Click background to cycle modes | Type and press Enter', padding, canvas.height - 20)
+        const hintText = 'Click to cycle modes | Type & Enter'
+        ctx.fillText(hintText, padding, canvas.height - 20)
       }
 
-      // CRT scanline effect (both modes)
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
-      for (let y = 0; y < canvas.height; y += 3) {
+      // CRT scanline effect (both modes) - very subtle
+      const scanlineOpacity = isDarkMode ? 0.02 : 0.015
+      ctx.fillStyle = `rgba(0, 0, 0, ${scanlineOpacity})`
+      for (let y = 0; y < canvas.height; y += 4) {
         ctx.fillRect(0, y, canvas.width, 1)
       }
 
-      // Subtle screen flicker (both modes)
-      if (Math.random() > 0.97) {
-        ctx.fillStyle = `rgba(${terminalRgb}, ${0.02 + Math.random() * 0.03})`
+      // Very subtle screen flicker (reduced frequency and intensity)
+      if (Math.random() > 0.995) {
+        ctx.fillStyle = `rgba(${terminalRgb}, ${0.01 + Math.random() * 0.01})`
         ctx.fillRect(0, 0, canvas.width, canvas.height)
       }
     }
@@ -966,23 +1052,34 @@ function InteractiveBackgroundComponent() {
     const drawLabyrinth = (time: number) => {
       const isExpanded = labyrinthExpanded.current
 
+      // Colors based on mode
+      const wallColor = isDarkMode ? '59, 130, 246' : '146, 64, 14'
+      const textColor = isDarkMode ? '147, 197, 253' : '120, 53, 15'
+      const playerColor = isDarkMode ? '59, 130, 246' : '180, 83, 9'
+
       if (isExpanded) {
-        // Expanded mode - darker background with subtle gradient
+        // Expanded mode - background with subtle gradient
         const gradient = ctx.createRadialGradient(
           canvas.width / 2, canvas.height / 2, 0,
           canvas.width / 2, canvas.height / 2, canvas.width / 1.5
         )
-        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
-        gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
+        if (isDarkMode) {
+          gradient.addColorStop(0, 'rgba(15, 23, 42, 0.98)')
+          gradient.addColorStop(1, 'rgba(5, 10, 20, 1)')
+        } else {
+          gradient.addColorStop(0, 'rgba(253, 251, 247, 0.98)')
+          gradient.addColorStop(1, 'rgba(245, 241, 232, 1)')
+        }
         ctx.fillStyle = gradient
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         // Border frame
-        ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+        ctx.strokeStyle = `rgba(${wallColor}, 0.3)`
         ctx.lineWidth = 2
         ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40)
       } else {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)' // dark background
+        const bgColor = isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(253, 251, 247, 0.85)'
+        ctx.fillStyle = bgColor
         ctx.fillRect(0, 0, canvas.width, canvas.height)
       }
 
@@ -994,12 +1091,17 @@ function InteractiveBackgroundComponent() {
         if (resetLabyrinth.current) resetLabyrinth.current = false
       }
 
-      const cellSize = 25
-      const offsetX = (canvas.width - lab.maze[0].length * cellSize) / 2
+      const cellSize = 20 // Smaller cells for more compact maze
+      // Shift maze to the right to avoid the glass pane overlay in light mode
+      const mazeWidth = lab.maze[0].length * cellSize
+      const baseOffsetX = (canvas.width - mazeWidth) / 2
+      // In light mode (not expanded), shift right by 45% of canvas width to clear the glass pane
+      const rightShift = (!isExpanded && !isDarkMode) ? canvas.width * 0.4 : 0
+      const offsetX = Math.min(baseOffsetX + rightShift, canvas.width - mazeWidth - 10)
       const offsetY = (canvas.height - lab.maze.length * cellSize) / 2
 
       // Draw maze
-      ctx.font = 'bold 16px monospace'
+      ctx.font = 'bold 13px monospace'
       for (let y = 0; y < lab.maze.length; y++) {
         for (let x = 0; x < lab.maze[y].length; x++) {
           const px = offsetX + x * cellSize
@@ -1008,27 +1110,27 @@ function InteractiveBackgroundComponent() {
 
           if (cell === 1) {
             // Wall
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.3)'
+            ctx.fillStyle = `rgba(${wallColor}, 0.3)`
             ctx.fillRect(px, py, cellSize, cellSize)
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.6)'
-            ctx.fillText('█', px + 5, py + 18)
+            ctx.fillStyle = `rgba(${wallColor}, 0.6)`
+            ctx.fillText('█', px + 3, py + 15)
           } else if (cell === 2 && !lab.collected.has(`${x},${y}`)) {
             // Book (Library of Babel)
             ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
-            ctx.fillText('📖', px + 4, py + 18)
+            ctx.fillText('📖', px + 2, py + 15)
           } else if (cell === 3 && !lab.collected.has(`${x},${y}`)) {
             // Key
             ctx.fillStyle = 'rgba(251, 191, 36, 0.8)' // amber
-            ctx.fillText('🗝', px + 4, py + 18)
+            ctx.fillText('🗝', px + 2, py + 15)
           } else if (cell === 4 && !lab.collected.has(`${x},${y}`)) {
             // Mirror (Tlön)
-            ctx.fillStyle = 'rgba(147, 197, 253, 0.8)' // blue-300
-            ctx.fillText('🪞', px + 4, py + 18)
+            ctx.fillStyle = isDarkMode ? 'rgba(147, 197, 253, 0.8)' : 'rgba(30, 64, 175, 0.8)'
+            ctx.fillText('🪞', px + 2, py + 15)
           } else if (cell === 5) {
             // Exit
             const exitColor = lab.solved ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.7)'
             ctx.fillStyle = exitColor
-            ctx.fillText('🚪', px + 4, py + 18)
+            ctx.fillText('🚪', px + 2, py + 15)
           }
         }
       }
@@ -1036,12 +1138,12 @@ function InteractiveBackgroundComponent() {
       // Draw player
       const playerPx = offsetX + lab.playerX * cellSize
       const playerPy = offsetY + lab.playerY * cellSize
-      ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : 'rgba(59, 130, 246, 1)'
-      ctx.fillText('@', playerPx + 7, playerPy + 18)
+      ctx.fillStyle = lab.solved ? 'rgba(34, 197, 94, 1)' : `rgba(${playerColor}, 1)`
+      ctx.fillText('@', playerPx + 5, playerPy + 15)
 
       // Draw inventory
       ctx.font = '14px monospace'
-      ctx.fillStyle = 'rgba(147, 197, 253, 0.9)'
+      ctx.fillStyle = `rgba(${textColor}, 0.9)`
       const inventoryY = 30
       ctx.fillText('Inventory:', 20, inventoryY)
       let invY = inventoryY + 20
@@ -1061,14 +1163,14 @@ function InteractiveBackgroundComponent() {
       // Draw message
       if (Date.now() - lab.messageTime < 3000) {
         ctx.font = 'bold 14px monospace'
-        ctx.fillStyle = 'rgba(251, 191, 36, 1)'
+        ctx.fillStyle = isDarkMode ? 'rgba(251, 191, 36, 1)' : 'rgba(180, 83, 9, 1)'
         const msgWidth = ctx.measureText(lab.message).width
         ctx.fillText(lab.message, (canvas.width - msgWidth) / 2, canvas.height - 60)
       }
 
       // Draw instructions
       ctx.font = '12px monospace'
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'
+      ctx.fillStyle = `rgba(${wallColor}, 0.5)`
       const instructions = isExpanded
         ? 'Arrow keys to move | Find 3 artifacts to unlock exit | ESC or close button to exit'
         : 'Arrow keys to move | Find 3 artifacts to unlock exit | Click to change mode'
@@ -1086,13 +1188,18 @@ function InteractiveBackgroundComponent() {
 
     // Bibliotheca - Living Library with floating books and scrolls
     const drawBibliotheca = (time: number) => {
-      // Deep library background with warm glow
+      // Background with warm glow - adjusted for light/dark mode
       const gradient = ctx.createRadialGradient(
         canvas.width / 2, canvas.height / 2, 0,
         canvas.width / 2, canvas.height / 2, canvas.width / 2
       )
-      gradient.addColorStop(0, 'rgba(30, 20, 10, 0.95)')
-      gradient.addColorStop(1, 'rgba(10, 5, 0, 0.98)')
+      if (isDarkMode) {
+        gradient.addColorStop(0, 'rgba(30, 20, 10, 0.95)')
+        gradient.addColorStop(1, 'rgba(10, 5, 0, 0.98)')
+      } else {
+        gradient.addColorStop(0, 'rgba(253, 251, 247, 0.9)')
+        gradient.addColorStop(1, 'rgba(245, 235, 220, 0.95)')
+      }
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -1103,6 +1210,7 @@ function InteractiveBackgroundComponent() {
       }
 
       // Update and draw dust motes for atmosphere
+      const dustColor = isDarkMode ? '200, 180, 150' : '160, 140, 100'
       dustMotes.current.forEach((mote: { x: number; y: number; vx: number; vy: number; opacity: number }) => {
         mote.x += mote.vx
         mote.y += mote.vy
@@ -1112,7 +1220,7 @@ function InteractiveBackgroundComponent() {
         if (mote.y < 0) mote.y = canvas.height
         if (mote.y > canvas.height) mote.y = 0
 
-        ctx.fillStyle = `rgba(200, 180, 150, ${mote.opacity})`
+        ctx.fillStyle = `rgba(${dustColor}, ${mote.opacity})`
         ctx.beginPath()
         ctx.arc(mote.x, mote.y, 1, 0, Math.PI * 2)
         ctx.fill()
@@ -1277,23 +1385,26 @@ function InteractiveBackgroundComponent() {
 
       // Draw title
       ctx.font = 'bold 16px serif'
-      ctx.fillStyle = 'rgba(220, 200, 170, 0.7)'
+      ctx.fillStyle = isDarkMode ? 'rgba(220, 200, 170, 0.7)' : 'rgba(120, 80, 40, 0.8)'
       ctx.textAlign = 'left'
       ctx.fillText('✦ Bibliotheca Humanitatis ✦', 20, 30)
 
       // Hint text
       ctx.font = '12px serif'
-      ctx.fillStyle = 'rgba(200, 180, 150, 0.5)'
+      ctx.fillStyle = isDarkMode ? 'rgba(200, 180, 150, 0.5)' : 'rgba(120, 80, 40, 0.5)'
       ctx.fillText('Hover over books to reveal wisdom from across the ages', 20, canvas.height - 20)
     }
 
     // Animation loop
     // Falling blocks mode with particle explosions
     const drawBlocks = (time: number) => {
-      const ctx = canvasRef.current?.getContext('2d')
-      if (!ctx) return
+      // Clear canvas with background
+      const bgColor = isDarkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(253, 251, 247, 0.85)'
+      ctx.fillStyle = bgColor
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Block colors based on mode
+      const blockColor = isDarkMode ? '59, 130, 246' : '180, 83, 9'
 
       // Handle pop all blocks action
       if (popAllBlocks.current) {
@@ -1330,17 +1441,17 @@ function InteractiveBackgroundComponent() {
         lastBlockSpawn.current = time
       }
 
-      // Spawn new blocks
-      if (time - lastBlockSpawn.current > 2000) {
+      // Spawn new blocks - slower spawn rate
+      if (time - lastBlockSpawn.current > 2500) {
         const word = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)].text.split(' ').slice(0, 2).join(' ')
         fallingBlocks.current.push({
-          x: Math.random() * canvas.width,
-          y: -30,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: 0.4 + Math.random() * 0.3,
+          x: Math.random() * canvas.width * 0.8 + canvas.width * 0.1, // Keep blocks in middle 80%
+          y: -40,
+          vx: (Math.random() - 0.5) * 0.15, // Slower horizontal drift
+          vy: 0.25 + Math.random() * 0.15, // Slower fall speed
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.01,
-          size: 20 + Math.random() * 10,
+          rotationSpeed: (Math.random() - 0.5) * 0.005, // Slower rotation
+          size: 28 + Math.random() * 12, // Slightly larger blocks
           word,
           destroyed: false
         })
@@ -1370,16 +1481,16 @@ function InteractiveBackgroundComponent() {
           block.vx *= -1
         }
 
-        // Draw block (blue maze-style block)
+        // Draw block - color based on mode
         ctx.save()
         ctx.translate(block.x, block.y)
         ctx.rotate(block.rotation)
 
-        ctx.fillStyle = 'rgba(59, 130, 246, 0.7)'
+        ctx.fillStyle = `rgba(${blockColor}, 0.7)`
         ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
         // Border
-        ctx.strokeStyle = 'rgba(59, 130, 246, 1)'
+        ctx.strokeStyle = `rgba(${blockColor}, 1)`
         ctx.lineWidth = 2
         ctx.strokeRect(-block.size / 2, -block.size / 2, block.size, block.size)
 
@@ -1389,6 +1500,7 @@ function InteractiveBackgroundComponent() {
       })
 
       // Update and draw particles
+      const particleColor = isDarkMode ? '234, 179, 8' : '180, 83, 9'
       blockParticles.current = blockParticles.current.filter(particle => {
         particle.x += particle.vx
         particle.y += particle.vy
@@ -1401,8 +1513,7 @@ function InteractiveBackgroundComponent() {
 
         const alpha = 1 - (particle.life / particle.maxLife)
 
-        // Amber particles
-        ctx.fillStyle = `rgba(234, 179, 8, ${alpha})`
+        ctx.fillStyle = `rgba(${particleColor}, ${alpha})`
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fill()
@@ -1419,36 +1530,47 @@ function InteractiveBackgroundComponent() {
         .filter(b => b.destroyed)
         .slice(-8)
 
+      const wordColor = isDarkMode ? '234, 179, 8' : '146, 64, 14'
       revealedWords.forEach((block) => {
         const fadeIn = block.destroyedTime ? Math.min(1, (Date.now() - block.destroyedTime) / 1000) : 1
 
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+        ctx.shadowColor = isDarkMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.2)'
         ctx.shadowBlur = 4
-        ctx.fillStyle = `rgba(234, 179, 8, ${fadeIn})`
+        ctx.fillStyle = `rgba(${wordColor}, ${fadeIn})`
         ctx.fillText(block.word, block.x, block.y)
         ctx.shadowBlur = 0
       })
     }
 
     let lastTime = 0
-    const animate = (time: number) => {
-      const deltaTime = time - lastTime
-      lastTime = time
+    let lastFrameTime = 0
+    const targetFPS = 30
+    const frameInterval = 1000 / targetFPS
 
-      if (mode === 'ascii') {
-        drawAsciiGrid(time)
-      } else if (mode === 'matrix') {
-        drawMatrix(time)
-      } else if (mode === 'particles') {
-        drawParticles(time)
-      } else if (mode === 'terminal') {
-        drawTerminal(time)
-      } else if (mode === 'labyrinth') {
-        drawLabyrinth(time)
-      } else if (mode === 'bibliotheca') {
-        drawBibliotheca(time)
-      } else if (mode === 'blocks') {
-        drawBlocks(time)
+    const animate = (time: number) => {
+      // Throttle to 30fps for smoother animation
+      const elapsed = time - lastFrameTime
+
+      if (elapsed >= frameInterval) {
+        lastFrameTime = time - (elapsed % frameInterval)
+        const deltaTime = time - lastTime
+        lastTime = time
+
+        if (mode === 'ascii') {
+          drawAsciiGrid(time)
+        } else if (mode === 'matrix') {
+          drawMatrix(time)
+        } else if (mode === 'particles') {
+          drawParticles(time)
+        } else if (mode === 'terminal') {
+          drawTerminal(time)
+        } else if (mode === 'labyrinth') {
+          drawLabyrinth(time)
+        } else if (mode === 'bibliotheca') {
+          drawBibliotheca(time)
+        } else if (mode === 'blocks') {
+          drawBlocks(time)
+        }
       }
 
       animationFrameId.current = requestAnimationFrame(animate)
@@ -1465,7 +1587,7 @@ function InteractiveBackgroundComponent() {
         cancelAnimationFrame(animationFrameId.current)
       }
     }
-  }, [mode])
+  }, [mode, isDarkMode])
 
   const cycleMode = () => {
     setMode((current: BackgroundMode) => {
@@ -1506,12 +1628,19 @@ function InteractiveBackgroundComponent() {
   }
 
   const renderControls = () => {
-    const buttonClass = "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+    // Adaptive button styling for light/dark mode
+    const buttonClass = isDarkMode
+      ? "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+      : "px-3 py-1.5 text-xs rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900"
+
+    const containerClass = isDarkMode
+      ? "flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10"
+      : "flex flex-col gap-1.5 bg-white/60 backdrop-blur-md rounded-lg p-2 border border-amber-200/50 shadow-sm"
 
     return (
       <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto">
         {mode === 'matrix' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); matrixPaused.current = !matrixPaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
               {matrixPaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
@@ -1525,7 +1654,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'terminal' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className={buttonClass}>
               Color: {terminalColorScheme.current}
             </button>
@@ -1539,7 +1668,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'particles' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); particlePaused.current = !particlePaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
               {particlePaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
@@ -1550,7 +1679,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'ascii' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); asciiPaused.current = !asciiPaused.current; forceUpdate(n => n + 1); }} className={buttonClass}>
               {asciiPaused.current ? '▶ Resume' : '⏸ Pause'}
             </button>
@@ -1558,7 +1687,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'labyrinth' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); labyrinthExpanded.current = !labyrinthExpanded.current; forceUpdate(n => n + 1); }} className={buttonClass}>
               {labyrinthExpanded.current ? '↙ Minimize' : '↗ Expand'}
             </button>
@@ -1569,7 +1698,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'bibliotheca' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => { e.stopPropagation(); refreshBooks.current = true; }} className={buttonClass}>
               Refresh Books
             </button>
@@ -1577,7 +1706,7 @@ function InteractiveBackgroundComponent() {
         )}
 
         {mode === 'blocks' && (
-          <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
+          <div className={containerClass}>
             <button onClick={(e) => {
               e.stopPropagation();
               popAllBlocks.current = true;
@@ -1653,21 +1782,36 @@ function InteractiveBackgroundComponent() {
           {/* Controls */}
           <div className="absolute bottom-4 right-4 z-[10000] flex flex-col gap-2 pointer-events-auto">
             {isExpanded ? (
-              // Expanded mode controls
+              // Expanded mode controls - adaptive for light/dark
               <>
                 {mode === 'terminal' && (
-                  <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-                    <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                  <div className={isDarkMode
+                    ? "flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10"
+                    : "flex flex-col gap-1.5 bg-white/60 backdrop-blur-md rounded-lg p-2 border border-amber-200/50 shadow-sm"
+                  }>
+                    <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className={isDarkMode
+                      ? "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+                      : "px-3 py-1.5 text-xs rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900"
+                    }>
                       Color: {terminalColorScheme.current}
                     </button>
-                    <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                    <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className={isDarkMode
+                      ? "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+                      : "px-3 py-1.5 text-xs rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900"
+                    }>
                       Clear
                     </button>
                   </div>
                 )}
                 {mode === 'labyrinth' && (
-                  <div className="flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10">
-                    <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className="px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white">
+                  <div className={isDarkMode
+                    ? "flex flex-col gap-1.5 bg-black/40 backdrop-blur-md rounded-lg p-2 border border-white/10"
+                    : "flex flex-col gap-1.5 bg-white/60 backdrop-blur-md rounded-lg p-2 border border-amber-200/50 shadow-sm"
+                  }>
+                    <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className={isDarkMode
+                      ? "px-3 py-1.5 text-xs rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white"
+                      : "px-3 py-1.5 text-xs rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900"
+                    }>
                       Reset Maze
                     </button>
                   </div>

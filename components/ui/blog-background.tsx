@@ -69,7 +69,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       '◼', '◽', '◾', '■', '▀', '▄', '█', '◆', '◇', '◈'
     ]
 
-    const gridSize = 60
+    const gridSize = 40 // Smaller grid for denser pattern
     const cols = Math.ceil(canvas.width / gridSize)
     const rows = Math.ceil(canvas.height / gridSize)
 
@@ -91,6 +91,16 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
         fadeProgress.current = Math.max(0, fadeProgress.current - fadeSpeed)
       }
 
+      // Throttle to 30fps for smoother animation and better performance
+      const targetFPS = 30
+      const frameInterval = 1000 / targetFPS
+      const elapsed = time - lastFrameTime.current
+      if (elapsed < frameInterval) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+      lastFrameTime.current = time - (elapsed % frameInterval)
+
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -100,26 +110,18 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
         return
       }
 
-      // Performance: only update time if enough time has passed (16ms = 60fps)
-      const deltaTime = time - lastFrameTime.current
-      if (deltaTime < 16) {
-        animationFrameId.current = requestAnimationFrame(draw)
-        return
-      }
-      lastFrameTime.current = time
-
-      ctx.font = 'bold 36px Georgia, serif'
+      ctx.font = 'bold 22px Georgia, serif' // Smaller font for denser grid
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
       timeRef.current = time
 
-      const hoverRadius = 200
-      const headerHoverRadius = 400 // Larger radius when header is hovered
-      const baseOpacity = 0.18 // Increased opacity for better visibility
+      const hoverRadius = 250
+      const headerHoverRadius = 500 // Larger radius when header is hovered
+      const baseOpacity = 0.35 // Much higher opacity for better visibility
 
-      // Cache canvas dimensions
-      const canvasHalfHeight = canvas.height * 0.5
+      // Cache canvas dimensions - fade starts from 30% down to make top much darker
+      const fadeStartY = canvas.height * 0.3
       const canvasHeight = canvas.height
 
       // Always use localized mode, but with different radius based on header hover
@@ -148,7 +150,8 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
           if (distanceFromCursor >= activeRadius) continue
 
           const cursorProximity = 1 - (distanceFromCursor / activeRadius)
-          const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
+          // Stronger vertical fade - max opacity at top, fades to 0 at fadeStartY
+          const verticalFade = y < fadeStartY ? 1 : Math.max(0, 1 - ((y - fadeStartY) / (canvasHeight - fadeStartY)))
           const finalOpacity = verticalFade * baseOpacity * cursorProximity * fadeProgress.current
 
           if (finalOpacity > 0.01) {
@@ -206,7 +209,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-auto"
-      style={{ opacity: 1 }}
+      style={{ opacity: 1, maxHeight: '200px' }}
     />
   )
 }

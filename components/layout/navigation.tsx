@@ -2,18 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { Container } from '@/components/ui/container'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { MazeLogo } from '@/components/ui/maze-logo'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const navigation = [
-  { name: 'Home', href: '/', color: '#eab308' }, // Amber
+  { name: 'Home', href: '/', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
   { name: 'Projects', href: '/projects', color: '#06b6d4' }, // Cyan
   { name: 'Pedagogy', href: '/pedagogy', color: '#8b5cf6' }, // Violet
-  { name: 'Resources', href: '/resources', color: '#eab308' }, // Amber
+  { name: 'Resources', href: '/resources', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
   { name: 'Guides', href: '/guides', color: '#3b82f6' }, // Blue
   { name: 'Blog', href: '/blog', color: '#f43f5e' }, // Rose
   { name: 'About', href: '/about', color: '#6366f1' }, // Indigo
@@ -22,18 +23,34 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const getItemColor = (item: typeof navigation[0]) => {
+    if (!mounted) return item.color
+    if (item.darkColor && resolvedTheme === 'dark') {
+      return item.darkColor
+    }
+    return item.color
+  }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm">
       <Container>
-        <nav className="flex h-16 items-center justify-between">
+        <nav className="flex h-[72px] items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <MazeLogo className="h-7 w-7 text-primary group-hover:text-amber-600 transition-colors" />
-              <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
+            <Link href="/" className="flex items-baseline gap-1.5 group">
+              <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-500 transition-all duration-300 self-center" />
+              <span className="text-[1.75rem] font-sans font-bold tracking-tight text-foreground group-hover:text-primary transition-all duration-300 leading-none">
                 THINK
               </span>
-              <span className="text-lg font-sans font-light text-muted-foreground/70">@ UCSC</span>
+              <span className="text-[0.95rem] font-logo font-semibold text-primary group-hover:text-amber-500 transition-all duration-300 leading-none relative top-[-2px]">
+                @ UCSC
+              </span>
             </Link>
           </div>
 
@@ -44,23 +61,23 @@ export function Navigation() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'relative px-4 py-2 text-sm font-medium transition-colors rounded-md',
+                  'relative px-4 py-2.5 text-[16px] font-semibold tracking-[-0.01em] transition-all duration-200 rounded-lg',
                   pathname === item.href
-                    ? ''
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                    ? 'text-foreground'
+                    : 'text-foreground/90 hover:text-foreground hover:bg-accent/60'
                 )}
-                style={pathname === item.href ? { color: item.color } : undefined}
+                style={pathname === item.href ? { color: getItemColor(item) } : undefined}
               >
                 {item.name}
                 {pathname === item.href && (
                   <span
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
-                    style={{ backgroundColor: item.color }}
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[2.5px] w-6 rounded-full transition-all duration-300"
+                    style={{ backgroundColor: getItemColor(item) }}
                   />
                 )}
               </Link>
             ))}
-            <div className="ml-2 pl-2 border-l">
+            <div className="ml-4 pl-4 border-l border-border/50">
               <ThemeToggle />
             </div>
           </div>

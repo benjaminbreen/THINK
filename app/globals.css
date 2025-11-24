@@ -4,56 +4,63 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Warm, cream-based light mode palette */
+    --background: 40 33% 98%;
+    --foreground: 25 30% 12%;
+    --card: 40 30% 99%;
+    --card-foreground: 25 30% 12%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 25 30% 12%;
+    --primary: 25 85% 45%;
+    --primary-foreground: 40 30% 99%;
+    --secondary: 38 35% 93%;
+    --secondary-foreground: 25 30% 15%;
+    --muted: 38 25% 93%;
+    --muted-foreground: 25 15% 45%;
+    --accent: 38 35% 91%;
+    --accent-foreground: 25 30% 15%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 30% 99%;
+    --border: 35 25% 88%;
+    --input: 35 25% 88%;
+    --ring: 25 85% 45%;
     --radius: 0.5rem;
 
-    /* Secondary accent colors */
+    /* Warm accent colors */
     --accent-amber: 29 96% 48%;
     --accent-amber-foreground: 0 0% 100%;
+    --accent-terracotta: 15 70% 50%;
+    --accent-sage: 145 30% 45%;
+    --accent-cream: 40 40% 95%;
   }
 
   .dark {
-    --background: 215 25% 12%;
-    --foreground: 210 40% 98%;
-    --card: 215 25% 14%;
-    --card-foreground: 210 40% 98%;
-    --popover: 215 25% 14%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 215 25% 12%;
-    --secondary: 215 20% 20%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 215 20% 20%;
-    --muted-foreground: 215 16% 70%;
-    --accent: 215 20% 22%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 215 20% 25%;
-    --input: 215 20% 22%;
-    --ring: 217.2 91.2% 59.8%;
+    /* Warm dark mode - deep slate with amber undertones */
+    --background: 220 20% 10%;
+    --foreground: 40 20% 95%;
+    --card: 220 18% 13%;
+    --card-foreground: 40 20% 95%;
+    --popover: 220 18% 13%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 30 90% 55%;
+    --primary-foreground: 220 20% 10%;
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 40 20% 95%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 40 10% 65%;
+    --accent: 220 15% 20%;
+    --accent-foreground: 40 20% 95%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 40 20% 95%;
+    --border: 220 15% 22%;
+    --input: 220 15% 20%;
+    --ring: 30 90% 55%;
 
-    /* Secondary accent colors */
-    --accent-sage: 160 84% 39%;
-    --accent-sage-foreground: 0 0% 100%;
+    /* Dark mode accent colors */
+    --accent-amber: 35 95% 55%;
+    --accent-amber-foreground: 220 20% 10%;
+    --accent-sage: 145 40% 50%;
+    --accent-sage-foreground: 220 20% 10%;
   }
 }
 
@@ -299,30 +306,30 @@ html {
 
 /* Hover lift effect */
 .hover-lift {
-  @apply transition-all duration-300;
+  @apply transition-all duration-300 ease-out;
 }
 
 .hover-lift:hover {
-  @apply -translate-y-1 shadow-xl;
+  @apply -translate-y-1;
+  box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.12);
 }
 
 /* Enhanced hover lift with glow */
 .hover-lift-glow {
-  @apply transition-all duration-300;
+  @apply transition-all duration-300 ease-out;
 }
 
 .hover-lift-glow:hover {
-  @apply -translate-y-1;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1),
-              0 0 0 1px rgba(0, 0, 0, 0.02),
-              0 0 20px rgba(var(--primary), 0.08);
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15),
+              0 0 0 1px rgba(0, 0, 0, 0.03),
+              0 0 24px rgba(var(--primary), 0.1);
 }
 
 .dark .hover-lift-glow:hover {
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3),
-              0 0 0 1px rgba(255, 255, 255, 0.05),
-              0 0 20px rgba(var(--primary), 0.15);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.06),
+              0 0 24px rgba(var(--primary), 0.18);
 }
 
 /* Badge hover effects */
@@ -359,11 +366,18 @@ html {
 
 /* Button hover scale */
 .btn-hover-scale {
-  @apply transition-all duration-200;
+  @apply transition-all ease-out;
+  transition-duration: 250ms;
+  position: relative;
 }
 
 .btn-hover-scale:hover {
-  transform: scale(1.05);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.12);
+}
+
+.btn-hover-scale:active {
+  transform: translateY(0) scale(0.99);
 }
 
 /* Shimmer effect */
@@ -389,21 +403,118 @@ html {
   animation: shimmer-slide 3s infinite;
 }
 
-/* Mixed-mode sections (always dark) */
-.mixed-mode-dark {
-  --foreground: 210 40% 98%;
-  --card-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  @apply text-[hsl(var(--foreground))];
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.96), rgba(10, 18, 35, 0.98));
-  backdrop-filter: blur(8px);
+/* Hero section with interactive background */
+.hero-with-background {
+  position: relative;
 }
 
-.dark .mixed-mode-dark {
-  background: linear-gradient(to bottom, rgba(10, 18, 35, 0.80), rgba(8, 15, 30, 0.90));
-  backdrop-filter: blur(12px);
+/* Frosted glass pane for hero content - skeuomorphic glass effect */
+.hero-glass-pane {
+  @apply backdrop-blur-lg rounded-2xl transition-all duration-300;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.42) 100%
+  );
+  box-shadow:
+    0 8px 32px -8px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.02);
+  animation: hero-glass-enter 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* More transparent on hover */
+.hero-glass-pane:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
+  box-shadow:
+    0 8px 32px -8px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.01);
+}
+
+/* Subtle glass reflection effect */
+.hero-glass-pane::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  border-radius: 1rem 1rem 0 0;
+  transition: opacity 0.3s;
+}
+
+.hero-glass-pane:hover::before {
+  opacity: 0.6;
+}
+
+.dark .hero-glass-pane {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.7) 0%,
+    rgba(15, 23, 42, 0.55) 50%,
+    rgba(15, 23, 42, 0.62) 100%
+  );
+  box-shadow:
+    0 8px 32px -8px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.dark .hero-glass-pane:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(15, 23, 42, 0.4) 50%,
+    rgba(15, 23, 42, 0.48) 100%
+  );
+}
+
+.dark .hero-glass-pane::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+@keyframes hero-glass-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero text colors for light mode glass pane */
+.hero-glass-pane h1,
+.hero-glass-pane p,
+.hero-glass-pane span {
+  @apply text-foreground;
+}
+
+.hero-glass-pane .hero-subtitle {
+  @apply text-muted-foreground;
 }
 
 /* Gradient borders */

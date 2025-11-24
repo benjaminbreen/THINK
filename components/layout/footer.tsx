@@ -30,6 +30,7 @@ const footerLinks = {
 
 export function Footer() {
   const [showMaze, setShowMaze] = useState(false)
+  const [showColophon, setShowColophon] = useState(false)
 
   return (
     <>
@@ -39,12 +40,14 @@ export function Footer() {
             <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
               {/* Brand */}
               <div className="md:col-span-1">
-                <Link href="/" className="flex items-center space-x-2 group">
-                  <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-600 transition-colors" />
-                  <span className="text-2xl font-serif font-bold text-primary group-hover:text-amber-600 transition-colors">
+                <Link href="/" className="flex items-baseline gap-1.5 group">
+                  <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-500 transition-all duration-300 self-center" />
+                  <span className="text-[1.75rem] font-sans font-bold tracking-tight text-foreground group-hover:text-primary transition-all duration-300 leading-none">
                     THINK
                   </span>
-                  <span className="text-xl font-sans font-light text-muted-foreground">@ UCSC</span>
+                  <span className="text-[0.95rem] font-logo font-semibold text-primary group-hover:text-amber-500 transition-all duration-300 leading-none relative top-[-2px]">
+                    @ UCSC
+                  </span>
                 </Link>
                 <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
                   Teaching with and about AI in humanities classes
@@ -65,13 +68,13 @@ export function Footer() {
 
               {/* Projects */}
               <div>
-                <h3 className="text-sm font-bold mb-4 text-foreground">Projects</h3>
-                <ul className="space-y-3">
+                <h3 className="text-sm font-semibold mb-4 text-foreground tracking-wide uppercase text-xs">Projects</h3>
+                <ul className="space-y-2.5">
                   {footerLinks.projects.map((link) => (
                     <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
+                        className="text-sm text-muted-foreground hover:text-primary transition-all duration-200 inline-block hover:translate-x-1"
                       >
                         {link.name}
                       </Link>
@@ -82,13 +85,13 @@ export function Footer() {
 
               {/* Resources */}
               <div>
-                <h3 className="text-sm font-bold mb-4 text-foreground">Resources</h3>
-                <ul className="space-y-3">
+                <h3 className="text-sm font-semibold mb-4 text-foreground tracking-wide uppercase text-xs">Resources</h3>
+                <ul className="space-y-2.5">
                   {footerLinks.resources.map((link) => (
                     <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
+                        className="text-sm text-muted-foreground hover:text-primary transition-all duration-200 inline-block hover:translate-x-1"
                       >
                         {link.name}
                       </Link>
@@ -99,8 +102,8 @@ export function Footer() {
 
               {/* About */}
               <div>
-                <h3 className="text-sm font-bold mb-4 text-foreground">About</h3>
-                <ul className="space-y-3">
+                <h3 className="text-sm font-semibold mb-4 text-foreground tracking-wide uppercase text-xs">About</h3>
+                <ul className="space-y-2.5">
                   {footerLinks.about.map((link) => (
                     <li key={link.name}>
                       {link.external ? (
@@ -108,15 +111,15 @@ export function Footer() {
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors group"
+                          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-all duration-200 group"
                         >
                           <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                          <ExternalLink className="h-3 w-3" />
+                          <ExternalLink className="h-3 w-3 opacity-60" />
                         </a>
                       ) : (
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1 transition-transform duration-200"
+                          className="text-sm text-muted-foreground hover:text-primary transition-all duration-200 inline-block hover:translate-x-1"
                         >
                           {link.name}
                         </Link>
@@ -129,7 +132,15 @@ export function Footer() {
 
             <div className="mt-12 pt-8 border-t border-border/50">
               <p className="text-sm text-muted-foreground text-center">
-                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the Humanities.
+                © {new Date().getFullYear()} THINK Project, UC Santa Cruz. Funded by the National Endowment for the Humanities and the Humanities Institute, UC Santa Cruz.
+              </p>
+              <p className="text-sm text-muted-foreground text-center mt-2">
+                <button
+                  onClick={() => setShowColophon(true)}
+                  className="hover:text-primary transition-colors underline underline-offset-2"
+                >
+                  Colophon
+                </button>
               </p>
 
               {/* Hidden Maze Easter Egg Trigger */}
@@ -197,6 +208,49 @@ export function Footer() {
               </button>
               <div className="absolute inset-0">
                 <BorgesianMaze />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Colophon Modal */}
+      {showColophon && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={() => setShowColophon(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-background border rounded-lg shadow-xl max-w-md w-full p-6 relative">
+              <button
+                onClick={() => setShowColophon(false)}
+                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-serif font-bold mb-4">Colophon</h2>
+              <div className="prose prose-sm text-muted-foreground">
+                <p className="mb-3">
+                  This website was designed and built by{' '}
+                  <strong className="text-foreground">Claude</strong>, an AI assistant developed by Anthropic.
+                </p>
+                <p className="mb-3">
+                  Oversight, design guidance, and testing by{' '}
+                  <strong className="text-foreground">Benjamin Breen</strong>, Assistant Professor of History at UC Santa Cruz.
+                </p>
+                <p className="text-xs mt-4 pt-4 border-t border-border/50">
+                  Built with Next.js, Tailwind CSS, and shadcn/ui. Source code available on{' '}
+                  <a
+                    href="https://github.com/benjaminbreen/THINK"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    GitHub
+                  </a>.
+                </p>
               </div>
             </div>
           </div>

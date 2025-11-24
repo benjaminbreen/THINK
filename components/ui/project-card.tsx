@@ -33,40 +33,41 @@ export function ProjectCard({
 
   return (
     <Link href={href} className="block group">
-      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer`}>
-        <CardHeader>
+      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 ease-out cursor-pointer border-border/60 hover:border-primary/30`}>
+        <CardHeader className="pb-3">
           {hasImage ? (
-            <div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
+            <div className="relative w-full h-36 rounded-lg overflow-hidden mb-3 bg-muted/30">
               <Image
                 src={thumbnailPath}
                 alt={title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-all duration-500 ease-out group-hover:scale-[1.03]"
                 onError={() => setHasImage(false)}
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           ) : null}
           <div className="flex items-start justify-between mb-2">
-            <Badge className="text-xs bg-amber-600 group-hover:bg-amber-700 text-white transition-colors">
+            <Badge className="text-xs font-medium bg-primary/90 group-hover:bg-primary text-primary-foreground transition-colors duration-200">
               {type}
             </Badge>
-            <span className="text-xs text-muted-foreground">{year}</span>
+            <span className="text-xs text-muted-foreground font-medium">{year}</span>
           </div>
-          <CardTitle className="text-xl mb-2 group-hover:text-amber-600 transition-colors">{title}</CardTitle>
-          <CardDescription className="text-sm mb-2 leading-snug">
+          <CardTitle className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-200">{title}</CardTitle>
+          <CardDescription className="text-sm mb-3 leading-relaxed text-muted-foreground/90">
             {description}
           </CardDescription>
           <div className="flex flex-wrap gap-1.5">
             {tags.map((tag) => (
-              <Badge key={tag} variant="outline" className="text-xs">
+              <Badge key={tag} variant="outline" className="text-xs font-normal border-border/70">
                 {tag}
               </Badge>
             ))}
           </div>
         </CardHeader>
-        <CardContent>
-          <span className="text-sm text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">
-            View project <ArrowRight className="ml-1 h-3 w-3" />
+        <CardContent className="pt-0">
+          <span className="text-sm font-medium text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+            View project <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </span>
         </CardContent>
       </Card>

@@ -52,6 +52,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
+          'var(--font-inter)',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
@@ -64,12 +65,19 @@ const config: Config = {
           'sans-serif',
         ],
         serif: [
-          'ui-serif',
           'Georgia',
           'Cambria',
           '"Times New Roman"',
           'Times',
+          'ui-serif',
           'serif',
+        ],
+        logo: [
+          'var(--font-space-grotesk)',
+          'var(--font-inter)',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
         ],
       },
       keyframes: {

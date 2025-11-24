@@ -13,63 +13,69 @@ export default function HomePage() {
   return (
     <>
       <LiteraryTransformer />
-      {/* Hero Section */}
-      <Section className="pt-16 pb-8 sm:pt-24 sm:pb-12 relative overflow-hidden mixed-mode-dark">
+      {/* Hero Section - Compact */}
+      <Section className="pt-10 pb-4 sm:pt-14 sm:pb-5 relative overflow-hidden hero-with-background min-h-[410px]">
         <InteractiveBackground />
         <Container className="relative z-10">
-          <div className="mx-auto max-w-4xl">
-            <div className="inline-block mb-3 animate-fade-in">
-              <Badge variant="outline" className="text-sm font-normal border-amber-600/30 text-amber-100">
-                <span data-literary="hero-badge">A collaborative resource for experimental AI tools in the humanities</span>
-              </Badge>
-            </div>
-            <h1 className="text-4xl font-serif font-bold tracking-tight sm:text-6xl mb-3 animate-fade-in animation-delay-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" data-literary="hero-title">
-              Building AI Tools for Teaching & Research
-            </h1>
-            <p className="text-lg text-white/80 mb-5 animate-fade-in animation-delay-200 leading-normal max-w-3xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" data-literary="hero-description">
-              A free, open resource hub for educators and researchers exploring experimental uses of AI in the humanities.
-              Browse projects, share your own work, and learn how to build custom tools for your courses and research.
-            </p>
-            <div className="flex flex-wrap gap-3 animate-fade-in animation-delay-300">
-              <Button asChild size="lg" className="btn-hover-scale bg-amber-600 hover:bg-amber-700 text-white border-0">
-                <Link href="/about">
-                  About THINK
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
-                <Link href="#guides">
-                  <BookOpen className="mr-2 h-4 w-4" /> How-to Guides
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="btn-hover-scale bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm">
-                <Link href="#projects">
-                  <Sparkles className="mr-2 h-4 w-4" /> Browse Projects
-                </Link>
-              </Button>
+          <div className="mx-auto max-w-2xl lg:max-w-3xl">
+            <div className="hero-glass-pane px-6 py-6 sm:px-10 sm:py-10">
+              <div className="inline-block mb-5 animate-fade-in">
+                <Badge variant="outline" className="text-sm font-normal border-primary/30 text-primary bg-primary/10">
+                  <span data-literary="hero-badge">Beta version</span>
+                </Badge>
+              </div>
+              <h1 className="text-3xl font-serif font-bold tracking-tight sm:text-5xl mb-5 animate-fade-in animation-delay-100 text-foreground" data-literary="hero-title">
+                Open Source Resources for Humanistic AI
+              </h1>
+              <p className="text-base sm:text-lg hero-subtitle animate-fade-in animation-delay-200 sm:leading-relaxed max-w-3xl" data-literary="hero-description">
+                A public resource hub for educators and researchers interested in creative, free, and otherwise interesting uses of AI in the humanities and beyond.
+              </p>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* About THINK Section */}
-      <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-y border-amber-200/30 dark:border-slate-700/40 py-0">
-        <Container className="-my-2">
+      {/* Navigation Buttons - Between hero and about */}
+      <Section className="sm:py-10 bg-gradient-to-b from-background to-[#f5f1e8] dark:to-slate-800/40">
+        <Container>
+          <div className="flex flex-wrap justify-center gap-4 animate-fade-in">
+            <Button asChild size="lg" className="btn-hover-scale bg-primary hover:bg-primary/90 text-primary-foreground border-0 px-8 py-6 text-base font-medium shadow-md">
+              <Link href="/about">
+                About THINK
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="btn-hover-scale border-primary/40 text-foreground hover:bg-primary/5 px-8 py-6 text-base font-medium shadow-sm bg-white/80 dark:bg-slate-900/50">
+              <Link href="#guides">
+                <BookOpen className="mr-2 h-5 w-5" /> How-to Guides
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="btn-hover-scale border-primary/40 text-foreground hover:bg-primary/5 px-8 py-6 text-base font-medium shadow-sm bg-white/80 dark:bg-slate-900/50">
+              <Link href="#projects">
+                <Sparkles className="mr-2 h-5 w-5" /> Browse Projects
+              </Link>
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      {/* About THINK Section - Compact */}
+      <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-2 border-amber-200/20 dark:border-slate-700/40 sm:py-6">
+        <Container>
           <div className="max-w-5xl mx-auto">
-            <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-10 py-7 shadow-md border border-amber-200/30 dark:border-slate-700/40">
-              <p className="text-xl leading-loose text-foreground/95 font-sans">
-                <span className="font-bold text-2xl text-amber-800 dark:text-amber-400">THINK</span> <span className="font-medium">is an NEH-funded project at UC Santa Cruz</span> offering free resources, learning materials, and interactive projects exploring AI in teaching, research, and learning within higher education. Our focus is on humanistic disciplines, emphasizing critical engagement and experimental approaches to educational technology. This project draws inspiration from Harvard's{' '}
-                <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-semibold">
+            <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-6 py-5 sm:px-8 sm:py-6 shadow-md border border-amber-200/30 dark:border-slate-700/40">
+              <p className="sm:text-lg sm:leading-8 text-foreground/90 font-sans">
+                <span className="font-bold text-lg sm:text-xl text-amber-800 dark:text-amber-400">THINK</span> is an NEH-funded project at UC Santa Cruz offering free resources and interactive projects exploring AI in teaching and research within the humanities. We draw inspiration from Harvard's{' '}
+                <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-medium">
                   AI Pedagogy Project
-                </a>{' '}
-                from metaLAB and the Berkman Klein Center,{' '}
-                <a href="https://mitsloanedtech.mit.edu/ai/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-semibold">
-                  MIT Sloan's Teaching with Generative AI Resource Hub
+                </a>,{' '}
+                <a href="https://mitsloanedtech.mit.edu/ai/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-medium">
+                  MIT Sloan's AI Resource Hub
                 </a>, and{' '}
-                <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-semibold">
-                  Brown University's framework for intentional pedagogy with AI
+                <a href="https://sheridan.brown.edu/resources/classroom-practices/intentional-pedagogy-ai-technology" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-medium">
+                  Brown's AI pedagogy framework
                 </a>.{' '}
-                <Link href="/contact" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-semibold">
-                  We welcome contributions
+               This is very much a work in progress. We  <Link href="/contact" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-medium">
+                  welcome contributions
                 </Link>{' '}
                 from educators across all fields.
               </p>
