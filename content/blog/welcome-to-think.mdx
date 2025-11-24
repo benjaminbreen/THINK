@@ -1,31 +1,12 @@
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
-import { Badge } from '@/components/ui/badge'
-
-export const metadata = {
-  title: 'Welcome to THINK',
-  description: 'Introducing the THINK project and our vision for AI-enabled humanities education',
-  date: '2024-01-15',
-  author: 'Benjamin Breen',
-}
-
-<Section className="pt-24 pb-16">
-  <Container>
-    <div className="mx-auto max-w-3xl">
-      <div className="mb-8">
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge>Announcement</Badge>
-          <Badge variant="outline">Education</Badge>
-        </div>
-        <h1 className="text-4xl font-serif font-bold mb-4">Welcome to THINK</h1>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <time dateTime="2024-01-15">January 15, 2024</time>
-          <span>by Benjamin Breen</span>
-          <span>5 min read</span>
-        </div>
-      </div>
-
-      <div className="prose prose-lg max-w-none">
+---
+title: "Welcome to THINK"
+description: "Introducing the THINK project and our vision for AI-enabled humanities education"
+author: "Benjamin Breen"
+date: "2024-01-15"
+tags:
+  - Announcement
+  - Pedagogy
+---
 
 ## Introduction
 
@@ -75,8 +56,3 @@ Whether you're an educator looking for new teaching tools, a student interested 
 Explore our projects, check out the pedagogy materials, and don't hesitate to reach out with questions, suggestions, or contributions.
 
 Welcome to THINK!
-
-      </div>
-    </div>
-  </Container>
-</Section>
