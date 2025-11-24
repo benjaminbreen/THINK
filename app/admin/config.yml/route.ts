@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server'
 
+// Set this to your Netlify site URL for Git Gateway auth
+// e.g., 'https://think-cms.netlify.app'
+const NETLIFY_SITE_URL = process.env.NETLIFY_SITE_URL || ''
+
 const config = `backend:
-  name: github
-  repo: benjaminbreen/THINK
+  name: git-gateway
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: /auth
+${NETLIFY_SITE_URL ? `  site_url: ${NETLIFY_SITE_URL}` : ''}
 
 # For local development - run: npx decap-server
 # Then uncomment the line below:
