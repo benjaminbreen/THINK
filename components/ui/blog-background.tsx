@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface BlogBackgroundProps {
   isHovered?: boolean
@@ -12,6 +12,8 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
   const animationFrameId = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
   const mousePos = useRef({ x: -1000, y: -1000 })
+  const fadeProgress = useRef(0)
+  const lastFrameTime = useRef(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -64,10 +66,31 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
     )
 
     const draw = (time: number) => {
-      // Semi-transparent background for fade effect - adapt to dark mode
-      const isDark = document.documentElement.classList.contains('dark')
-      ctx.fillStyle = isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      // Clear canvas completely to prevent flickering
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Smooth fade in/out animation (300ms = 18 frames at 60fps)
+      const isActive = isHovered || isHeaderHovered
+      const fadeSpeed = 1 / 18
+      if (isActive && fadeProgress.current < 1) {
+        fadeProgress.current = Math.min(1, fadeProgress.current + fadeSpeed)
+      } else if (!isActive && fadeProgress.current > 0) {
+        fadeProgress.current = Math.max(0, fadeProgress.current - fadeSpeed)
+      }
+
+      // Skip rendering if fully faded out
+      if (fadeProgress.current === 0) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+
+      // Performance: only update time if enough time has passed (16ms = 60fps)
+      const deltaTime = time - lastFrameTime.current
+      if (deltaTime < 16) {
+        animationFrameId.current = requestAnimationFrame(draw)
+        return
+      }
+      lastFrameTime.current = time
 
       ctx.font = 'bold 36px Georgia, serif'
       ctx.textAlign = 'center'
@@ -77,13 +100,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
 
       const hoverRadius = 200
       const headerHoverRadius = 400 // Larger radius when header is hovered
-      const baseOpacity = 0.12 // Lower opacity for more transparency
-
-      // Performance optimization: skip if not hovered
-      if (!isHovered && !isHeaderHovered) {
-        animationFrameId.current = requestAnimationFrame(draw)
-        return
-      }
+      const baseOpacity = 0.18 // Increased opacity for better visibility
 
       // Cache canvas dimensions
       const canvasHalfHeight = canvas.height * 0.5
@@ -116,7 +133,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
 
           const cursorProximity = 1 - (distanceFromCursor / activeRadius)
           const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
-          const finalOpacity = verticalFade * baseOpacity * cursorProximity
+          const finalOpacity = verticalFade * baseOpacity * cursorProximity * fadeProgress.current
 
           if (finalOpacity > 0.01) {
             // Get the evolution chain for this cell
