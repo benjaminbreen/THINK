@@ -76,6 +76,7 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       timeRef.current = time
 
       const hoverRadius = 200
+      const headerHoverRadius = 400 // Larger radius when header is hovered
       const baseOpacity = 0.12 // Lower opacity for more transparency
 
       // Performance optimization: skip if not hovered
@@ -88,45 +89,34 @@ export function BlogBackground({ isHovered = false, isHeaderHovered = false }: B
       const canvasHalfHeight = canvas.height * 0.5
       const canvasHeight = canvas.height
 
-      // When header is hovered, show full background; otherwise show localized
-      let minI = 0, maxI = cols - 1, minJ = 0, maxJ = rows - 1
+      // Always use localized mode, but with different radius based on header hover
+      const activeRadius = isHeaderHovered ? headerHoverRadius : hoverRadius
 
-      if (!isHeaderHovered) {
-        // Calculate cell range to check (only near cursor)
-        const mouseCellX = Math.floor(mousePos.current.x / gridSize)
-        const mouseCellY = Math.floor(mousePos.current.y / gridSize)
-        const cellRadius = Math.ceil(hoverRadius / gridSize) + 1
+      // Calculate cell range to check (only near cursor)
+      const mouseCellX = Math.floor(mousePos.current.x / gridSize)
+      const mouseCellY = Math.floor(mousePos.current.y / gridSize)
+      const cellRadius = Math.ceil(activeRadius / gridSize) + 1
 
-        minI = Math.max(0, mouseCellX - cellRadius)
-        maxI = Math.min(cols - 1, mouseCellX + cellRadius)
-        minJ = Math.max(0, mouseCellY - cellRadius)
-        maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
-      }
+      const minI = Math.max(0, mouseCellX - cellRadius)
+      const maxI = Math.min(cols - 1, mouseCellX + cellRadius)
+      const minJ = Math.max(0, mouseCellY - cellRadius)
+      const maxJ = Math.min(rows - 1, mouseCellY + cellRadius)
 
       for (let i = minI; i <= maxI; i++) {
         for (let j = minJ; j <= maxJ; j++) {
           const x = i * gridSize + gridSize / 2
           const y = j * gridSize + gridSize / 2
 
-          // Calculate opacity based on mode
-          let finalOpacity = 0
+          // Calculate opacity based on distance from cursor
+          const dx = mousePos.current.x - x
+          const dy = mousePos.current.y - y
+          const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
 
-          if (isHeaderHovered) {
-            // Full background mode - fade based on vertical position
-            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
-            finalOpacity = verticalFade * baseOpacity
-          } else {
-            // Localized mode - fade based on distance from cursor
-            const dx = mousePos.current.x - x
-            const dy = mousePos.current.y - y
-            const distanceFromCursor = Math.sqrt(dx * dx + dy * dy)
+          if (distanceFromCursor >= activeRadius) continue
 
-            if (distanceFromCursor >= hoverRadius) continue
-
-            const cursorProximity = 1 - (distanceFromCursor / hoverRadius)
-            const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
-            finalOpacity = verticalFade * baseOpacity * cursorProximity
-          }
+          const cursorProximity = 1 - (distanceFromCursor / activeRadius)
+          const verticalFade = Math.max(0, 1 - (y / canvasHalfHeight))
+          const finalOpacity = verticalFade * baseOpacity * cursorProximity
 
           if (finalOpacity > 0.01) {
             // Get the evolution chain for this cell
