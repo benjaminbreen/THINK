@@ -10,7 +10,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { GuideBanner } from '@/components/ui/guide-banner'
 import { MazeLogo } from '@/components/ui/maze-logo'
-import { ArrowLeft, Calendar, Clock, BookOpen, ExternalLink, X } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, BookOpen, ExternalLink, X, Minus, Plus, Type } from 'lucide-react'
 
 interface TableOfContentsItem {
   id: string
@@ -63,6 +63,12 @@ export function GuideLayout({
   const [wikipediaData, setWikipediaData] = useState<WikipediaData | null>(null)
   const [wikipediaLoading, setWikipediaLoading] = useState(false)
   const [wikipediaError, setWikipediaError] = useState<string | null>(null)
+  const [fontSize, setFontSize] = useState<number>(100) // percentage, 100 = default
+
+  // Font size controls
+  const decreaseFontSize = () => setFontSize(prev => Math.max(80, prev - 10))
+  const increaseFontSize = () => setFontSize(prev => Math.min(140, prev + 10))
+  const resetFontSize = () => setFontSize(100)
 
   // Track active section on scroll
   useEffect(() => {
@@ -215,6 +221,41 @@ export function GuideLayout({
                         </a>
                       ))}
                     </nav>
+
+                    {/* Font Size Control */}
+                    <div className="mt-6 pt-4 border-t border-border/50">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Type className="h-3.5 w-3.5" />
+                          <span className="text-xs font-medium">Font Size</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={decreaseFontSize}
+                            disabled={fontSize <= 80}
+                            className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Decrease font size"
+                          >
+                            <Minus className="h-3.5 w-3.5 text-muted-foreground" />
+                          </button>
+                          <button
+                            onClick={resetFontSize}
+                            className="px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors min-w-[36px]"
+                            aria-label="Reset font size"
+                          >
+                            {fontSize}%
+                          </button>
+                          <button
+                            onClick={increaseFontSize}
+                            disabled={fontSize >= 140}
+                            className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Increase font size"
+                          >
+                            <Plus className="h-3.5 w-3.5 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -353,7 +394,10 @@ export function GuideLayout({
                 </header>
 
                 {/* Content */}
-                <div className="guide-content prose prose-xl max-w-none">
+                <div
+                  className="guide-content prose prose-xl max-w-none transition-all duration-200"
+                  style={{ fontSize: `${fontSize}%` }}
+                >
                   {children}
                 </div>
               </div>

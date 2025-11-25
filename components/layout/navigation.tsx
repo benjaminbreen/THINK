@@ -25,9 +25,22 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [heroVisible, setHeroVisible] = useState(true)
 
   useEffect(() => {
     setMounted(true)
+
+    // Listen for hero visibility changes
+    const handleHideHero = () => setHeroVisible(false)
+    const handleShowHero = () => setHeroVisible(true)
+
+    window.addEventListener('THINK_hideHero', handleHideHero)
+    window.addEventListener('THINK_showHero', handleShowHero)
+
+    return () => {
+      window.removeEventListener('THINK_hideHero', handleHideHero)
+      window.removeEventListener('THINK_showHero', handleShowHero)
+    }
   }, [])
 
   const getItemColor = (item: typeof navigation[0]) => {
@@ -43,7 +56,27 @@ export function Navigation() {
       <Container>
         <nav className="flex h-[72px] items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-baseline gap-1.5 group">
+            <Link
+              href="/"
+              className="flex items-baseline gap-1.5 group"
+              onClick={(e) => {
+                if (typeof window === 'undefined') return
+
+                // If not on homepage, let the link navigate normally
+                if (pathname !== '/') return
+
+                // On homepage: check hero visibility
+                if (!heroVisible) {
+                  // Hero is hidden - show it and prevent navigation
+                  e.preventDefault()
+                  window.dispatchEvent(new CustomEvent('THINK_showHero'))
+                } else {
+                  // Hero is visible - cycle to next interactive background
+                  e.preventDefault()
+                  window.dispatchEvent(new CustomEvent('THINK_cycleBackground'))
+                }
+              }}
+            >
               <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-500 transition-all duration-300 self-center" />
               <span className="text-[1.75rem] font-sans font-bold tracking-tight text-foreground group-hover:text-primary transition-all duration-300 leading-none">
                 THINK
