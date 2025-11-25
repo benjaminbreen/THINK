@@ -506,6 +506,51 @@ html {
   }
 }
 
+/* Smooth canvas fade-in for interactive backgrounds */
+@keyframes canvas-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-canvas-fade-in {
+  animation: canvas-fade-in 0.5s ease-out forwards;
+}
+
+/* Guide content styling */
+.guide-content h2 {
+  @apply scroll-mt-24 pt-8 first:pt-0;
+}
+
+.guide-content h2:not(:first-child) {
+  @apply border-t border-border/50 mt-16;
+}
+
+.guide-content h3 {
+  @apply mt-10 mb-4;
+}
+
+.guide-content > p:first-of-type {
+  @apply text-lg leading-relaxed;
+}
+
+/* Wiki link styling */
+.wiki-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  text-align: left;
+}
+
+.wiki-link-example {
+  @apply underline decoration-dotted decoration-primary/50 underline-offset-2;
+}
+
 /* Hero text colors for light mode glass pane */
 .hero-glass-pane h1,
 .hero-glass-pane p,
@@ -618,4 +663,108 @@ html {
 
 .code-block-dark pre {
   color: rgb(226 232 240) !important;
+}
+
+/* Dark code blocks - ensure all text is light and code has no extra background */
+div.bg-slate-900 {
+  background-color: rgb(15 23 42) !important;
+}
+
+div.bg-slate-900 code {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: rgb(226 232 240) !important;
+  padding: 0 !important;
+}
+
+div.bg-slate-900 p,
+div.bg-slate-900 span:not(.text-slate-400) {
+  color: rgb(226 232 240) !important;
+}
+
+div.bg-slate-900 .text-slate-400,
+div.bg-slate-900 p.text-slate-400 {
+  color: rgb(148 163 184) !important;
+}
+
+div.bg-slate-900 .text-slate-100 {
+  color: rgb(241 245 249) !important;
+}
+
+/* Inline code in dark code blocks should have no background */
+.font-mono code,
+div.font-mono code {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Conversation blocks styling - ensure proper text colors */
+div.bg-blue-50 p,
+div.bg-blue-950 p {
+  color: inherit;
+}
+
+/* Light mode conversation blocks */
+div.bg-blue-50 p.text-sm {
+  color: rgb(30 58 138) !important;
+}
+
+/* Dark mode conversation blocks */
+.dark div.bg-blue-950 p.text-sm {
+  color: rgb(191 219 254) !important;
+}
+
+/* Claude response blocks */
+div.bg-slate-50 p.text-sm:not(.text-muted-foreground) {
+  color: rgb(30 41 59) !important;
+}
+
+.dark div.bg-slate-900 p.text-sm:not(.text-muted-foreground):not(.text-slate-400) {
+  color: rgb(226 232 240) !important;
+}
+
+/* Cube list markers for guide content */
+.guide-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.guide-content ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.guide-content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background-color: hsl(var(--primary));
+  transform: rotate(45deg);
+}
+
+/* Nested lists */
+.guide-content ul ul li::before {
+  background-color: hsl(var(--muted-foreground));
+  width: 5px;
+  height: 5px;
+}
+
+/* Ordered lists keep numbers */
+.guide-content ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.guide-content ol li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+/* Lists inside info boxes should also have cube markers */
+.guide-content div ul li::before {
+  background-color: hsl(var(--primary));
 }

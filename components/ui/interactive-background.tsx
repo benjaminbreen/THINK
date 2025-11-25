@@ -38,12 +38,46 @@ const darkColors = {
   terracotta: '239, 68, 68',
 }
 
+// Check if we're in dark mode - checks multiple sources synchronously
+const checkIsDarkMode = (): boolean => {
+  if (typeof window === 'undefined') return false
+
+  // Check the document class first (most reliable after hydration)
+  if (document.documentElement.classList.contains('dark')) return true
+
+  // Check localStorage (set by our inline script)
+  try {
+    const stored = localStorage.getItem('theme')
+    if (stored === 'dark') return true
+    if (stored === 'light') return false
+  } catch {}
+
+  // Fall back to system preference
+  if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) return true
+
+  return false
+}
+
 function InteractiveBackgroundComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [mode, setMode] = useState<BackgroundMode>(getRandomMode())
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  // Start with null to indicate "not yet determined" - prevents flash
+  const [isDarkMode, setIsDarkMode] = useState<boolean | null>(null)
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
+
+  // Initialize theme on mount (client-side only) and watch for changes
+  useEffect(() => {
+    // Set initial theme from client-side detection
+    setIsDarkMode(checkIsDarkMode())
+
+    // Watch for theme changes
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
 
   // Get current color palette based on dark mode
   const colors = isDarkMode ? darkColors : lightColors
@@ -210,23 +244,10 @@ function InteractiveBackgroundComponent() {
     { text: "I dwell in Possibility", author: "Dickinson" },
   ]
 
-  // Detect dark mode changes
   useEffect(() => {
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'))
-    }
+    // Don't run animation until theme is determined
+    if (isDarkMode === null) return
 
-    // Initial check
-    checkDarkMode()
-
-    // Watch for changes
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -1543,34 +1564,26 @@ function InteractiveBackgroundComponent() {
     }
 
     let lastTime = 0
-    let lastFrameTime = 0
-    const targetFPS = 30
-    const frameInterval = 1000 / targetFPS
 
     const animate = (time: number) => {
-      // Throttle to 30fps for smoother animation
-      const elapsed = time - lastFrameTime
+      // Run at full 60fps for smooth animation
+      const deltaTime = time - lastTime
+      lastTime = time
 
-      if (elapsed >= frameInterval) {
-        lastFrameTime = time - (elapsed % frameInterval)
-        const deltaTime = time - lastTime
-        lastTime = time
-
-        if (mode === 'ascii') {
-          drawAsciiGrid(time)
-        } else if (mode === 'matrix') {
-          drawMatrix(time)
-        } else if (mode === 'particles') {
-          drawParticles(time)
-        } else if (mode === 'terminal') {
-          drawTerminal(time)
-        } else if (mode === 'labyrinth') {
-          drawLabyrinth(time)
-        } else if (mode === 'bibliotheca') {
-          drawBibliotheca(time)
-        } else if (mode === 'blocks') {
-          drawBlocks(time)
-        }
+      if (mode === 'ascii') {
+        drawAsciiGrid(time)
+      } else if (mode === 'matrix') {
+        drawMatrix(time)
+      } else if (mode === 'particles') {
+        drawParticles(time)
+      } else if (mode === 'terminal') {
+        drawTerminal(time)
+      } else if (mode === 'labyrinth') {
+        drawLabyrinth(time)
+      } else if (mode === 'bibliotheca') {
+        drawBibliotheca(time)
+      } else if (mode === 'blocks') {
+        drawBlocks(time)
       }
 
       animationFrameId.current = requestAnimationFrame(animate)
@@ -1747,6 +1760,11 @@ function InteractiveBackgroundComponent() {
     return () => clearTimeout(timer)
   }, [isExpanded])
 
+  // Don't render until we know the theme - prevents flash
+  if (isDarkMode === null) {
+    return null
+  }
+
   return (
     <>
       {/* Backdrop - only when expanded */}
@@ -1771,11 +1789,14 @@ function InteractiveBackgroundComponent() {
             </button>
           )}
 
-          {/* Canvas - always in same place */}
+          {/* Canvas - always in same place with smooth fade-in */}
           <canvas
             ref={canvasRef}
             onClick={isExpanded ? undefined : cycleMode}
-            className={isExpanded ? "absolute inset-0 w-full h-full rounded-lg pointer-events-auto" : "absolute inset-0 w-full h-full cursor-pointer pointer-events-auto"}
+            className={isExpanded
+              ? "absolute inset-0 w-full h-full rounded-lg pointer-events-auto animate-canvas-fade-in"
+              : "absolute inset-0 w-full h-full cursor-pointer pointer-events-auto animate-canvas-fade-in"
+            }
             style={{ opacity: isExpanded ? 1 : 0.6 }}
           />
 

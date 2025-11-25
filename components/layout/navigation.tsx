@@ -60,6 +60,7 @@ export function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
+                prefetch={true}
                 className={cn(
                   'relative px-4 py-2.5 text-[16px] font-semibold tracking-[-0.01em] transition-all duration-200 rounded-lg',
                   pathname === item.href
@@ -87,10 +88,13 @@ export function Navigation() {
             <ThemeToggle />
             <button
               type="button"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={mobileMenuOpen ? 'Close main menu' : 'Open main menu'}
               className="ml-2 inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <span className="sr-only">Open main menu</span>
+              <span className="sr-only">{mobileMenuOpen ? 'Close main menu' : 'Open main menu'}</span>
               {mobileMenuOpen ? (
                 <X className="h-6 w-6" aria-hidden="true" />
               ) : (
@@ -102,12 +106,13 @@ export function Navigation() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden">
+          <div id="mobile-menu" className="md:hidden" role="navigation" aria-label="Mobile navigation">
             <div className="space-y-1 pb-3 pt-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
+                  aria-current={pathname === item.href ? 'page' : undefined}
                   className={cn(
                     'block rounded-md px-3 py-2 text-base font-medium',
                     pathname === item.href

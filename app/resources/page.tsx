@@ -581,7 +581,7 @@ const resources: Resource[] = [
     type: "article",
     category: "Digital Humanities",
     description: "Critical examination of power dynamics, labor, and representation in digital humanities work.",
-    url: "http://journalofdigitalhumanities.org/2-3/dh-that-matters-by-miriam-posner/",
+    url: "https://journalofdigitalhumanities.org/2-3/dh-that-matters-by-miriam-posner/",
     journal: "Journal of Digital Humanities"
   },
   {

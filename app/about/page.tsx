@@ -426,7 +426,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <Button asChild variant="outline" size="sm">
-                    <a href="#" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.baccc.net" target="_blank" rel="noopener noreferrer">
                       Visit <ExternalLink className="ml-2 h-3 w-3" />
                     </a>
                   </Button>

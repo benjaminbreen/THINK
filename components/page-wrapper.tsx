@@ -7,7 +7,7 @@ export const InteractiveBackground = dynamic(
   () => import('@/components/ui/interactive-background').then(mod => ({ default: mod.InteractiveBackground })),
   {
     ssr: false,
-    loading: () => <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-900 to-slate-800" />
+    loading: () => <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-background to-muted" />
   }
 )
 

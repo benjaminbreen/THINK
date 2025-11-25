@@ -5,15 +5,11 @@ export const metadata: Metadata = {
   robots: 'noindex, nofollow',
 }
 
+// Keystatic renders without navigation/footer (handled by LayoutWrapper)
 export default function KeystaticLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <head />
-      <body>{children}</body>
-    </html>
-  )
+  return children
 }

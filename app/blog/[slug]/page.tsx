@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import Image from 'next/image'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Badge } from '@/components/ui/badge'
@@ -7,6 +8,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { RelatedPosts } from '@/components/ui/related-posts'
 import { BlogPostFooter } from '@/components/ui/blog-post-footer'
 import { BackToTop } from '@/components/ui/back-to-top'
+import { SocialShare } from '@/components/ui/social-share'
 import { getPostBySlug, getRelatedPosts, getAllPostsMeta, getReadingTime } from '@/lib/blog'
 import { Calendar, Clock, User } from 'lucide-react'
 
@@ -31,9 +33,42 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     }
   }
 
+  const url = `https://think.ucsc.edu/blog/${slug}`
+
   return {
     title: `${post.title} | THINK Blog`,
     description: post.description,
+    authors: [{ name: post.author }],
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url,
+      siteName: 'THINK @ UCSC',
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author],
+      images: post.image ? [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ] : [
+        {
+          url: '/og-default.png',
+          width: 1200,
+          height: 630,
+          alt: 'THINK @ UCSC',
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: post.image ? [post.image] : ['/og-default.png'],
+    },
   }
 }
 
@@ -83,26 +118,48 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </p>
 
               {/* Meta info */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-b py-4">
-                <div className="flex items-center gap-1.5">
-                  <User className="h-4 w-4" />
-                  <span>{post.author}</span>
+              <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground border-t border-b py-4">
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <User className="h-4 w-4" />
+                    <span>{post.author}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    <time dateTime={post.date}>
+                      {new Date(post.date).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </time>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-4 w-4" />
+                    <span>{readingTime}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </time>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4" />
-                  <span>{readingTime}</span>
-                </div>
+                <SocialShare
+                  title={post.title}
+                  url={`https://think.ucsc.edu/blog/${slug}`}
+                  description={post.description}
+                />
               </div>
+
+              {/* Featured Image */}
+              {post.image && (
+                <div className="mt-8 -mx-4 sm:-mx-8 lg:-mx-16">
+                  <div className="relative aspect-[2/1] w-full overflow-hidden rounded-xl">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </div>
+              )}
             </header>
 
             {/* Post Content */}

@@ -127,7 +127,7 @@ export default function PedagogyPage() {
       institution: 'University of Central Florida',
       source: 'University',
       type: 'syllabus',
-      url: 'http://anastasiasalter.net/HumanitiesAISyllabus/',
+      url: 'https://anastasiasalter.net/HumanitiesAISyllabus/',
       description: 'Fall 2024 syllabus exploring critical perspectives on AI using texts like "Algorithms of Oppression" and hands-on experiments with AI tools',
       tags: ['Critical Thinking', 'Experiential Learning', 'Undergraduate']
     },
@@ -149,7 +149,7 @@ export default function PedagogyPage() {
       institution: 'University of Central Florida',
       source: 'University',
       type: 'syllabus',
-      url: 'http://anastasiasalter.net/markdown_dhsi/',
+      url: 'https://anastasiasalter.net/markdown_dhsi/',
       description: 'Spring 2025 course exploring how AI enhances humanistic inquiry while critically engaging with limitations and ethics',
       tags: ['Project-Based', 'Active Learning', 'Scaffolding']
     },

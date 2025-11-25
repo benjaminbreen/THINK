@@ -78,38 +78,44 @@ ${formData.message}`
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form">
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Name *
+                Name <span aria-hidden="true">*</span>
               </label>
               <input
                 id="name"
                 name="name"
                 type="text"
                 required
+                aria-required="true"
+                aria-describedby="name-hint"
                 value={formData.name}
                 onChange={handleChange}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Your name"
               />
+              <span id="name-hint" className="sr-only">Required field</span>
             </div>
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Email *
+                Email <span aria-hidden="true">*</span>
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
+                aria-required="true"
+                aria-describedby="email-hint"
                 value={formData.email}
                 onChange={handleChange}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="you@example.com"
               />
+              <span id="email-hint" className="sr-only">Required field, enter a valid email address</span>
             </div>
           </div>
 
@@ -121,21 +127,24 @@ ${formData.message}`
               id="affiliation"
               name="affiliation"
               type="text"
+              aria-describedby="affiliation-hint"
               value={formData.affiliation}
               onChange={handleChange}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="University or organization (optional)"
             />
+            <span id="affiliation-hint" className="sr-only">Optional field</span>
           </div>
 
           <div className="space-y-2">
             <label htmlFor="type" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Submission Type *
+              Submission Type <span aria-hidden="true">*</span>
             </label>
             <select
               id="type"
               name="type"
               required
+              aria-required="true"
               value={formData.type}
               onChange={handleChange}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -150,25 +159,29 @@ ${formData.message}`
 
           <div className="space-y-2">
             <label htmlFor="message" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Message *
+              Message <span aria-hidden="true">*</span>
             </label>
             <textarea
               id="message"
               name="message"
               required
+              aria-required="true"
+              aria-describedby="message-hint"
               value={formData.message}
               onChange={handleChange}
               rows={6}
               className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
               placeholder="Tell us about your project, idea, or question..."
             />
+            <span id="message-hint" className="sr-only">Required field</span>
           </div>
 
           <Button
             type="submit"
+            aria-label="Send message"
             className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white"
           >
-            <Send className="mr-2 h-4 w-4" />
+            <Send className="mr-2 h-4 w-4" aria-hidden="true" />
             Send Message
           </Button>
         </form>
