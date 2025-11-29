@@ -221,16 +221,7 @@
   color: hsl(var(--foreground) / 0.85);
 }
 
-.prose blockquote::before {
-  content: '"';
-  position: absolute;
-  left: -0.1em;
-  top: -0.2em;
-  font-size: 3rem;
-  font-family: Georgia, serif;
-  color: hsl(var(--primary) / 0.2);
-  line-height: 1;
-}
+/* Removed duplicate quotation mark - the border-left is sufficient */
 
 /* Improved inline quotes */
 .prose q {
@@ -817,7 +808,7 @@ button:hover > .external-link-icon {
 }
 
 .guide-content h2:not(:first-child) {
-  @apply border-t border-border/50 mt-16;
+  @apply mt-12; /* GuideSectionDivider handles visual breaks, no border needed */
 }
 
 .guide-content h3 {
@@ -1011,6 +1002,11 @@ button:hover > .external-link-icon {
   @apply border-border;
   margin-top: calc(var(--rhythm) * 2);
   margin-bottom: calc(var(--rhythm) * 2);
+}
+
+/* Hide hr in guide content - GuideSectionDivider handles section breaks */
+.guide-content hr {
+  display: none;
 }
 
 /* Tables */
