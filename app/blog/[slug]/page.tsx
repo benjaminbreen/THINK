@@ -10,6 +10,8 @@ import { BlogPostFooter } from '@/components/ui/blog-post-footer'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { SocialShare } from '@/components/ui/social-share'
 import { getPostBySlug, getRelatedPosts, getAllPostsMeta, getReadingTime } from '@/lib/blog'
+import { siteConfig } from '@/lib/config'
+import { BlogPostingJsonLd, BreadcrumbJsonLd } from '@/components/structured-data'
 import { Calendar, Clock, User } from 'lucide-react'
 
 interface BlogPostPageProps {
@@ -33,7 +35,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     }
   }
 
-  const url = `https://think.ucsc.edu/blog/${slug}`
+  const url = `${siteConfig.url}/blog/${slug}`
 
   return {
     title: `${post.title} | THINK Blog`,
@@ -85,6 +87,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <>
+      <BlogPostingJsonLd
+        title={post.title}
+        description={post.description}
+        author={post.author}
+        datePublished={post.date}
+        image={post.image}
+        slug={slug}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: post.title, url: `/blog/${slug}` },
+        ]}
+      />
+
       <Breadcrumb
         items={[
           { label: 'Home', href: '/' },
@@ -141,7 +159,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </div>
                 <SocialShare
                   title={post.title}
-                  url={`https://think.ucsc.edu/blog/${slug}`}
+                  url={`${siteConfig.url}/blog/${slug}`}
                   description={post.description}
                 />
               </div>

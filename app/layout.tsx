@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LayoutWrapper } from '@/components/layout/layout-wrapper'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -61,6 +62,7 @@ export default function RootLayout({
         >
           <LayoutWrapper>{children}</LayoutWrapper>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

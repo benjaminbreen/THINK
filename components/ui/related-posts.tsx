@@ -19,7 +19,7 @@ export function RelatedPosts({ posts, title = "You Might Also Like" }: RelatedPo
   }
 
   return (
-    <Section className="border-t bg-muted/20">
+    <Section className="border-t bg-muted/20 py-12 sm:py-16">
       <Container>
         <div className="max-w-4xl mx-auto">
           <h3 className="text-2xl font-serif font-bold mb-8 text-center">

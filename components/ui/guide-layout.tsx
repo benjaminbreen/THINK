@@ -10,6 +10,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { GuideBanner } from '@/components/ui/guide-banner'
 import { MazeLogo } from '@/components/ui/maze-logo'
+import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/structured-data'
 import { ArrowLeft, Calendar, Clock, BookOpen, ExternalLink, X, Minus, Plus, Type } from 'lucide-react'
 
 interface TableOfContentsItem {
@@ -63,12 +64,12 @@ export function GuideLayout({
   const [wikipediaData, setWikipediaData] = useState<WikipediaData | null>(null)
   const [wikipediaLoading, setWikipediaLoading] = useState(false)
   const [wikipediaError, setWikipediaError] = useState<string | null>(null)
-  const [fontSize, setFontSize] = useState<number>(100) // percentage, 100 = default
+  const [fontSize, setFontSize] = useState<number>(110) // percentage, 110 = 10% larger default
 
   // Font size controls
   const decreaseFontSize = () => setFontSize(prev => Math.max(80, prev - 10))
   const increaseFontSize = () => setFontSize(prev => Math.min(140, prev + 10))
-  const resetFontSize = () => setFontSize(100)
+  const resetFontSize = () => setFontSize(110)
 
   // Track active section on scroll
   useEffect(() => {
@@ -132,6 +133,23 @@ export function GuideLayout({
 
   return (
     <>
+      <ArticleJsonLd
+        title={title}
+        description={subtitle}
+        author={author?.name}
+        dateModified={lastUpdated}
+        image={thumbnailPath}
+        slug={`guides/${guideId}`}
+        section="Educational Guide"
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Guides', url: '/guides' },
+          { name: title, url: `/guides/${guideId}` },
+        ]}
+      />
+
       <Breadcrumb items={[
         { label: 'Home', href: '/' },
         { label: 'Guides', href: '/guides' },

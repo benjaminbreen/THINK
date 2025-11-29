@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
@@ -16,6 +17,7 @@ interface ProjectCardProps {
   year: string
   tags: string[]
   animationDelay?: string
+  priority?: boolean // For above-the-fold images
 }
 
 export function ProjectCard({
@@ -26,22 +28,42 @@ export function ProjectCard({
   type,
   year,
   tags,
-  animationDelay = '100'
+  animationDelay = '100',
+  priority = false
 }: ProjectCardProps) {
   const [hasImage, setHasImage] = useState(true)
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
   const thumbnailPath = `/thumbnails/${slug}.png`
+
+  // Map string delays to actual CSS classes
+  const delayClass = {
+    '100': 'animation-delay-100',
+    '200': 'animation-delay-200',
+    '300': 'animation-delay-300',
+    '400': 'animation-delay-400',
+    '500': 'animation-delay-500',
+    '600': 'animation-delay-600',
+  }[animationDelay] || 'animation-delay-100'
 
   return (
     <Link href={href} className="block group">
-      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 ease-out cursor-pointer border-border/60 hover:border-primary/30`}>
+      <Card interactive className={`h-full animate-fade-in-up opacity-0 ${delayClass} cursor-pointer border-border/60 hover:border-primary/30`}>
         <CardHeader className="pb-3">
           {hasImage ? (
             <div className="relative w-full h-36 rounded-lg overflow-hidden mb-3 bg-muted/30">
+              {!isImageLoaded && (
+                <Skeleton className="absolute inset-0 w-full h-full" />
+              )}
               <Image
                 src={thumbnailPath}
                 alt={title}
                 fill
-                className="object-cover transition-all duration-500 ease-out group-hover:scale-[1.03]"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                priority={priority}
+                className={`object-cover transition-all duration-500 ease-out group-hover:scale-[1.03] ${
+                  isImageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setIsImageLoaded(true)}
                 onError={() => setHasImage(false)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

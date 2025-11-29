@@ -68,8 +68,43 @@
   * {
     @apply border-border;
   }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Smooth theme transitions */
+  html {
+    transition: background-color 0.15s ease-out, color 0.15s ease-out;
+  }
+
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out, fill 0.15s ease-out, stroke 0.15s ease-out !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html,
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after {
+      transition: none !important;
+    }
   }
 
   /* Improved typography */
@@ -89,6 +124,150 @@
   h3, h4, h5, h6 {
     line-height: 1.4;
   }
+
+  /* Beautiful focus states for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove default focus for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Enhanced focus for interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+    transition: outline-offset 0.15s ease-out;
+  }
+
+  /* Skip to content focus style */
+  .skip-link:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9999;
+    padding: 0.75rem 1.5rem;
+    background: hsl(var(--background));
+    border: 2px solid hsl(var(--primary));
+    border-radius: 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Form input focus transitions */
+  input,
+  textarea,
+  select {
+    transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+  }
+
+  /* Custom select dropdown styling */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .dark select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  select:hover {
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    input,
+    textarea,
+    select {
+      transition: none;
+    }
+  }
+}
+
+/* Typography refinements */
+
+/* Hanging punctuation for cleaner text alignment */
+.prose blockquote,
+.prose q {
+  hanging-punctuation: first last;
+}
+
+/* Enhanced blockquote styling */
+.prose blockquote {
+  position: relative;
+  font-style: italic;
+  border-left: 3px solid hsl(var(--primary) / 0.4);
+  padding-left: 1.5rem;
+  margin-left: 0;
+  margin-right: 0;
+  color: hsl(var(--foreground) / 0.85);
+}
+
+.prose blockquote::before {
+  content: '"';
+  position: absolute;
+  left: -0.1em;
+  top: -0.2em;
+  font-size: 3rem;
+  font-family: Georgia, serif;
+  color: hsl(var(--primary) / 0.2);
+  line-height: 1;
+}
+
+/* Improved inline quotes */
+.prose q {
+  quotes: '"' '"' ''' ''';
+}
+
+.prose q::before {
+  content: open-quote;
+  color: hsl(var(--muted-foreground));
+}
+
+.prose q::after {
+  content: close-quote;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Animated underlines for prose links */
+.prose a:not(.no-underline) {
+  text-decoration: none;
+  background-image: linear-gradient(hsl(var(--primary)), hsl(var(--primary)));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.25s ease-out, color 0.2s ease-out;
+}
+
+.prose a:not(.no-underline):hover {
+  background-size: 100% 1px;
+  color: hsl(var(--primary));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose a:not(.no-underline) {
+    text-decoration: underline;
+    background-image: none;
+    transition: none;
+  }
 }
 
 /* Custom scrollbar */
@@ -107,11 +286,6 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/50;
-}
-
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
 }
 
 /* Animations */
@@ -213,6 +387,123 @@ html {
   50% {
     transform: translateY(-3px);
   }
+}
+
+@keyframes sun-rise {
+  0% {
+    transform: scale(0.8) rotate(-45deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes moon-rise {
+  0% {
+    transform: scale(0.8) rotate(45deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-sun-rise {
+  animation: sun-rise 0.5s ease-out;
+}
+
+.animate-moon-rise {
+  animation: moon-rise 0.5s ease-out;
+}
+
+/* Button ripple effect */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.animate-ripple {
+  animation: ripple 0.6s ease-out forwards;
+}
+
+/* Checkmark animation for copy button */
+@keyframes checkmark-pop {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-checkmark {
+  animation: checkmark-pop 0.4s ease-out forwards;
+}
+
+/* Breadcrumb sequential slide-in animation */
+@keyframes breadcrumb-item-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes breadcrumb-chevron-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-4px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-breadcrumb-item {
+  animation: breadcrumb-item-enter 0.3s ease-out forwards;
+}
+
+.animate-breadcrumb-chevron {
+  animation: breadcrumb-chevron-enter 0.25s ease-out forwards;
+}
+
+/* External link icon animation - moves diagonally on hover */
+.external-link-icon {
+  transition: transform 0.2s ease-out;
+}
+
+.group:hover .external-link-icon,
+a:hover > .external-link-icon,
+button:hover > .external-link-icon {
+  transform: translate(1px, -1px);
+}
+
+/* Alternative: use this class on links that contain external icons */
+.external-link:hover .lucide-external-link,
+.external-link:hover .lucide-arrow-up-right {
+  transform: translate(1px, -1px);
+  transition: transform 0.2s ease-out;
 }
 
 .animate-fade-in {
@@ -602,45 +893,86 @@ html {
   }
 }
 
-/* Prose styles for MDX content */
+/* Prose styles for MDX content with improved vertical rhythm */
 .prose {
   @apply max-w-none;
+  /* Base unit for vertical rhythm: 1.5rem (24px at default) */
+  --rhythm: 1.5rem;
 }
 
+/* Headings with consistent spacing based on rhythm */
 .prose h1 {
-  @apply text-4xl font-serif font-bold mb-4 mt-8 text-foreground;
+  @apply text-4xl font-serif font-bold text-foreground;
+  margin-top: calc(var(--rhythm) * 2.5);
+  margin-bottom: calc(var(--rhythm) * 1);
 }
 
 .prose h2 {
-  @apply text-3xl font-serif font-bold mb-3 mt-6 text-foreground;
+  @apply text-3xl font-serif font-bold text-foreground;
+  margin-top: calc(var(--rhythm) * 2);
+  margin-bottom: calc(var(--rhythm) * 0.75);
 }
 
 .prose h3 {
-  @apply text-2xl font-serif font-semibold mb-2 mt-4 text-foreground;
+  @apply text-2xl font-serif font-semibold text-foreground;
+  margin-top: calc(var(--rhythm) * 1.5);
+  margin-bottom: calc(var(--rhythm) * 0.5);
 }
 
+.prose h4 {
+  @apply text-xl font-semibold text-foreground;
+  margin-top: calc(var(--rhythm) * 1.25);
+  margin-bottom: calc(var(--rhythm) * 0.5);
+}
+
+/* First heading shouldn't have top margin */
+.prose > h1:first-child,
+.prose > h2:first-child,
+.prose > h3:first-child,
+.prose > h4:first-child {
+  margin-top: 0;
+}
+
+/* Paragraphs and text blocks */
 .prose p {
-  @apply mb-4 leading-relaxed text-foreground/90;
+  @apply leading-relaxed text-foreground/90;
+  margin-bottom: var(--rhythm);
 }
 
+/* Links */
 .prose a {
-  @apply text-primary hover:underline;
+  @apply text-primary hover:underline underline-offset-2;
 }
 
+/* Lists with proper spacing */
 .prose ul, .prose ol {
-  @apply mb-4 ml-6;
+  @apply ml-6;
+  margin-bottom: var(--rhythm);
 }
 
 .prose li {
-  @apply mb-2;
+  margin-bottom: calc(var(--rhythm) * 0.35);
 }
 
+.prose li:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested lists */
+.prose li > ul,
+.prose li > ol {
+  margin-top: calc(var(--rhythm) * 0.35);
+  margin-bottom: 0;
+}
+
+/* Code */
 .prose code {
-  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
 }
 
 .prose pre {
-  @apply p-4 rounded-lg overflow-x-auto mb-4;
+  @apply p-4 rounded-lg overflow-x-auto;
+  margin-bottom: var(--rhythm);
   background-color: rgb(15 23 42) !important;
   color: rgb(226 232 240) !important;
 }
@@ -651,8 +983,49 @@ html {
   padding: 0;
 }
 
+/* Blockquotes - inherits enhanced styling from above */
 .prose blockquote {
-  @apply border-l-4 border-primary pl-4 italic my-4;
+  margin-top: var(--rhythm);
+  margin-bottom: var(--rhythm);
+}
+
+/* Images and figures */
+.prose img {
+  @apply rounded-lg;
+  margin-top: var(--rhythm);
+  margin-bottom: var(--rhythm);
+}
+
+.prose figure {
+  margin-top: calc(var(--rhythm) * 1.5);
+  margin-bottom: calc(var(--rhythm) * 1.5);
+}
+
+.prose figcaption {
+  @apply text-sm text-muted-foreground text-center;
+  margin-top: calc(var(--rhythm) * 0.5);
+}
+
+/* Horizontal rules */
+.prose hr {
+  @apply border-border;
+  margin-top: calc(var(--rhythm) * 2);
+  margin-bottom: calc(var(--rhythm) * 2);
+}
+
+/* Tables */
+.prose table {
+  @apply w-full border-collapse;
+  margin-bottom: var(--rhythm);
+}
+
+.prose th,
+.prose td {
+  @apply border border-border px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-muted/50 font-semibold;
 }
 
 /* Force code blocks to have dark background with light text in both modes */

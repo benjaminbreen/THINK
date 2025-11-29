@@ -2,27 +2,27 @@
 
 import { useState, useEffect } from 'react'
 import { ArrowUp } from 'lucide-react'
-import { Button } from './button'
+import { cn } from '@/lib/utils'
 
-export function BackToTop() {
+interface BackToTopProps {
+  /** Scroll threshold in pixels before button appears */
+  threshold?: number
+}
+
+export function BackToTop({ threshold = 400 }: BackToTopProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Show button when page is scrolled down 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
+      setIsVisible(window.scrollY > threshold)
     }
 
-    window.addEventListener('scroll', toggleVisibility)
+    // Check initial state
+    toggleVisibility()
 
-    return () => {
-      window.removeEventListener('scroll', toggleVisibility)
-    }
-  }, [])
+    window.addEventListener('scroll', toggleVisibility, { passive: true })
+    return () => window.removeEventListener('scroll', toggleVisibility)
+  }, [threshold])
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -31,18 +31,26 @@ export function BackToTop() {
     })
   }
 
-  if (!isVisible) {
-    return null
-  }
-
   return (
-    <Button
+    <button
       onClick={scrollToTop}
-      size="icon"
-      className="fixed bottom-8 right-8 z-50 shadow-lg"
       aria-label="Back to top"
+      className={cn(
+        'fixed bottom-6 right-6 z-50',
+        'h-11 w-11 rounded-full',
+        'bg-primary/90 text-primary-foreground',
+        'shadow-lg shadow-primary/25',
+        'flex items-center justify-center',
+        'transition-all duration-300 ease-out',
+        'hover:bg-primary hover:scale-110 hover:shadow-xl hover:-translate-y-0.5',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        'active:scale-95',
+        isVisible
+          ? 'opacity-100 translate-y-0'
+          : 'opacity-0 translate-y-4 pointer-events-none'
+      )}
     >
-      <ArrowUp className="h-4 w-4" />
-    </Button>
+      <ArrowUp className="h-5 w-5 transition-transform group-hover:-translate-y-0.5" />
+    </button>
   )
 }

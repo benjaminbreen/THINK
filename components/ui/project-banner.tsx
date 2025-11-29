@@ -30,7 +30,7 @@ export function ProjectBanner({ thumbnailPath, projectTitle }: ProjectBannerProp
       <div className="mb-8">
         {/* Banner Image */}
         <div
-          className="relative w-full h-48 md:h-64 bg-muted rounded-lg overflow-hidden group cursor-pointer"
+          className="relative w-full h-64 md:h-80 lg:h-96 bg-muted rounded-lg overflow-hidden group cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => setIsModalOpen(true)}

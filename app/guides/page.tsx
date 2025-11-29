@@ -6,6 +6,7 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -138,12 +139,12 @@ export default function GuidesPage() {
 
   return (
     <>
-      <Section className="pt-16 pb-12 relative">
+      <Section className="pt-24 pb-12 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <GuidesBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl text-center mb-8">
+          <AnimatedSection className="mx-auto max-w-3xl text-center mb-8">
             <div
               className="inline-block"
               onMouseEnter={() => setIsHeaderHovered(true)}
@@ -161,10 +162,10 @@ export default function GuidesPage() {
             <p className="text-lg text-muted-foreground mt-3">
               Comprehensive guides for building AI tools, designing assignments, and integrating AI thoughtfully into humanities teaching and research
             </p>
-          </div>
+          </AnimatedSection>
 
           {/* View Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8">
+          <AnimatedSection delay={100} className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8">
             <div className="flex gap-2">
               <Button
                 variant={viewMode === 'cards' ? 'default' : 'outline'}
@@ -201,7 +202,7 @@ export default function GuidesPage() {
                 {sortBy === 'category' && 'Category'}
               </Button>
             </div>
-          </div>
+          </AnimatedSection>
 
           {/* Cards View */}
           {viewMode === 'cards' && (
@@ -356,7 +357,7 @@ export default function GuidesPage() {
       </Section>
 
       {/* Additional Resources */}
-      <Section className="bg-muted/40 border-t">
+      <Section className="bg-muted/40 border-t py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-serif font-bold mb-4">Looking for More?</h2>

@@ -7,6 +7,7 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ProjectCard } from '@/components/ui/project-card'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import Link from 'next/link'
 import { Filter, Code } from 'lucide-react'
 import { ProjectsBackground } from '@/components/ui/projects-background'
@@ -52,13 +53,13 @@ export default function ProjectsPage() {
       filters: ['research', 'history'] as FilterType[]
     },
     {
-      title: "Historical Figure Generator",
-      description: "Create randomized but plausible historical figures from different eras",
-      href: "/projects/historical-figure-generator",
-      slug: "historical-figure-generator",
+      title: "Historical Persona Generator",
+      description: "Procedurally generate historically accurate character personas with pixel-art portraits and life histories",
+      href: "/projects/historical-persona-generator",
+      slug: "historical-persona-generator",
       type: "Generator",
-      year: "2024",
-      tags: ['History', 'Research Tool'],
+      year: "2025",
+      tags: ['World History', 'Digital Humanities'],
       filters: ['research', 'history'] as FilterType[]
     }
   ]
@@ -70,12 +71,12 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <Section className="pt-16 pb-6 relative">
+      <Section className="pt-24 pb-6 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <ProjectsBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl text-center mb-6">
+          <AnimatedSection className="mx-auto max-w-3xl text-center mb-6">
             <div
               className="inline-block"
               onMouseEnter={() => setIsHeaderHovered(true)}
@@ -93,10 +94,10 @@ export default function ProjectsPage() {
             <p className="text-lg text-muted-foreground mt-3">
               Experimental AI tools for humanities teaching and research. All projects are part of the HistoryLens pedagogical framework, which combines primary sources with interactive simulations.
             </p>
-          </div>
+          </AnimatedSection>
 
           {/* Filter Section */}
-          <div className="mb-8">
+          <AnimatedSection delay={100} className="mb-8">
             <div className="flex items-center justify-center mb-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Filter className="h-4 w-4" />
@@ -183,7 +184,7 @@ export default function ProjectsPage() {
                 Linguistics
               </Badge>
             </div>
-          </div>
+          </AnimatedSection>
 
           {/* Projects Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -202,7 +203,7 @@ export default function ProjectsPage() {
             ))}
 
             {/* Placeholder for community contributions */}
-            <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors">
+            <Card interactive className="group border-dashed border-2 hover:border-primary/30">
               <CardHeader>
                 <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
                   <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
@@ -225,9 +226,9 @@ export default function ProjectsPage() {
       </Section>
 
       {/* HistoryLens Framework Section */}
-      <Section className="bg-muted/40 border-t">
+      <Section className="bg-muted/40 border-t py-12 sm:py-16">
         <Container>
-          <div className="mx-auto max-w-3xl">
+          <AnimatedSection className="mx-auto max-w-3xl">
             <h2 className="text-3xl font-serif font-bold mb-4 text-center">About the HistoryLens Framework</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="leading-relaxed">
@@ -249,14 +250,14 @@ export default function ProjectsPage() {
                 </Link>
               </Button>
             </div>
-          </div>
+          </AnimatedSection>
         </Container>
       </Section>
 
       {/* Get Started Section */}
-      <Section className="border-t">
+      <Section className="border-t py-12 sm:py-16">
         <Container>
-          <div className="mx-auto max-w-2xl text-center">
+          <AnimatedSection className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-serif font-bold mb-4">Use or Adapt These Projects</h2>
             <p className="text-muted-foreground mb-8">
               All materials are freely available. Browse our teaching guides to see how these tools work in practice, or dive into the modules themselves. Everything here is designed to be modified and built upon.
@@ -269,7 +270,7 @@ export default function ProjectsPage() {
                 <Link href="/about">About THINK</Link>
               </Button>
             </div>
-          </div>
+          </AnimatedSection>
         </Container>
       </Section>
     </>

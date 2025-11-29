@@ -10,9 +10,9 @@ interface BlogPostFooterProps {
 
 export function BlogPostFooter({ showBackLink = true }: BlogPostFooterProps) {
   return (
-    <Section className="bg-muted/30 border-t">
+    <Section className="bg-muted/30 border-t py-10 sm:py-12">
       <Container>
-        <div className="max-w-2xl mx-auto text-center py-4">
+        <div className="max-w-2xl mx-auto text-center">
           {showBackLink && (
             <div className="mb-8">
               <Button asChild variant="ghost" size="sm">

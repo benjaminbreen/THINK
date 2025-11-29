@@ -1,0 +1,15 @@
+# THINK - Technology + Humanities Integrated Knowledge
+# https://think.ucsc.edu
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://think.ucsc.edu/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+
+# Disallow admin/CMS routes
+Disallow: /keystatic
+Disallow: /api/

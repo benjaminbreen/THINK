@@ -61,7 +61,7 @@ ${formData.message}`
             We've prepared an email with your submission. If your email client didn't open automatically,
             please send your message to <a href="mailto:bbreen@ucsc.edu" className="text-amber-700 dark:text-amber-500 hover:underline">bbreen@ucsc.edu</a>.
           </p>
-          <Button onClick={() => setSubmitted(false)} variant="outline">
+          <Button onClick={() => setSubmitted(false)} variant="outline" ripple>
             Submit another message
           </Button>
         </CardContent>

@@ -7,14 +7,18 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { AssignmentCard } from '@/components/ui/assignment-card'
+import { AssignmentListItem, AssignmentData } from '@/components/ui/assignment-list-item'
+import { InkWashBackground } from '@/components/ui/ink-wash-background'
 import { PedagogyBackground } from '@/components/ui/pedagogy-background'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import { pageThemes } from '@/lib/page-themes'
 import Link from 'next/link'
-import { FileText, ExternalLink, Filter, List as ListIcon } from 'lucide-react'
+import { FileText, ExternalLink, Filter, List, LayoutGrid } from 'lucide-react'
 
 const theme = pageThemes.pedagogy
 
 type FilterType = 'all' | 'assignment' | 'syllabus' | 'guide'
+type ViewMode = 'list' | 'grid'
 type ResourceSource = 'University' | 'Community College' | 'K-12' | 'Independent'
 
 interface ExternalResource {
@@ -31,94 +35,90 @@ interface ExternalResource {
 
 export default function PedagogyPage() {
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const [isHistoryLensHovered, setIsHistoryLensHovered] = useState(false)
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
-  // Sample assignments - 9 total for 3x3 grid
-  const assignments = [
+  // Sample assignments with extended data
+  const assignments: AssignmentData[] = [
     {
-      title: "Young Darwin Simulation",
-      description: "Interactive exploration of Darwin's Galápagos expedition with specimen collection and analysis",
-      href: "/projects/young-darwin",
-      slug: "young-darwin",
-      type: "Simulation",
-      tags: ['History', 'Critical Thinking'],
-      status: 'available' as const
+      id: '1',
+      title: "Create a Digital Artifact about Drug History",
+      description: "Final assignment offering creative, digital artifact, or research paper options (7-10 pages). Build an online exhibit, database, or interactive resource exploring the cultural history of drugs. Requires 2-5 primary sources and 5+ secondary sources with a clear argument.",
+      href: "https://cultural-history-drugs.vercel.app/",
+      slug: "drug-history-artifact",
+      type: "Creative/Research",
+      tags: ['History', 'Primary Sources', 'Digital Humanities', 'Research'],
+      status: 'available',
+      thumbnailPath: "/thumbnails/drug-history-artifact.png",
+      pdfPath: "/pdfs/HIS151BDrugHistoryFinalAssignment.pdf",
+      sampleSubmissionUrl: "https://cultural-history-drugs.vercel.app/",
+      courseName: "HIS 151B: History of Drugs",
+      institution: "UC Santa Cruz",
+      gradeLevel: "Upper Division",
+      author: "Benjamin Breen"
     },
     {
+      id: '2',
       title: "Apothecary Simulator",
-      description: "17th century medical practice using authentic early modern recipes and primary sources",
+      description: "17th century medical practice simulation using authentic early modern recipes and primary sources. Students roleplay as an apprentice apothecary, learning historical pharmacology.",
       href: "/projects/apothecary-simulator",
       slug: "apothecary-simulator",
       type: "Simulation",
-      tags: ['History', 'Primary Sources'],
-      status: 'available' as const
+      tags: ['History', 'Primary Sources', 'Roleplay'],
+      status: 'available',
+      thumbnailPath: "/thumbnails/apothecary-simulator.png",
+      courseName: "History of Medicine",
+      institution: "UC Santa Cruz"
     },
     {
+      id: '3',
       title: "Auditing AI Training Datasets",
-      description: "Students probe the contingency of archives used to train LLMs, examining biases and gaps",
+      description: "Students probe the contingency of archives used to train LLMs, examining biases and gaps in training data. Develops critical thinking about how AI systems inherit historical prejudices.",
       href: "#",
       slug: "audit-datasets",
       type: "Critical Analysis",
-      tags: ['AI Literacy', 'Research'],
-      status: 'coming-soon' as const
+      tags: ['AI Literacy', 'Research', 'Critical Thinking'],
+      status: 'coming-soon',
+      gradeLevel: "Upper Division/Graduate"
     },
     {
+      id: '4',
       title: "Constructing Counterfactual Datasets",
-      description: "Surface marginalized forms of knowledge by creating alternative datasets that challenge dominant narratives",
+      description: "Surface marginalized forms of knowledge by creating alternative datasets that challenge dominant narratives. Students build small-scale datasets highlighting overlooked perspectives.",
       href: "#",
       slug: "counterfactual-datasets",
       type: "Creative Project",
-      tags: ['Critical Theory', 'Data'],
-      status: 'coming-soon' as const
+      tags: ['Critical Theory', 'Data', 'Research'],
+      status: 'coming-soon',
+      thumbnailPath: "/thumbnails/counterfactual-datasets.png",
+      gradeLevel: "Graduate"
     },
     {
+      id: '5',
       title: "Building Historical Simulations",
-      description: "Guided project for creating historical simulations using HistoryLens and primary sources",
+      description: "Guided project for creating historical simulations using HistoryLens and primary sources. Students learn prompt engineering while building educational tools.",
       href: "#",
       slug: "build-simulations",
       type: "Hands-On",
-      tags: ['Technical', 'History'],
-      status: 'coming-soon' as const
+      tags: ['Technical', 'History', 'AI Literacy'],
+      status: 'coming-soon',
+      gradeLevel: "Upper Division"
     },
     {
+      id: '6',
       title: "AI Inaccuracies Discussion",
-      description: "Scaffolded reflective writing that helps students develop critical AI literacy through analysis of AI errors",
+      description: "Scaffolded reflective writing that helps students develop critical AI literacy through analysis of AI errors. Students document and analyze hallucinations.",
       href: "#",
       slug: "ai-inaccuracies",
       type: "Reflection",
-      tags: ['Writing', 'AI Literacy'],
-      status: 'coming-soon' as const
+      tags: ['Writing', 'AI Literacy', 'Critical Thinking'],
+      status: 'coming-soon',
+      gradeLevel: "Any Level"
     },
-    {
-      title: "Primary Source Analysis with AI",
-      description: "Using AI tools to analyze historical documents while maintaining source criticism and scholarly rigor",
-      href: "#",
-      slug: "source-analysis",
-      type: "Analysis",
-      tags: ['History', 'Research'],
-      status: 'coming-soon' as const
-    },
-    {
-      title: "Collaborative Timeline Building",
-      description: "Students work together to create interactive historical timelines using AI-assisted research",
-      href: "#",
-      slug: "timeline-building",
-      type: "Collaborative",
-      tags: ['History', 'Teamwork'],
-      status: 'coming-soon' as const
-    },
-    {
-      title: "Critical AI Pedagogy Seminar",
-      description: "Discussion-based assignment exploring ethical implications of AI in education",
-      href: "#",
-      slug: "critical-pedagogy",
-      type: "Discussion",
-      tags: ['Ethics', 'Pedagogy'],
-      status: 'coming-soon' as const
-    }
   ]
 
-  // External resources - syllabi and assignments from elsewhere (real resources)
+  // External resources - syllabi and assignments from elsewhere
   const externalResources: ExternalResource[] = [
     {
       id: '1',
@@ -208,83 +208,6 @@ export default function PedagogyPage() {
       description: 'Harvard teaching center resources on incorporating AI thoughtfully into course design and assignments',
       tags: ['Universal Design', 'Course Design', 'Backward Design']
     },
-    {
-      id: '9',
-      title: 'AI Teaching Strategies',
-      author: 'Center for Teaching and Learning',
-      institution: 'Stanford University',
-      source: 'University',
-      type: 'guide',
-      url: 'https://ctl.stanford.edu/aimes/ai-teaching-strategies',
-      description: 'AIMES initiative resources including examples from Stanford instructors and critical AI literacy for educators',
-      tags: ['Formative Assessment', 'AI Literacy', 'Peer Learning']
-    },
-    {
-      id: '10',
-      title: 'Critical AI Pedagogy Framework',
-      author: 'Dr. Jesse Stommel',
-      institution: 'University of Mary Washington',
-      source: 'University',
-      type: 'guide',
-      url: 'https://www.jessestommel.com/how-to-ungrade/',
-      description: 'Framework for centering student agency and critical engagement with technology in teaching',
-      tags: ['Ungrading', 'Student-Centered', 'Critical Pedagogy']
-    },
-    {
-      id: '11',
-      title: 'Transparent Assignment Design',
-      author: 'TILT Higher Ed',
-      institution: 'Multi-Institutional Collaboration',
-      source: 'University',
-      type: 'guide',
-      url: 'https://tilthighered.com/',
-      description: 'Resources for designing assignments that make purpose, task, and criteria transparent to students',
-      tags: ['Transparency', 'Inclusive Teaching', 'Learning Goals']
-    },
-    {
-      id: '12',
-      title: 'Problem-Based Learning with AI',
-      author: 'Dr. Elizabeth Barre',
-      institution: 'MIT',
-      source: 'University',
-      type: 'assignment',
-      url: 'https://tll.mit.edu/teaching-resources/inclusive-classroom/problem-based-learning/',
-      description: 'Guide to implementing problem-based learning approaches using AI as a research and reflection tool',
-      tags: ['Problem-Based', 'Authentic Assessment', 'Deep Learning']
-    },
-    {
-      id: '13',
-      title: 'Flipped Classroom with AI Tools',
-      author: 'Faculty Innovation Center',
-      institution: 'UT Austin',
-      source: 'University',
-      type: 'guide',
-      url: 'https://facultyinnovate.utexas.edu/flipped-classroom',
-      description: 'Strategies for using AI to enhance flipped classroom models and active learning',
-      tags: ['Flipped Classroom', 'Active Learning', 'Video Learning']
-    },
-    {
-      id: '14',
-      title: 'Contemplative Pedagogy & Technology',
-      author: 'The Center for Contemplative Mind in Society',
-      institution: 'Independent',
-      source: 'Independent',
-      type: 'guide',
-      url: 'https://www.contemplativemind.org/programs/acmhe',
-      description: 'Resources for integrating mindful practices with technology use in higher education',
-      tags: ['Contemplative Practice', 'Reflection', 'Holistic Learning']
-    },
-    {
-      id: '15',
-      title: 'Specification Grading for AI Assignments',
-      author: 'Dr. Linda Nilson',
-      institution: 'Clemson University',
-      source: 'University',
-      type: 'guide',
-      url: 'https://www.styluspub.com/Books/BookDetail.aspx?productID=371834',
-      description: 'Framework for specifications grading that works well with AI-enhanced assignments',
-      tags: ['Specification Grading', 'Mastery Learning', 'Clear Criteria']
-    }
   ]
 
   const filteredResources = externalResources.filter(resource => {
@@ -292,18 +215,17 @@ export default function PedagogyPage() {
     return resource.type === activeFilter
   })
 
-  // Extract unique tags from all resources for the background visualization
   const allTags = Array.from(new Set(externalResources.flatMap(resource => resource.tags)))
 
   return (
     <>
-      {/* Header with pedagogy background */}
-      <Section className="pt-16 pb-2 relative">
+      {/* Header with grid background */}
+      <Section className="pt-24 pb-6 relative">
         <div className="absolute inset-0 overflow-hidden">
-          <PedagogyBackground isHovered={isHeaderHovered} tags={allTags} />
+          <InkWashBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <div className="mx-auto max-w-3xl text-center">
+          <AnimatedSection className="mx-auto max-w-3xl text-center">
             <div
               className="inline-block"
               onMouseEnter={() => setIsHeaderHovered(true)}
@@ -321,35 +243,77 @@ export default function PedagogyPage() {
             <p className="text-lg text-muted-foreground mt-3">
               Sample assignments, syllabi, and resources for teaching with and about AI in the humanities
             </p>
-          </div>
+          </AnimatedSection>
         </Container>
       </Section>
 
-      {/* Sample Assignments Grid - reduced padding */}
-      <Section className="pt-4 pb-8">
+      {/* Sample Assignments Section */}
+      <Section className="pt-8 pb-8 sm:pt-10">
         <Container>
-          <div className="mb-6">
-            <h2 className="text-3xl font-serif font-bold mb-2 text-center">Sample Assignments</h2>
-            <p className="text-muted-foreground text-center">
-              Ready-to-use assignments and simulation modules for your courses
-            </p>
-          </div>
+          <AnimatedSection delay={100} className="flex flex-col sm:flex-row sm:items-center sm:justify-between ">
+            <div>
+              <h2 className="text-3xl font-serif font-bold mb-2">Sample Assignments</h2>
+              <p className="text-muted-foreground mb-5">
+                Ready-to-use assignments and simulation modules for your courses
+              </p>
+            </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {assignments.map((assignment, index) => (
-              <AssignmentCard
-                key={assignment.slug}
-                title={assignment.title}
-                description={assignment.description}
-                href={assignment.href}
-                slug={assignment.slug}
-                type={assignment.type}
-                tags={assignment.tags}
-                status={assignment.status}
-                animationDelay={((index + 1) * 100).toString()}
-              />
-            ))}
-          </div>
+            {/* View mode toggle */}
+            <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                className="h-8"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="h-4 w-4 mr-1.5" />
+                List
+              </Button>
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                className="h-8"
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className="h-4 w-4 mr-1.5" />
+                Grid
+              </Button>
+            </div>
+          </AnimatedSection>
+
+          {/* Assignments - List or Grid view */}
+          {viewMode === 'list' ? (
+            <div className="space-y-4">
+              {assignments.map((assignment, index) => (
+                <AssignmentListItem
+                  key={assignment.id}
+                  assignment={assignment}
+                  animationDelay={((index + 1) * 100).toString()}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              {assignments.map((assignment, index) => (
+                <AssignmentCard
+                  key={assignment.id}
+                  title={assignment.title}
+                  description={assignment.description}
+                  href={assignment.href}
+                  slug={assignment.slug}
+                  type={assignment.type}
+                  tags={assignment.tags}
+                  status={assignment.status}
+                  animationDelay={((index + 1) * 100).toString()}
+                  thumbnailPath={assignment.thumbnailPath}
+                  pdfPath={assignment.pdfPath}
+                  sampleSubmissionUrl={assignment.sampleSubmissionUrl}
+                  courseName={assignment.courseName}
+                  institution={assignment.institution}
+                />
+              ))}
+            </div>
+          )}
         </Container>
       </Section>
 
@@ -409,7 +373,7 @@ export default function PedagogyPage() {
                 </CardContent>
               </Card>
 
-              {/* Source Filter */}
+              {/* Source Filter Legend */}
               <Card className="mt-4">
                 <CardHeader>
                   <CardTitle className="text-sm">By Institution Type</CardTitle>
@@ -477,7 +441,7 @@ export default function PedagogyPage() {
                       <Button asChild variant="outline" size="sm">
                         <a href={resource.url} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="mr-2 h-3 w-3" />
-                          View Resource (Placeholder)
+                          View Resource
                         </a>
                       </Button>
                     </CardContent>
@@ -504,11 +468,27 @@ export default function PedagogyPage() {
         </Container>
       </Section>
 
-      {/* About HistoryLens */}
-      <Section className="border-t">
-        <Container>
+      {/* About HistoryLens - with physics blocks background */}
+      <Section className="border-t relative overflow-hidden py-12 sm:py-16">
+        <div className="absolute inset-0">
+          <PedagogyBackground isHovered={isHistoryLensHovered} tags={allTags} />
+        </div>
+        <Container className="relative">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">About the HistoryLens Framework</h2>
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHistoryLensHovered(true)}
+              onMouseLeave={() => setIsHistoryLensHovered(false)}
+            >
+              <h2 className="text-3xl font-serif font-bold mb-1 cursor-default">About the HistoryLens Framework</h2>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300 mb-4"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHistoryLensHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
             <p className="text-muted-foreground mb-8 leading-relaxed">
               All simulation-based assignments are built using the HistoryLens pedagogical framework,
               which combines interactive historical simulations with authentic primary sources. Rather than

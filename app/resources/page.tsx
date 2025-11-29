@@ -2,15 +2,20 @@
 
 import { useState, useMemo } from 'react'
 import { Container } from '@/components/ui/container'
+import { Section } from '@/components/ui/section'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ChevronRight, ArrowUpDown } from 'lucide-react'
+import { pageThemes } from '@/lib/page-themes'
+import { AnimatedSection } from '@/components/ui/animated-section'
+import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ArrowUpDown, LayoutList, Clock, BarChart3 } from 'lucide-react'
+
+const theme = pageThemes.resources
 
 type SortOption = 'newest' | 'oldest' | 'author-az' | 'category' | 'type'
+type ViewMode = 'list' | 'timeline' | 'scatter' | 'custom'
 type ResourceType = 'article' | 'paper' | 'blog' | 'video' | 'book' | 'tool'
 type ResourceCategory =
-  | 'Historical Primary Sources'
   | 'Critical AI Theory'
   | 'Humanities Pedagogy'
   | 'Writing & Composition'
@@ -35,13 +40,13 @@ interface Resource {
 }
 
 const resources: Resource[] = [
-  // Historical Primary Sources (1747-1999)
+  // Classic texts on machines, minds, and computation (re-categorized into thematic buckets)
   {
     title: "Man a Machine",
     authors: "Julien Offray de La Mettrie",
     year: 1747,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Radical materialist treatise arguing humans are complex machines, anticipating debates about consciousness, determinism, and artificial intelligence by centuries.",
     url: "https://www.earlymoderntexts.com/assets/pdfs/lamettrie1748.pdf"
   },
@@ -50,7 +55,7 @@ const resources: Resource[] = [
     authors: "Ada Lovelace",
     year: 1843,
     type: "paper",
-    category: "Historical Primary Sources",
+    category: "Digital Humanities",
     description: "Translation and notes on Babbage's Analytical Engine, including Note G—the first computer algorithm.",
     url: "https://www.computerhistory.org/babbage/adalovelace/",
     journal: "Taylor's Scientific Memoirs"
@@ -60,7 +65,7 @@ const resources: Resource[] = [
     authors: "Samuel Butler",
     year: 1863,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "AI and Humanities Weirdness",
     description: "Satirical essay speculating that machines might evolve consciousness and supplant humanity—an early science fiction exploration of machine intelligence.",
     url: "https://www.gutenberg.org/files/1906/1906-h/1906-h.htm",
     journal: "The Press (New Zealand)"
@@ -70,7 +75,7 @@ const resources: Resource[] = [
     authors: "William James",
     year: 1879,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Philosophical examination of consciousness, free will, and whether humans are mere mechanical automata. Directly relevant to debates about AI consciousness.",
     url: "https://archive.org/details/jstor-2246397",
     journal: "Mind"
@@ -80,7 +85,7 @@ const resources: Resource[] = [
     authors: "E.M. Forster",
     year: 1909,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "AI and Humanities Weirdness",
     description: "Dystopian short story about humanity's total dependence on an all-encompassing Machine. Prescient critique of technological dependence and digital isolation.",
     url: "https://www.cs.ucdavis.edu/~koehl/Teaching/ECS188/PDF_files/Machine_stops.pdf"
   },
@@ -89,7 +94,7 @@ const resources: Resource[] = [
     authors: "Walter Benjamin",
     year: 1935,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Examines how reproducibility changes art's aura and authenticity. Foundational for understanding AI-generated content and authorship questions.",
     url: "https://web.mit.edu/allanmc/www/benjamin.pdf"
   },
@@ -98,7 +103,7 @@ const resources: Resource[] = [
     authors: "Jorge Luis Borges",
     year: 1942,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "AI and Humanities Weirdness",
     description: "Examines artificial classification systems and their arbitrariness, featuring the famous Celestial Emporium taxonomy. Relevant to AI categorization and knowledge graphs.",
     url: "https://www.alamut.com/subj/artiface/language/johnWilkins.html"
   },
@@ -107,7 +112,7 @@ const resources: Resource[] = [
     authors: "Vannevar Bush",
     year: 1945,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "Digital Humanities",
     description: "Visionary essay proposing the memex—a proto-hypertext device presaging information retrieval and digital humanities.",
     url: "https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/",
     journal: "The Atlantic"
@@ -117,7 +122,7 @@ const resources: Resource[] = [
     authors: "Claude Shannon",
     year: 1948,
     type: "paper",
-    category: "Historical Primary Sources",
+    category: "Digital Humanities",
     description: "Foundational paper establishing information theory and introducing the concept of 'bits' as units of information.",
     url: "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf",
     journal: "Bell System Technical Journal"
@@ -127,7 +132,7 @@ const resources: Resource[] = [
     authors: "Norbert Wiener",
     year: 1948,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Technical foundation for cybernetics exploring feedback loops and control systems across biological and mechanical domains.",
     url: "https://archive.org/details/cybernetics-or-communication-and-control-in-the-animal-and-the-machine-norbert-wiene-ocr"
   },
@@ -136,7 +141,7 @@ const resources: Resource[] = [
     authors: "Norbert Wiener",
     year: 1950,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Accessible exploration of cybernetics' societal implications, warning about automation's impact on labor and human dignity.",
     url: "https://monoskop.org/images/6/60/Wiener_Norbert_The_Human_Use_of_Human_Beings_1989.pdf"
   },
@@ -145,7 +150,7 @@ const resources: Resource[] = [
     authors: "Alan Turing",
     year: 1950,
     type: "paper",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Seminal paper introducing the Turing Test and foundational questions about machine intelligence.",
     url: "https://academic.oup.com/mind/article-abstract/LIX/236/433/986238",
     journal: "Mind"
@@ -155,7 +160,7 @@ const resources: Resource[] = [
     authors: "Marshall McLuhan",
     year: 1951,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Pioneering media criticism examining how advertising and mass media mechanize human consciousness. Early exploration of technology's effect on thought patterns.",
     url: "https://archive.org/details/mechanicalbridef00mclu"
   },
@@ -164,7 +169,7 @@ const resources: Resource[] = [
     authors: "Martin Heidegger",
     year: 1954,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Philosophical inquiry into technology's essence as 'enframing'—a way of revealing that transforms everything into standing-reserve. Foundational for philosophy of technology.",
     url: "https://monoskop.org/images/4/44/Heidegger_Martin_The_Question_Concerning_Technology_and_Other_Essays.pdf"
   },
@@ -173,7 +178,7 @@ const resources: Resource[] = [
     authors: "John McCarthy, Marvin Minsky, Nathaniel Rochester, Claude Shannon",
     year: 1955,
     type: "paper",
-    category: "Historical Primary Sources",
+    category: "AI Literacy",
     description: "Historic proposal coining 'artificial intelligence' and launching AI as an academic discipline.",
     url: "https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html"
   },
@@ -182,7 +187,7 @@ const resources: Resource[] = [
     authors: "Douglas Engelbart",
     year: 1962,
     type: "paper",
-    category: "Historical Primary Sources",
+    category: "Humanities Pedagogy",
     description: "Visionary framework proposing computers as tools to augment rather than replace human intelligence. Foundational for human-computer interaction and collaborative systems.",
     url: "https://www.dougengelbart.org/content/view/138"
   },
@@ -191,7 +196,7 @@ const resources: Resource[] = [
     authors: "Joseph Weizenbaum",
     year: 1976,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "ELIZA creator's critique arguing computers should never make important decisions requiring human wisdom and compassion.",
     url: "https://archive.org/details/computerpowerhum0000weiz_v0i3"
   },
@@ -200,7 +205,7 @@ const resources: Resource[] = [
     authors: "Ted Nelson",
     year: 1981,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Digital Humanities",
     description: "Foundational hypertext theory proposing transclusion, tumblers, and Project Xanadu's vision of networked writing.",
     url: "https://www.eastgate.com/catalog/LiteraryMachines.html"
   },
@@ -209,7 +214,7 @@ const resources: Resource[] = [
     authors: "Sherry Turkle",
     year: 1984,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Psychological study of how computers reshape human identity, thought, and relationships in the personal computing era.",
     url: "https://direct.mit.edu/books/monograph/2327/The-Second-SelfComputers-and-the-Human-Spirit"
   },
@@ -218,7 +223,7 @@ const resources: Resource[] = [
     authors: "Donna Haraway",
     year: 1985,
     type: "article",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Influential feminist critique using the cyborg as metaphor for boundary transgression and political coalitions.",
     url: "https://theanarchistlibrary.org/library/donna-haraway-a-cyborg-manifesto",
     journal: "Socialist Review"
@@ -228,7 +233,7 @@ const resources: Resource[] = [
     authors: "Jerome McGann",
     year: 1991,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Digital Humanities",
     description: "Theory of texts as networks of linguistic and bibliographical codes, foundational for digital scholarly editing.",
     url: "https://press.princeton.edu/books/paperback/9780691015187/the-textual-condition"
   },
@@ -237,7 +242,7 @@ const resources: Resource[] = [
     authors: "Geoffrey C. Bowker & Susan Leigh Star",
     year: 1999,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Data Ethics",
     description: "Foundational STS text exploring how classification systems shape knowledge, power, and social order.",
     url: "https://direct.mit.edu/books/monograph/4738/Sorting-Things-OutClassification-and-Its"
   },
@@ -246,9 +251,311 @@ const resources: Resource[] = [
     authors: "N. Katherine Hayles",
     year: 1999,
     type: "book",
-    category: "Historical Primary Sources",
+    category: "Critical AI Theory",
     description: "Traces how information lost its body through cybernetics, constructing posthuman subjectivity.",
     url: "https://press.uchicago.edu/ucp/books/book/chicago/H/bo3769963.html"
+  },
+
+  // Additional classic and pre-2020 texts
+  {
+    title: "Gödel, Escher, Bach: An Eternal Golden Braid",
+    authors: "Douglas Hofstadter",
+    year: 1979,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Pulitzer Prize-winning exploration of consciousness, self-reference, and meaning through the lens of mathematics, art, and music. Essential reading on minds and machines.",
+    url: "https://archive.org/details/glodelescherbach00hofs"
+  },
+  {
+    title: "I Am a Strange Loop",
+    authors: "Douglas Hofstadter",
+    year: 2007,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Hofstadter's meditation on consciousness as self-referential 'strange loops'—arguing the self is a hallucination hallucinated by a hallucination. Deeply relevant to questions of AI sentience.",
+    url: "https://www.basicbooks.com/titles/douglas-r-hofstadter/i-am-a-strange-loop/9780465030798/"
+  },
+  {
+    title: "Neuromancer",
+    authors: "William Gibson",
+    year: 1984,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "Genre-defining cyberpunk novel that coined 'cyberspace' and shaped cultural imagination of AI, virtual reality, and human-machine interfaces.",
+    url: "https://archive.org/details/neuaborr00gibs"
+  },
+  {
+    title: "Society of Mind",
+    authors: "Marvin Minsky",
+    year: 1986,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "AI pioneer's theory that intelligence emerges from interactions of many simple agents, each mindless alone. Influential model for understanding both human and artificial cognition.",
+    url: "https://archive.org/details/societyofmind00mins"
+  },
+  {
+    title: "Situated Cognition and the Culture of Learning",
+    authors: "John Seely Brown, Allan Collins, Paul Duguid",
+    year: 1989,
+    type: "paper",
+    category: "Humanities Pedagogy",
+    description: "Influential argument that knowledge is inseparable from the contexts in which it develops. Foundational for understanding why AI lacks situated understanding.",
+    url: "https://www.jstor.org/stable/1176008",
+    journal: "Educational Researcher"
+  },
+  {
+    title: "The Computer as Theatre",
+    authors: "Brenda Laurel",
+    year: 1991,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Pioneering work applying dramatic theory to human-computer interaction, arguing for computers as stages for collaborative performance rather than tools.",
+    url: "https://archive.org/details/computerastheatr00laur"
+  },
+  {
+    title: "The Embodied Mind: Cognitive Science and Human Experience",
+    authors: "Francisco Varela, Evan Thompson, Eleanor Rosch",
+    year: 1991,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Groundbreaking synthesis of cognitive science with Buddhist philosophy, arguing that cognition depends on embodied experience—a challenge to disembodied AI.",
+    url: "https://direct.mit.edu/books/monograph/4062/The-Embodied-MindCognitive-Science-and-Human"
+  },
+  {
+    title: "Hypertext: The Convergence of Contemporary Critical Theory and Technology",
+    authors: "George P. Landow",
+    year: 1992,
+    type: "book",
+    category: "Digital Humanities",
+    description: "Influential exploration of how hypertext embodies poststructuralist ideas about textuality, authorship, and reading. Key text for digital literary studies.",
+    url: "https://press.jhu.edu/books/title/8473/hypertext-30"
+  },
+  {
+    title: "The Logic of Practice",
+    authors: "Pierre Bourdieu",
+    year: 1990,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Theory of habitus and practical knowledge that cannot be reduced to rules—foundational for understanding what AI cannot easily capture about human expertise.",
+    url: "https://www.sup.org/books/title/?id=2478"
+  },
+  {
+    title: "Mind Children: The Future of Robot and Human Intelligence",
+    authors: "Hans Moravec",
+    year: 1988,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "Roboticist's provocative vision of mind uploading and the evolution of machine intelligence surpassing humanity. Influential on transhumanist thought.",
+    url: "https://archive.org/details/mindchildrenfutu00mora"
+  },
+  {
+    title: "Technologies of the Self",
+    authors: "Michel Foucault",
+    year: 1988,
+    type: "article",
+    category: "Critical AI Theory",
+    description: "Foucault's late lectures on practices through which individuals transform themselves—relevant to understanding AI as a technology that reshapes subjectivity.",
+    url: "https://monoskop.org/images/0/03/Technologies_of_the_Self_A_Seminar_with_Michel_Foucault.pdf"
+  },
+
+  // Unusual and international texts on machines, minds, and automation
+  {
+    title: "The Sandman (Der Sandmann)",
+    authors: "E.T.A. Hoffmann",
+    year: 1816,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "Gothic tale of a man who falls in love with an automaton, source for Freud's essay on the uncanny. Foundational text on artificial beings, deception, and the horror of mechanical life.",
+    url: "https://www.gutenberg.org/ebooks/32046"
+  },
+  {
+    title: "Tomorrow's Eve (L'Ève future)",
+    authors: "Auguste Villiers de l'Isle-Adam",
+    year: 1886,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "French symbolist novel in which Edison creates a perfect android woman. Coined the word 'android' and explores technology, gender, and the pursuit of artificial perfection.",
+    url: "https://archive.org/details/tomorrowseve00vill"
+  },
+  {
+    title: "The Supermale (Le Surmâle)",
+    authors: "Alfred Jarry",
+    year: 1902,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "Absurdist proto-surrealist novel about a man who becomes a machine to outperform machines. Pataphysical meditation on human-machine competition and the mechanization of desire.",
+    url: "https://archive.org/details/supermale0000jarr"
+  },
+  {
+    title: "R.U.R. (Rossum's Universal Robots)",
+    authors: "Karel Čapek",
+    year: 1920,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "Czech play that invented the word 'robot' (from robota, forced labor). Prophetic drama about artificial workers, exploitation, and machine rebellion.",
+    url: "https://archive.org/details/rurrossumsunivers00apek"
+  },
+  {
+    title: "Man and Technics: A Contribution to a Philosophy of Life",
+    authors: "Oswald Spengler",
+    year: 1931,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Pessimistic German philosophy viewing technology as humanity's Faustian bargain—tools that will ultimately escape human control. Prescient warnings about technological determinism.",
+    url: "https://archive.org/details/in.ernet.dli.2015.190659"
+  },
+  {
+    title: "On the Mode of Existence of Technical Objects (Du mode d'existence des objets techniques)",
+    authors: "Gilbert Simondon",
+    year: 1958,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Radical French philosophy arguing machines have their own mode of existence and evolution. Influential on Deleuze, Stiegler, and contemporary philosophy of technology.",
+    url: "https://www.upress.umn.edu/book-division/books/on-the-mode-of-existence-of-technical-objects"
+  },
+  {
+    title: "Summa Technologiae",
+    authors: "Stanisław Lem",
+    year: 1964,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Polish science fiction master's philosophical treatise on AI, virtual reality, biological engineering, and the future of intelligence. Remarkably prescient, only translated to English in 2013.",
+    url: "https://www.upress.umn.edu/book-division/books/summa-technologiae"
+  },
+  {
+    title: "Cybernetics and Ghosts (Cibernetica e fantasmi)",
+    authors: "Italo Calvino",
+    year: 1967,
+    type: "article",
+    category: "AI and Humanities Weirdness",
+    description: "Italian novelist's lecture on literature as combinatorial machine—exploring whether stories can be generated algorithmically and what remains irreducibly human in writing.",
+    url: "https://monoskop.org/images/2/23/Calvino_Italo_1986_Cybernetics_and_Ghosts.pdf"
+  },
+  {
+    title: "Towards a Philosophy of Photography",
+    authors: "Vilém Flusser",
+    year: 1983,
+    type: "book",
+    category: "Critical AI Theory",
+    description: "Czech-Brazilian philosopher's theory of 'apparatus' and programmed behavior. Argues cameras (and by extension AI) shape human thought in ways we cannot perceive from inside the program.",
+    url: "https://www.reaktionbooks.co.uk/work/towards-a-philosophy-of-photography"
+  },
+  {
+    title: "The Policeman's Beard is Half Constructed",
+    authors: "RACTER (William Chamberlain)",
+    year: 1984,
+    type: "book",
+    category: "AI and Humanities Weirdness",
+    description: "First book 'written' by an AI—prose and poetry generated by the RACTER program. A strange artifact from early computational creativity, raising questions about authorship and machine expression.",
+    url: "https://archive.org/details/policemansbeardi00ract"
+  },
+  {
+    title: "The Garden of Forking Paths (El jardín de senderos que se bifurcan)",
+    authors: "Jorge Luis Borges",
+    year: 1941,
+    type: "article",
+    category: "Historical Simulation",
+    description: "Short story about a novel where all possible outcomes occur simultaneously—a labyrinth of time rather than space. Direct precursor to hypertext fiction, branching narratives, and interactive simulation.",
+    url: "https://archive.org/details/laaborinths00LBorworborg"
+  },
+  {
+    title: "Mindstorms: Children, Computers, and Powerful Ideas",
+    authors: "Seymour Papert",
+    year: 1980,
+    type: "book",
+    category: "Humanities Pedagogy",
+    description: "MIT educator's vision of LOGO programming as a tool for children to learn thinking itself. Foundational text for constructionist learning, computational thinking, and educational technology.",
+    url: "https://archive.org/details/mindstlogoandlea00seym"
+  },
+  {
+    title: "Virtual History: Alternatives and Counterfactuals",
+    authors: "Niall Ferguson (ed.)",
+    year: 1997,
+    type: "book",
+    category: "Historical Simulation",
+    description: "Historians defend counterfactual reasoning as serious methodology. Essays exploring 'what if' scenarios—directly relevant to historical simulation pedagogy and teaching contingency.",
+    url: "https://www.basicbooks.com/titles/niall-ferguson/virtual-history/9780465023233/"
+  },
+  {
+    title: "Hamlet on the Holodeck: The Future of Narrative in Cyberspace",
+    authors: "Janet Murray",
+    year: 1997,
+    type: "book",
+    category: "Historical Simulation",
+    description: "Theory of interactive narrative and immersive digital storytelling. Essential text for understanding narrative simulation, agency, and procedural authorship.",
+    url: "https://mitpress.mit.edu/9780262533485/hamlet-on-the-holodeck/"
+  },
+  {
+    title: "Writing Space: Computers, Hypertext, and the Remediation of Print",
+    authors: "Jay David Bolter",
+    year: 1991,
+    type: "book",
+    category: "Writing & Composition",
+    description: "How digital writing transforms composition, authorship, and the nature of text itself. Foundational for understanding word processing, hypertext, and now AI writing tools.",
+    url: "https://www.routledge.com/Writing-Space-Computers-Hypertext-and-the-Remediation-of-Print/Bolter/p/book/9780805829198"
+  },
+  {
+    title: "English Composition and Rhetoric: A Manual",
+    authors: "Alexander Bain",
+    year: 1866,
+    type: "book",
+    category: "Writing & Composition",
+    description: "Systematized paragraph structure and modes of discourse still taught today. Demonstrates how 'writing rules' are technologies that become internalized—relevant to AI writing templates and formulas.",
+    url: "https://archive.org/details/englishcomposit21teleigoog"
+  },
+  {
+    title: "Cent Mille Milliards de Poèmes (Hundred Thousand Billion Poems)",
+    authors: "Raymond Queneau",
+    year: 1961,
+    type: "book",
+    category: "Writing & Composition",
+    description: "Ten sonnets with interchangeable lines creating 100 trillion possible poems. Oulipo's combinatorial literature is proto-generative AI—algorithmic creativity decades before LLMs.",
+    url: "https://www.bevrowe.info/Queneau/QueneauRandom_v4.html"
+  },
+  {
+    title: "The Philosophy of Composition",
+    authors: "Edgar Allan Poe",
+    year: 1846,
+    type: "article",
+    category: "Writing & Composition",
+    description: "Poe claims he wrote 'The Raven' algorithmically, through logical steps rather than inspiration. Whether true or performance, it's an early vision of systematic, mechanical creativity.",
+    url: "https://www.gutenberg.org/files/55749/55749-h/55749-h.htm"
+  },
+  {
+    title: "Understanding Media: The Extensions of Man",
+    authors: "Marshall McLuhan",
+    year: 1964,
+    type: "book",
+    category: "Writing & Composition",
+    description: "'The medium is the message.' Essential for understanding how AI as a writing medium shapes what we write and think—not just a tool but an environment that restructures cognition.",
+    url: "https://archive.org/details/understandingmed0000mclu"
+  },
+  {
+    title: "Napoléon et la conquête du monde, 1812-1832",
+    authors: "Louis Geoffroy",
+    year: 1836,
+    type: "book",
+    category: "Historical Simulation",
+    description: "The first alternate history novel—Napoleon conquers the world. Origin of counterfactual historical fiction and imaginative exploration of historical contingency.",
+    url: "https://archive.org/details/naaborpolonabil00teleefgoog"
+  },
+  {
+    title: "The Man in the High Castle",
+    authors: "Philip K. Dick",
+    year: 1962,
+    type: "book",
+    category: "Historical Simulation",
+    description: "Axis powers win WWII, but a novel within the novel imagines Allied victory. Nested alternate histories and questions about authenticity anticipate simulation thinking and AI-generated realities.",
+    url: "https://archive.org/details/maninhighcastle00dick"
+  },
+  {
+    title: "A Connecticut Yankee in King Arthur's Court",
+    authors: "Mark Twain",
+    year: 1889,
+    type: "book",
+    category: "Historical Simulation",
+    description: "Time travel as historical simulation—a 19th-century engineer 'plays' the medieval period, testing what modern knowledge could accomplish. Satirical exploration of technological intervention in history.",
+    url: "https://www.gutenberg.org/ebooks/86"
   },
 
   // Critical AI Theory
@@ -1138,8 +1445,10 @@ export default function ResourcesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | 'All'>('All')
   const [selectedType, setSelectedType] = useState<ResourceType | 'All'>('All')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>('newest')
+  const [viewMode, setViewMode] = useState<ViewMode>('list')
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
 
   const allCategories: ResourceCategory[] = Array.from(new Set(resources.map(r => r.category))).sort()
 
@@ -1213,409 +1522,930 @@ export default function ResourcesPage() {
   }
 
   const categoryDescriptions: Record<ResourceCategory, string> = {
-    'Historical Primary Sources': 'Seminal texts from 1747-1999 tracing the evolution of thinking about machines, consciousness, automation, computing, AI, cybernetics, hypertext, and digital humanities',
-    'Critical AI Theory': 'Foundational texts examining AI systems through lenses of power, bias, labor, and social justice',
+    'Critical AI Theory': 'Foundational texts from 1747 to today examining machines, minds, consciousness, and AI through philosophical, critical, and social lenses',
     'Humanities Pedagogy': 'Teaching approaches integrating AI in humanities courses with critical, humanistic frameworks',
     'Writing & Composition': 'Rhetoric and composition scholarship on AI writing tools in writing instruction',
     'Academic Integrity': 'Research on plagiarism, assessment redesign, and maintaining integrity in the AI era',
-    'Digital Humanities': 'Computational methods, data analysis, and visualization in humanities research and teaching',
+    'Digital Humanities': 'Computational methods, hypertext theory, information science, and visualization in humanities research and teaching',
     'Historical Simulation': 'AI tools and pedagogies for interactive historical learning and simulation',
     'AI Literacy': 'Teaching students and educators to use, critique, and understand AI systems',
     'Policy & Guidance': 'Institutional frameworks and policy recommendations for AI in education',
     'Tools & Platforms': 'Practical AI tools designed for educators and classroom use',
-    'Data Ethics': 'Critical perspectives on algorithmic bias, fairness, and ethical data practices',
-    'AI and Humanities Weirdness': 'Unusual, unexpected, and fascinating research at the strange edges where AI meets literature, art, history, and creative expression'
+    'Data Ethics': 'Critical perspectives on classification, algorithmic bias, fairness, and ethical data practices',
+    'AI and Humanities Weirdness': 'Fiction, speculation, and fascinating research at the strange edges where AI meets literature, art, history, and creative expression'
   }
 
   const scrollToCategory = (category: ResourceCategory) => {
     setSelectedCategory(category)
+    setMobileSidebarOpen(false)
     const element = document.getElementById(category.toLowerCase().replace(/\s+/g, '-'))
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
+  // Color map for categories
+  const categoryColors: Record<ResourceCategory, string> = {
+    'Critical AI Theory': 'bg-purple-500',
+    'Humanities Pedagogy': 'bg-green-500',
+    'Writing & Composition': 'bg-blue-500',
+    'Academic Integrity': 'bg-red-500',
+    'Digital Humanities': 'bg-cyan-500',
+    'Historical Simulation': 'bg-orange-500',
+    'AI Literacy': 'bg-indigo-500',
+    'Policy & Guidance': 'bg-slate-500',
+    'Tools & Platforms': 'bg-emerald-500',
+    'Data Ethics': 'bg-rose-500',
+    'AI and Humanities Weirdness': 'bg-pink-500'
+  }
+
+  // Timeline View Component
+  const TimelineView = () => {
+    // Group resources by decade
+    const resourcesByDecade: Record<string, Resource[]> = {}
+    filteredAndSortedResources.forEach(r => {
+      const decade = Math.floor(r.year / 10) * 10
+      const decadeLabel = `${decade}s`
+      if (!resourcesByDecade[decadeLabel]) {
+        resourcesByDecade[decadeLabel] = []
+      }
+      resourcesByDecade[decadeLabel].push(r)
+    })
+
+    const decades = Object.keys(resourcesByDecade).sort()
+    const minYear = Math.min(...filteredAndSortedResources.map(r => r.year))
+    const maxYear = Math.max(...filteredAndSortedResources.map(r => r.year))
+
+    return (
+      <div className="relative">
+        {/* Timeline header with year range */}
+        <div className="sticky top-0 bg-background z-10 pb-4 mb-4 border-b">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span className="font-mono">{minYear}</span>
+            <span className="text-xs">Timeline of {filteredAndSortedResources.length} resources</span>
+            <span className="font-mono">{maxYear}</span>
+          </div>
+          {/* Category legend */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {allCategories.filter(cat =>
+              filteredAndSortedResources.some(r => r.category === cat)
+            ).map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(selectedCategory === cat ? 'All' : cat)}
+                className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-full transition-all ${
+                  selectedCategory === cat
+                    ? 'ring-2 ring-primary ring-offset-1'
+                    : 'opacity-70 hover:opacity-100'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${categoryColors[cat]}`} />
+                <span className="hidden sm:inline">{cat.split(' ').slice(0, 2).join(' ')}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Timeline content */}
+        <div className="relative">
+          {/* Vertical line */}
+          <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-border" />
+
+          {decades.map((decade, decadeIndex) => (
+            <div key={decade} className="relative mb-8">
+              {/* Decade marker */}
+              <div className="sticky top-[120px] z-[5] flex items-center mb-4">
+                <div className="w-8 sm:w-16 flex justify-center">
+                  <div className="w-4 h-4 rounded-full bg-primary border-4 border-background" />
+                </div>
+                <span className="ml-2 font-mono text-lg font-bold text-primary">{decade}</span>
+                <Badge variant="secondary" className="ml-2 text-xs">
+                  {resourcesByDecade[decade].length}
+                </Badge>
+              </div>
+
+              {/* Resources in this decade */}
+              <div className="space-y-2 ml-8 sm:ml-16 pl-4 border-l-2 border-transparent">
+                {resourcesByDecade[decade]
+                  .sort((a, b) => a.year - b.year)
+                  .map((resource, index) => (
+                    <a
+                      key={index}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block p-3 rounded-lg hover:bg-muted/50 transition-all border border-transparent hover:border-border"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${categoryColors[resource.category]}`} />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="font-mono text-xs text-muted-foreground">{resource.year}</span>
+                            <h4 className="font-medium text-sm group-hover:text-primary transition-colors line-clamp-1">
+                              {resource.title}
+                            </h4>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5">{resource.authors}</p>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] flex-shrink-0 capitalize">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                    </a>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Chart/Scatterplot View Component
+  const ChartView = () => {
+    const minYear = Math.min(...filteredAndSortedResources.map(r => r.year))
+    const maxYear = Math.max(...filteredAndSortedResources.map(r => r.year))
+    const yearRange = maxYear - minYear || 1
+
+    // Get unique categories in the current filtered set
+    const activeCategories = [...new Set(filteredAndSortedResources.map(r => r.category))]
+
+    // Calculate position for each resource
+    const getXPosition = (year: number) => ((year - minYear) / yearRange) * 100
+    const getYPosition = (category: ResourceCategory) => {
+      const index = activeCategories.indexOf(category)
+      return ((index + 0.5) / activeCategories.length) * 100
+    }
+
+    // Generate year markers
+    const yearMarkers: number[] = []
+    const step = yearRange > 100 ? 50 : yearRange > 50 ? 25 : 10
+    for (let year = Math.ceil(minYear / step) * step; year <= maxYear; year += step) {
+      yearMarkers.push(year)
+    }
+
+    return (
+      <div className="relative">
+        {/* Chart header */}
+        <div className="sticky top-0 bg-background z-10 pb-4 mb-4 border-b">
+          <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
+            <span>Resources by Year & Category</span>
+            <span className="text-xs">{filteredAndSortedResources.length} resources</span>
+          </div>
+          {/* Category legend - clickable */}
+          <div className="flex flex-wrap gap-1.5">
+            {activeCategories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(selectedCategory === cat ? 'All' : cat)}
+                className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-muted ring-1 ring-primary'
+                    : 'hover:bg-muted/50'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${categoryColors[cat]}`} />
+                <span className="hidden md:inline truncate max-w-[120px]">{cat}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Chart area */}
+        <div className="relative bg-muted/20 rounded-lg border overflow-hidden" style={{ minHeight: '400px' }}>
+          {/* Y-axis labels (categories) */}
+          <div className="absolute left-0 top-0 bottom-8 w-32 sm:w-48 bg-gradient-to-r from-background via-background to-transparent z-10 flex flex-col justify-around py-4 pr-2">
+            {activeCategories.map((cat, i) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(selectedCategory === cat ? 'All' : cat)}
+                className={`text-[10px] sm:text-xs text-right truncate px-2 py-1 rounded transition-colors ${
+                  selectedCategory === cat ? 'bg-muted font-medium' : 'hover:bg-muted/50 text-muted-foreground'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* X-axis labels (years) */}
+          <div className="absolute bottom-0 left-32 sm:left-48 right-0 h-8 bg-gradient-to-t from-background to-transparent flex items-end justify-between px-4 z-10">
+            {yearMarkers.map(year => (
+              <span key={year} className="text-[10px] font-mono text-muted-foreground">
+                {year}
+              </span>
+            ))}
+          </div>
+
+          {/* Grid lines */}
+          <div className="absolute inset-0 left-32 sm:left-48 right-0 bottom-8">
+            {/* Horizontal lines */}
+            {activeCategories.map((_, i) => (
+              <div
+                key={i}
+                className="absolute left-0 right-0 border-t border-dashed border-muted-foreground/20"
+                style={{ top: `${((i + 0.5) / activeCategories.length) * 100}%` }}
+              />
+            ))}
+            {/* Vertical lines */}
+            {yearMarkers.map(year => (
+              <div
+                key={year}
+                className="absolute top-0 bottom-0 border-l border-dashed border-muted-foreground/20"
+                style={{ left: `${getXPosition(year)}%` }}
+              />
+            ))}
+          </div>
+
+          {/* Data points */}
+          <div className="absolute inset-0 left-32 sm:left-48 right-0 bottom-8 p-2">
+            {filteredAndSortedResources.map((resource, index) => {
+              const x = getXPosition(resource.year)
+              const y = getYPosition(resource.category)
+
+              return (
+                <a
+                  key={index}
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute group"
+                  style={{
+                    left: `${x}%`,
+                    top: `${y}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  {/* Dot */}
+                  <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${categoryColors[resource.category]}
+                    opacity-80 group-hover:opacity-100 group-hover:scale-150 transition-all
+                    ring-0 group-hover:ring-4 ring-primary/20`}
+                  />
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100
+                    transition-opacity pointer-events-none z-20 w-48 sm:w-64">
+                    <div className="bg-popover text-popover-foreground border rounded-lg shadow-lg p-3 text-xs">
+                      <p className="font-medium line-clamp-2">{resource.title}</p>
+                      <p className="text-muted-foreground mt-1">{resource.authors}, {resource.year}</p>
+                      <Badge variant="outline" className="mt-2 text-[10px] capitalize">{resource.type}</Badge>
+                    </div>
+                  </div>
+                </a>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Mobile-friendly list below chart */}
+        <div className="mt-6 lg:hidden">
+          <h3 className="text-sm font-medium mb-3">All Resources</h3>
+          <div className="space-y-2">
+            {filteredAndSortedResources.map((resource, index) => (
+              <a
+                key={index}
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 p-2 rounded hover:bg-muted transition-colors"
+              >
+                <span className={`w-2 h-2 rounded-full flex-shrink-0 ${categoryColors[resource.category]}`} />
+                <span className="font-mono text-xs text-muted-foreground w-10">{resource.year}</span>
+                <span className="text-sm truncate flex-1">{resource.title}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Sidebar content (shared between desktop and mobile)
+  const SidebarContent = () => (
+    <div className="space-y-4">
+      {/* Search */}
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Search
+        </label>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search resources..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+
+      {/* Visualization Options */}
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          View
+        </label>
+        <div className="flex flex-wrap gap-1">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            className="text-xs h-7 px-2"
+            onClick={() => setViewMode('list')}
+          >
+            <LayoutList className="h-3 w-3 mr-1" />
+            List
+          </Button>
+          <Button
+            variant={viewMode === 'timeline' ? 'default' : 'outline'}
+            size="sm"
+            className="text-xs h-7 px-2"
+            onClick={() => setViewMode('timeline')}
+          >
+            <Clock className="h-3 w-3 mr-1" />
+            Timeline
+          </Button>
+          <Button
+            variant={viewMode === 'scatter' ? 'default' : 'outline'}
+            size="sm"
+            className="text-xs h-7 px-2"
+            onClick={() => setViewMode('scatter')}
+          >
+            <BarChart3 className="h-3 w-3 mr-1" />
+            Chart
+          </Button>
+        </div>
+      </div>
+
+      {/* Type Filter */}
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Type
+        </label>
+        <div className="flex flex-wrap gap-1">
+          <Badge
+            variant={selectedType === 'All' ? 'default' : 'outline'}
+            className="cursor-pointer text-xs"
+            onClick={() => setSelectedType('All')}
+          >
+            All
+          </Badge>
+          {(['book', 'paper', 'article', 'blog', 'video', 'tool'] as ResourceType[]).map(type => (
+            <Badge
+              key={type}
+              variant={selectedType === type ? 'default' : 'outline'}
+              className="cursor-pointer text-xs capitalize"
+              onClick={() => setSelectedType(type)}
+            >
+              {type}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      {/* Categories Navigation */}
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Categories
+        </label>
+        <nav className="space-y-0.5">
+          <button
+            onClick={() => { setSelectedCategory('All'); setMobileSidebarOpen(false) }}
+            className={`w-full flex items-center justify-between px-2 py-1.5 text-sm rounded transition-colors ${
+              selectedCategory === 'All'
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-muted'
+            }`}
+          >
+            <span>All Resources</span>
+            <Badge variant="secondary" className="text-[10px] h-5">
+              {resources.length}
+            </Badge>
+          </button>
+          {allCategories.map(category => {
+            const count = resources.filter(r => r.category === category).length
+            return (
+              <button
+                key={category}
+                onClick={() => scrollToCategory(category)}
+                className={`w-full flex items-center justify-between px-2 py-1.5 text-sm rounded transition-colors text-left ${
+                  selectedCategory === category
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                <span className="flex-1 truncate text-xs">{category}</span>
+                <Badge variant="secondary" className="text-[10px] h-5 ml-1">
+                  {count}
+                </Badge>
+              </button>
+            )
+          })}
+        </nav>
+      </div>
+
+      {/* Results Count */}
+      <div className="pt-3 border-t text-xs text-muted-foreground">
+        Showing {filteredAndSortedResources.length} of {resources.length} resources
+      </div>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center px-4">
+      {/* Centered Page Header - Matching other pages */}
+      <Section className="pt-24 pb-6 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-amber-50/30 to-transparent dark:from-amber-950/10" />
+        <Container className="relative">
+          <AnimatedSection className="mx-auto max-w-3xl text-center">
+            <div
+              className="inline-block"
+              onMouseEnter={() => setIsHeaderHovered(true)}
+              onMouseLeave={() => setIsHeaderHovered(false)}
+            >
+              <h1 className="text-3xl font-serif font-bold mb-1">Resources</h1>
+              <div
+                className="h-0.5 mx-auto transition-all duration-300"
+                style={{
+                  backgroundColor: theme.accent,
+                  width: isHeaderHovered ? '100%' : '4rem'
+                }}
+              />
+            </div>
+            <div className="text-lg text-muted-foreground mt-3 flex items-center justify-center gap-3">
+              <span>Curated readings, tools, and scholarship for AI in the humanities</span>
+              <Badge variant="secondary">
+                {resources.length} Resources
+              </Badge>
+            </div>
+
+          </AnimatedSection>
+        </Container>
+      </Section>
+
+      {/* Mobile: View Mode Ribbon */}
+      <div className="lg:hidden sticky top-[72px] z-30 bg-background border-b">
+        <div className="flex items-center justify-between px-4 py-2">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="mr-4"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setMobileSidebarOpen(true)}
           >
-            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <Menu className="h-4 w-4 mr-2" />
+            Filters
           </Button>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-serif font-bold">Resources</h1>
-            <Badge variant="secondary" className="text-xs">
-              {resources.length} Total
+          <div className="flex items-center gap-1">
+            <Badge
+              variant={sortBy === 'newest' ? 'default' : 'outline'}
+              className="cursor-pointer text-xs"
+              onClick={() => setSortBy('newest')}
+            >
+              Newest
+            </Badge>
+            <Badge
+              variant={sortBy === 'category' ? 'default' : 'outline'}
+              className="cursor-pointer text-xs"
+              onClick={() => setSortBy('category')}
+            >
+              By Category
             </Badge>
           </div>
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        {sidebarOpen && (
-          <aside className="sticky top-16 h-[calc(100vh-4rem)] w-72 flex-shrink-0 border-r bg-muted/30 overflow-y-auto">
-            <div className="p-4 space-y-6">
-              {/* Search */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  Search
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <input
-                    type="text"
-                    placeholder="Search resources..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-              </div>
-
-              {/* Type Filter */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  Type
-                </label>
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge
-                    variant={selectedType === 'All' ? 'default' : 'outline'}
-                    className="cursor-pointer text-xs"
-                    onClick={() => setSelectedType('All')}
-                  >
-                    All
-                  </Badge>
-                  {(['book', 'paper', 'article', 'blog', 'video', 'tool'] as ResourceType[]).map(type => (
-                    <Badge
-                      key={type}
-                      variant={selectedType === type ? 'default' : 'outline'}
-                      className="cursor-pointer text-xs capitalize"
-                      onClick={() => setSelectedType(type)}
-                    >
-                      {type}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Categories Navigation */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  Categories
-                </label>
-                <nav className="space-y-1">
-                  <button
-                    onClick={() => setSelectedCategory('All')}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${
-                      selectedCategory === 'All'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-muted'
-                    }`}
-                  >
-                    <span>All Resources</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {resources.length}
-                    </Badge>
-                  </button>
-                  {allCategories.map(category => {
-                    const count = resources.filter(r => r.category === category).length
-                    return (
-                      <button
-                        key={category}
-                        onClick={() => scrollToCategory(category)}
-                        className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors text-left ${
-                          selectedCategory === category
-                            ? 'bg-primary text-primary-foreground'
-                            : 'hover:bg-muted'
-                        }`}
-                      >
-                        <span className="flex-1 truncate">{category}</span>
-                        <Badge variant="secondary" className="text-xs ml-2">
-                          {count}
-                        </Badge>
-                      </button>
-                    )
-                  })}
-                </nav>
-              </div>
-
-              {/* Results Count */}
-              <div className="pt-4 border-t text-xs text-muted-foreground">
-                Showing {filteredAndSortedResources.length} of {resources.length} resources
-              </div>
+      {/* Mobile Slide-in Sidebar */}
+      {mobileSidebarOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setMobileSidebarOpen(false)}
+          />
+          {/* Sidebar Panel */}
+          <div className="absolute left-0 top-0 bottom-0 w-80 bg-background shadow-xl overflow-y-auto">
+            <div className="sticky top-0 bg-background border-b p-4 flex items-center justify-between">
+              <h2 className="font-semibold">Filters</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileSidebarOpen(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
             </div>
-          </aside>
-        )}
+            <div className="p-4">
+              <SidebarContent />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex max-w-[1400px] mx-auto">
+        {/* Desktop Sidebar */}
+        <aside className="sticky top-[72px] h-[calc(100vh-72px)] w-60 flex-shrink-0 border-r bg-muted/30 overflow-y-auto">
+          <div className="p-3">
+            <SidebarContent />
+          </div>
+        </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
-          <Container className="py-8 max-w-5xl">
-            {/* Sort Controls */}
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Sort by:</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Badge
-                  variant={sortBy === 'newest' ? 'default' : 'outline'}
-                  className="cursor-pointer text-xs"
-                  onClick={() => setSortBy('newest')}
-                >
-                  Newest First
-                </Badge>
-                <Badge
-                  variant={sortBy === 'oldest' ? 'default' : 'outline'}
-                  className="cursor-pointer text-xs"
-                  onClick={() => setSortBy('oldest')}
-                >
-                  Oldest First
-                </Badge>
-                <Badge
-                  variant={sortBy === 'author-az' ? 'default' : 'outline'}
-                  className="cursor-pointer text-xs"
-                  onClick={() => setSortBy('author-az')}
-                >
-                  Author A-Z
-                </Badge>
-                <Badge
-                  variant={sortBy === 'category' ? 'default' : 'outline'}
-                  className="cursor-pointer text-xs"
-                  onClick={() => setSortBy('category')}
-                >
-                  By Category
-                </Badge>
-                <Badge
-                  variant={sortBy === 'type' ? 'default' : 'outline'}
-                  className="cursor-pointer text-xs"
-                  onClick={() => setSortBy('type')}
-                >
-                  By Format
-                </Badge>
-              </div>
+        <main className="flex-1 overflow-y-auto py-3 px-6">
+          {/* Sort Controls */}
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Sort by:</span>
             </div>
+            <div className="flex flex-wrap gap-2">
+              <Badge
+                variant={sortBy === 'newest' ? 'default' : 'outline'}
+                className="cursor-pointer text-xs"
+                onClick={() => setSortBy('newest')}
+              >
+                Newest First
+              </Badge>
+              <Badge
+                variant={sortBy === 'oldest' ? 'default' : 'outline'}
+                className="cursor-pointer text-xs"
+                onClick={() => setSortBy('oldest')}
+              >
+                Oldest First
+              </Badge>
+              <Badge
+                variant={sortBy === 'author-az' ? 'default' : 'outline'}
+                className="cursor-pointer text-xs"
+                onClick={() => setSortBy('author-az')}
+              >
+                Author A-Z
+              </Badge>
+              <Badge
+                variant={sortBy === 'category' ? 'default' : 'outline'}
+                className="cursor-pointer text-xs"
+                onClick={() => setSortBy('category')}
+              >
+                By Category
+              </Badge>
+              <Badge
+                variant={sortBy === 'type' ? 'default' : 'outline'}
+                className="cursor-pointer text-xs"
+                onClick={() => setSortBy('type')}
+              >
+                By Format
+              </Badge>
+            </div>
+          </div>
 
-            {filteredAndSortedResources.length > 0 ? (
-              <div className="space-y-12">
-                {/* Grouped by Category View */}
-                {sortBy === 'category' && Object.entries(resourcesByCategory)
-                  .sort(([catA], [catB]) => catA.localeCompare(catB))
-                  .map(([category, categoryResources]) => (
-                    <section key={category} id={category.toLowerCase().replace(/\s+/g, '-')}>
-                      <div className="mb-6 pb-3 border-b">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h2 className="text-2xl font-serif font-bold">{category}</h2>
-                          <Badge variant="secondary">{categoryResources.length}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {categoryDescriptions[category as ResourceCategory]}
-                        </p>
-                      </div>
-                      <div className="space-y-3">
-                        {categoryResources.map((resource, index) => (
-                          <Card key={index} className="hover-lift-glow">
-                            <CardContent className="p-4">
-                              <div className="flex gap-4">
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    {getTypeIcon(resource.type)}
-                                    <Badge variant="outline" className="text-xs capitalize">
-                                      {resource.type}
-                                    </Badge>
-                                    <span className="text-xs text-muted-foreground">{resource.year}</span>
-                                    {resource.journal && (
-                                      <span className="text-xs text-muted-foreground italic truncate">
-                                        · {resource.journal}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <h3 className="font-semibold text-base mb-1 leading-snug">
-                                    <a
-                                      href={resource.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="hover:text-primary transition-colors hover:underline"
-                                    >
-                                      {resource.title}
-                                    </a>
-                                  </h3>
-                                  <p className="text-sm text-muted-foreground mb-2">
-                                    {resource.authors}
-                                  </p>
-                                  <p className="text-sm leading-relaxed">
-                                    {resource.description}
-                                  </p>
-                                </div>
-                                <div className="flex-shrink-0">
-                                  <Button asChild variant="ghost" size="sm">
-                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                                      <ExternalLink className="h-4 w-4" />
-                                    </a>
-                                  </Button>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
-                    </section>
-                  ))}
+          {filteredAndSortedResources.length > 0 ? (
+            <>
+              {/* Timeline View */}
+              {viewMode === 'timeline' && <TimelineView />}
 
-                {/* Grouped by Type/Format View */}
-                {sortBy === 'type' && Object.entries(resourcesByType)
-                  .sort(([typeA], [typeB]) => typeA.localeCompare(typeB))
-                  .map(([type, typeResources]) => (
-                    <section key={type}>
-                      <div className="mb-6 pb-3 border-b">
-                        <div className="flex items-center gap-3 mb-2">
-                          {getTypeIcon(type as ResourceType)}
-                          <h2 className="text-2xl font-serif font-bold capitalize">{type}s</h2>
-                          <Badge variant="secondary">{typeResources.length}</Badge>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        {typeResources.map((resource, index) => (
-                          <Card key={index} className="hover-lift-glow">
-                            <CardContent className="p-4">
-                              <div className="flex gap-4">
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <Badge variant="outline" className="text-xs">
-                                      {resource.category}
-                                    </Badge>
-                                    <span className="text-xs text-muted-foreground">{resource.year}</span>
-                                    {resource.journal && (
-                                      <span className="text-xs text-muted-foreground italic truncate">
-                                        · {resource.journal}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <h3 className="font-semibold text-base mb-1 leading-snug">
-                                    <a
-                                      href={resource.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="hover:text-primary transition-colors hover:underline"
-                                    >
-                                      {resource.title}
-                                    </a>
-                                  </h3>
-                                  <p className="text-sm text-muted-foreground mb-2">
-                                    {resource.authors}
-                                  </p>
-                                  <p className="text-sm leading-relaxed">
-                                    {resource.description}
-                                  </p>
-                                </div>
-                                <div className="flex-shrink-0">
-                                  <Button asChild variant="ghost" size="sm">
-                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                                      <ExternalLink className="h-4 w-4" />
-                                    </a>
-                                  </Button>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
-                    </section>
-                  ))}
+              {/* Chart/Scatter View */}
+              {viewMode === 'scatter' && <ChartView />}
 
-                {/* Flat List View (for date and author sorts) */}
-                {!isGroupedView && (
-                  <div className="space-y-3">
-                    {filteredAndSortedResources.map((resource, index) => (
-                      <Card key={index} className="hover-lift-glow">
-                        <CardContent className="p-4">
-                          <div className="flex gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-2">
-                                {getTypeIcon(resource.type)}
-                                <Badge variant="outline" className="text-xs capitalize">
-                                  {resource.type}
-                                </Badge>
-                                <Badge variant="outline" className="text-xs">
-                                  {resource.category}
-                                </Badge>
-                                <span className="text-xs text-muted-foreground">{resource.year}</span>
-                                {resource.journal && (
-                                  <span className="text-xs text-muted-foreground italic truncate">
-                                    · {resource.journal}
-                                  </span>
-                                )}
+              {/* List View (default) */}
+              {viewMode === 'list' && (
+                <div className="space-y-12">
+                  {/* Grouped by Category View */}
+                  {sortBy === 'category' && Object.entries(resourcesByCategory)
+                .sort(([catA], [catB]) => catA.localeCompare(catB))
+                .map(([category, categoryResources]) => (
+                  <section key={category} id={category.toLowerCase().replace(/\s+/g, '-')}>
+                    <div className="mb-6 pb-3 border-b">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl font-serif font-bold">{category}</h2>
+                        <Badge variant="secondary">{categoryResources.length}</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {categoryDescriptions[category as ResourceCategory]}
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      {categoryResources.map((resource, index) => (
+                        <Card key={index} className="hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-2">
+                                  {getTypeIcon(resource.type)}
+                                  <Badge variant="outline" className="text-xs capitalize">
+                                    {resource.type}
+                                  </Badge>
+                                  <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                  {resource.journal && (
+                                    <span className="text-xs text-muted-foreground italic truncate">
+                                      · {resource.journal}
+                                    </span>
+                                  )}
+                                </div>
+                                <h3 className="font-semibold text-base mb-1 leading-snug">
+                                  <a
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors hover:underline"
+                                  >
+                                    {resource.title}
+                                  </a>
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-2">
+                                  {resource.authors}
+                                </p>
+                                <p className="text-sm leading-relaxed">
+                                  {resource.description}
+                                </p>
                               </div>
-                              <h3 className="font-semibold text-base mb-1 leading-snug">
-                                <a
-                                  href={resource.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="hover:text-primary transition-colors hover:underline"
-                                >
-                                  {resource.title}
-                                </a>
-                              </h3>
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {resource.authors}
-                              </p>
-                              <p className="text-sm leading-relaxed">
-                                {resource.description}
-                              </p>
+                              <div className="flex-shrink-0">
+                                <Button asChild variant="ghost" size="sm">
+                                  <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="h-4 w-4" />
+                                  </a>
+                                </Button>
+                              </div>
                             </div>
-                            <div className="flex-shrink-0">
-                              <Button asChild variant="ghost" size="sm">
-                                <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-4 w-4" />
-                                </a>
-                              </Button>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+
+              {/* Grouped by Type/Format View */}
+              {sortBy === 'type' && Object.entries(resourcesByType)
+                .sort(([typeA], [typeB]) => typeA.localeCompare(typeB))
+                .map(([type, typeResources]) => (
+                  <section key={type}>
+                    <div className="mb-6 pb-3 border-b">
+                      <div className="flex items-center gap-3 mb-2">
+                        {getTypeIcon(type as ResourceType)}
+                        <h2 className="text-2xl font-serif font-bold capitalize">{type}s</h2>
+                        <Badge variant="secondary">{typeResources.length}</Badge>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      {typeResources.map((resource, index) => (
+                        <Card key={index} className="hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Badge variant="outline" className="text-xs">
+                                    {resource.category}
+                                  </Badge>
+                                  <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                  {resource.journal && (
+                                    <span className="text-xs text-muted-foreground italic truncate">
+                                      · {resource.journal}
+                                    </span>
+                                  )}
+                                </div>
+                                <h3 className="font-semibold text-base mb-1 leading-snug">
+                                  <a
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors hover:underline"
+                                  >
+                                    {resource.title}
+                                  </a>
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-2">
+                                  {resource.authors}
+                                </p>
+                                <p className="text-sm leading-relaxed">
+                                  {resource.description}
+                                </p>
+                              </div>
+                              <div className="flex-shrink-0">
+                                <Button asChild variant="ghost" size="sm">
+                                  <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="h-4 w-4" />
+                                  </a>
+                                </Button>
+                              </div>
                             </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+
+              {/* Flat List View (for date and author sorts) */}
+              {!isGroupedView && (
+                <div className="space-y-3">
+                  {filteredAndSortedResources.map((resource, index) => (
+                    <Card key={index} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              {getTypeIcon(resource.type)}
+                              <Badge variant="outline" className="text-xs capitalize">
+                                {resource.type}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {resource.category}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">{resource.year}</span>
+                              {resource.journal && (
+                                <span className="text-xs text-muted-foreground italic truncate">
+                                  · {resource.journal}
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="font-semibold text-base mb-1 leading-snug">
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-primary transition-colors hover:underline"
+                              >
+                                {resource.title}
+                              </a>
+                            </h3>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {resource.authors}
+                            </p>
+                            <p className="text-sm leading-relaxed">
+                              {resource.description}
+                            </p>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground mb-4">No resources found matching your criteria.</p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchQuery('')
-                    setSelectedCategory('All')
-                    setSelectedType('All')
-                  }}
-                >
-                  Clear All Filters
-                </Button>
-              </div>
-            )}
+                          <div className="flex-shrink-0">
+                            <Button asChild variant="ghost" size="sm">
+                              <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">No resources found matching your criteria.</p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedCategory('All')
+                  setSelectedType('All')
+                }}
+              >
+                Clear All Filters
+              </Button>
+            </div>
+          )}
 
-            {/* Contribution Call */}
-            <Card className="mt-12 border-dashed border-2 bg-muted/30">
-              <CardContent className="p-6 text-center">
-                <h3 className="text-lg font-semibold mb-2">Know a resource we should include?</h3>
-                <p className="text-sm text-muted-foreground mb-4 max-w-xl mx-auto">
-                  This is a living collection. We welcome suggestions for articles, tools, papers, and
-                  resources related to AI in humanities education.
-                </p>
-                <Button asChild>
-                  <a href="mailto:bbreen@ucsc.edu?subject=THINK Resource Suggestion">
-                    Suggest a Resource
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          </Container>
+          {/* Contribution Call */}
+          <Card className="mt-12 border-dashed border-2 bg-muted/30">
+            <CardContent className="p-6 text-center">
+              <h3 className="text-lg font-semibold mb-2">Know a resource we should include?</h3>
+              <p className="text-sm text-muted-foreground mb-4 max-w-xl mx-auto">
+                This is a living collection. We welcome suggestions for articles, tools, papers, and
+                resources related to AI in humanities education.
+              </p>
+              <Button asChild>
+                <a href="mailto:bbreen@ucsc.edu?subject=THINK Resource Suggestion">
+                  Suggest a Resource
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
         </main>
+      </div>
+
+      {/* Mobile Main Content */}
+      <div className="lg:hidden">
+        <Container className="py-6">
+          {filteredAndSortedResources.length > 0 ? (
+            <>
+              {/* Timeline View - Mobile */}
+              {viewMode === 'timeline' && <TimelineView />}
+
+              {/* Chart View - Mobile (simplified message for small screens) */}
+              {viewMode === 'scatter' && (
+                <div className="space-y-4">
+                  <div className="text-center p-4 bg-muted/50 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Chart view works best on larger screens
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                    >
+                      Switch to List View
+                    </Button>
+                  </div>
+                  <ChartView />
+                </div>
+              )}
+
+              {/* List View - Mobile */}
+              {viewMode === 'list' && (
+                <div className="space-y-8">
+                  {/* Grouped by Category View */}
+                  {sortBy === 'category' && Object.entries(resourcesByCategory)
+                .sort(([catA], [catB]) => catA.localeCompare(catB))
+                .map(([category, categoryResources]) => (
+                  <section key={category}>
+                    <div className="mb-4 pb-2 border-b">
+                      <h2 className="text-xl font-serif font-bold">{category}</h2>
+                      <Badge variant="secondary" className="mt-1">{categoryResources.length}</Badge>
+                    </div>
+                    <div className="space-y-3">
+                      {categoryResources.map((resource, index) => (
+                        <Card key={index}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              {getTypeIcon(resource.type)}
+                              <Badge variant="outline" className="text-xs capitalize">
+                                {resource.type}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">{resource.year}</span>
+                            </div>
+                            <h3 className="font-semibold text-base mb-1">
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-primary"
+                              >
+                                {resource.title}
+                              </a>
+                            </h3>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {resource.authors}
+                            </p>
+                            <p className="text-sm leading-relaxed">
+                              {resource.description}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+
+              {/* Flat List for newest sort on mobile */}
+              {sortBy === 'newest' && (
+                <div className="space-y-3">
+                  {filteredAndSortedResources.map((resource, index) => (
+                    <Card key={index}>
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          {getTypeIcon(resource.type)}
+                          <Badge variant="outline" className="text-xs capitalize">
+                            {resource.type}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{resource.year}</span>
+                        </div>
+                        <h3 className="font-semibold text-base mb-1">
+                          <a
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-primary"
+                          >
+                            {resource.title}
+                          </a>
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {resource.authors}
+                        </p>
+                        <p className="text-sm leading-relaxed">
+                          {resource.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">No resources found.</p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedCategory('All')
+                  setSelectedType('All')
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
+        </Container>
       </div>
     </div>
   )

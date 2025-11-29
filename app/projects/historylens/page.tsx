@@ -4,21 +4,21 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProjectBanner } from '@/components/ui/project-banner'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Github, BarChart3, Users, BookOpen, Sparkles } from 'lucide-react'
 
 export default function HistoryLensPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: 'HistoryLens' }
+      ]} />
+
+      <Section className="pt-8 pb-16">
         <Container>
-          <div className="mb-8">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/projects">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Projects
-              </Link>
-            </Button>
-          </div>
 
           <div className="mx-auto max-w-3xl">
             <ProjectBanner
@@ -215,7 +215,7 @@ export default function HistoryLensPage() {
         </Container>
       </Section>
 
-      <Section className="bg-muted/40">
+      <Section className="bg-muted/40 py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-serif font-bold mb-4">Using HistoryLens in Your Classroom</h2>

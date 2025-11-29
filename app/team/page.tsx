@@ -2,6 +2,7 @@ import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import { GraduationCap, Mail, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 
@@ -10,15 +11,15 @@ export default function TeamPage() {
     <>
       <Section className="pt-24 pb-16">
         <Container>
-          <div className="mx-auto max-w-3xl text-center mb-12">
+          <AnimatedSection className="mx-auto max-w-3xl text-center mb-12">
             <h1 className="text-4xl font-serif font-bold mb-4">Our Team</h1>
             <p className="text-lg text-muted-foreground">
               THINK is led by an interdisciplinary team of humanities faculty at UC Santa Cruz
             </p>
-          </div>
+          </AnimatedSection>
 
           {/* Principal Investigators */}
-          <div className="mx-auto max-w-4xl mb-16">
+          <AnimatedSection delay={100} className="mx-auto max-w-4xl mb-16">
             <h2 className="text-2xl font-serif font-bold mb-8 text-center">Principal Investigators</h2>
 
             <div className="grid gap-8 md:grid-cols-3 mb-12">
@@ -100,10 +101,10 @@ export default function TeamPage() {
                 courses that work from humanistic strengths rather than treating them as afterthoughts.
               </p>
             </div>
-          </div>
+          </AnimatedSection>
 
           {/* Collaborators & Partners */}
-          <div className="mx-auto max-w-4xl">
+          <AnimatedSection delay={200} className="mx-auto max-w-4xl">
             <h2 className="text-2xl font-serif font-bold mb-8 text-center">Collaborators & Partners</h2>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -169,14 +170,14 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
             </div>
-          </div>
+          </AnimatedSection>
         </Container>
       </Section>
 
       {/* Join Us */}
-      <Section className="bg-muted/40">
+      <Section className="bg-muted/40 py-12 sm:py-16">
         <Container>
-          <div className="mx-auto max-w-2xl text-center">
+          <AnimatedSection className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-serif font-bold mb-4">Collaborate with THINK</h2>
             <p className="text-muted-foreground mb-8">
               Interested in piloting our curriculum modules, contributing resources, or partnering
@@ -190,7 +191,7 @@ export default function TeamPage() {
                 <Link href="/about">Learn More About THINK</Link>
               </Button>
             </div>
-          </div>
+          </AnimatedSection>
         </Container>
       </Section>
     </>

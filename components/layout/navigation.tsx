@@ -11,13 +11,13 @@ import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 const navigation = [
-  { name: 'Home', href: '/', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
-  { name: 'Projects', href: '/projects', color: '#06b6d4' }, // Cyan
-  { name: 'Pedagogy', href: '/pedagogy', color: '#8b5cf6' }, // Violet
-  { name: 'Resources', href: '/resources', color: '#b45309', darkColor: '#eab308' }, // Burnt umber (light) / Amber (dark)
-  { name: 'Guides', href: '/guides', color: '#3b82f6' }, // Blue
-  { name: 'Blog', href: '/blog', color: '#f43f5e' }, // Rose
-  { name: 'About', href: '/about', color: '#6366f1' }, // Indigo
+  { name: 'Home', href: '/', color: '#b45309', darkColor: '#fbbf24' }, // Burnt umber (light) / Amber (dark)
+  { name: 'Projects', href: '/projects', color: '#0891b2', darkColor: '#22d3ee' }, // Cyan
+  { name: 'Pedagogy', href: '/pedagogy', color: '#7c3aed', darkColor: '#a78bfa' }, // Violet
+  { name: 'Resources', href: '/resources', color: '#b45309', darkColor: '#fbbf24' }, // Burnt umber (light) / Amber (dark)
+  { name: 'Guides', href: '/guides', color: '#2563eb', darkColor: '#60a5fa' }, // Blue
+  { name: 'Blog', href: '/blog', color: '#e11d48', darkColor: '#fb7185' }, // Rose
+  { name: 'About', href: '/about', color: '#4f46e5', darkColor: '#818cf8' }, // Indigo
 ]
 
 export function Navigation() {
@@ -26,6 +26,7 @@ export function Navigation() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [heroVisible, setHeroVisible] = useState(true)
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -49,6 +50,11 @@ export function Navigation() {
       return item.darkColor
     }
     return item.color
+  }
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
   }
 
   return (
@@ -88,29 +94,42 @@ export function Navigation() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                prefetch={true}
-                className={cn(
-                  'relative px-4 py-2.5 text-[16px] font-semibold tracking-[-0.01em] transition-all duration-200 rounded-lg',
-                  pathname === item.href
-                    ? 'text-foreground'
-                    : 'text-foreground/90 hover:text-foreground hover:bg-accent/60'
-                )}
-                style={pathname === item.href ? { color: getItemColor(item) } : undefined}
-              >
-                {item.name}
-                {pathname === item.href && (
-                  <span
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[2.5px] w-6 rounded-full transition-all duration-300"
-                    style={{ backgroundColor: getItemColor(item) }}
-                  />
-                )}
-              </Link>
-            ))}
+          <div className="hidden md:flex md:items-center md:space-x-0.5">
+            {navigation.map((item) => {
+              const active = isActive(item.href)
+              const hovered = hoveredItem === item.name
+              const itemColor = getItemColor(item)
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  prefetch={true}
+                  className={cn(
+                    'relative px-4 py-2.5 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200 rounded-lg',
+                    active
+                      ? 'text-foreground'
+                      : 'text-foreground/70 hover:text-foreground'
+                  )}
+                  style={active ? { color: itemColor } : undefined}
+                  onMouseEnter={() => setHoveredItem(item.name)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                >
+                  <span className="relative">
+                    {item.name}
+                    {/* Animated underline - width matches text */}
+                    <span
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-all duration-300 ease-out origin-left"
+                      style={{
+                        backgroundColor: itemColor,
+                        transform: `scaleX(${active || hovered ? 1 : 0})`,
+                        opacity: active || hovered ? 1 : 0,
+                      }}
+                    />
+                  </span>
+                </Link>
+              )
+            })}
             <div className="ml-4 pl-4 border-l border-border/50">
               <ThemeToggle />
             </div>
@@ -124,7 +143,7 @@ export function Navigation() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
               aria-label={mobileMenuOpen ? 'Close main menu' : 'Open main menu'}
-              className="ml-2 inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              className="ml-2 inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">{mobileMenuOpen ? 'Close main menu' : 'Open main menu'}</span>
@@ -138,28 +157,58 @@ export function Navigation() {
         </nav>
 
         {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div id="mobile-menu" className="md:hidden" role="navigation" aria-label="Mobile navigation">
-            <div className="space-y-1 pb-3 pt-2">
-              {navigation.map((item) => (
+        <div
+          id="mobile-menu"
+          className={cn(
+            'md:hidden overflow-hidden transition-all duration-300 ease-out',
+            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          )}
+          role="navigation"
+          aria-label="Mobile navigation"
+        >
+          <div className="space-y-1 pb-4 pt-2">
+            {navigation.map((item) => {
+              const active = isActive(item.href)
+              const itemColor = getItemColor(item)
+
+              return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  aria-current={pathname === item.href ? 'page' : undefined}
+                  aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'block rounded-md px-3 py-2 text-base font-medium',
-                    pathname === item.href
-                      ? 'bg-accent text-accent-foreground'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    'relative block rounded-lg px-4 py-3 text-base font-medium transition-all duration-200',
+                    active
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
+                  style={active ? { color: itemColor } : undefined}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {item.name}
+                  <span className="flex items-center gap-3">
+                    {/* Accent dot for active item */}
+                    <span
+                      className="w-2 h-2 rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor: active ? itemColor : 'transparent',
+                        transform: active ? 'scale(1)' : 'scale(0)',
+                      }}
+                    />
+                    {item.name}
+                  </span>
+
+                  {/* Left border accent on active */}
+                  {active && (
+                    <span
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 rounded-full"
+                      style={{ backgroundColor: itemColor }}
+                    />
+                  )}
                 </Link>
-              ))}
-            </div>
+              )
+            })}
           </div>
-        )}
+        </div>
       </Container>
     </header>
   )

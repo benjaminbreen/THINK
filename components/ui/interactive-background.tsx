@@ -65,6 +65,23 @@ function InteractiveBackgroundComponent() {
   const [isDarkMode, setIsDarkMode] = useState<boolean | null>(null)
   const mousePos = useRef({ x: 0, y: 0 })
   const animationFrameId = useRef<number | undefined>(undefined)
+  // Track visibility to pause animation when off-screen (performance optimization)
+  const isVisible = useRef(true)
+
+  // Pause animation when canvas is off-screen to save CPU/battery
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible.current = entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+    observer.observe(canvas)
+    return () => observer.disconnect()
+  }, [])
 
   // Initialize theme on mount (client-side only) and watch for changes
   useEffect(() => {
@@ -3022,6 +3039,12 @@ function InteractiveBackgroundComponent() {
     let lastTime = 0
 
     const animate = (time: number) => {
+      // Skip rendering when off-screen to save CPU/battery
+      if (!isVisible.current) {
+        animationFrameId.current = requestAnimationFrame(animate)
+        return
+      }
+
       // Run at full 60fps for smooth animation
       const deltaTime = time - lastTime
       lastTime = time

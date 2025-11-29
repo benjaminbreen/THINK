@@ -36,6 +36,13 @@ export const pageThemes = {
     accentRgb: '6, 182, 212',
     tailwind: 'cyan-500',
     description: 'AI projects and simulations'
+  },
+  resources: {
+    name: 'Resources',
+    accent: '#f59e0b', // Amber - knowledge, scholarship, warmth
+    accentRgb: '245, 158, 11',
+    tailwind: 'amber-500',
+    description: 'Curated readings and tools'
   }
 } as const
 

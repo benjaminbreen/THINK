@@ -6,6 +6,12 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
+  // Set turbopack root to this directory to avoid lockfile confusion
+  turbopack: {
+    root: process.cwd(),
+  },
+  // Allow dev origins for network access
+  allowedDevOrigins: ['localhost', '169.233.240.127'],
   // Performance optimizations
   images: {
     formats: ['image/avif', 'image/webp'],

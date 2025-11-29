@@ -3,21 +3,21 @@ import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ProjectBanner } from '@/components/ui/project-banner'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react'
 
 export default function YoungDarwinPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: 'Young Darwin' }
+      ]} />
+
+      <Section className="pt-8 pb-16">
         <Container>
-          <div className="mb-8">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/projects">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Projects
-              </Link>
-            </Button>
-          </div>
 
           <div className="mx-auto max-w-3xl">
             <ProjectBanner
@@ -93,7 +93,7 @@ export default function YoungDarwinPage() {
         </Container>
       </Section>
 
-      <Section className="bg-muted/40">
+      <Section className="bg-muted/40 py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-serif font-bold mb-4">Want to Learn More?</h2>
