@@ -218,6 +218,8 @@ function InteractiveBackgroundComponent() {
     size: number
   }>>([])
   const dustMotes = useRef<Array<{ x: number; y: number; vx: number; vy: number; opacity: number }>>([])
+  const bibliothecaStartTime = useRef<number>(0)
+  const maxBooks = 4 // Maximum number of books to show
 
   // ASCII animation time reference for pause functionality
   const asciiTimeRef = useRef(0)
@@ -1210,38 +1212,9 @@ function InteractiveBackgroundComponent() {
     const initBibliotheca = () => {
       books.current = []
       dustMotes.current = []
+      bibliothecaStartTime.current = Date.now()
 
-      // Create floating books with humanistic quotes
-      for (let i = 0; i < 12; i++) {
-        const quote = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)]
-        // Match book type to era for visual consistency
-        let bookType: 'book' | 'scroll' | 'manuscript'
-        if (quote.era === 'ancient') {
-          bookType = Math.random() > 0.3 ? 'scroll' : 'manuscript'
-        } else if (quote.era === 'medieval') {
-          bookType = Math.random() > 0.5 ? 'manuscript' : 'book'
-        } else {
-          bookType = Math.random() > 0.2 ? 'book' : 'manuscript'
-        }
-
-        books.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.008,
-          type: bookType,
-          quote: quote.text,
-          author: quote.author,
-          era: quote.era,
-          open: false,
-          openProgress: 0,
-          hovered: false,
-          size: 100 + Math.random() * 50,  // Larger books for better readability
-        })
-      }
-
+      // Start with no books - they will gradually appear over time
       // Create dust motes for atmosphere
       for (let i = 0; i < 60; i++) {
         dustMotes.current.push({
@@ -1252,6 +1225,62 @@ function InteractiveBackgroundComponent() {
           opacity: Math.random() * 0.25,
         })
       }
+    }
+
+    // Add a single book to the bibliotheca
+    const addBook = () => {
+      const quote = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)]
+      // Match book type to era for visual consistency
+      let bookType: 'book' | 'scroll' | 'manuscript'
+      if (quote.era === 'ancient') {
+        bookType = Math.random() > 0.3 ? 'scroll' : 'manuscript'
+      } else if (quote.era === 'medieval') {
+        bookType = Math.random() > 0.5 ? 'manuscript' : 'book'
+      } else {
+        bookType = Math.random() > 0.2 ? 'book' : 'manuscript'
+      }
+
+      // Start from edges and drift in
+      const edge = Math.floor(Math.random() * 4)
+      let startX: number, startY: number, vx: number, vy: number
+      if (edge === 0) { // top
+        startX = Math.random() * canvas.width
+        startY = -100
+        vx = (Math.random() - 0.5) * 0.2
+        vy = 0.15 + Math.random() * 0.1
+      } else if (edge === 1) { // right
+        startX = canvas.width + 100
+        startY = Math.random() * canvas.height
+        vx = -(0.15 + Math.random() * 0.1)
+        vy = (Math.random() - 0.5) * 0.2
+      } else if (edge === 2) { // bottom
+        startX = Math.random() * canvas.width
+        startY = canvas.height + 100
+        vx = (Math.random() - 0.5) * 0.2
+        vy = -(0.15 + Math.random() * 0.1)
+      } else { // left
+        startX = -100
+        startY = Math.random() * canvas.height
+        vx = 0.15 + Math.random() * 0.1
+        vy = (Math.random() - 0.5) * 0.2
+      }
+
+      books.current.push({
+        x: startX,
+        y: startY,
+        vx: vx,
+        vy: vy,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.008,
+        type: bookType,
+        quote: quote.text,
+        author: quote.author,
+        era: quote.era,
+        open: false,
+        openProgress: 0,
+        hovered: false,
+        size: 100 + Math.random() * 50,  // Larger books for better readability
+      })
     }
 
     // ASCII Grid Effect
@@ -2593,9 +2622,16 @@ function InteractiveBackgroundComponent() {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // Initialize if needed or refresh requested
-      if (books.current.length === 0 || refreshBooks.current) {
+      if (dustMotes.current.length === 0 || refreshBooks.current) {
         initBibliotheca()
         if (refreshBooks.current) refreshBooks.current = false
+      }
+
+      // Gradually add books over time (one every 3 seconds, up to maxBooks)
+      const elapsedSeconds = (Date.now() - bibliothecaStartTime.current) / 1000
+      const targetBooks = Math.min(maxBooks, Math.floor(elapsedSeconds / 3))
+      if (books.current.length < targetBooks) {
+        addBook()
       }
 
       // Update and draw dust motes for atmosphere

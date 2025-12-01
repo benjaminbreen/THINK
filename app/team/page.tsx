@@ -79,7 +79,7 @@ export default function TeamPage() {
                   </p>
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
-                      <a href="https://literature.ucsc.edu/faculty/index.php?uid=zzimmer" target="_blank" rel="noopener noreferrer">
+                      <a href="https://campusdirectory.ucsc.edu/cd_detail?uid=zaazimme" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" /> Faculty Page
                       </a>
                     </Button>
