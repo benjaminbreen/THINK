@@ -11,6 +11,7 @@ import { InteractiveBackground, LiteraryTransformer } from '@/components/page-wr
 import { HeroContent } from '@/components/ui/hero-content'
 import { AnimatedSection, StaggeredChildren } from '@/components/ui/animated-section'
 import { OrganizationJsonLd } from '@/components/structured-data'
+import { siteConfig } from '@/lib/config'
 
 export default function HomePage() {
   return (
@@ -146,7 +147,7 @@ export default function HomePage() {
                     </CardDescription>
                   </div>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="mailto:bbreen@ucsc.edu">Get in touch</a>
+                    <a href={`mailto:${siteConfig.email}`}>Get in touch</a>
                   </Button>
                 </div>
               </CardHeader>

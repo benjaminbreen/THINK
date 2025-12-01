@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Mail, Send } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ Type: ${formData.type}
 Message:
 ${formData.message}`
 
-    const mailtoLink = `mailto:bbreen@ucsc.edu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const mailtoLink = `mailto:${siteConfig.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     window.location.href = mailtoLink
 
     setSubmitted(true)
@@ -59,7 +60,7 @@ ${formData.message}`
         <CardContent>
           <p className="text-muted-foreground mb-4">
             We've prepared an email with your submission. If your email client didn't open automatically,
-            please send your message to <a href="mailto:bbreen@ucsc.edu" className="text-amber-700 dark:text-amber-500 hover:underline">bbreen@ucsc.edu</a>.
+            please send your message to <a href={`mailto:${siteConfig.email}`} className="text-amber-700 dark:text-amber-500 hover:underline">{siteConfig.email}</a>.
           </p>
           <Button onClick={() => setSubmitted(false)} variant="outline" ripple>
             Submit another message

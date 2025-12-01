@@ -5,6 +5,7 @@ import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Lightbulb, AlertCircle, CheckCircle, BookOpen, ArrowLeft } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 const tableOfContents = [
   { id: 'intro', title: 'Introduction' },
@@ -380,7 +381,7 @@ export default function CriticalPedagogyGuide() {
       <div className="mt-8 pt-8 border-t">
         <p className="text-sm text-muted-foreground">
           <strong>Guide last updated:</strong> November 2025. Questions or feedback?{' '}
-          <a href="mailto:bbreen@ucsc.edu" className="text-primary hover:underline">
+          <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline">
             Get in touch
           </a>
         </p>

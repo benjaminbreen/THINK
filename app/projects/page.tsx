@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { Filter, Code } from 'lucide-react'
 import { ProjectsBackground } from '@/components/ui/projects-background'
 import { pageThemes } from '@/lib/page-themes'
+import { siteConfig } from '@/lib/config'
 
 const theme = pageThemes.projects
 
@@ -216,7 +217,7 @@ export default function ProjectsPage() {
                     </CardDescription>
                   </div>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="mailto:bbreen@ucsc.edu">Get in touch</a>
+                    <a href={`mailto:${siteConfig.email}`}>Get in touch</a>
                   </Button>
                 </div>
               </CardHeader>

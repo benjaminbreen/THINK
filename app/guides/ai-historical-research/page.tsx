@@ -6,6 +6,7 @@ import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { Lightbulb, AlertCircle, CheckCircle, ExternalLink, BookOpen, FileText, Search, AlertTriangle, Eye } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 const tableOfContents = [
   { id: 'intro', title: 'Introduction' },
@@ -535,7 +536,7 @@ Be harsh. I need this to be better.`}</code></pre>
       <div className="mt-8 pt-8 border-t">
         <p className="text-sm text-muted-foreground">
           <strong>Guide last updated:</strong> November 2025. Questions or feedback?{' '}
-          <a href="mailto:bbreen@ucsc.edu" className="text-primary hover:underline">
+          <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline">
             Get in touch
           </a>
         </p>

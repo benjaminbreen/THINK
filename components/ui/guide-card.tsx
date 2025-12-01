@@ -25,9 +25,19 @@ export function GuideCard({
 }: GuideCardProps) {
   const [hasImage, setHasImage] = useState(!!thumbnailPath)
 
+  // Map string delays to actual CSS classes for Tailwind JIT
+  const delayClass = {
+    '100': 'animation-delay-100',
+    '200': 'animation-delay-200',
+    '300': 'animation-delay-300',
+    '400': 'animation-delay-400',
+    '500': 'animation-delay-500',
+    '600': 'animation-delay-600',
+  }[animationDelay] || 'animation-delay-100'
+
   return (
     <Link href={href} className="block group">
-      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 ease-out cursor-pointer border-border/60 hover:border-primary/30`}>
+      <Card className={`h-full hover-lift-glow animate-fade-in-up opacity-0 ${delayClass} transition-all duration-300 ease-out cursor-pointer border-border/60 hover:border-primary/30`}>
         <CardHeader className="pb-3">
           {hasImage && thumbnailPath ? (
             <div className="relative w-full h-36 rounded-lg overflow-hidden mb-3 bg-muted/30">

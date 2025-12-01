@@ -4,6 +4,7 @@ import { GuideLayout, WikiLink, GuideSectionDivider } from '@/components/ui/guid
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import Link from 'next/link'
 import { Lightbulb, AlertCircle, CheckCircle, Code } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 const tableOfContents = [
   { id: 'what-is-prompting', title: 'What Is Prompt Engineering?' },
@@ -704,7 +705,7 @@ entry.`}
         </p>
         <p className="text-sm text-muted-foreground">
           This guide reflects ongoing experimentation with AI tools in humanities pedagogy and research. We welcome feedback and examples from your own work—please{' '}
-          <a href="mailto:bbreen@ucsc.edu" className="text-primary hover:underline">
+          <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline">
             get in touch
           </a>
           {' '}to share what you've learned.

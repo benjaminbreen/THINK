@@ -4,6 +4,7 @@ import { GuideLayout, WikiLink, GuideSectionDivider } from '@/components/ui/guid
 import { HeadingAnchor } from '@/components/ui/heading-anchor'
 import Link from 'next/link'
 import { Lightbulb, AlertCircle, CheckCircle, Download, Sparkles, Terminal, Github, Globe, Code } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 const tableOfContents = [
   { id: 'what-is-vibe-coding', title: 'What Is Vibe Coding?' },
@@ -586,7 +587,7 @@ export default function ClaudeCodeBasicsGuide() {
       <div className="mt-8 pt-8 border-t">
         <p className="text-sm text-muted-foreground">
           <strong>Guide last updated:</strong> November 2025. Questions or feedback?{' '}
-          <a href="mailto:bbreen@ucsc.edu" className="text-primary hover:underline">
+          <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline">
             Get in touch
           </a>
         </p>

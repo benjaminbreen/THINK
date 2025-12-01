@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ExternalLink, BookOpen, Code, Users, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { AnimatedSection } from '@/components/ui/animated-section'
+import { siteConfig } from '@/lib/config'
 
 export default function AboutPage() {
   return (
@@ -201,7 +202,7 @@ export default function AboutPage() {
               Questions about using these materials or interested in collaboration?
             </p>
             <Button asChild>
-              <a href="mailto:bbreen@ucsc.edu">
+              <a href={`mailto:${siteConfig.email}`}>
                 Contact Us
               </a>
             </Button>

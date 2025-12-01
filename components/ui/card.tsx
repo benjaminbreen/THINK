@@ -16,7 +16,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           'transition-all duration-300 ease-out',
           'hover:-translate-y-1 hover:shadow-lg hover:shadow-foreground/5',
           'hover:border-border/80',
-          'active:translate-y-0 active:shadow-md active:duration-100'
+          'active:translate-y-0 active:shadow-md active:duration-100',
+          // Focus indicators for keyboard navigation
+          'focus-within:ring-2 focus-within:ring-primary/50 focus-within:ring-offset-2 focus-within:ring-offset-background',
+          'focus-within:-translate-y-1 focus-within:shadow-lg focus-within:border-primary/30'
         ],
         className
       )}

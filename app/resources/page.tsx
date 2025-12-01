@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { pageThemes } from '@/lib/page-themes'
+import { siteConfig } from '@/lib/config'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ArrowUpDown, LayoutList, Clock, BarChart3 } from 'lucide-react'
 
@@ -2311,7 +2312,7 @@ export default function ResourcesPage() {
                 resources related to AI in humanities education.
               </p>
               <Button asChild>
-                <a href="mailto:bbreen@ucsc.edu?subject=THINK Resource Suggestion">
+                <a href={`mailto:${siteConfig.email}?subject=THINK Resource Suggestion`}>
                   Suggest a Resource
                 </a>
               </Button>

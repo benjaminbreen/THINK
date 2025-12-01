@@ -46,6 +46,16 @@ export function AssignmentCard({
   const thumbnailPath = customThumbnailPath || ''
   const isAvailable = status === 'available'
 
+  // Map string delays to actual CSS classes for Tailwind JIT
+  const delayClass = {
+    '100': 'animation-delay-100',
+    '200': 'animation-delay-200',
+    '300': 'animation-delay-300',
+    '400': 'animation-delay-400',
+    '500': 'animation-delay-500',
+    '600': 'animation-delay-600',
+  }[animationDelay] || 'animation-delay-100'
+
   // Color-code tags based on content
   const getTagColor = (tag: string) => {
     const tagLower = tag.toLowerCase()
@@ -62,7 +72,7 @@ export function AssignmentCard({
   }
 
   const cardContent = (
-    <Card className={`group h-full overflow-hidden animate-fade-in-up opacity-0 animation-delay-${animationDelay} transition-all duration-300 hover:shadow-xl ${isAvailable ? 'cursor-pointer' : 'opacity-60'}`}>
+    <Card className={`group h-full overflow-hidden animate-fade-in-up opacity-0 ${delayClass} transition-all duration-300 hover:shadow-xl ${isAvailable ? 'cursor-pointer' : 'opacity-60'}`}>
       {/* Thumbnail with gradient overlay */}
       <div className="relative w-full h-40 overflow-hidden">
         {!imageError && thumbnailPath ? (

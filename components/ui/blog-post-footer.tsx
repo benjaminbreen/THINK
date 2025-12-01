@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Mail, MessageSquare, ArrowLeft } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
 
 interface BlogPostFooterProps {
   showBackLink?: boolean
@@ -39,7 +40,7 @@ export function BlogPostFooter({ showBackLink = true }: BlogPostFooterProps) {
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <a href="mailto:bbreen@ucsc.edu">
+              <a href={`mailto:${siteConfig.email}`}>
                 <Mail className="mr-2 h-4 w-4" />
                 Email Directly
               </a>

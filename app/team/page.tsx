@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { GraduationCap, Mail, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { siteConfig } from '@/lib/config'
 
 export default function TeamPage() {
   return (
@@ -36,7 +37,7 @@ export default function TeamPage() {
                   </p>
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
-                      <a href="mailto:bbreen@ucsc.edu">
+                      <a href={`mailto:${siteConfig.email}`}>
                         <Mail className="mr-2 h-4 w-4" /> Contact
                       </a>
                     </Button>
@@ -185,7 +186,7 @@ export default function TeamPage() {
             </p>
             <div className="flex gap-4 justify-center">
               <Button asChild size="lg">
-                <a href="mailto:bbreen@ucsc.edu">Get in Touch</a>
+                <a href={`mailto:${siteConfig.email}`}>Get in Touch</a>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="/about">Learn More About THINK</Link>

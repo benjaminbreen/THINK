@@ -12,6 +12,7 @@ import { InkWashBackground } from '@/components/ui/ink-wash-background'
 import { PedagogyBackground } from '@/components/ui/pedagogy-background'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { pageThemes } from '@/lib/page-themes'
+import { siteConfig } from '@/lib/config'
 import Link from 'next/link'
 import { FileText, ExternalLink, Filter, List, LayoutGrid } from 'lucide-react'
 
@@ -459,7 +460,7 @@ export default function PedagogyPage() {
                 </CardHeader>
                 <CardContent className="flex justify-center">
                   <Button asChild variant="outline">
-                    <a href="mailto:bbreen@ucsc.edu">Submit Resources</a>
+                    <a href={`mailto:${siteConfig.email}`}>Submit Resources</a>
                   </Button>
                 </CardContent>
               </Card>
