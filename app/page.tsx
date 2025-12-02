@@ -230,8 +230,7 @@ export default function HomePage() {
             <h2 className="text-2xl font-serif font-bold mb-4">About This Resource</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="leading-relaxed">
-                This site collects experimental AI tools built by humanists for teaching and research. It's maintained
-                by faculty and students at UC Santa Cruz with NEH support, but we welcome contributions from anyone.
+                This site collects experimental AI tools built by humanists for teaching and research. The code of this site was mostly written by Claude Opus 4.5, an AI model from Anthropic, with design guidance and oversight by Benjamin Breen. It's maintained thanks to NEH support and is a project hosted at UC Santa Cruz.
               </p>
               <p className="leading-relaxed">
                 The premise: humanists should build their own AI tools, not just adapt commercial products. In 1963,

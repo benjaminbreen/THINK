@@ -219,7 +219,7 @@ function InteractiveBackgroundComponent() {
   }>>([])
   const dustMotes = useRef<Array<{ x: number; y: number; vx: number; vy: number; opacity: number }>>([])
   const bibliothecaStartTime = useRef<number>(0)
-  const maxBooks = 4 // Maximum number of books to show
+  const maxBooks = 6 // Maximum number of books to show
 
   // ASCII animation time reference for pause functionality
   const asciiTimeRef = useRef(0)
@@ -285,14 +285,16 @@ function InteractiveBackgroundComponent() {
     { text: "The mind is everything. What you think you become", author: "Buddha", era: 'ancient' },
     { text: "Three things cannot be long hidden: the sun, the moon, and the truth", author: "Buddha", era: 'ancient' },
     { text: "In the sky, there is no distinction of east and west", author: "Buddha", era: 'ancient' },
+    { text: "That which is the finest essence—this whole world has that as its soul", author: "Chandogya Upanishad", era: 'ancient' },
+    { text: "From the unreal lead me to the real; from darkness lead me to light", author: "Brihadaranyaka Upanishad", era: 'ancient' },
     // Persian & Middle Eastern
-    { text: "This too shall pass", author: "Persian proverb", era: 'ancient' },
     { text: "I am Cyrus, king of the world", author: "Cyrus Cylinder", era: 'ancient' },
+    // Egyptian & African
+    { text: "I have not done evil to mankind", author: "Egyptian Book of the Dead", era: 'ancient' },
+    { text: "The heart of the wise inclines to the right, but the heart of the fool to the left", author: "Ptahhotep", era: 'ancient' },
 
     // === MEDIEVAL (500-1500 CE) ===
     // Islamic Golden Age
-    { text: "The ink of the scholar is more sacred than the blood of the martyr", author: "Islamic proverb", era: 'medieval' },
-    { text: "Seek knowledge even unto China", author: "Islamic proverb", era: 'medieval' },
     { text: "I am the Truth", author: "Mansur al-Hallaj", era: 'medieval' },
     { text: "Whoever travels without a guide needs two hundred years for a two-day journey", author: "Rumi", era: 'medieval' },
     { text: "What you seek is seeking you", author: "Rumi", era: 'medieval' },
@@ -308,7 +310,15 @@ function InteractiveBackgroundComponent() {
     { text: "Mono no aware: the pathos of things", author: "Murasaki Shikibu", era: 'medieval' },
     { text: "The fleeting world—a dream within a dream", author: "Tale of Genji", era: 'medieval' },
     { text: "The sound of the bell of Gion Shōja echoes the impermanence of all things", author: "Heike Monogatari", era: 'medieval' },
-    { text: "In this floating world, to be is to become", author: "Japanese proverb", era: 'medieval' },
+    // Chinese Medieval
+    { text: "Before the calf is born, the cow is already dead", author: "Huineng", era: 'medieval' },
+    { text: "The great Way has no gate; there are a thousand paths to it", author: "Wumen Huikai", era: 'medieval' },
+    // African Medieval
+    { text: "Salt comes from the north, gold from the south, and silver from the country of the white men", author: "Ibn Battuta on Mali", era: 'medieval' },
+    { text: "He who conceals his disease cannot expect to be cured", author: "Ethiopian wisdom", era: 'medieval' },
+    // Mesoamerican
+    { text: "The face of the Lord of the Near and the Nigh can be seen everywhere", author: "Aztec poetry", era: 'medieval' },
+    { text: "We only came to dream; we only came to sleep. It is not true that we came to live on earth", author: "Nezahualcoyotl", era: 'medieval' },
     // European Medieval
     { text: "In the middle of the journey of our life, I found myself in a dark wood", author: "Dante", era: 'medieval' },
     { text: "Love that moves the sun and the other stars", author: "Dante", era: 'medieval' },
@@ -316,24 +326,13 @@ function InteractiveBackgroundComponent() {
     { text: "Abandon all hope, ye who enter here", author: "Dante", era: 'medieval' },
     { text: "The more perfect a thing is, the more it feels pleasure and pain", author: "Dante", era: 'medieval' },
     { text: "No one can be perfectly free till all are free", author: "Herbert Spencer", era: 'medieval' },
-    // African
-    { text: "However far the stream flows, it never forgets its source", author: "Yoruba proverb", era: 'medieval' },
-    { text: "When the music changes, so does the dance", author: "Hausa proverb", era: 'medieval' },
-    { text: "Knowledge without wisdom is like water in the sand", author: "Guinean proverb", era: 'medieval' },
-
     // === MODERN (1500-present) ===
     // Renaissance & Early Modern
     { text: "I think, therefore I am", author: "Descartes", era: 'modern' },
     { text: "To philosophize is to learn how to die", author: "Montaigne", era: 'modern' },
     { text: "We are such stuff as dreams are made on", author: "Shakespeare", era: 'modern' },
-    { text: "What's past is prologue", author: "Shakespeare", era: 'modern' },
     { text: "This above all: to thine own self be true", author: "Shakespeare", era: 'modern' },
-    { text: "The fault, dear Brutus, is not in our stars, but in ourselves", author: "Shakespeare", era: 'modern' },
-    { text: "Nothing will come of nothing", author: "Shakespeare", era: 'modern' },
-    { text: "Time is out of joint", author: "Shakespeare", era: 'modern' },
     { text: "All the world's a stage, and all the men and women merely players", author: "Shakespeare", era: 'modern' },
-    { text: "The rest is silence", author: "Shakespeare", era: 'modern' },
-    { text: "We know what we are, but know not what we may be", author: "Shakespeare", era: 'modern' },
     { text: "There are more things in heaven and earth than are dreamt of in your philosophy", author: "Shakespeare", era: 'modern' },
     // Enlightenment & 19th Century
     { text: "Esse est percipi - To be is to be perceived", author: "Berkeley", era: 'modern' },
@@ -343,10 +342,7 @@ function InteractiveBackgroundComponent() {
     { text: "Become who you are", author: "Nietzsche", era: 'modern' },
     { text: "He who has a why to live can bear almost any how", author: "Nietzsche", era: 'modern' },
     { text: "Whatever you can do or dream you can, begin it", author: "Goethe", era: 'modern' },
-    { text: "The eternal feminine draws us onward", author: "Goethe", era: 'modern' },
-    { text: "In the beginning was the deed", author: "Goethe", era: 'modern' },
     { text: "Two souls, alas, are dwelling in my breast", author: "Goethe", era: 'modern' },
-    { text: "More light!", author: "Goethe", era: 'modern' },
     { text: "Beauty is truth, truth beauty", author: "Keats", era: 'modern' },
     { text: "A thing of beauty is a joy forever", author: "Keats", era: 'modern' },
     { text: "Here lies one whose name was writ in water", author: "Keats", era: 'modern' },
@@ -371,12 +367,8 @@ function InteractiveBackgroundComponent() {
     { text: "One must imagine Sisyphus happy", author: "Camus", era: 'modern' },
     { text: "In the midst of winter, I found there was, within me, an invincible summer", author: "Camus", era: 'modern' },
     { text: "The past is never dead. It's not even past", author: "Faulkner", era: 'modern' },
-    { text: "In my beginning is my end", author: "Eliot", era: 'modern' },
-    { text: "Between the idea and the reality falls the shadow", author: "Eliot", era: 'modern' },
     { text: "April is the cruellest month", author: "Eliot", era: 'modern' },
     { text: "We shall not cease from exploration", author: "Eliot", era: 'modern' },
-    { text: "This is the way the world ends: not with a bang but a whimper", author: "Eliot", era: 'modern' },
-    { text: "I have measured out my life with coffee spoons", author: "Eliot", era: 'modern' },
     { text: "Do I dare disturb the universe?", author: "Eliot", era: 'modern' },
     { text: "The centre cannot hold", author: "Yeats", era: 'modern' },
     { text: "Things fall apart", author: "Yeats", era: 'modern' },
@@ -396,22 +388,25 @@ function InteractiveBackgroundComponent() {
     { text: "I have always imagined that Paradise will be a kind of library", author: "Borges", era: 'modern' },
     { text: "The original is unfaithful to the translation", author: "Borges", era: 'modern' },
     // African & Caribbean
-    { text: "Things fall apart; the centre cannot hold", author: "Achebe (via Yeats)", era: 'modern' },
     { text: "Until the lions have their own historians, the history of the hunt will always glorify the hunter", author: "Chinua Achebe", era: 'modern' },
-    { text: "The white man is very clever. He came quietly with his religion", author: "Chinua Achebe", era: 'modern' },
     { text: "If you don't like someone's story, write your own", author: "Chinua Achebe", era: 'modern' },
-    { text: "A people without the knowledge of their past history, origin and culture is like a tree without roots", author: "Marcus Garvey", era: 'modern' },
-    { text: "Me only have one ambition, y'know. I only have one thing I really like to see happen. I like to see mankind live together - black, white, Chinese, everyone", author: "Bob Marley", era: 'modern' },
+    { text: "A people without the knowledge of their past history is like a tree without roots", author: "Marcus Garvey", era: 'modern' },
+    { text: "The sea is history", author: "Derek Walcott", era: 'modern' },
+    { text: "I come from a place that likes grandeur; it likes large gestures", author: "Derek Walcott", era: 'modern' },
+    { text: "We dream of hope. We dream of change. Of fire, of water, of death, and birth", author: "Wole Soyinka", era: 'modern' },
+    { text: "The greatest threat to freedom is the absence of criticism", author: "Wole Soyinka", era: 'modern' },
+    { text: "To be an African writer is to be engaged in a kind of perpetual argument", author: "Ngũgĩ wa Thiong'o", era: 'modern' },
     // Asian Modern
-    { text: "The more you sweat in peacetime, the less you bleed during war", author: "Chinese proverb", era: 'modern' },
     { text: "An old pond / A frog jumps in / The sound of water", author: "Bashō", era: 'modern' },
     { text: "Do not seek to follow in the footsteps of the wise. Seek what they sought", author: "Bashō", era: 'modern' },
     { text: "Be the change you wish to see in the world", author: "Gandhi", era: 'modern' },
-    { text: "In a gentle way, you can shake the world", author: "Gandhi", era: 'modern' },
     { text: "The weak can never forgive. Forgiveness is the attribute of the strong", author: "Gandhi", era: 'modern' },
     { text: "Where the mind is without fear and the head is held high", author: "Tagore", era: 'modern' },
-    { text: "You can't cross the sea merely by standing and staring at the water", author: "Tagore", era: 'modern' },
     { text: "Let your life lightly dance on the edges of Time like dew on the tip of a leaf", author: "Tagore", era: 'modern' },
+    { text: "True words are not beautiful; beautiful words are not true", author: "Lu Xun", era: 'modern' },
+    { text: "Hope cannot be said to exist, nor can it be said not to exist", author: "Lu Xun", era: 'modern' },
+    { text: "Being forgotten is not the same as not existing", author: "Yoko Ogawa", era: 'modern' },
+    { text: "I think my job is to observe people and the world, and not to judge them", author: "Haruki Murakami", era: 'modern' },
     // Women's Voices
     { text: "One is not born, but rather becomes, a woman", author: "Simone de Beauvoir", era: 'modern' },
     { text: "I am no bird; and no net ensnares me", author: "Charlotte Brontë", era: 'modern' },
@@ -1208,29 +1203,9 @@ function InteractiveBackgroundComponent() {
       labyrinth.current.messageTime = Date.now()
     }
 
-    // Initialize Bibliotheca - Living Library with floating books
-    const initBibliotheca = () => {
-      books.current = []
-      dustMotes.current = []
-      bibliothecaStartTime.current = Date.now()
-
-      // Start with no books - they will gradually appear over time
-      // Create dust motes for atmosphere
-      for (let i = 0; i < 60; i++) {
-        dustMotes.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.15,
-          vy: Math.random() * 0.08 - 0.04,
-          opacity: Math.random() * 0.25,
-        })
-      }
-    }
-
-    // Add a single book to the bibliotheca
-    const addBook = () => {
+    // Helper to get a random quote and book type
+    const getRandomBookData = () => {
       const quote = humanisticQuotes[Math.floor(Math.random() * humanisticQuotes.length)]
-      // Match book type to era for visual consistency
       let bookType: 'book' | 'scroll' | 'manuscript'
       if (quote.era === 'ancient') {
         bookType = Math.random() > 0.3 ? 'scroll' : 'manuscript'
@@ -1239,6 +1214,33 @@ function InteractiveBackgroundComponent() {
       } else {
         bookType = Math.random() > 0.2 ? 'book' : 'manuscript'
       }
+      return { quote, bookType }
+    }
+
+    // Add a book that starts already on screen (for initial population)
+    const addBookImmediate = () => {
+      const { quote, bookType } = getRandomBookData()
+      books.current.push({
+        x: 100 + Math.random() * (canvas.width - 200),
+        y: 100 + Math.random() * (canvas.height - 200),
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.008,
+        type: bookType,
+        quote: quote.text,
+        author: quote.author,
+        era: quote.era,
+        open: false,
+        openProgress: 0,
+        hovered: false,
+        size: 100 + Math.random() * 50,
+      })
+    }
+
+    // Add a single book to the bibliotheca (drifts in from edges)
+    const addBook = () => {
+      const { quote, bookType } = getRandomBookData()
 
       // Start from edges and drift in
       const edge = Math.floor(Math.random() * 4)
@@ -1281,6 +1283,30 @@ function InteractiveBackgroundComponent() {
         hovered: false,
         size: 100 + Math.random() * 50,  // Larger books for better readability
       })
+    }
+
+    // Initialize Bibliotheca - Living Library with floating books
+    const initBibliotheca = () => {
+      books.current = []
+      dustMotes.current = []
+      bibliothecaStartTime.current = Date.now()
+
+      // Start with 2-3 books immediately (random)
+      const initialBooks = 2 + Math.floor(Math.random() * 2) // 2 or 3 books
+      for (let i = 0; i < initialBooks; i++) {
+        addBookImmediate()
+      }
+
+      // Create dust motes for atmosphere
+      for (let i = 0; i < 60; i++) {
+        dustMotes.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: Math.random() * 0.08 - 0.04,
+          opacity: Math.random() * 0.25,
+        })
+      }
     }
 
     // ASCII Grid Effect
@@ -2739,34 +2765,51 @@ function InteractiveBackgroundComponent() {
             }
 
             // Draw quote on pages with era-appropriate font
-            ctx.fillStyle = `rgba(40, 30, 20, ${book.openProgress})`
-            const fontSize = 11 + book.openProgress * 3
+            // Use clipping to ensure text stays within book bounds
+            ctx.save()
+            ctx.beginPath()
+            ctx.rect(-pageSpread / 2 + 10, -book.size / 2 + 10, pageSpread - 20, book.size * 1.4 - 20)
+            ctx.clip()
+
+            ctx.fillStyle = `rgba(30, 20, 10, ${book.openProgress})`
+            const fontSize = 12 + book.openProgress * 3
             ctx.font = getFontForEra(era, fontSize)
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
 
-            // Wrap text with better line spacing
+            // Wrap text with better line spacing, limiting to visible area
             const words = book.quote.split(' ')
             let line = ''
-            let y = -book.size * 0.25
-            const lineHeight = fontSize * 1.5
-            const maxWidth = pageSpread * 0.85
-            words.forEach((word: string) => {
+            let y = -book.size * 0.35
+            const lineHeight = fontSize * 1.4
+            const maxWidth = pageSpread * 0.8
+            const maxY = book.size * 0.5  // Don't go past this Y position
+            let linesDrawn = 0
+            const maxLines = 5
+            for (const word of words) {
+              if (linesDrawn >= maxLines || y > maxY) break
               const testLine = line + word + ' '
               if (ctx.measureText(testLine).width > maxWidth && line !== '') {
                 ctx.fillText(line.trim(), 0, y)
                 line = word + ' '
                 y += lineHeight
+                linesDrawn++
               } else {
                 line = testLine
               }
-            })
-            ctx.fillText(line.trim(), 0, y)
+            }
+            if (linesDrawn < maxLines && y <= maxY) {
+              ctx.fillText(line.trim(), 0, y)
+              y += lineHeight
+            }
 
-            // Draw author with elegant styling
-            ctx.font = getFontForEra(era, fontSize * 0.75, 'italic')
-            ctx.fillStyle = `rgba(80, 60, 40, ${book.openProgress * 0.9})`
-            ctx.fillText(`— ${book.author}`, 0, y + lineHeight * 1.3)
+            // Draw author with elegant styling (only if space permits)
+            if (y + lineHeight * 0.8 <= maxY + lineHeight) {
+              ctx.font = getFontForEra(era, fontSize * 0.8, 'italic')
+              ctx.fillStyle = `rgba(70, 50, 30, ${book.openProgress * 0.95})`
+              ctx.fillText(`— ${book.author}`, 0, y + lineHeight * 0.5)
+            }
+            ctx.restore()
           }
         } else if (book.type === 'scroll') {
           // Scroll with papyrus-like appearance - wider for better readability
@@ -2810,30 +2853,47 @@ function InteractiveBackgroundComponent() {
           ctx.fill()
 
           if (book.openProgress > 0.25) {
-            ctx.fillStyle = `rgba(35, 25, 15, ${book.openProgress})`
-            const fontSize = 10 + book.openProgress * 2
+            // Clip text to scroll bounds
+            ctx.save()
+            ctx.beginPath()
+            ctx.rect(-scrollWidth / 2 + 8, -scrollLength / 2 + 12, scrollWidth - 16, scrollLength - 24)
+            ctx.clip()
+
+            ctx.fillStyle = `rgba(30, 20, 10, ${book.openProgress})`
+            const fontSize = 11 + book.openProgress * 2
             ctx.font = getFontForEra(era, fontSize)
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
             const words = book.quote.split(' ')
             let line = ''
-            let y = -scrollLength / 3.5
-            const lineHeight = fontSize * 1.4
-            const maxWidth = scrollWidth * 0.85
-            words.forEach((word: string) => {
+            let y = -scrollLength / 4
+            const lineHeight = fontSize * 1.35
+            const maxWidth = scrollWidth * 0.8
+            const maxY = scrollLength / 4
+            let linesDrawn = 0
+            const maxLines = 6
+            for (const word of words) {
+              if (linesDrawn >= maxLines || y > maxY) break
               const testLine = line + word + ' '
               if (ctx.measureText(testLine).width > maxWidth && line !== '') {
                 ctx.fillText(line.trim(), 0, y)
                 line = word + ' '
                 y += lineHeight
+                linesDrawn++
               } else {
                 line = testLine
               }
-            })
-            ctx.fillText(line.trim(), 0, y)
-            ctx.font = getFontForEra(era, fontSize * 0.7, 'italic')
-            ctx.fillStyle = `rgba(60, 45, 25, ${book.openProgress * 0.85})`
-            ctx.fillText(`— ${book.author}`, 0, scrollLength / 3.5)
+            }
+            if (linesDrawn < maxLines && y <= maxY) {
+              ctx.fillText(line.trim(), 0, y)
+              y += lineHeight
+            }
+            if (y + lineHeight * 0.5 <= maxY + lineHeight) {
+              ctx.font = getFontForEra(era, fontSize * 0.75, 'italic')
+              ctx.fillStyle = `rgba(50, 35, 20, ${book.openProgress * 0.9})`
+              ctx.fillText(`— ${book.author}`, 0, y + lineHeight * 0.3)
+            }
+            ctx.restore()
           }
         } else {
           // Manuscript/illuminated pages with ornate border
@@ -2875,30 +2935,47 @@ function InteractiveBackgroundComponent() {
           }
 
           if (book.openProgress > 0.15) {
-            ctx.fillStyle = `rgba(35, 25, 15, ${book.openProgress})`
-            const fontSize = 11 + book.openProgress * 2
+            // Clip text to manuscript bounds
+            ctx.save()
+            ctx.beginPath()
+            ctx.rect(-pageWidth / 2 + 15, -pageHeight / 2 + 15, pageWidth - 30, pageHeight - 30)
+            ctx.clip()
+
+            ctx.fillStyle = `rgba(30, 20, 10, ${book.openProgress})`
+            const fontSize = 12 + book.openProgress * 2
             ctx.font = getFontForEra(era, fontSize)
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
             const words = book.quote.split(' ')
             let line = ''
-            let y = -pageHeight / 3.5
-            const lineHeight = fontSize * 1.45
-            const maxWidth = pageWidth * 0.78
-            words.forEach((word: string) => {
+            let y = -pageHeight / 4
+            const lineHeight = fontSize * 1.4
+            const maxWidth = pageWidth * 0.75
+            const maxY = pageHeight / 4
+            let linesDrawn = 0
+            const maxLines = 5
+            for (const word of words) {
+              if (linesDrawn >= maxLines || y > maxY) break
               const testLine = line + word + ' '
               if (ctx.measureText(testLine).width > maxWidth && line !== '') {
                 ctx.fillText(line.trim(), 0, y)
                 line = word + ' '
                 y += lineHeight
+                linesDrawn++
               } else {
                 line = testLine
               }
-            })
-            ctx.fillText(line.trim(), 0, y)
-            ctx.font = getFontForEra(era, fontSize * 0.75, 'italic')
-            ctx.fillStyle = `rgba(70, 50, 30, ${book.openProgress * 0.9})`
-            ctx.fillText(`— ${book.author}`, 0, y + lineHeight * 1.4)
+            }
+            if (linesDrawn < maxLines && y <= maxY) {
+              ctx.fillText(line.trim(), 0, y)
+              y += lineHeight
+            }
+            if (y + lineHeight * 0.5 <= maxY + lineHeight) {
+              ctx.font = getFontForEra(era, fontSize * 0.8, 'italic')
+              ctx.fillStyle = `rgba(60, 45, 25, ${book.openProgress * 0.95})`
+              ctx.fillText(`— ${book.author}`, 0, y + lineHeight * 0.4)
+            }
+            ctx.restore()
           }
         }
 
