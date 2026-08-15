@@ -27,7 +27,7 @@ export default function HistorySimulatorPage() {
 
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-4xl font-serif font-bold">History Simulator</h1>
+                <h1 className="text-display font-serif font-bold">History Simulator</h1>
                 <Badge>Active</Badge>
               </div>
               <div className="flex flex-wrap gap-2 mb-6">
@@ -98,7 +98,7 @@ export default function HistorySimulatorPage() {
       <Section className="bg-muted/40 py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Explore Related Projects</h2>
+            <h2 className="mb-4 text-title font-serif font-bold">Explore Related Projects</h2>
             <p className="text-muted-foreground mb-8">
               Check out the Historical Figure Generator and other modules
             </p>

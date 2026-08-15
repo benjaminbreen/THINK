@@ -49,7 +49,7 @@ export default function TagPage({ params }: { params: Promise<{ tag: string }> }
 
   return (
     <>
-      <Section className="pt-24 pb-8">
+      <Section className="section-top pb-8">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -66,7 +66,7 @@ export default function TagPage({ params }: { params: Promise<{ tag: string }> }
                 <div className="p-3 rounded-full bg-primary/10">
                   <Tag className="h-6 w-6 text-primary" />
                 </div>
-                <h1 className="text-4xl font-serif font-bold">{tag}</h1>
+                <h1 className="text-display font-serif font-bold">{tag}</h1>
               </div>
               <p className="text-lg text-muted-foreground">
                 {content.length} item{content.length !== 1 ? 's' : ''} tagged with "{tag}"

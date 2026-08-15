@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-react'
 export default function BuildingSimulationsGuide() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Section className="section-top pb-16">
         <Container>
           <div className="mb-8">
             <Button asChild variant="ghost" size="sm">
@@ -18,7 +18,7 @@ export default function BuildingSimulationsGuide() {
           </div>
 
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-4xl font-serif font-bold mb-4">
+            <h1 className="mb-4 text-display font-serif font-bold">
               Building Historical Simulations
             </h1>
             <p className="text-xl text-muted-foreground mb-12">

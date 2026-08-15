@@ -4,63 +4,68 @@
 
 @layer base {
   :root {
-    /* Warm, cream-based light mode palette */
-    --background: 40 33% 98%;
-    --foreground: 25 30% 12%;
-    --card: 40 30% 99%;
-    --card-foreground: 25 30% 12%;
-    --popover: 40 30% 99%;
-    --popover-foreground: 25 30% 12%;
-    --primary: 25 85% 45%;
-    --primary-foreground: 40 30% 99%;
-    --secondary: 38 35% 93%;
-    --secondary-foreground: 25 30% 15%;
-    --muted: 38 25% 93%;
-    --muted-foreground: 25 15% 45%;
-    --accent: 38 35% 91%;
-    --accent-foreground: 25 30% 15%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 40 30% 99%;
-    --border: 35 25% 88%;
-    --input: 35 25% 88%;
-    --ring: 25 85% 45%;
-    --radius: 0.5rem;
+    /* Warm, paper-based light palette */
+    --background: 40 32% 97.5%;
+    --foreground: 24 24% 13%;
+    --card: 42 45% 99.5%;
+    --card-foreground: 24 24% 13%;
+    --popover: 42 45% 99.5%;
+    --popover-foreground: 24 24% 13%;
+    --primary: 22 80% 40%;
+    --primary-foreground: 42 45% 99%;
+    --secondary: 38 32% 93%;
+    --secondary-foreground: 24 26% 16%;
+    --muted: 38 26% 93.5%;
+    --muted-foreground: 25 13% 40%;
+    --accent: 38 34% 91%;
+    --accent-foreground: 24 26% 16%;
+    --destructive: 0 68% 45%;
+    --destructive-foreground: 42 45% 99%;
+    --border: 34 22% 87%;
+    --input: 34 22% 87%;
+    --ring: 22 80% 40%;
+    --radius: 0.625rem;
+
+    /* Warm-tinted shadow so elevation reads as light, not soot */
+    --shadow: 26 42% 22%;
 
     /* Warm accent colors */
-    --accent-amber: 29 96% 48%;
+    --accent-amber: 29 92% 45%;
     --accent-amber-foreground: 0 0% 100%;
-    --accent-terracotta: 15 70% 50%;
-    --accent-sage: 145 30% 45%;
+    --accent-terracotta: 15 66% 46%;
+    --accent-sage: 145 30% 38%;
     --accent-cream: 40 40% 95%;
   }
 
   .dark {
-    /* Warm dark mode - deep slate with amber undertones */
-    --background: 220 20% 10%;
-    --foreground: 40 20% 95%;
-    --card: 220 18% 13%;
-    --card-foreground: 40 20% 95%;
-    --popover: 220 18% 13%;
-    --popover-foreground: 40 20% 95%;
-    --primary: 30 90% 55%;
-    --primary-foreground: 220 20% 10%;
-    --secondary: 220 15% 18%;
-    --secondary-foreground: 40 20% 95%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 40 10% 65%;
-    --accent: 220 15% 20%;
-    --accent-foreground: 40 20% 95%;
-    --destructive: 0 65% 55%;
-    --destructive-foreground: 40 20% 95%;
-    --border: 220 15% 22%;
-    --input: 220 15% 20%;
-    --ring: 30 90% 55%;
+    /* Deep slate with warm amber accents */
+    --background: 222 22% 9%;
+    --foreground: 40 22% 94%;
+    --card: 222 19% 12.5%;
+    --card-foreground: 40 22% 94%;
+    --popover: 222 19% 12.5%;
+    --popover-foreground: 40 22% 94%;
+    --primary: 32 94% 60%;
+    --primary-foreground: 222 30% 8%;
+    --secondary: 222 15% 17%;
+    --secondary-foreground: 40 22% 94%;
+    --muted: 222 15% 17%;
+    --muted-foreground: 40 10% 68%;
+    --accent: 222 15% 20%;
+    --accent-foreground: 40 22% 94%;
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 40 22% 94%;
+    --border: 222 14% 22%;
+    --input: 222 14% 20%;
+    --ring: 32 94% 60%;
+
+    --shadow: 222 60% 2%;
 
     /* Dark mode accent colors */
-    --accent-amber: 35 95% 55%;
-    --accent-amber-foreground: 220 20% 10%;
-    --accent-sage: 145 40% 50%;
-    --accent-sage-foreground: 220 20% 10%;
+    --accent-amber: 35 95% 58%;
+    --accent-amber-foreground: 222 30% 8%;
+    --accent-sage: 145 40% 52%;
+    --accent-sage-foreground: 222 30% 8%;
   }
 }
 
@@ -69,25 +74,21 @@
     @apply border-border;
   }
 
-  /* Smooth scrolling for anchor links */
   html {
     scroll-behavior: smooth;
-  }
-
-  /* Respect user's motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
+    /* Anchored headings clear the sticky header */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    transition: background-color 0.15s ease-out, color 0.15s ease-out;
   }
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Smooth theme transitions */
-  html {
-    transition: background-color 0.15s ease-out, color 0.15s ease-out;
+    /* Nothing on this site is meant to scroll sideways */
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: hsl(var(--primary) / 0.12);
+    font-feature-settings: 'kern', 'liga', 'calt';
   }
 
   html.theme-transitioning,
@@ -97,70 +98,49 @@
     transition: background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out, fill 0.15s ease-out, stroke 0.15s ease-out !important;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    html,
-    html.theme-transitioning,
-    html.theme-transitioning *,
-    html.theme-transitioning *::before,
-    html.theme-transitioning *::after {
-      transition: none !important;
-    }
-  }
-
-  /* Improved typography */
+  /* Typography defaults */
   p {
-    line-height: 1.6;
+    line-height: 1.65;
+    text-wrap: pretty;
   }
 
   h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.02em;
     line-height: 1.2;
+    /* Keeps headline rags even instead of leaving one orphaned word */
+    text-wrap: balance;
   }
 
   h2 {
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
   h3, h4, h5, h6 {
-    line-height: 1.4;
+    line-height: 1.35;
   }
 
-  /* Beautiful focus states for keyboard navigation */
+  /* Long words and URLs should never widen the page on a phone */
+  h1, h2, h3, h4, h5, h6, p, li, dd, dt, figcaption {
+    overflow-wrap: break-word;
+  }
+
+  /* Serif numerals in headings look better lining than old-style */
+  .font-serif {
+    font-variant-numeric: lining-nums;
+  }
+
+  /* Focus states for keyboard navigation */
   :focus-visible {
-    outline: 2px solid hsl(var(--primary));
+    outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
     border-radius: 4px;
   }
 
-  /* Remove default focus for mouse users */
   :focus:not(:focus-visible) {
     outline: none;
   }
 
-  /* Enhanced focus for interactive elements */
-  a:focus-visible,
-  button:focus-visible,
-  [role="button"]:focus-visible {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
-    border-radius: 4px;
-    transition: outline-offset 0.15s ease-out;
-  }
-
-  /* Skip to content focus style */
-  .skip-link:focus {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 9999;
-    padding: 0.75rem 1.5rem;
-    background: hsl(var(--background));
-    border: 2px solid hsl(var(--primary));
-    border-radius: 0.5rem;
-    font-weight: 600;
-  }
-
-  /* Form input focus transitions */
+  /* Form controls */
   input,
   textarea,
   select {
@@ -171,10 +151,9 @@
   textarea:focus,
   select:focus {
     border-color: hsl(var(--primary));
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
   }
 
-  /* Custom select dropdown styling */
   select {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -193,37 +172,126 @@
     border-color: hsl(var(--primary) / 0.5);
   }
 
+  /* Images never overflow their column */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    html,
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after,
     input,
     textarea,
     select {
-      transition: none;
+      transition: none !important;
     }
   }
 }
 
-/* Typography refinements */
+@layer components {
+  /* Horizontal page gutters. Scales with the viewport and clears the
+     rounded corners / notch of a phone held in landscape. */
+  .gutter {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
 
-/* Hanging punctuation for cleaner text alignment */
+  @media (min-width: 640px) {
+    .gutter {
+      padding-left: max(2rem, env(safe-area-inset-left));
+      padding-right: max(2rem, env(safe-area-inset-right));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gutter {
+      padding-left: max(2.5rem, env(safe-area-inset-left));
+      padding-right: max(2.5rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* Vertical rhythm for page sections — one scale, used everywhere */
+  .section-y {
+    padding-top: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+    padding-bottom: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+  }
+
+  .section-y-sm {
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+
+  .section-y-lg {
+    padding-top: clamp(3rem, 1.8rem + 5vw, 6rem);
+    padding-bottom: clamp(3rem, 1.8rem + 5vw, 6rem);
+  }
+
+  /* Top padding for the first section under the sticky header */
+  .section-top {
+    padding-top: clamp(2rem, 1.2rem + 3.2vw, 4rem);
+  }
+
+  /* An eyebrow label above a page title */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  /* Comfortable reading measure for body copy */
+  .measure {
+    max-width: 68ch;
+  }
+
+  /* Hairline divider that fades at both ends */
+  .rule-soft {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsl(var(--border)) 15%,
+      hsl(var(--border)) 85%,
+      transparent
+    );
+  }
+
+  /* Respects notches and home indicators on modern phones */
+  .safe-b {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Typography refinements
+   --------------------------------------------------------------------------- */
+
 .prose blockquote,
 .prose q {
   hanging-punctuation: first last;
 }
 
-/* Enhanced blockquote styling */
 .prose blockquote {
   position: relative;
   font-style: italic;
-  border-left: 3px solid hsl(var(--primary) / 0.4);
+  border-left: 2px solid hsl(var(--primary) / 0.45);
   padding-left: 1.5rem;
   margin-left: 0;
   margin-right: 0;
   color: hsl(var(--foreground) / 0.85);
 }
 
-/* Removed duplicate quotation mark - the border-left is sufficient */
-
-/* Improved inline quotes */
 .prose q {
   quotes: '"' '"' ''' ''';
 }
@@ -238,7 +306,7 @@
   color: hsl(var(--muted-foreground));
 }
 
-/* Animated underlines for prose links */
+/* Prose links grow an underline instead of flicking one on */
 .prose a:not(.no-underline) {
   text-decoration: none;
   background-image: linear-gradient(hsl(var(--primary)), hsl(var(--primary)));
@@ -261,25 +329,36 @@
   }
 }
 
-/* Custom scrollbar */
+/* Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-lg;
+  @apply rounded-full;
+  background-color: hsl(var(--muted-foreground) / 0.25);
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
+  background-color: hsl(var(--muted-foreground) / 0.45);
 }
 
-/* Animations */
+* {
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  scrollbar-width: thin;
+}
+
+/* ---------------------------------------------------------------------------
+   Animations
+   --------------------------------------------------------------------------- */
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -294,71 +373,11 @@
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-@keyframes gentle-float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes subtle-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(var(--primary), 0.15);
-  }
-}
-
-@keyframes gentle-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scale(1.02);
   }
 }
 
@@ -368,15 +387,6 @@
   }
   100% {
     transform: translateX(100%);
-  }
-}
-
-@keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
   }
 }
 
@@ -404,15 +414,6 @@
   }
 }
 
-.animate-sun-rise {
-  animation: sun-rise 0.5s ease-out;
-}
-
-.animate-moon-rise {
-  animation: moon-rise 0.5s ease-out;
-}
-
-/* Button ripple effect */
 @keyframes ripple {
   0% {
     transform: scale(0);
@@ -424,11 +425,6 @@
   }
 }
 
-.animate-ripple {
-  animation: ripple 0.6s ease-out forwards;
-}
-
-/* Checkmark animation for copy button */
 @keyframes checkmark-pop {
   0% {
     transform: scale(0) rotate(-45deg);
@@ -444,11 +440,6 @@
   }
 }
 
-.animate-checkmark {
-  animation: checkmark-pop 0.4s ease-out forwards;
-}
-
-/* Breadcrumb sequential slide-in animation */
 @keyframes breadcrumb-item-enter {
   0% {
     opacity: 0;
@@ -471,310 +462,13 @@
   }
 }
 
-.animate-breadcrumb-item {
-  animation: breadcrumb-item-enter 0.3s ease-out forwards;
-}
-
-.animate-breadcrumb-chevron {
-  animation: breadcrumb-chevron-enter 0.25s ease-out forwards;
-}
-
-/* External link icon animation - moves diagonally on hover */
-.external-link-icon {
-  transition: transform 0.2s ease-out;
-}
-
-.group:hover .external-link-icon,
-a:hover > .external-link-icon,
-button:hover > .external-link-icon {
-  transform: translate(1px, -1px);
-}
-
-/* Alternative: use this class on links that contain external icons */
-.external-link:hover .lucide-external-link,
-.external-link:hover .lucide-arrow-up-right {
-  transform: translate(1px, -1px);
-  transition: transform 0.2s ease-out;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s ease-out forwards;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s ease-out forwards;
-}
-
-/* Stagger animation delays */
-.animation-delay-100 {
-  animation-delay: 100ms;
-}
-
-.animation-delay-200 {
-  animation-delay: 200ms;
-}
-
-.animation-delay-300 {
-  animation-delay: 300ms;
-}
-
-.animation-delay-400 {
-  animation-delay: 400ms;
-}
-
-.animation-delay-500 {
-  animation-delay: 500ms;
-}
-
-.animation-delay-600 {
-  animation-delay: 600ms;
-}
-
-.animation-delay-700 {
-  animation-delay: 700ms;
-}
-
-.animation-delay-800 {
-  animation-delay: 800ms;
-}
-
-.animation-delay-900 {
-  animation-delay: 900ms;
-}
-
-/* Animation utilities */
-.animate-gentle-pulse {
-  animation: gentle-pulse 3s ease-in-out infinite;
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: gentle-float 3s ease-in-out infinite;
-}
-
-/* Gradient text */
-.gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-500 to-purple-600;
-}
-
-/* Gradient backgrounds */
-.gradient-primary {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
-}
-
-.gradient-mesh {
-  background:
-    radial-gradient(at 0% 0%, hsl(var(--primary) / 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsl(var(--primary) / 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsl(var(--primary) / 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsl(var(--primary) / 0.05) 0px, transparent 50%);
-}
-
-/* Glass effect */
-.glass-effect {
-  @apply bg-background/80 backdrop-blur-sm border border-border/50;
-}
-
-/* Hover lift effect */
-.hover-lift {
-  @apply transition-all duration-300 ease-out;
-}
-
-.hover-lift:hover {
-  @apply -translate-y-1;
-  box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.12);
-}
-
-/* Enhanced hover lift with glow */
-.hover-lift-glow {
-  @apply transition-all duration-300 ease-out;
-}
-
-.hover-lift-glow:hover {
-  transform: translateY(-3px) scale(1.005);
-  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15),
-              0 0 0 1px rgba(0, 0, 0, 0.03),
-              0 0 24px rgba(var(--primary), 0.1);
-}
-
-.dark .hover-lift-glow:hover {
-  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.4),
-              0 0 0 1px rgba(255, 255, 255, 0.06),
-              0 0 24px rgba(var(--primary), 0.18);
-}
-
-/* Badge hover effects */
-.badge-hover {
-  @apply transition-all duration-200;
-  position: relative;
-}
-
-.badge-hover:hover {
-  @apply scale-105;
-  transform: translateY(-1px) scale(1.05);
-}
-
-/* Link underline animation */
-.link-underline {
-  position: relative;
-  text-decoration: none;
-}
-
-.link-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: currentColor;
-  transition: width 0.3s ease-out;
-}
-
-.link-underline:hover::after {
-  width: 100%;
-}
-
-/* Button hover scale */
-.btn-hover-scale {
-  @apply transition-all ease-out;
-  transition-duration: 250ms;
-  position: relative;
-}
-
-.btn-hover-scale:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.12);
-}
-
-.btn-hover-scale:active {
-  transform: translateY(0) scale(0.99);
-}
-
-/* Shimmer effect */
-.shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transform: translateX(-100%);
-  animation: shimmer-slide 3s infinite;
-}
-
-/* Hero section with interactive background */
-.hero-with-background {
-  position: relative;
-}
-
-/* Frosted glass pane for hero content - skeuomorphic glass effect */
-.hero-glass-pane {
-  @apply backdrop-blur-lg rounded-2xl transition-all duration-300;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.42) 100%
-  );
-  box-shadow:
-    0 8px 32px -8px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.6),
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.02);
-  animation: hero-glass-enter 0.6s ease-out;
-  position: relative;
-  overflow: hidden;
-}
-
-/* More transparent on hover */
-.hero-glass-pane:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(255, 255, 255, 0.22) 50%,
-    rgba(255, 255, 255, 0.28) 100%
-  );
-  box-shadow:
-    0 8px 32px -8px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.5),
-    inset 0 1px 1px rgba(255, 255, 255, 0.5),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.01);
-}
-
-/* Subtle glass reflection effect */
-.hero-glass-pane::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  pointer-events: none;
-  border-radius: 1rem 1rem 0 0;
-  transition: opacity 0.3s;
-}
-
-.hero-glass-pane:hover::before {
-  opacity: 0.6;
-}
-
-.dark .hero-glass-pane {
-  background: linear-gradient(
-    135deg,
-    rgba(15, 23, 42, 0.7) 0%,
-    rgba(15, 23, 42, 0.55) 50%,
-    rgba(15, 23, 42, 0.62) 100%
-  );
-  box-shadow:
-    0 8px 32px -8px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.08),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.15);
-}
-
-.dark .hero-glass-pane:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(15, 23, 42, 0.55) 0%,
-    rgba(15, 23, 42, 0.4) 50%,
-    rgba(15, 23, 42, 0.48) 100%
-  );
-}
-
-.dark .hero-glass-pane::before {
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
+@keyframes canvas-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes hero-glass-enter {
@@ -788,52 +482,205 @@ button:hover > .external-link-icon {
   }
 }
 
-/* Smooth canvas fade-in for interactive backgrounds */
-@keyframes canvas-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.animate-sun-rise {
+  animation: sun-rise 0.5s ease-out;
+}
+
+.animate-moon-rise {
+  animation: moon-rise 0.5s ease-out;
+}
+
+.animate-ripple {
+  animation: ripple 0.6s ease-out forwards;
+}
+
+.animate-checkmark {
+  animation: checkmark-pop 0.4s ease-out forwards;
+}
+
+.animate-breadcrumb-item {
+  animation: breadcrumb-item-enter 0.3s ease-out forwards;
+}
+
+.animate-breadcrumb-chevron {
+  animation: breadcrumb-chevron-enter 0.25s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-canvas-fade-in {
   animation: canvas-fade-in 0.5s ease-out forwards;
 }
 
-/* Guide content styling */
-.guide-content h2 {
-  @apply scroll-mt-24 pt-8 first:pt-0;
+/* Stagger delays */
+.animation-delay-100 { animation-delay: 60ms; }
+.animation-delay-200 { animation-delay: 120ms; }
+.animation-delay-300 { animation-delay: 180ms; }
+.animation-delay-400 { animation-delay: 240ms; }
+.animation-delay-500 { animation-delay: 300ms; }
+.animation-delay-600 { animation-delay: 360ms; }
+.animation-delay-700 { animation-delay: 420ms; }
+.animation-delay-800 { animation-delay: 480ms; }
+.animation-delay-900 { animation-delay: 540ms; }
+
+/* External link icons drift on hover */
+.external-link-icon {
+  transition: transform 0.2s ease-out;
 }
 
-.guide-content h2:not(:first-child) {
-  @apply mt-12; /* GuideSectionDivider handles visual breaks, no border needed */
+.group:hover .external-link-icon,
+a:hover > .external-link-icon,
+button:hover > .external-link-icon {
+  transform: translate(1px, -1px);
 }
 
-.guide-content h3 {
-  @apply mt-10 mb-4;
+.external-link:hover .lucide-external-link,
+.external-link:hover .lucide-arrow-up-right {
+  transform: translate(1px, -1px);
+  transition: transform 0.2s ease-out;
 }
 
-.guide-content > p:first-of-type {
-  @apply text-lg leading-relaxed;
+/* ---------------------------------------------------------------------------
+   Interaction utilities
+   --------------------------------------------------------------------------- */
+
+.hover-lift {
+  @apply transition-all duration-300 ease-out;
 }
 
-/* Wiki link styling */
-.wiki-link {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
-  text-align: left;
+.hover-lift:hover {
+  @apply -translate-y-1 shadow-md;
 }
 
-.wiki-link-example {
-  @apply underline decoration-dotted decoration-primary/50 underline-offset-2;
+.hover-lift-glow {
+  @apply transition-all duration-300 ease-out;
 }
 
-/* Hero text colors for light mode glass pane */
+.hover-lift-glow:hover {
+  @apply -translate-y-1 shadow-lg;
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+.btn-hover-scale {
+  @apply transition-all ease-out;
+  transition-duration: 220ms;
+  position: relative;
+}
+
+.btn-hover-scale:hover {
+  transform: translateY(-1px);
+  @apply shadow-md;
+}
+
+.btn-hover-scale:active {
+  transform: translateY(0);
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer-slide 3s infinite;
+}
+
+/* Touch devices get no hover lift — it only ever fires as a sticky state */
+@media (hover: none) {
+  .hover-lift:hover,
+  .hover-lift-glow:hover,
+  .btn-hover-scale:hover {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero
+   --------------------------------------------------------------------------- */
+
+.hero-with-background {
+  position: relative;
+}
+
+/* Frosted pane that floats the hero copy above the animated canvas */
+.hero-glass-pane {
+  @apply backdrop-blur-xl rounded-2xl transition-all duration-500 ease-out;
+  background: linear-gradient(
+    150deg,
+    hsl(var(--card) / 0.82) 0%,
+    hsl(var(--card) / 0.66) 55%,
+    hsl(var(--card) / 0.74) 100%
+  );
+  box-shadow:
+    0 1px 0 0 hsl(0 0% 100% / 0.7) inset,
+    0 0 0 1px hsl(var(--border) / 0.7),
+    0 18px 40px -24px hsl(var(--shadow) / 0.35);
+  animation: hero-glass-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fades back to reveal the canvas behind it */
+.hero-glass-pane:hover {
+  background: linear-gradient(
+    150deg,
+    hsl(var(--card) / 0.62) 0%,
+    hsl(var(--card) / 0.44) 55%,
+    hsl(var(--card) / 0.54) 100%
+  );
+  box-shadow:
+    0 1px 0 0 hsl(0 0% 100% / 0.5) inset,
+    0 0 0 1px hsl(var(--border) / 0.5),
+    0 18px 40px -24px hsl(var(--shadow) / 0.28);
+}
+
+.hero-glass-pane::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: linear-gradient(
+    to bottom,
+    hsl(0 0% 100% / 0.22) 0%,
+    hsl(0 0% 100% / 0) 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.dark .hero-glass-pane {
+  box-shadow:
+    0 1px 0 0 hsl(0 0% 100% / 0.07) inset,
+    0 0 0 1px hsl(var(--border) / 0.9),
+    0 24px 48px -28px hsl(var(--shadow) / 0.8);
+}
+
+.dark .hero-glass-pane::before {
+  background: linear-gradient(
+    to bottom,
+    hsl(0 0% 100% / 0.05) 0%,
+    hsl(0 0% 100% / 0) 100%
+  );
+}
+
 .hero-glass-pane h1,
 .hero-glass-pane p,
 .hero-glass-pane span {
@@ -844,36 +691,6 @@ button:hover > .external-link-icon {
   @apply text-muted-foreground;
 }
 
-/* Gradient borders */
-.gradient-border {
-  position: relative;
-  border: none;
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg,
-    hsl(var(--border)) 0%,
-    transparent 50%,
-    hsl(var(--border)) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.5;
-}
-
-/* Focus glow */
-.focus-glow:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.3),
-              0 0 15px hsl(var(--ring) / 0.2);
-}
-
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -884,39 +701,39 @@ button:hover > .external-link-icon {
   }
 }
 
-/* Prose styles for MDX content with improved vertical rhythm */
+/* ---------------------------------------------------------------------------
+   Prose / MDX content
+   --------------------------------------------------------------------------- */
+
 .prose {
   @apply max-w-none;
-  /* Base unit for vertical rhythm: 1.5rem (24px at default) */
   --rhythm: 1.5rem;
 }
 
-/* Headings with consistent spacing based on rhythm */
 .prose h1 {
-  @apply text-4xl font-serif font-bold text-foreground;
+  @apply text-display font-serif font-bold text-foreground;
   margin-top: calc(var(--rhythm) * 2.5);
   margin-bottom: calc(var(--rhythm) * 1);
 }
 
 .prose h2 {
-  @apply text-3xl font-serif font-bold text-foreground;
+  @apply text-title font-serif font-bold text-foreground;
   margin-top: calc(var(--rhythm) * 2);
   margin-bottom: calc(var(--rhythm) * 0.75);
 }
 
 .prose h3 {
-  @apply text-2xl font-serif font-semibold text-foreground;
+  @apply text-headline font-serif font-semibold text-foreground;
   margin-top: calc(var(--rhythm) * 1.5);
   margin-bottom: calc(var(--rhythm) * 0.5);
 }
 
 .prose h4 {
-  @apply text-xl font-semibold text-foreground;
+  @apply text-lg font-semibold text-foreground;
   margin-top: calc(var(--rhythm) * 1.25);
   margin-bottom: calc(var(--rhythm) * 0.5);
 }
 
-/* First heading shouldn't have top margin */
 .prose > h1:first-child,
 .prose > h2:first-child,
 .prose > h3:first-child,
@@ -924,18 +741,15 @@ button:hover > .external-link-icon {
   margin-top: 0;
 }
 
-/* Paragraphs and text blocks */
 .prose p {
   @apply leading-relaxed text-foreground/90;
   margin-bottom: var(--rhythm);
 }
 
-/* Links */
 .prose a {
   @apply text-primary hover:underline underline-offset-2;
 }
 
-/* Lists with proper spacing */
 .prose ul, .prose ol {
   @apply ml-6;
   margin-bottom: var(--rhythm);
@@ -949,16 +763,14 @@ button:hover > .external-link-icon {
   margin-bottom: 0;
 }
 
-/* Nested lists */
 .prose li > ul,
 .prose li > ol {
   margin-top: calc(var(--rhythm) * 0.35);
   margin-bottom: 0;
 }
 
-/* Code */
 .prose code {
-  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-muted px-1.5 py-0.5 rounded text-[0.875em] font-mono;
 }
 
 .prose pre {
@@ -974,15 +786,13 @@ button:hover > .external-link-icon {
   padding: 0;
 }
 
-/* Blockquotes - inherits enhanced styling from above */
 .prose blockquote {
   margin-top: var(--rhythm);
   margin-bottom: var(--rhythm);
 }
 
-/* Images and figures */
 .prose img {
-  @apply rounded-lg;
+  @apply rounded-xl;
   margin-top: var(--rhythm);
   margin-bottom: var(--rhythm);
 }
@@ -997,34 +807,118 @@ button:hover > .external-link-icon {
   margin-top: calc(var(--rhythm) * 0.5);
 }
 
-/* Horizontal rules */
 .prose hr {
-  @apply border-border;
+  @apply border-0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
   margin-top: calc(var(--rhythm) * 2);
   margin-bottom: calc(var(--rhythm) * 2);
 }
 
-/* Hide hr in guide content - GuideSectionDivider handles section breaks */
 .guide-content hr {
   display: none;
 }
 
-/* Tables */
+/* Tables scroll rather than squeeze on narrow screens */
 .prose table {
-  @apply w-full border-collapse;
+  @apply w-full border-collapse text-sm;
   margin-bottom: var(--rhythm);
 }
 
 .prose th,
 .prose td {
-  @apply border border-border px-4 py-2 text-left;
+  @apply border border-border px-4 py-2.5 text-left align-top;
 }
 
 .prose th {
-  @apply bg-muted/50 font-semibold;
+  @apply bg-muted/60 font-semibold;
 }
 
-/* Force code blocks to have dark background with light text in both modes */
+.prose :where(table):not(:where([class~='not-prose'] *)) {
+  display: block;
+  overflow-x: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Guide content
+   --------------------------------------------------------------------------- */
+
+.guide-content h2 {
+  @apply scroll-mt-24 pt-8 first:pt-0;
+}
+
+.guide-content h2:not(:first-child) {
+  @apply mt-12;
+}
+
+.guide-content h3 {
+  @apply mt-10 mb-4;
+}
+
+.guide-content > p:first-of-type {
+  @apply text-lg leading-relaxed;
+}
+
+.wiki-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  text-align: left;
+}
+
+.wiki-link-example {
+  @apply underline decoration-dotted decoration-primary/50 underline-offset-2;
+}
+
+/* Diamond bullets for guide lists */
+.guide-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.guide-content ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.guide-content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background-color: hsl(var(--primary));
+  transform: rotate(45deg);
+}
+
+.guide-content ul ul li::before {
+  background-color: hsl(var(--muted-foreground));
+  width: 5px;
+  height: 5px;
+}
+
+.guide-content ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.guide-content ol li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.guide-content div ul li::before {
+  background-color: hsl(var(--primary));
+}
+
+/* ---------------------------------------------------------------------------
+   Code blocks — always dark, in both themes
+   --------------------------------------------------------------------------- */
+
 .code-block-dark {
   background-color: rgb(15 23 42) !important;
   color: rgb(226 232 240) !important;
@@ -1034,7 +928,6 @@ button:hover > .external-link-icon {
   color: rgb(226 232 240) !important;
 }
 
-/* Dark code blocks - ensure all text is light and code has no extra background */
 div.bg-slate-900 {
   background-color: rgb(15 23 42) !important;
 }
@@ -1060,80 +953,30 @@ div.bg-slate-900 .text-slate-100 {
   color: rgb(241 245 249) !important;
 }
 
-/* Inline code in dark code blocks should have no background */
 .font-mono code,
 div.font-mono code {
   background: transparent !important;
   padding: 0 !important;
 }
 
-/* Conversation blocks styling - ensure proper text colors */
+/* Conversation blocks */
 div.bg-blue-50 p,
 div.bg-blue-950 p {
   color: inherit;
 }
 
-/* Light mode conversation blocks */
 div.bg-blue-50 p.text-sm {
   color: rgb(30 58 138) !important;
 }
 
-/* Dark mode conversation blocks */
 .dark div.bg-blue-950 p.text-sm {
   color: rgb(191 219 254) !important;
 }
 
-/* Claude response blocks */
 div.bg-slate-50 p.text-sm:not(.text-muted-foreground) {
   color: rgb(30 41 59) !important;
 }
 
 .dark div.bg-slate-900 p.text-sm:not(.text-muted-foreground):not(.text-slate-400) {
   color: rgb(226 232 240) !important;
-}
-
-/* Cube list markers for guide content */
-.guide-content ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.guide-content ul li {
-  position: relative;
-  padding-left: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.guide-content ul li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 6px;
-  height: 6px;
-  background-color: hsl(var(--primary));
-  transform: rotate(45deg);
-}
-
-/* Nested lists */
-.guide-content ul ul li::before {
-  background-color: hsl(var(--muted-foreground));
-  width: 5px;
-  height: 5px;
-}
-
-/* Ordered lists keep numbers */
-.guide-content ol {
-  list-style: decimal;
-  padding-left: 1.5rem;
-}
-
-.guide-content ol li {
-  margin-bottom: 0.5rem;
-  padding-left: 0.25rem;
-}
-
-/* Lists inside info boxes should also have cube markers */
-.guide-content div ul li::before {
-  background-color: hsl(var(--primary));
 }

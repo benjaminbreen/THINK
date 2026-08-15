@@ -12,7 +12,7 @@ export function Skeleton({ className, style }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-muted/60',
+        'animate-pulse rounded-md bg-muted-foreground/10',
         className
       )}
       style={style}
@@ -25,9 +25,9 @@ export function Skeleton({ className, style }: SkeletonProps) {
  */
 export function CardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-6 space-y-4">
+    <div className="space-y-4 overflow-hidden rounded-xl border border-border/70 bg-card p-5 sm:p-6">
       {/* Image placeholder */}
-      <Skeleton className="h-36 w-full rounded-lg" />
+      <Skeleton className="aspect-[16/10] w-full rounded-lg" />
       {/* Badge and date row */}
       <div className="flex justify-between items-center">
         <Skeleton className="h-5 w-20 rounded-full" />
@@ -49,6 +49,9 @@ export function CardSkeleton() {
   )
 }
 
+/* Fixed rag widths — random ones differ between server and client render */
+const LINE_WIDTHS = ['96%', '88%', '92%', '79%', '85%']
+
 /**
  * Skeleton for text content - paragraph blocks
  */
@@ -59,7 +62,7 @@ export function TextSkeleton({ lines = 3 }: { lines?: number }) {
         <Skeleton
           key={i}
           className="h-4"
-          style={{ width: `${Math.random() * 20 + 75}%` }}
+          style={{ width: LINE_WIDTHS[i % LINE_WIDTHS.length] }}
         />
       ))}
     </div>
@@ -71,7 +74,7 @@ export function TextSkeleton({ lines = 3 }: { lines?: number }) {
  */
 export function ArticleSkeleton() {
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="max-w-3xl space-y-8">
       {/* Title */}
       <div className="space-y-4">
         <Skeleton className="h-10 w-3/4" />
@@ -82,7 +85,7 @@ export function ArticleSkeleton() {
       </div>
       {/* Content blocks */}
       <TextSkeleton lines={4} />
-      <Skeleton className="h-48 w-full rounded-lg" />
+      <Skeleton className="h-48 w-full rounded-xl" />
       <TextSkeleton lines={5} />
       <TextSkeleton lines={3} />
     </div>

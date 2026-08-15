@@ -3247,15 +3247,19 @@ function InteractiveBackgroundComponent() {
   }, [mode]) // Include mode dependency since cycleMode uses it
 
   const renderControls = () => {
-    // Adaptive button styling for light/dark mode - compact sizing
-    const buttonClass = isDarkMode
-      ? "px-2 py-1 text-[10px] rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white whitespace-nowrap"
-      : "px-2 py-1 text-[10px] rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900 whitespace-nowrap"
+    // Quiet pill controls that sit on the canvas without competing with the hero
+    const buttonClass =
+      "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium tracking-tight " +
+      "transition-colors duration-200 whitespace-nowrap " +
+      (isDarkMode
+        ? "text-white/85 hover:bg-white/15 hover:text-white"
+        : "text-amber-950/70 hover:bg-amber-900/10 hover:text-amber-950")
 
-    // Horizontal layout with smaller gap
-    const containerClass = isDarkMode
-      ? "flex flex-row gap-1 bg-black/40 backdrop-blur-md rounded-lg p-1.5 border border-white/10"
-      : "flex flex-row gap-1 bg-white/60 backdrop-blur-md rounded-lg p-1.5 border border-amber-200/50 shadow-sm"
+    const containerClass =
+      "flex flex-row items-center gap-0.5 rounded-full p-1 backdrop-blur-md shadow-sm " +
+      (isDarkMode
+        ? "bg-black/35 border border-white/10"
+        : "bg-white/65 border border-amber-900/10")
 
     return (
       // Mobile: bottom-2 right-2, Desktop: bottom-3 right-3
@@ -3415,18 +3419,18 @@ function InteractiveBackgroundComponent() {
               <>
                 {mode === 'terminal' && (
                   <div className={isDarkMode
-                    ? "flex flex-row gap-1 bg-black/40 backdrop-blur-md rounded-lg p-1.5 border border-white/10"
-                    : "flex flex-row gap-1 bg-white/60 backdrop-blur-md rounded-lg p-1.5 border border-amber-200/50 shadow-sm"
+                    ? "flex flex-row items-center gap-0.5 rounded-full p-1 backdrop-blur-md shadow-sm bg-black/35 border border-white/10"
+                    : "flex flex-row items-center gap-0.5 rounded-full p-1 backdrop-blur-md shadow-sm bg-white/65 border border-amber-900/10"
                   }>
                     <button onClick={(e) => { e.stopPropagation(); terminalColorScheme.current = terminalColorScheme.current === 'blue' ? 'green' : terminalColorScheme.current === 'green' ? 'amber' : 'blue'; forceUpdate(n => n + 1); }} className={isDarkMode
-                      ? "px-2 py-1 text-[10px] rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white whitespace-nowrap"
-                      : "px-2 py-1 text-[10px] rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900 whitespace-nowrap"
+                      ? "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-white/85 hover:bg-white/15 hover:text-white"
+                      : "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-amber-950/70 hover:bg-amber-900/10 hover:text-amber-950"
                     }>
                       Color: {terminalColorScheme.current}
                     </button>
                     <button onClick={(e) => { e.stopPropagation(); terminalHistory.current = ['']; }} className={isDarkMode
-                      ? "px-2 py-1 text-[10px] rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white whitespace-nowrap"
-                      : "px-2 py-1 text-[10px] rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900 whitespace-nowrap"
+                      ? "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-white/85 hover:bg-white/15 hover:text-white"
+                      : "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-amber-950/70 hover:bg-amber-900/10 hover:text-amber-950"
                     }>
                       Clear
                     </button>
@@ -3434,12 +3438,12 @@ function InteractiveBackgroundComponent() {
                 )}
                 {mode === 'labyrinth' && (
                   <div className={isDarkMode
-                    ? "flex flex-row gap-1 bg-black/40 backdrop-blur-md rounded-lg p-1.5 border border-white/10"
-                    : "flex flex-row gap-1 bg-white/60 backdrop-blur-md rounded-lg p-1.5 border border-amber-200/50 shadow-sm"
+                    ? "flex flex-row items-center gap-0.5 rounded-full p-1 backdrop-blur-md shadow-sm bg-black/35 border border-white/10"
+                    : "flex flex-row items-center gap-0.5 rounded-full p-1 backdrop-blur-md shadow-sm bg-white/65 border border-amber-900/10"
                   }>
                     <button onClick={(e) => { e.stopPropagation(); resetLabyrinth.current = true; }} className={isDarkMode
-                      ? "px-2 py-1 text-[10px] rounded bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-colors text-white whitespace-nowrap"
-                      : "px-2 py-1 text-[10px] rounded bg-amber-900/10 hover:bg-amber-900/20 backdrop-blur-sm border border-amber-900/20 transition-colors text-amber-900 whitespace-nowrap"
+                      ? "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-white/85 hover:bg-white/15 hover:text-white"
+                      : "h-7 px-2.5 inline-flex items-center rounded-full text-[11px] font-medium transition-colors duration-200 whitespace-nowrap text-amber-950/70 hover:bg-amber-900/10 hover:text-amber-950"
                     }>
                       Reset Maze
                     </button>

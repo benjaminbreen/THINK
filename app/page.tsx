@@ -19,7 +19,7 @@ export default function HomePage() {
       <OrganizationJsonLd />
       <LiteraryTransformer />
       {/* Hero Section - Compact */}
-      <Section className="pt-10 pb-4 sm:pt-14 sm:pb-5 relative overflow-hidden hero-with-background min-h-[410px]">
+      <Section className="hero-with-background relative min-h-[26rem] overflow-hidden pb-6 pt-8 sm:min-h-[28rem] sm:pt-12">
         <InteractiveBackground />
         <Container className="relative z-10">
           <div className="mx-auto max-w-2xl lg:max-w-3xl">
@@ -29,22 +29,25 @@ export default function HomePage() {
       </Section>
 
       {/* Navigation Buttons - Between hero and about */}
-      <Section className="sm:py-10 bg-gradient-to-b from-background to-[#f5f1e8] dark:to-slate-800/40">
+      <Section className="bg-gradient-to-b from-background to-muted/70 py-8 sm:py-10">
         <Container>
-          <AnimatedSection delay={600} className="flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" className="btn-hover-scale bg-primary hover:bg-primary/90 text-primary-foreground border-0 px-8 py-6 text-base font-medium shadow-md">
+          <AnimatedSection
+            delay={600}
+            className="mx-auto flex max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4"
+          >
+            <Button asChild size="lg" className="btn-hover-scale">
               <Link href="/about">
                 About THINK
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="btn-hover-scale border-primary/40 text-foreground hover:bg-primary/5 px-8 py-6 text-base font-medium shadow-sm bg-white/80 dark:bg-slate-900/50">
+            <Button asChild size="lg" variant="outline" className="btn-hover-scale">
               <Link href="#guides">
-                <BookOpen className="mr-2 h-5 w-5" /> How-to Guides
+                <BookOpen className="h-[18px] w-[18px]" /> How-to Guides
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="btn-hover-scale border-primary/40 text-foreground hover:bg-primary/5 px-8 py-6 text-base font-medium shadow-sm bg-white/80 dark:bg-slate-900/50">
+            <Button asChild size="lg" variant="outline" className="btn-hover-scale">
               <Link href="#projects">
-                <Sparkles className="mr-2 h-5 w-5" /> Browse Projects
+                <Sparkles className="h-[18px] w-[18px]" /> Browse Projects
               </Link>
             </Button>
           </AnimatedSection>
@@ -52,11 +55,11 @@ export default function HomePage() {
       </Section>
 
       {/* About THINK Section - Compact */}
-      <Section className="bg-gradient-to-b from-[#f5f1e8] to-[#faf8f3] dark:from-slate-800/40 dark:to-slate-800/20 border-2 border-amber-200/20 dark:border-slate-700/40 sm:py-6">
+      <Section className="border-y border-border/60 bg-gradient-to-b from-muted/70 to-background py-8 sm:py-10">
         <Container>
-          <AnimatedSection delay={100} className="max-w-5xl mx-auto">
-            <div className="bg-white/70 dark:bg-slate-900/30 rounded-xl px-6 py-5 sm:px-8 sm:py-6 shadow-md border border-amber-200/30 dark:border-slate-700/40">
-              <p className="sm:text-lg sm:leading-8 text-foreground/90 font-sans">
+          <AnimatedSection delay={100} className="mx-auto max-w-4xl">
+            <div className="rounded-2xl border border-border/70 bg-card/80 px-6 py-6 shadow-sm sm:px-9 sm:py-8">
+              <p className="font-sans text-[1.0625rem] leading-[1.7] text-foreground/90 sm:text-lg sm:leading-8">
                 <span className="font-bold text-lg sm:text-xl text-amber-800 dark:text-amber-400">THINK</span> is an NEH-funded project at UC Santa Cruz offering free resources and interactive projects exploring AI in teaching and research within the humanities. We draw inspiration from Harvard's{' '}
                 <a href="https://aipedagogy.org" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline decoration-amber-600/50 hover:decoration-amber-600 underline-offset-2 transition-all font-medium">
                   AI Pedagogy Project
@@ -78,16 +81,16 @@ export default function HomePage() {
       </Section>
 
       {/* Project Gallery */}
-      <Section id="projects" className="bg-muted/40 py-8">
+      <Section id="projects" className="section-y scroll-mt-20 bg-muted/40">
         <Container>
-          <AnimatedSection delay={100} className="mb-6">
-            <h2 className="text-3xl font-serif font-bold mb-2" data-literary="projects-title">Project Gallery</h2>
-            <p className="text-muted-foreground" data-literary="projects-description">
+          <AnimatedSection delay={100} className="mb-8">
+            <h2 className="text-title font-serif font-bold" data-literary="projects-title">Project Gallery</h2>
+            <p className="mt-2 text-base text-muted-foreground" data-literary="projects-description">
               Experimental AI tools for humanities teaching and research
             </p>
           </AnimatedSection>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
 
             <ProjectCard
               title="Young Darwin"
@@ -134,19 +137,19 @@ export default function HomePage() {
             />
 
             {/* Placeholder for community contributions */}
-            <Card className="group border-dashed border-2 hover:border-primary/30 transition-colors">
-              <CardHeader>
-                <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
-                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-                    <Code className="h-6 w-6 text-muted-foreground" />
+            <Card className="group border-2 border-dashed border-border/70 bg-transparent shadow-none transition-colors hover:border-primary/30">
+              <CardHeader className="h-full">
+                <div className="flex h-full min-h-[13rem] flex-col items-center justify-center gap-3 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted transition-colors group-hover:bg-primary/10">
+                    <Code className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
                   </div>
-                  <div className="text-center">
-                    <CardTitle className="text-lg mb-2">Share Your Project</CardTitle>
-                    <CardDescription className="text-sm">
+                  <div>
+                    <CardTitle className="mb-1.5 text-lg">Share Your Project</CardTitle>
+                    <CardDescription>
                       Built something interesting? We'd love to feature it here.
                     </CardDescription>
                   </div>
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="mt-1">
                     <a href={`mailto:${siteConfig.email}`}>Get in touch</a>
                   </Button>
                 </div>
@@ -157,16 +160,16 @@ export default function HomePage() {
       </Section>
 
       {/* How-to Guides */}
-      <Section id="guides" className="border-t py-8">
+      <Section id="guides" className="section-y scroll-mt-20 border-t">
         <Container>
-          <AnimatedSection delay={100} className="mb-6">
-            <h2 className="text-3xl font-serif font-bold mb-2" data-literary="guides-title">How-to Guides</h2>
-            <p className="text-lg text-muted-foreground" data-literary="guides-description">
+          <AnimatedSection delay={100} className="mb-8">
+            <h2 className="text-title font-serif font-bold" data-literary="guides-title">How-to Guides</h2>
+            <p className="mt-2 text-base text-muted-foreground" data-literary="guides-description">
               Learn how to build your own experimental AI tools for teaching and research
             </p>
           </AnimatedSection>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             <GuideCard
               title="Getting Started with Claude Code"
               description="Learn how to use Claude Code in the terminal to build custom AI tools"
@@ -213,10 +216,11 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="text-center mt-8">
-            <Button asChild variant="outline" size="lg">
+          <div className="mt-10 text-center">
+            <Button asChild variant="outline" size="lg" className="group">
               <Link href="/guides">
-                View All Guides <ArrowRight className="ml-2 h-4 w-4" />
+                View All Guides
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             </Button>
           </div>
@@ -224,11 +228,11 @@ export default function HomePage() {
       </Section>
 
       {/* Community & Collaboration */}
-      <Section className="bg-muted/40 border-t py-12 sm:py-16">
+      <Section className="section-y border-t bg-muted/40">
         <Container>
           <AnimatedSection delay={100} className="mx-auto max-w-3xl">
-            <h2 className="text-2xl font-serif font-bold mb-4">About This Resource</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground">
+            <h2 className="mb-5 text-title font-serif font-bold">About This Resource</h2>
+            <div className="prose max-w-none text-muted-foreground">
               <p className="leading-relaxed">
                 This site collects experimental AI tools built by humanists for teaching and research. The code of this site was mostly written by Claude Opus 4.5, an AI model from Anthropic, with design guidance and oversight by Benjamin Breen. It's maintained thanks to NEH support and is a project hosted at UC Santa Cruz.
               </p>
@@ -243,7 +247,7 @@ export default function HomePage() {
                 something interesting or have ideas to share, please get in touch.
               </p>
             </div>
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="mt-9 flex flex-wrap gap-3">
               <Button asChild variant="outline">
                 <Link href="/about">
                   Read more about THINK

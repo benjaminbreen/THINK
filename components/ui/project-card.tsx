@@ -46,50 +46,55 @@ export function ProjectCard({
   }[animationDelay] || 'animation-delay-100'
 
   return (
-    <Link href={href} className="block group">
-      <Card interactive className={`h-full animate-fade-in-up opacity-0 ${delayClass} cursor-pointer border-border/60 hover:border-primary/30`}>
-        <CardHeader className="pb-3">
-          {hasImage ? (
-            <div className="relative w-full h-36 rounded-lg overflow-hidden mb-3 bg-muted/30">
-              {!isImageLoaded && (
-                <Skeleton className="absolute inset-0 w-full h-full" />
-              )}
-              <Image
-                src={thumbnailPath}
-                alt={title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                priority={priority}
-                className={`object-cover transition-all duration-500 ease-out group-hover:scale-[1.03] ${
-                  isImageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
-                onLoad={() => setIsImageLoaded(true)}
-                onError={() => setHasImage(false)}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-          ) : null}
-          <div className="flex items-start justify-between mb-2">
-            <Badge className="text-xs font-medium bg-primary/90 group-hover:bg-primary text-primary-foreground transition-colors duration-200">
+    <Link href={href} className="group block">
+      <Card
+        interactive
+        className={`flex h-full flex-col overflow-hidden opacity-0 animate-fade-in-up ${delayClass}`}
+      >
+        {hasImage ? (
+          // A fixed ratio keeps every card in the grid aligned
+          <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/40">
+            {!isImageLoaded && <Skeleton className="absolute inset-0 h-full w-full" />}
+            <Image
+              src={thumbnailPath}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={priority}
+              className={`object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.04] ${
+                isImageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onLoad={() => setIsImageLoaded(true)}
+              onError={() => setHasImage(false)}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/15 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          </div>
+        ) : null}
+
+        <CardHeader className="flex-1 gap-0 space-y-0 pb-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <Badge className="bg-primary/90 transition-colors duration-200 group-hover:bg-primary">
               {type}
             </Badge>
-            <span className="text-xs text-muted-foreground font-medium">{year}</span>
+            <span className="font-mono text-xs tabular-nums text-muted-foreground">{year}</span>
           </div>
-          <CardTitle className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-200">{title}</CardTitle>
-          <CardDescription className="text-sm mb-3 leading-relaxed text-muted-foreground/90">
-            {description}
-          </CardDescription>
-          <div className="flex flex-wrap gap-1.5">
+          <CardTitle className="text-lg transition-colors duration-200 group-hover:text-primary">
+            {title}
+          </CardTitle>
+          <CardDescription className="mt-2">{description}</CardDescription>
+          <div className="mt-4 flex flex-wrap gap-1.5">
             {tags.map((tag) => (
-              <Badge key={tag} variant="outline" className="text-xs font-normal border-border/70">
+              <Badge key={tag} variant="outline" className="font-normal">
                 {tag}
               </Badge>
             ))}
           </div>
         </CardHeader>
+
         <CardContent className="pt-0">
-          <span className="text-sm font-medium text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-            View project <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+            View project
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover:translate-x-1" />
           </span>
         </CardContent>
       </Card>

@@ -11,12 +11,23 @@ import { AnimatedSection } from '@/components/ui/animated-section'
 import Link from 'next/link'
 import { Filter, Code } from 'lucide-react'
 import { ProjectsBackground } from '@/components/ui/projects-background'
+import { PageHeader } from '@/components/ui/page-header'
 import { pageThemes } from '@/lib/page-themes'
 import { siteConfig } from '@/lib/config'
 
 const theme = pageThemes.projects
 
 type FilterType = 'all' | 'assignment' | 'course' | 'research' | 'history' | 'literature' | 'linguistics'
+
+const filters: { value: FilterType; label: string }[] = [
+  { value: 'all', label: 'All Projects' },
+  { value: 'assignment', label: 'Classroom Assignment' },
+  { value: 'course', label: 'Full Course' },
+  { value: 'research', label: 'Research Tool' },
+  { value: 'history', label: 'History' },
+  { value: 'literature', label: 'Literature' },
+  { value: 'linguistics', label: 'Linguistics' },
+]
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
@@ -72,123 +83,61 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-6 relative">
+      <Section className="section-top relative pb-10">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <ProjectsBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <AnimatedSection className="mx-auto max-w-3xl text-center mb-6">
-            <div
-              className="inline-block"
-              onMouseEnter={() => setIsHeaderHovered(true)}
-              onMouseLeave={() => setIsHeaderHovered(false)}
-            >
-              <h1 className="text-4xl font-serif font-bold mb-1">Project Gallery</h1>
-              <div
-                className="h-0.5 mx-auto transition-all duration-300"
-                style={{
-                  backgroundColor: theme.accent,
-                  width: isHeaderHovered ? '100%' : '4rem'
-                }}
-              />
-            </div>
-            <p className="text-lg text-muted-foreground mt-3">
-              Experimental AI tools for humanities teaching and research. All projects are part of the HistoryLens pedagogical framework, which combines primary sources with interactive simulations.
-            </p>
+          <AnimatedSection className="mb-10">
+            <PageHeader
+              title="Project Gallery"
+              accent={theme.accent}
+              onHoverChange={setIsHeaderHovered}
+              description="Experimental AI tools for humanities teaching and research. All projects are part of the HistoryLens pedagogical framework, which combines primary sources with interactive simulations."
+            />
           </AnimatedSection>
 
           {/* Filter Section */}
-          <AnimatedSection delay={100} className="mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Filter className="h-4 w-4" />
-                <span>Filter by type</span>
-              </div>
+          <AnimatedSection delay={100} className="mb-9">
+            <div className="mb-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Filter className="h-4 w-4" />
+              <span>Filter by type</span>
             </div>
 
-            <div className="flex flex-wrap gap-2 justify-center">
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'all'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'all' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('all')}
-              >
-                All Projects
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'assignment'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'assignment' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('assignment')}
-              >
-                Classroom Assignment
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'course'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'course' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('course')}
-              >
-                Full Course
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'research'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'research' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('research')}
-              >
-                Research Tool
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'history'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'history' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('history')}
-              >
-                History
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'literature'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'literature' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('literature')}
-              >
-                Literature
-              </Badge>
-              <Badge
-                className={`cursor-pointer transition-colors ${
-                  activeFilter === 'linguistics'
-                    ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
-                    : 'bg-background hover:bg-cyan-600/10 hover:border-cyan-600/50 hover:text-cyan-700 dark:hover:text-cyan-400'
-                }`}
-                variant={activeFilter === 'linguistics' ? 'default' : 'outline'}
-                onClick={() => setActiveFilter('linguistics')}
-              >
-                Linguistics
-              </Badge>
+            {/* One scrolling row on phones, a centred wrap once there's room */}
+            <div className="-mx-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0">
+              {filters.map((filter) => {
+                const active = activeFilter === filter.value
+                return (
+                  <Badge
+                    key={filter.value}
+                    interactive
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={active}
+                    variant={active ? 'default' : 'outline'}
+                    className={
+                      active
+                        ? 'flex-shrink-0 snap-start border-transparent bg-cyan-600 text-white shadow-sm hover:bg-cyan-700'
+                        : 'flex-shrink-0 snap-start bg-card/70 hover:border-cyan-600/50 hover:bg-cyan-600/10 hover:text-cyan-700 dark:hover:text-cyan-400'
+                    }
+                    onClick={() => setActiveFilter(filter.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setActiveFilter(filter.value)
+                      }
+                    }}
+                  >
+                    {filter.label}
+                  </Badge>
+                )
+              })}
             </div>
           </AnimatedSection>
 
           {/* Projects Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {filteredProjects.map((project, index) => (
               <ProjectCard
                 key={project.slug}
@@ -200,23 +149,24 @@ export default function ProjectsPage() {
                 year={project.year}
                 tags={project.tags}
                 animationDelay={((index + 1) * 100).toString()}
+                priority={index === 0}
               />
             ))}
 
             {/* Placeholder for community contributions */}
-            <Card interactive className="group border-dashed border-2 hover:border-primary/30">
-              <CardHeader>
-                <div className="flex items-center justify-center h-full min-h-[200px] flex-col gap-3">
-                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-                    <Code className="h-6 w-6 text-muted-foreground" />
+            <Card className="group border-2 border-dashed border-border/70 bg-transparent shadow-none transition-colors hover:border-primary/30">
+              <CardHeader className="h-full">
+                <div className="flex h-full min-h-[13rem] flex-col items-center justify-center gap-3 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted transition-colors group-hover:bg-primary/10">
+                    <Code className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
                   </div>
-                  <div className="text-center">
-                    <CardTitle className="text-lg mb-2">Share Your Project</CardTitle>
-                    <CardDescription className="text-sm">
+                  <div>
+                    <CardTitle className="mb-1.5 text-lg">Share Your Project</CardTitle>
+                    <CardDescription>
                       Built something interesting? We'd love to feature it here.
                     </CardDescription>
                   </div>
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="mt-1">
                     <a href={`mailto:${siteConfig.email}`}>Get in touch</a>
                   </Button>
                 </div>
@@ -227,11 +177,11 @@ export default function ProjectsPage() {
       </Section>
 
       {/* HistoryLens Framework Section */}
-      <Section className="bg-muted/40 border-t py-12 sm:py-16">
+      <Section className="section-y border-t bg-muted/40">
         <Container>
           <AnimatedSection className="mx-auto max-w-3xl">
-            <h2 className="text-3xl font-serif font-bold mb-4 text-center">About the HistoryLens Framework</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground">
+            <h2 className="mb-5 text-center text-title font-serif font-bold">About the HistoryLens Framework</h2>
+            <div className="prose max-w-none text-muted-foreground">
               <p className="leading-relaxed">
                 All projects featured here are built using the <strong>HistoryLens</strong> pedagogical framework, which combines interactive historical simulations with authentic primary sources. Rather than treating AI as a source of knowledge, HistoryLens encourages students to test AI against historical reality, discovering how these systems misinterpret the past, fabricate sources, and break in revealing ways.
               </p>
@@ -239,7 +189,7 @@ export default function ProjectsPage() {
                 This approach develops critical thinking skills while teaching students about both history and the limitations of AI systems. Students learn by doing—collecting specimens with Young Darwin, mixing remedies in the Apothecary Simulator, or generating plausible historical scenarios—always with an emphasis on source criticism and historical evidence.
               </p>
             </div>
-            <div className="flex gap-4 justify-center mt-6">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild variant="outline">
                 <Link href="/projects/historylens">
                   Learn more about HistoryLens
@@ -256,14 +206,14 @@ export default function ProjectsPage() {
       </Section>
 
       {/* Get Started Section */}
-      <Section className="border-t py-12 sm:py-16">
+      <Section className="section-y border-t">
         <Container>
           <AnimatedSection className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Use or Adapt These Projects</h2>
-            <p className="text-muted-foreground mb-8">
+            <h2 className="mb-4 text-title font-serif font-bold">Use or Adapt These Projects</h2>
+            <p className="mb-8 text-muted-foreground">
               All materials are freely available. Browse our teaching guides to see how these tools work in practice, or dive into the modules themselves. Everything here is designed to be modified and built upon.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
+            <div className="flex flex-wrap justify-center gap-3">
               <Button asChild size="lg">
                 <Link href="/guides">How-To Guides</Link>
               </Button>

@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function BlogLoading() {
   return (
-    <Section className="pt-24 pb-16">
+    <Section className="section-top pb-16">
       <Container>
         <div className="mx-auto max-w-3xl text-center mb-12">
           <Skeleton className="h-10 w-32 mx-auto mb-4" />

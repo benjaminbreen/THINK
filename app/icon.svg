@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Paper tile so the mark reads on both light and dark browser chrome -->
+  <rect width="32" height="32" rx="7" fill="#FAF7F0"/>
+  <g fill="#B85014">
+    <!-- 4x4 maze grid: filled cells trace the THINK labyrinth mark -->
+    <rect x="5" y="5" width="5.5" height="5.5" rx="1"/>
+    <rect x="16.5" y="5" width="5.5" height="5.5" rx="1"/>
+    <rect x="10.75" y="10.75" width="5.5" height="5.5" rx="1"/>
+    <rect x="22.25" y="10.75" width="4.75" height="5.5" rx="1"/>
+    <rect x="5" y="16.5" width="5.5" height="5.5" rx="1"/>
+    <rect x="16.5" y="16.5" width="5.5" height="5.5" rx="1"/>
+    <rect x="10.75" y="22.25" width="5.5" height="4.75" rx="1"/>
+    <rect x="22.25" y="22.25" width="4.75" height="4.75" rx="1"/>
+  </g>
+</svg>

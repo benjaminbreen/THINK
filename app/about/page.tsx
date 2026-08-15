@@ -7,20 +7,26 @@ import Link from 'next/link'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { siteConfig } from '@/lib/config'
 
+const quickLinks = [
+  { href: '/projects', label: 'Projects', blurb: 'Interactive simulations and tools', icon: Code },
+  { href: '/pedagogy', label: 'Pedagogy', blurb: 'Assignments and teaching guides', icon: BookOpen },
+  { href: '/guides', label: 'Guides', blurb: 'How-to articles and tutorials', icon: Users },
+]
+
 export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <Section className="pt-24 pb-8 bg-gradient-to-b from-indigo-50/50 to-background dark:from-indigo-950/20">
+      <Section className="section-top bg-gradient-to-b from-indigo-50/50 to-background pb-12 dark:from-indigo-950/20">
         <Container>
           <AnimatedSection className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2 tracking-wide uppercase">
+            <p className="eyebrow mb-3 text-indigo-600 dark:text-indigo-400">
               Technology + Humanities Integrated Knowledge
             </p>
-            <h1 className="text-4xl sm:text-5xl font-serif font-bold mb-4 tracking-tight">
+            <h1 className="text-display font-serif font-bold">
               About THINK
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-xl">
               An NEH-funded project at UC Santa Cruz developing free resources
               for teaching with and about AI in the humanities.
             </p>
@@ -29,10 +35,10 @@ export default function AboutPage() {
       </Section>
 
       {/* Core Info */}
-      <Section className="py-16">
+      <Section className="section-y">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <AnimatedSection className="prose prose-lg max-w-none">
+            <AnimatedSection className="prose max-w-none">
               <p className="text-lg leading-relaxed">
                 THINK offers curriculum materials, interactive simulations, and practical guides for
                 educators interested in AI pedagogy. Our focus is on critical engagement—teaching
@@ -49,48 +55,20 @@ export default function AboutPage() {
             </AnimatedSection>
 
             {/* Quick Links */}
-            <AnimatedSection delay={150} className="grid sm:grid-cols-3 gap-4 mt-12">
-              <Link href="/projects" className="group">
-                <Card className="h-full transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-md">
-                  <CardContent className="pt-6">
-                    <Code className="h-8 w-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                    <h3 className="font-semibold mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      Projects
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Interactive simulations and tools
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/pedagogy" className="group">
-                <Card className="h-full transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-md">
-                  <CardContent className="pt-6">
-                    <BookOpen className="h-8 w-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                    <h3 className="font-semibold mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      Pedagogy
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Assignments and teaching guides
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/guides" className="group">
-                <Card className="h-full transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-md">
-                  <CardContent className="pt-6">
-                    <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                    <h3 className="font-semibold mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      Guides
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      How-to articles and tutorials
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+            <AnimatedSection delay={150} className="mt-12 grid gap-4 sm:grid-cols-3">
+              {quickLinks.map(({ href, label, blurb, icon: Icon }) => (
+                <Link key={href} href={href} className="group block">
+                  <Card interactive className="h-full hover:border-indigo-300 dark:hover:border-indigo-700">
+                    <CardContent className="pt-6">
+                      <Icon className="mb-4 h-7 w-7 text-indigo-600 transition-transform duration-300 group-hover:scale-110 dark:text-indigo-400" />
+                      <h3 className="mb-1 font-serif text-lg font-semibold transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                        {label}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">{blurb}</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
             </AnimatedSection>
           </div>
         </Container>
@@ -112,31 +90,25 @@ export default function AboutPage() {
       */}
 
       {/* Team */}
-      <Section className="py-16">
+      <Section className="section-y">
         <Container>
           <div className="mx-auto max-w-3xl">
             <AnimatedSection>
-              <h2 className="text-2xl font-serif font-bold mb-6">Team</h2>
+              <h2 className="mb-7 text-title font-serif font-bold">Team</h2>
             </AnimatedSection>
 
-            <AnimatedSection delay={100} className="grid sm:grid-cols-3 gap-6 mb-8">
-              <div className="text-center sm:text-left">
-                <h3 className="font-semibold">Benjamin Breen</h3>
-                <p className="text-sm text-muted-foreground">Principal Investigator</p>
-                <p className="text-sm text-muted-foreground">History</p>
-              </div>
-
-              <div className="text-center sm:text-left">
-                <h3 className="font-semibold">Pranav Anand</h3>
-                <p className="text-sm text-muted-foreground">Co-PI</p>
-                <p className="text-sm text-muted-foreground">Linguistics</p>
-              </div>
-
-              <div className="text-center sm:text-left">
-                <h3 className="font-semibold">Zac Zimmer</h3>
-                <p className="text-sm text-muted-foreground">Co-PI</p>
-                <p className="text-sm text-muted-foreground">Literature</p>
-              </div>
+            <AnimatedSection delay={100} className="mb-9 grid gap-6 sm:grid-cols-3">
+              {[
+                { name: 'Benjamin Breen', role: 'Principal Investigator', field: 'History' },
+                { name: 'Pranav Anand', role: 'Co-PI', field: 'Linguistics' },
+                { name: 'Zac Zimmer', role: 'Co-PI', field: 'Literature' },
+              ].map((member) => (
+                <div key={member.name} className="border-l-2 border-indigo-500/30 pl-4">
+                  <h3 className="font-serif text-lg font-semibold">{member.name}</h3>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{member.role}</p>
+                  <p className="text-sm text-muted-foreground">{member.field}</p>
+                </div>
+              ))}
             </AnimatedSection>
 
             <AnimatedSection delay={150}>
@@ -151,14 +123,14 @@ export default function AboutPage() {
       </Section>
 
       {/* Partners */}
-      <Section className="py-16 bg-muted/30 border-t">
+      <Section className="section-y border-t bg-muted/30">
         <Container>
           <div className="mx-auto max-w-3xl">
             <AnimatedSection>
-              <h2 className="text-2xl font-serif font-bold mb-6">Funding & Partners</h2>
+              <h2 className="mb-7 text-title font-serif font-bold">Funding & Partners</h2>
             </AnimatedSection>
 
-            <AnimatedSection delay={100} className="flex flex-wrap gap-x-8 gap-y-4 items-center">
+            <AnimatedSection delay={100} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-4">
               <a
                 href="https://www.neh.gov"
                 target="_blank"
@@ -194,11 +166,11 @@ export default function AboutPage() {
       </Section>
 
       {/* Contact */}
-      <Section className="py-16 border-t">
+      <Section className="section-y border-t">
         <Container>
           <AnimatedSection className="mx-auto max-w-xl text-center">
-            <h2 className="text-2xl font-serif font-bold mb-4">Get in Touch</h2>
-            <p className="text-muted-foreground mb-6">
+            <h2 className="mb-4 text-title font-serif font-bold">Get in Touch</h2>
+            <p className="mb-7 text-muted-foreground">
               Questions about using these materials or interested in collaboration?
             </p>
             <Button asChild>

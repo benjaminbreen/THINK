@@ -3,6 +3,7 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnimatedSection } from '@/components/ui/animated-section'
+import { PageHeader } from '@/components/ui/page-header'
 import { GraduationCap, Mail, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { siteConfig } from '@/lib/config'
@@ -10,28 +11,28 @@ import { siteConfig } from '@/lib/config'
 export default function TeamPage() {
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Section className="section-top pb-16">
         <Container>
-          <AnimatedSection className="mx-auto max-w-3xl text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold mb-4">Our Team</h1>
-            <p className="text-lg text-muted-foreground">
-              THINK is led by an interdisciplinary team of humanities faculty at UC Santa Cruz
-            </p>
+          <AnimatedSection className="mb-14">
+            <PageHeader
+              title="Our Team"
+              description="THINK is led by an interdisciplinary team of humanities faculty at UC Santa Cruz"
+            />
           </AnimatedSection>
 
           {/* Principal Investigators */}
-          <AnimatedSection delay={100} className="mx-auto max-w-4xl mb-16">
-            <h2 className="text-2xl font-serif font-bold mb-8 text-center">Principal Investigators</h2>
+          <AnimatedSection delay={100} className="mx-auto mb-16 max-w-4xl">
+            <h2 className="mb-8 text-center text-title font-serif font-bold">Principal Investigators</h2>
 
-            <div className="grid gap-8 md:grid-cols-3 mb-12">
-              <Card>
+            <div className="mb-12 grid gap-5 sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
+              <Card interactive className="flex flex-col">
                 <CardHeader>
-                  <GraduationCap className="h-12 w-12 text-primary mb-4" />
+                  <GraduationCap className="mb-4 h-9 w-9 text-primary" />
                   <CardTitle>Benjamin Breen</CardTitle>
                   <CardDescription>Principal Investigator</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-4">
+                <CardContent className="flex flex-1 flex-col">
+                  <p className="mb-5 flex-1 text-sm leading-relaxed text-muted-foreground">
                     Associate Professor of History specializing in early modern science and medicine. Created
                     HistoryLens and has been experimenting with AI in history courses since 2019.
                   </p>
@@ -45,14 +46,14 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card interactive className="flex flex-col">
                 <CardHeader>
-                  <GraduationCap className="h-12 w-12 text-primary mb-4" />
+                  <GraduationCap className="mb-4 h-9 w-9 text-primary" />
                   <CardTitle>Pranav Anand</CardTitle>
                   <CardDescription>Co-Principal Investigator</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-4">
+                <CardContent className="flex flex-1 flex-col">
+                  <p className="mb-5 flex-1 text-sm leading-relaxed text-muted-foreground">
                     Professor of Linguistics at UC Santa Cruz, specializing in natural language processing,
                     semantics, and the intersection of linguistics and computational methods.
                   </p>
@@ -66,14 +67,14 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card interactive className="flex flex-col">
                 <CardHeader>
-                  <GraduationCap className="h-12 w-12 text-primary mb-4" />
+                  <GraduationCap className="mb-4 h-9 w-9 text-primary" />
                   <CardTitle>Zac Zimmer</CardTitle>
                   <CardDescription>Co-Principal Investigator</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-4">
+                <CardContent className="flex flex-1 flex-col">
+                  <p className="mb-5 flex-1 text-sm leading-relaxed text-muted-foreground">
                     Associate Professor of Literature at UC Santa Cruz, with expertise in digital humanities,
                     critical AI studies, and sociotechnical systems.
                   </p>
@@ -88,8 +89,8 @@ export default function TeamPage() {
               </Card>
             </div>
 
-            <div className="prose prose-lg max-w-none mx-auto">
-              <h3 className="text-xl font-serif font-bold mb-4">About the Team</h3>
+            <div className="prose mx-auto max-w-none">
+              <h3 className="mb-4 text-headline font-serif font-bold">About the Team</h3>
               <p>
                 Benjamin Breen (History), Pranav Anand (Linguistics), and Zac Zimmer (Literature) have been
                 working together through UCSC's Humanizing Technology initiative since 2022, bringing humanistic
@@ -106,12 +107,12 @@ export default function TeamPage() {
 
           {/* Collaborators & Partners */}
           <AnimatedSection delay={200} className="mx-auto max-w-4xl">
-            <h2 className="text-2xl font-serif font-bold mb-8 text-center">Collaborators & Partners</h2>
+            <h2 className="mb-8 text-center text-title font-serif font-bold">Collaborators & Partners</h2>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
+            <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+              <Card interactive>
                 <CardHeader>
-                  <CardTitle>Bay Area Community College Consortium</CardTitle>
+                  <CardTitle className="text-lg">Bay Area Community College Consortium</CardTitle>
                   <CardDescription>Module Development Partners</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -122,9 +123,9 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card interactive>
                 <CardHeader>
-                  <CardTitle>UC Santa Cruz Humanities Division</CardTitle>
+                  <CardTitle className="text-lg">UC Santa Cruz Humanities Division</CardTitle>
                   <CardDescription>Institutional Support</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -135,9 +136,9 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card interactive>
                 <CardHeader>
-                  <CardTitle>National Endowment for the Humanities</CardTitle>
+                  <CardTitle className="text-lg">National Endowment for the Humanities</CardTitle>
                   <CardDescription>Funding Agency</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -153,9 +154,9 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card interactive>
                 <CardHeader>
-                  <CardTitle>National Humanities Center</CardTitle>
+                  <CardTitle className="text-lg">National Humanities Center</CardTitle>
                   <CardDescription>Research Partner</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -176,15 +177,15 @@ export default function TeamPage() {
       </Section>
 
       {/* Join Us */}
-      <Section className="bg-muted/40 py-12 sm:py-16">
+      <Section className="section-y border-t bg-muted/40">
         <Container>
           <AnimatedSection className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Collaborate with THINK</h2>
-            <p className="text-muted-foreground mb-8">
+            <h2 className="mb-4 text-title font-serif font-bold">Collaborate with THINK</h2>
+            <p className="mb-8 text-muted-foreground">
               Interested in piloting our curriculum modules, contributing resources, or partnering
               with THINK? We welcome collaboration from educators, institutions, and community organizations.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap justify-center gap-3">
               <Button asChild size="lg">
                 <a href={`mailto:${siteConfig.email}`}>Get in Touch</a>
               </Button>

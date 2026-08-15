@@ -5,6 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Mail, Send } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
+import { cn } from '@/lib/utils'
+
+/* 16px text on small screens keeps iOS Safari from zooming in on focus */
+const fieldClass =
+  'flex h-11 w-full rounded-lg border border-input bg-background px-3.5 text-base placeholder:text-muted-foreground/70 ' +
+  'transition-colors focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:h-10 sm:text-sm'
+
+const labelClass = 'block text-sm font-medium leading-none text-foreground'
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -45,20 +53,20 @@ ${formData.message}`
 
   if (submitted) {
     return (
-      <Card className="border-amber-200 dark:border-amber-900/30">
+      <Card className="border-amber-200/70 dark:border-amber-900/30">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-              <Mail className="h-6 w-6 text-amber-600 dark:text-amber-500" />
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
+              <Mail className="h-5 w-5 text-amber-600 dark:text-amber-500" />
             </div>
             <div>
-              <CardTitle>Thank you!</CardTitle>
+              <CardTitle className="text-xl">Thank you!</CardTitle>
               <CardDescription>Your email client should open shortly.</CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground mb-4">
+          <p className="mb-5 text-muted-foreground">
             We've prepared an email with your submission. If your email client didn't open automatically,
             please send your message to <a href={`mailto:${siteConfig.email}`} className="text-amber-700 dark:text-amber-500 hover:underline">{siteConfig.email}</a>.
           </p>
@@ -71,9 +79,9 @@ ${formData.message}`
   }
 
   return (
-    <Card className="border-amber-200 dark:border-amber-900/30">
+    <Card className="border-amber-200/70 dark:border-amber-900/30">
       <CardHeader>
-        <CardTitle>Get in Touch</CardTitle>
+        <CardTitle className="text-xl">Get in Touch</CardTitle>
         <CardDescription>
           Fill out the form below and we'll get back to you as soon as possible.
         </CardDescription>
@@ -82,7 +90,7 @@ ${formData.message}`
         <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form">
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <label htmlFor="name" className={labelClass}>
                 Name <span aria-hidden="true">*</span>
               </label>
               <input
@@ -94,14 +102,14 @@ ${formData.message}`
                 aria-describedby="name-hint"
                 value={formData.name}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className={fieldClass}
                 placeholder="Your name"
               />
               <span id="name-hint" className="sr-only">Required field</span>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <label htmlFor="email" className={labelClass}>
                 Email <span aria-hidden="true">*</span>
               </label>
               <input
@@ -113,7 +121,7 @@ ${formData.message}`
                 aria-describedby="email-hint"
                 value={formData.email}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className={fieldClass}
                 placeholder="you@example.com"
               />
               <span id="email-hint" className="sr-only">Required field, enter a valid email address</span>
@@ -121,7 +129,7 @@ ${formData.message}`
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="affiliation" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label htmlFor="affiliation" className={labelClass}>
               Affiliation
             </label>
             <input
@@ -131,14 +139,14 @@ ${formData.message}`
               aria-describedby="affiliation-hint"
               value={formData.affiliation}
               onChange={handleChange}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className={fieldClass}
               placeholder="University or organization (optional)"
             />
             <span id="affiliation-hint" className="sr-only">Optional field</span>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="type" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label htmlFor="type" className={labelClass}>
               Submission Type <span aria-hidden="true">*</span>
             </label>
             <select
@@ -148,7 +156,7 @@ ${formData.message}`
               aria-required="true"
               value={formData.type}
               onChange={handleChange}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className={fieldClass}
             >
               <option value="project">Share a Project</option>
               <option value="collaboration">Propose a Collaboration</option>
@@ -159,7 +167,7 @@ ${formData.message}`
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label htmlFor="message" className={labelClass}>
               Message <span aria-hidden="true">*</span>
             </label>
             <textarea
@@ -171,7 +179,7 @@ ${formData.message}`
               value={formData.message}
               onChange={handleChange}
               rows={6}
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
+              className={cn(fieldClass, "h-auto resize-y py-2.5")}
               placeholder="Tell us about your project, idea, or question..."
             />
             <span id="message-hint" className="sr-only">Required field</span>
@@ -180,9 +188,9 @@ ${formData.message}`
           <Button
             type="submit"
             aria-label="Send message"
-            className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white"
+            className="w-full bg-amber-600 text-white hover:bg-amber-700 sm:w-auto"
           >
-            <Send className="mr-2 h-4 w-4" aria-hidden="true" />
+            <Send className="h-4 w-4" aria-hidden="true" />
             Send Message
           </Button>
         </form>

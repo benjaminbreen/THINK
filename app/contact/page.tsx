@@ -5,13 +5,13 @@ import { ContactForm } from '@/components/ui/contact-form'
 export default function ContactPage() {
   return (
     <>
-      <Section className="pt-24 pb-16 bg-gradient-to-b from-amber-50/50 to-background dark:from-slate-900/50">
+      <Section className="section-top bg-gradient-to-b from-amber-50/50 to-background pb-16 dark:from-slate-900/50">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-4xl font-serif font-bold mb-6 text-center">Contact & Contributions</h1>
+            <h1 className="text-center text-display font-serif font-bold">Contact &amp; Contributions</h1>
 
-            <div className="prose prose-lg max-w-none mb-12">
-              <p className="text-xl text-muted-foreground text-center mb-8">
+            <div className="prose mb-12 max-w-none">
+              <p className="mb-10 mt-5 text-center text-lg text-muted-foreground sm:text-xl">
                 Share your project, idea, or feedback with the THINK community
               </p>
 

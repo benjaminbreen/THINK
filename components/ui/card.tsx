@@ -11,15 +11,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        'rounded-xl border border-border/70 bg-card text-card-foreground shadow-sm',
         interactive && [
-          'transition-all duration-300 ease-out',
-          'hover:-translate-y-1 hover:shadow-lg hover:shadow-foreground/5',
-          'hover:border-border/80',
+          'transition-[transform,box-shadow,border-color] duration-300 ease-out-expo',
+          'hover:-translate-y-1 hover:shadow-lg hover:border-primary/30',
           'active:translate-y-0 active:shadow-md active:duration-100',
-          // Focus indicators for keyboard navigation
-          'focus-within:ring-2 focus-within:ring-primary/50 focus-within:ring-offset-2 focus-within:ring-offset-background',
-          'focus-within:-translate-y-1 focus-within:shadow-lg focus-within:border-primary/30'
+          'focus-within:ring-2 focus-within:ring-ring/60 focus-within:ring-offset-2 focus-within:ring-offset-background',
+          'focus-within:-translate-y-1 focus-within:shadow-lg focus-within:border-primary/30',
+          // Hover lift only misleads on touch, where it sticks after a tap
+          '[@media(hover:none)]:hover:translate-y-0 [@media(hover:none)]:hover:shadow-sm',
         ],
         className
       )}
@@ -33,7 +33,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex flex-col space-y-1.5 p-6', className)}
+      className={cn('flex flex-col space-y-1.5 p-5 sm:p-6', className)}
       {...props}
     />
   )
@@ -44,7 +44,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-2xl font-semibold leading-none tracking-tight', className)}
+      className={cn('font-serif text-xl font-semibold leading-snug tracking-tight', className)}
       {...props}
     />
   )
@@ -55,7 +55,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-sm leading-relaxed text-muted-foreground', className)}
       {...props}
     />
   )
@@ -64,7 +64,7 @@ CardDescription.displayName = 'CardDescription'
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+    <div ref={ref} className={cn('p-5 pt-0 sm:p-6 sm:pt-0', className)} {...props} />
   )
 )
 CardContent.displayName = 'CardContent'
@@ -73,7 +73,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex items-center p-6 pt-0', className)}
+      className={cn('flex items-center p-5 pt-0 sm:p-6 sm:pt-0', className)}
       {...props}
     />
   )

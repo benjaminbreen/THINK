@@ -22,6 +22,8 @@ interface AssignmentCardProps {
   sampleSubmissionUrl?: string
   courseName?: string
   institution?: string
+  /** Eagerly load the thumbnail when the card is above the fold */
+  priority?: boolean
 }
 
 export function AssignmentCard({
@@ -37,7 +39,8 @@ export function AssignmentCard({
   pdfPath,
   sampleSubmissionUrl,
   courseName,
-  institution
+  institution,
+  priority = false
 }: AssignmentCardProps) {
   // Only attempt to load image if custom thumbnail is provided
   // This prevents 404 errors for placeholder assignments
@@ -72,70 +75,75 @@ export function AssignmentCard({
   }
 
   const cardContent = (
-    <Card className={`group h-full overflow-hidden animate-fade-in-up opacity-0 ${delayClass} transition-all duration-300 hover:shadow-xl ${isAvailable ? 'cursor-pointer' : 'opacity-60'}`}>
+    <Card
+      interactive={isAvailable}
+      className={`group flex h-full flex-col overflow-hidden opacity-0 animate-fade-in-up ${delayClass} ${
+        isAvailable ? 'cursor-pointer' : 'opacity-70'
+      }`}
+    >
       {/* Thumbnail with gradient overlay */}
-      <div className="relative w-full h-40 overflow-hidden">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/40">
         {!imageError && thumbnailPath ? (
           <>
             <Image
               src={thumbnailPath}
-              alt={title}
+              alt=""
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, 50vw"
+              priority={priority}
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               onError={() => setImageError(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-white/20 dark:via-slate-900/20 to-transparent" />
-            {/* Purple tint overlay for coming-soon items */}
+            {/* Desaturate thumbnails for assignments that aren't published yet */}
             {!isAvailable && (
-              <div className="absolute inset-0 bg-violet-500/40 dark:bg-violet-900/50" />
+              <div className="absolute inset-0 bg-background/50 backdrop-grayscale" />
             )}
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900/30 dark:to-violet-800/30 flex items-center justify-center">
-            <BookOpen className="w-12 h-12 text-violet-300 dark:text-violet-600" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-transparent to-transparent" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-50 to-violet-100/60 dark:from-violet-950/25 dark:to-violet-900/15">
+            <BookOpen className="h-9 w-9 text-violet-300/80 dark:text-violet-700/70" />
           </div>
         )}
         {/* Type badge */}
-        <div className="absolute top-3 left-3">
-          <Badge className="bg-violet-600 text-white shadow-md text-xs">
+        <div className="absolute left-3 top-3">
+          <Badge className="bg-violet-600 text-white shadow-sm">
             {type}
           </Badge>
         </div>
         {!isAvailable && (
-          <div className="absolute top-3 right-3">
-            <Badge variant="secondary" className="bg-slate-800/80 text-white text-xs">
+          <div className="absolute right-3 top-3">
+            <Badge variant="secondary" className="bg-slate-900/80 text-white shadow-sm">
               Coming Soon
             </Badge>
           </div>
         )}
       </div>
 
-      <CardHeader className="pt-3 pb-2">
+      <CardHeader className="flex-1 gap-0 space-y-0 pb-4">
         {/* Course/Institution info */}
         {(courseName || institution) && (
-          <p className="text-xs text-muted-foreground mb-1">
+          <p className="mb-2 text-xs text-muted-foreground">
             {courseName}{courseName && institution && ' • '}{institution}
           </p>
         )}
-        <CardTitle className="text-lg leading-snug group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+        <CardTitle className="line-clamp-2 text-lg transition-colors duration-200 group-hover:text-violet-600 dark:group-hover:text-violet-400">
           {title}
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed line-clamp-3 mt-1">
+        <CardDescription className="mt-2 line-clamp-3">
           {description}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="pt-0 pb-4">
+      <CardContent className="pt-0">
         {/* Tags */}
-        <div className="flex flex-wrap gap-1 mb-4">
+        <div className="mb-4 flex flex-wrap gap-1.5">
           {tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="outline" className={`text-xs ${getTagColor(tag)}`}>
+            <Badge key={tag} variant="outline" className={`border-transparent font-normal ${getTagColor(tag)}`}>
               {tag}
             </Badge>
           ))}
           {tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="font-normal">
               +{tags.length - 3}
             </Badge>
           )}
@@ -148,14 +156,14 @@ export function AssignmentCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs h-7"
+                className="h-8 px-3 text-xs"
                 onClick={(e: React.MouseEvent) => {
                   e.preventDefault()
                   e.stopPropagation()
                   window.open(pdfPath, '_blank', 'noopener,noreferrer')
                 }}
               >
-                <Download className="mr-1 h-3 w-3" />
+                <Download className="h-3.5 w-3.5" />
                 PDF
               </Button>
             )}
@@ -163,14 +171,14 @@ export function AssignmentCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs h-7"
+                className="h-8 px-3 text-xs"
                 onClick={(e: React.MouseEvent) => {
                   e.preventDefault()
                   e.stopPropagation()
                   window.open(sampleSubmissionUrl, '_blank', 'noopener,noreferrer')
                 }}
               >
-                <ExternalLink className="mr-1 h-3 w-3" />
+                <ExternalLink className="h-3.5 w-3.5" />
                 Sample
               </Button>
             )}

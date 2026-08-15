@@ -50,24 +50,27 @@ export function HeroContent({ children }: HeroContentProps) {
   return (
     <div
       onClick={() => setIsVisible(false)}
-      className={`hero-glass-pane px-6 py-6 sm:px-10 sm:py-10 cursor-pointer hover:opacity-95 ${
+      className={`hero-glass-pane cursor-pointer px-6 py-7 sm:px-10 sm:py-9 ${
         prefersReducedMotion ? '' : 'transition-all duration-300'
       } ${getAnimationClass('translate-y-4')}`}
       style={prefersReducedMotion ? undefined : { transitionDelay: '100ms' }}
       title="Click to hide"
     >
       <div
-        className={`inline-block mb-5 ${
+        className={`mb-5 inline-block ${
           prefersReducedMotion ? '' : 'transition-all duration-500 ease-out'
         } ${getAnimationClass('translate-y-3')}`}
         style={prefersReducedMotion ? undefined : { transitionDelay: '250ms' }}
       >
-        <Badge variant="outline" className="text-sm font-normal border-primary/30 text-primary bg-primary/10">
+        <Badge
+          variant="outline"
+          className="border-primary/30 bg-primary/10 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary"
+        >
           <span data-literary="hero-badge">Beta version</span>
         </Badge>
       </div>
       <h1
-        className={`text-3xl font-serif font-bold tracking-tight sm:text-5xl mb-5 text-foreground ${
+        className={`mb-4 text-display-lg font-serif font-bold text-foreground ${
           prefersReducedMotion ? '' : 'transition-all duration-500 ease-out'
         } ${getAnimationClass('translate-y-4')}`}
         style={prefersReducedMotion ? undefined : { transitionDelay: '350ms' }}
@@ -76,7 +79,7 @@ export function HeroContent({ children }: HeroContentProps) {
         Open Source Resources for Humanistic AI
       </h1>
       <p
-        className={`text-base sm:text-lg hero-subtitle sm:leading-relaxed max-w-3xl ${
+        className={`hero-subtitle max-w-[46ch] text-base leading-relaxed sm:text-lg ${
           prefersReducedMotion ? '' : 'transition-all duration-500 ease-out'
         } ${getAnimationClass('translate-y-4')}`}
         style={prefersReducedMotion ? undefined : { transitionDelay: '450ms' }}

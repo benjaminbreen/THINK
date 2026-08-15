@@ -6,14 +6,30 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { PageHeader } from '@/components/ui/page-header'
 import { pageThemes } from '@/lib/page-themes'
 import { siteConfig } from '@/lib/config'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { ExternalLink, Search, BookOpen, FileText, Video, Newspaper, Wrench, Menu, X, ArrowUpDown, LayoutList, Clock, BarChart3 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const theme = pageThemes.resources
 
 type SortOption = 'newest' | 'oldest' | 'author-az' | 'category' | 'type'
+
+const viewOptions: { value: ViewMode; label: string; icon: typeof LayoutList }[] = [
+  { value: 'list', label: 'List', icon: LayoutList },
+  { value: 'timeline', label: 'Timeline', icon: Clock },
+  { value: 'scatter', label: 'Chart', icon: BarChart3 },
+]
+
+const sortOptions: { value: SortOption; label: string }[] = [
+  { value: 'newest', label: 'Newest First' },
+  { value: 'oldest', label: 'Oldest First' },
+  { value: 'author-az', label: 'Author A-Z' },
+  { value: 'category', label: 'By Category' },
+  { value: 'type', label: 'By Format' },
+]
 type ViewMode = 'list' | 'timeline' | 'scatter' | 'custom'
 type ResourceType = 'article' | 'paper' | 'blog' | 'video' | 'book' | 'tool'
 type ResourceCategory =
@@ -1822,69 +1838,60 @@ export default function ResourcesPage() {
 
   // Sidebar content (shared between desktop and mobile)
   const SidebarContent = () => (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Search */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+      <div className="space-y-2">
+        <label className="eyebrow block" htmlFor="resource-search">
           Search
         </label>
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            type="text"
+            id="resource-search"
+            type="search"
             placeholder="Search resources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none"
           />
         </div>
       </div>
 
       {/* Visualization Options */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          View
-        </label>
-        <div className="flex flex-wrap gap-1">
-          <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
-            size="sm"
-            className="text-xs h-7 px-2"
-            onClick={() => setViewMode('list')}
-          >
-            <LayoutList className="h-3 w-3 mr-1" />
-            List
-          </Button>
-          <Button
-            variant={viewMode === 'timeline' ? 'default' : 'outline'}
-            size="sm"
-            className="text-xs h-7 px-2"
-            onClick={() => setViewMode('timeline')}
-          >
-            <Clock className="h-3 w-3 mr-1" />
-            Timeline
-          </Button>
-          <Button
-            variant={viewMode === 'scatter' ? 'default' : 'outline'}
-            size="sm"
-            className="text-xs h-7 px-2"
-            onClick={() => setViewMode('scatter')}
-          >
-            <BarChart3 className="h-3 w-3 mr-1" />
-            Chart
-          </Button>
+      <div className="space-y-2">
+        <span className="eyebrow block">View</span>
+        <div className="inline-flex w-full rounded-full border border-border bg-muted/50 p-1">
+          {viewOptions.map((option) => {
+            const Icon = option.icon
+            return (
+              <button
+                key={option.value}
+                type="button"
+                aria-pressed={viewMode === option.value}
+                onClick={() => setViewMode(option.value)}
+                className={cn(
+                  'inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-full text-xs font-medium transition-colors',
+                  viewMode === option.value
+                    ? 'bg-card text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {option.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       {/* Type Filter */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          Type
-        </label>
-        <div className="flex flex-wrap gap-1">
+      <div className="space-y-2">
+        <span className="eyebrow block">Type</span>
+        <div className="flex flex-wrap gap-1.5">
           <Badge
+            interactive
             variant={selectedType === 'All' ? 'default' : 'outline'}
-            className="cursor-pointer text-xs"
+            className={selectedType === 'All' ? '' : 'bg-card/60 hover:border-primary/40 hover:text-foreground'}
             onClick={() => setSelectedType('All')}
           >
             All
@@ -1892,8 +1899,12 @@ export default function ResourcesPage() {
           {(['book', 'paper', 'article', 'blog', 'video', 'tool'] as ResourceType[]).map(type => (
             <Badge
               key={type}
+              interactive
               variant={selectedType === type ? 'default' : 'outline'}
-              className="cursor-pointer text-xs capitalize"
+              className={cn(
+                'capitalize',
+                selectedType === type ? '' : 'bg-card/60 hover:border-primary/40 hover:text-foreground'
+              )}
               onClick={() => setSelectedType(type)}
             >
               {type}
@@ -1903,23 +1914,22 @@ export default function ResourcesPage() {
       </div>
 
       {/* Categories Navigation */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          Categories
-        </label>
+      <div className="space-y-2">
+        <span className="eyebrow block">Categories</span>
         <nav className="space-y-0.5">
           <button
             onClick={() => { setSelectedCategory('All'); setMobileSidebarOpen(false) }}
-            className={`w-full flex items-center justify-between px-2 py-1.5 text-sm rounded transition-colors ${
+            className={cn(
+              'flex min-h-[36px] w-full items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors',
               selectedCategory === 'All'
                 ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted'
-            }`}
+                : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+            )}
           >
             <span>All Resources</span>
-            <Badge variant="secondary" className="text-[10px] h-5">
+            <span className="font-mono text-[0.6875rem] tabular-nums opacity-70">
               {resources.length}
-            </Badge>
+            </span>
           </button>
           {allCategories.map(category => {
             const count = resources.filter(r => r.category === category).length
@@ -1927,16 +1937,17 @@ export default function ResourcesPage() {
               <button
                 key={category}
                 onClick={() => scrollToCategory(category)}
-                className={`w-full flex items-center justify-between px-2 py-1.5 text-sm rounded transition-colors text-left ${
+                className={cn(
+                  'flex min-h-[36px] w-full items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors',
                   selectedCategory === category
                     ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
+                    : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                )}
               >
-                <span className="flex-1 truncate text-xs">{category}</span>
-                <Badge variant="secondary" className="text-[10px] h-5 ml-1">
+                <span className="min-w-0 flex-1 truncate">{category}</span>
+                <span className="font-mono text-[0.6875rem] tabular-nums opacity-70">
                   {count}
-                </Badge>
+                </span>
               </button>
             )
           })}
@@ -1944,7 +1955,7 @@ export default function ResourcesPage() {
       </div>
 
       {/* Results Count */}
-      <div className="pt-3 border-t text-xs text-muted-foreground">
+      <div className="border-t border-border/70 pt-4 text-xs text-muted-foreground">
         Showing {filteredAndSortedResources.length} of {resources.length} resources
       </div>
     </div>
@@ -1953,57 +1964,48 @@ export default function ResourcesPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Centered Page Header - Matching other pages */}
-      <Section className="pt-24 pb-6 relative">
+      <Section className="section-top relative pb-8">
         <div className="absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-amber-50/30 to-transparent dark:from-amber-950/10" />
         <Container className="relative">
-          <AnimatedSection className="mx-auto max-w-3xl text-center">
-            <div
-              className="inline-block"
-              onMouseEnter={() => setIsHeaderHovered(true)}
-              onMouseLeave={() => setIsHeaderHovered(false)}
+          <AnimatedSection>
+            <PageHeader
+              title="Resources"
+              accent={theme.accent}
+              onHoverChange={setIsHeaderHovered}
+              description="Curated readings, tools, and scholarship for AI in the humanities"
             >
-              <h1 className="text-3xl font-serif font-bold mb-1">Resources</h1>
-              <div
-                className="h-0.5 mx-auto transition-all duration-300"
-                style={{
-                  backgroundColor: theme.accent,
-                  width: isHeaderHovered ? '100%' : '4rem'
-                }}
-              />
-            </div>
-            <div className="text-lg text-muted-foreground mt-3 flex items-center justify-center gap-3">
-              <span>Curated readings, tools, and scholarship for AI in the humanities</span>
-              <Badge variant="secondary">
-                {resources.length} Resources
-              </Badge>
-            </div>
-
+              <div className="flex justify-center">
+                <Badge variant="secondary" className="font-mono tabular-nums">
+                  {resources.length} resources
+                </Badge>
+              </div>
+            </PageHeader>
           </AnimatedSection>
         </Container>
       </Section>
 
       {/* Mobile: View Mode Ribbon */}
-      <div className="lg:hidden sticky top-[72px] z-30 bg-background border-b">
-        <div className="flex items-center justify-between px-4 py-2">
+      <div className="sticky top-16 z-30 border-y border-border/70 bg-background/90 backdrop-blur-lg lg:hidden">
+        <div className="flex items-center justify-between gap-3 px-5 py-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setMobileSidebarOpen(true)}
           >
-            <Menu className="h-4 w-4 mr-2" />
+            <Menu className="h-4 w-4" />
             Filters
           </Button>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <Badge
+              interactive
               variant={sortBy === 'newest' ? 'default' : 'outline'}
-              className="cursor-pointer text-xs"
               onClick={() => setSortBy('newest')}
             >
               Newest
             </Badge>
             <Badge
+              interactive
               variant={sortBy === 'category' ? 'default' : 'outline'}
-              className="cursor-pointer text-xs"
               onClick={() => setSortBy('category')}
             >
               By Category
@@ -2014,25 +2016,26 @@ export default function ResourcesPage() {
 
       {/* Mobile Slide-in Sidebar */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 lg:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-foreground/40 backdrop-blur-sm animate-fade-in"
             onClick={() => setMobileSidebarOpen(false)}
           />
           {/* Sidebar Panel */}
-          <div className="absolute left-0 top-0 bottom-0 w-80 bg-background shadow-xl overflow-y-auto">
-            <div className="sticky top-0 bg-background border-b p-4 flex items-center justify-between">
-              <h2 className="font-semibold">Filters</h2>
+          <div className="absolute inset-y-0 left-0 flex w-[19rem] max-w-[85vw] flex-col overflow-y-auto border-r border-border bg-background shadow-xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border/70 bg-background/95 px-5 py-3.5 backdrop-blur">
+              <h2 className="font-serif text-lg font-semibold">Filters</h2>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
+                aria-label="Close filters"
                 onClick={() => setMobileSidebarOpen(false)}
               >
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="p-4">
+            <div className="safe-b p-5">
               <SidebarContent />
             </div>
           </div>
@@ -2040,58 +2043,34 @@ export default function ResourcesPage() {
       )}
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex max-w-[1400px] mx-auto">
+      <div className="mx-auto hidden max-w-[1400px] lg:flex">
         {/* Desktop Sidebar */}
-        <aside className="sticky top-[72px] h-[calc(100vh-72px)] w-60 flex-shrink-0 border-r bg-muted/30 overflow-y-auto">
-          <div className="p-3">
+        <aside className="sticky top-[72px] h-[calc(100vh-72px)] w-64 flex-shrink-0 overflow-y-auto border-r border-border/70 bg-muted/30">
+          <div className="p-4">
             <SidebarContent />
           </div>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto py-3 px-6">
+        <main className="flex-1 overflow-y-auto px-8 py-6">
           {/* Sort Controls */}
-          <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Sort by:</span>
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <ArrowUpDown className="h-4 w-4" />
+              <span className="text-sm font-medium">Sort by</span>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Badge
-                variant={sortBy === 'newest' ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => setSortBy('newest')}
-              >
-                Newest First
-              </Badge>
-              <Badge
-                variant={sortBy === 'oldest' ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => setSortBy('oldest')}
-              >
-                Oldest First
-              </Badge>
-              <Badge
-                variant={sortBy === 'author-az' ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => setSortBy('author-az')}
-              >
-                Author A-Z
-              </Badge>
-              <Badge
-                variant={sortBy === 'category' ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => setSortBy('category')}
-              >
-                By Category
-              </Badge>
-              <Badge
-                variant={sortBy === 'type' ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => setSortBy('type')}
-              >
-                By Format
-              </Badge>
+            <div className="flex flex-wrap justify-end gap-1.5">
+              {sortOptions.map((option) => (
+                <Badge
+                  key={option.value}
+                  interactive
+                  variant={sortBy === option.value ? 'default' : 'outline'}
+                  onClick={() => setSortBy(option.value)}
+                  className={sortBy === option.value ? '' : 'bg-card/60 hover:border-primary/40 hover:text-foreground'}
+                >
+                  {option.label}
+                </Badge>
+              ))}
             </div>
           </div>
 
@@ -2111,10 +2090,10 @@ export default function ResourcesPage() {
                 .sort(([catA], [catB]) => catA.localeCompare(catB))
                 .map(([category, categoryResources]) => (
                   <section key={category} id={category.toLowerCase().replace(/\s+/g, '-')}>
-                    <div className="mb-6 pb-3 border-b">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h2 className="text-2xl font-serif font-bold">{category}</h2>
-                        <Badge variant="secondary">{categoryResources.length}</Badge>
+                    <div className="mb-6 border-b border-border/70 pb-3">
+                      <div className="mb-2 flex items-center gap-3">
+                        <h2 className="text-title font-serif font-bold">{category}</h2>
+                        <Badge variant="secondary" className="font-mono tabular-nums">{categoryResources.length}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         {categoryDescriptions[category as ResourceCategory]}
@@ -2122,8 +2101,8 @@ export default function ResourcesPage() {
                     </div>
                     <div className="space-y-3">
                       {categoryResources.map((resource, index) => (
-                        <Card key={index} className="hover:shadow-md transition-shadow">
-                          <CardContent className="p-4">
+                        <Card key={index} interactive className="group">
+                          <CardContent className="p-5">
                             <div className="flex gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-2">
@@ -2131,19 +2110,19 @@ export default function ResourcesPage() {
                                   <Badge variant="outline" className="text-xs capitalize">
                                     {resource.type}
                                   </Badge>
-                                  <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                  <span className="font-mono text-xs tabular-nums text-muted-foreground">{resource.year}</span>
                                   {resource.journal && (
-                                    <span className="text-xs text-muted-foreground italic truncate">
+                                    <span className="truncate text-xs italic text-muted-foreground">
                                       · {resource.journal}
                                     </span>
                                   )}
                                 </div>
-                                <h3 className="font-semibold text-base mb-1 leading-snug">
+                                <h3 className="mb-1.5 font-serif text-lg font-semibold leading-snug">
                                   <a
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="hover:text-primary transition-colors hover:underline"
+                                    className="transition-colors group-hover:text-primary"
                                   >
                                     {resource.title}
                                   </a>
@@ -2151,7 +2130,7 @@ export default function ResourcesPage() {
                                 <p className="text-sm text-muted-foreground mb-2">
                                   {resource.authors}
                                 </p>
-                                <p className="text-sm leading-relaxed">
+                                <p className="text-sm leading-relaxed text-foreground/85">
                                   {resource.description}
                                 </p>
                               </div>
@@ -2175,36 +2154,36 @@ export default function ResourcesPage() {
                 .sort(([typeA], [typeB]) => typeA.localeCompare(typeB))
                 .map(([type, typeResources]) => (
                   <section key={type}>
-                    <div className="mb-6 pb-3 border-b">
-                      <div className="flex items-center gap-3 mb-2">
+                    <div className="mb-6 border-b border-border/70 pb-3">
+                      <div className="mb-2 flex items-center gap-3">
                         {getTypeIcon(type as ResourceType)}
-                        <h2 className="text-2xl font-serif font-bold capitalize">{type}s</h2>
-                        <Badge variant="secondary">{typeResources.length}</Badge>
+                        <h2 className="text-title font-serif font-bold capitalize">{type}s</h2>
+                        <Badge variant="secondary" className="font-mono tabular-nums">{typeResources.length}</Badge>
                       </div>
                     </div>
                     <div className="space-y-3">
                       {typeResources.map((resource, index) => (
-                        <Card key={index} className="hover:shadow-md transition-shadow">
-                          <CardContent className="p-4">
+                        <Card key={index} interactive className="group">
+                          <CardContent className="p-5">
                             <div className="flex gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-2">
                                   <Badge variant="outline" className="text-xs">
                                     {resource.category}
                                   </Badge>
-                                  <span className="text-xs text-muted-foreground">{resource.year}</span>
+                                  <span className="font-mono text-xs tabular-nums text-muted-foreground">{resource.year}</span>
                                   {resource.journal && (
-                                    <span className="text-xs text-muted-foreground italic truncate">
+                                    <span className="truncate text-xs italic text-muted-foreground">
                                       · {resource.journal}
                                     </span>
                                   )}
                                 </div>
-                                <h3 className="font-semibold text-base mb-1 leading-snug">
+                                <h3 className="mb-1.5 font-serif text-lg font-semibold leading-snug">
                                   <a
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="hover:text-primary transition-colors hover:underline"
+                                    className="transition-colors group-hover:text-primary"
                                   >
                                     {resource.title}
                                   </a>
@@ -2212,7 +2191,7 @@ export default function ResourcesPage() {
                                 <p className="text-sm text-muted-foreground mb-2">
                                   {resource.authors}
                                 </p>
-                                <p className="text-sm leading-relaxed">
+                                <p className="text-sm leading-relaxed text-foreground/85">
                                   {resource.description}
                                 </p>
                               </div>
@@ -2235,8 +2214,8 @@ export default function ResourcesPage() {
               {!isGroupedView && (
                 <div className="space-y-3">
                   {filteredAndSortedResources.map((resource, index) => (
-                    <Card key={index} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
+                    <Card key={index} interactive className="group">
+                      <CardContent className="p-5">
                         <div className="flex gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2">
@@ -2247,19 +2226,19 @@ export default function ResourcesPage() {
                               <Badge variant="outline" className="text-xs">
                                 {resource.category}
                               </Badge>
-                              <span className="text-xs text-muted-foreground">{resource.year}</span>
+                              <span className="font-mono text-xs tabular-nums text-muted-foreground">{resource.year}</span>
                               {resource.journal && (
-                                <span className="text-xs text-muted-foreground italic truncate">
+                                <span className="truncate text-xs italic text-muted-foreground">
                                   · {resource.journal}
                                 </span>
                               )}
                             </div>
-                            <h3 className="font-semibold text-base mb-1 leading-snug">
+                            <h3 className="mb-1.5 font-serif text-lg font-semibold leading-snug">
                               <a
                                 href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-primary transition-colors hover:underline"
+                                className="transition-colors group-hover:text-primary"
                               >
                                 {resource.title}
                               </a>
@@ -2267,7 +2246,7 @@ export default function ResourcesPage() {
                             <p className="text-sm text-muted-foreground mb-2">
                               {resource.authors}
                             </p>
-                            <p className="text-sm leading-relaxed">
+                            <p className="text-sm leading-relaxed text-foreground/85">
                               {resource.description}
                             </p>
                           </div>
@@ -2356,35 +2335,35 @@ export default function ResourcesPage() {
                 .sort(([catA], [catB]) => catA.localeCompare(catB))
                 .map(([category, categoryResources]) => (
                   <section key={category}>
-                    <div className="mb-4 pb-2 border-b">
-                      <h2 className="text-xl font-serif font-bold">{category}</h2>
-                      <Badge variant="secondary" className="mt-1">{categoryResources.length}</Badge>
+                    <div className="mb-4 flex items-center gap-2.5 border-b border-border/70 pb-2.5">
+                      <h2 className="text-headline font-serif font-bold">{category}</h2>
+                      <Badge variant="secondary" className="font-mono tabular-nums">{categoryResources.length}</Badge>
                     </div>
                     <div className="space-y-3">
                       {categoryResources.map((resource, index) => (
-                        <Card key={index}>
-                          <CardContent className="p-4">
-                            <div className="flex items-center gap-2 mb-2">
+                        <Card key={index} interactive className="group">
+                          <CardContent className="p-4 sm:p-5">
+                            <div className="mb-2.5 flex items-center gap-2 text-muted-foreground">
                               {getTypeIcon(resource.type)}
-                              <Badge variant="outline" className="text-xs capitalize">
+                              <Badge variant="outline" className="capitalize">
                                 {resource.type}
                               </Badge>
-                              <span className="text-xs text-muted-foreground">{resource.year}</span>
+                              <span className="font-mono text-xs tabular-nums">{resource.year}</span>
                             </div>
-                            <h3 className="font-semibold text-base mb-1">
+                            <h3 className="mb-1.5 font-serif text-lg font-semibold leading-snug">
                               <a
                                 href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-primary"
+                                className="transition-colors group-hover:text-primary"
                               >
                                 {resource.title}
                               </a>
                             </h3>
-                            <p className="text-sm text-muted-foreground mb-2">
+                            <p className="mb-2 text-sm text-muted-foreground">
                               {resource.authors}
                             </p>
-                            <p className="text-sm leading-relaxed">
+                            <p className="text-sm leading-relaxed text-foreground/85">
                               {resource.description}
                             </p>
                           </CardContent>
@@ -2398,29 +2377,29 @@ export default function ResourcesPage() {
               {sortBy === 'newest' && (
                 <div className="space-y-3">
                   {filteredAndSortedResources.map((resource, index) => (
-                    <Card key={index}>
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-2 mb-2">
+                    <Card key={index} interactive className="group">
+                      <CardContent className="p-4 sm:p-5">
+                        <div className="mb-2.5 flex items-center gap-2 text-muted-foreground">
                           {getTypeIcon(resource.type)}
-                          <Badge variant="outline" className="text-xs capitalize">
+                          <Badge variant="outline" className="capitalize">
                             {resource.type}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">{resource.year}</span>
+                          <span className="font-mono text-xs tabular-nums">{resource.year}</span>
                         </div>
-                        <h3 className="font-semibold text-base mb-1">
+                        <h3 className="mb-1.5 font-serif text-lg font-semibold leading-snug">
                           <a
                             href={resource.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-primary"
+                            className="transition-colors group-hover:text-primary"
                           >
                             {resource.title}
                           </a>
                         </h3>
-                        <p className="text-sm text-muted-foreground mb-2">
+                        <p className="mb-2 text-sm text-muted-foreground">
                           {resource.authors}
                         </p>
-                        <p className="text-sm leading-relaxed">
+                        <p className="text-sm leading-relaxed text-foreground/85">
                           {resource.description}
                         </p>
                       </CardContent>

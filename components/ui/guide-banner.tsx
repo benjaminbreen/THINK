@@ -49,7 +49,7 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
     <div className="mb-8">
       {/* Banner Image */}
       <div
-        className="relative w-full h-48 md:h-64 bg-muted rounded-lg overflow-hidden group cursor-pointer"
+        className="group relative aspect-[16/9] w-full cursor-pointer overflow-hidden rounded-2xl bg-muted sm:aspect-[21/9]"
         onMouseEnter={() => {
           setIsHovered(true)
           if (!isAttributionDismissed) {
@@ -63,7 +63,8 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
           src={thumbnailPath}
           alt={guideTitle}
           fill
-          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 1024px"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
           priority
         />
         <div
@@ -80,7 +81,7 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
 
       {/* Attribution Content - Shows on hover, stays visible until dismissed */}
       {isAttributionVisible && !isAttributionDismissed && (
-        <div className="mt-4 p-6 bg-muted/50 rounded-lg border relative animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="relative mt-4 rounded-2xl border border-border/70 bg-muted/50 p-6 animate-in fade-in slide-in-from-top-2 duration-300">
           <button
             onClick={() => setIsAttributionDismissed(true)}
             className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-muted-foreground/10 flex items-center justify-center transition-colors group"
@@ -88,7 +89,7 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
           >
             <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
           </button>
-          <h3 className="font-sans text-lg font-semibold mb-4 pr-8">Image Attribution & Mini-Game</h3>
+          <h3 className="mb-4 pr-8 font-serif text-lg font-semibold">Image Attribution &amp; Mini-Game</h3>
 
         <div className="prose prose-sm max-w-none mb-6">
           <p>
@@ -110,7 +111,7 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
         </div>
 
         {!hasGuessed ? (
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
             <Button
               onClick={(e) => {
                 e.stopPropagation()
@@ -150,21 +151,21 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           onClick={() => setIsModalOpen(false)}
         >
-          <div className="relative max-w-7xl max-h-[90vh] w-full">
+          <div className="relative max-h-[90vh] w-full max-w-6xl">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-colors"
+              className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
-            <div className="relative w-full h-full overflow-auto rounded-lg">
+            <div className="relative h-full w-full overflow-auto rounded-xl">
               <Image
                 src={thumbnailPath}
                 alt={guideTitle}
                 width={1200}
                 height={800}
-                className="w-full h-auto rounded-lg"
+                className="h-auto w-full rounded-xl"
                 priority
               />
             </div>
@@ -174,8 +175,8 @@ export function GuideBanner({ thumbnailPath, guideTitle, guideId }: GuideBannerP
 
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-5 duration-300">
-          <div className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg max-w-sm">
+        <div className="fixed inset-x-5 bottom-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-300 sm:inset-x-auto sm:bottom-8 sm:right-8">
+          <div className="max-w-sm rounded-xl bg-green-600 px-5 py-4 text-white shadow-lg">
             <p className="font-semibold mb-1">Congratulations! 🎉</p>
             <p className="text-sm">You have good intuition about AI-generated images!</p>
           </div>

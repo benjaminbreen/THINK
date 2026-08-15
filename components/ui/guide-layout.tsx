@@ -359,7 +359,7 @@ export function GuideLayout({
               <div className="mx-auto max-w-3xl">
                 {/* Header */}
                 <header className="mb-12">
-                  <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight">
+                  <h1 className="mb-4 text-display-lg font-serif font-bold">
                     {title}
                   </h1>
                   <p className="text-xl text-muted-foreground mb-8">

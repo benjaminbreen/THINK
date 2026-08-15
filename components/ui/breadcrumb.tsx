@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { Fragment } from 'react'
+import { Container } from '@/components/ui/container'
 
 export interface BreadcrumbItem {
   label: string
@@ -15,38 +16,51 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <nav aria-label="Breadcrumb" className="border-b bg-muted/30 backdrop-blur-sm">
-      <div className="container mx-auto px-4">
-        <ol className="flex items-center gap-2 py-3 text-sm overflow-x-auto">
-          {items.map((item, index) => (
-            <Fragment key={index}>
-              {index > 0 && (
-                <ChevronRight
-                  className="h-4 w-4 text-muted-foreground flex-shrink-0 animate-breadcrumb-chevron opacity-0"
-                  style={{ animationDelay: `${index * 80 + 40}ms` }}
-                />
-              )}
-              <li
-                className="flex items-center whitespace-nowrap animate-breadcrumb-item opacity-0"
-                style={{ animationDelay: `${index * 80}ms` }}
-              >
-                {item.href && index < items.length - 1 ? (
-                  <Link
-                    href={item.href}
-                    className="text-muted-foreground hover:text-foreground transition-colors hover:translate-x-0.5 transform duration-200"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className={index === items.length - 1 ? "text-foreground font-medium" : "text-muted-foreground"}>
-                    {item.label}
-                  </span>
+    <nav aria-label="Breadcrumb" className="border-b border-border/60 bg-muted/25">
+      <Container>
+        {/* Long trails scroll sideways instead of clipping the current page */}
+        <ol className="flex items-center gap-1.5 overflow-x-auto py-3 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {items.map((item, index) => {
+            const isLast = index === items.length - 1
+
+            return (
+              <Fragment key={index}>
+                {index > 0 && (
+                  <ChevronRight
+                    className="h-3.5 w-3.5 flex-shrink-0 animate-breadcrumb-chevron text-muted-foreground/60 opacity-0"
+                    style={{ animationDelay: `${index * 80 + 40}ms` }}
+                    aria-hidden="true"
+                  />
                 )}
-              </li>
-            </Fragment>
-          ))}
+                <li
+                  className="flex animate-breadcrumb-item items-center whitespace-nowrap opacity-0"
+                  style={{ animationDelay: `${index * 80}ms` }}
+                >
+                  {item.href && !isLast ? (
+                    <Link
+                      href={item.href}
+                      className="rounded px-1 py-0.5 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span
+                      aria-current={isLast ? 'page' : undefined}
+                      className={
+                        isLast
+                          ? 'px-1 py-0.5 font-medium text-foreground'
+                          : 'px-1 py-0.5 text-muted-foreground'
+                      }
+                    >
+                      {item.label}
+                    </span>
+                  )}
+                </li>
+              </Fragment>
+            )
+          })}
         </ol>
-      </div>
+      </Container>
     </nav>
   )
 }

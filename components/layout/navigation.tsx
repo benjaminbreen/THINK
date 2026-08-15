@@ -27,6 +27,7 @@ export function Navigation() {
   const [mounted, setMounted] = useState(false)
   const [heroVisible, setHeroVisible] = useState(true)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -44,6 +45,37 @@ export function Navigation() {
     }
   }, [])
 
+  // The header gains a shadow once the page is scrolled away from the top
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close the menu on navigation
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
+  // Lock the page behind the open menu, and let Escape dismiss it
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [mobileMenuOpen])
+
   const getItemColor = (item: typeof navigation[0]) => {
     if (!mounted) return item.color
     if (item.darkColor && resolvedTheme === 'dark') {
@@ -57,44 +89,52 @@ export function Navigation() {
     return pathname.startsWith(href)
   }
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (typeof window === 'undefined') return
+
+    // If not on homepage, let the link navigate normally
+    if (pathname !== '/') return
+
+    // On homepage: reveal a hidden hero, otherwise cycle the background
+    e.preventDefault()
+    window.dispatchEvent(
+      new CustomEvent(heroVisible ? 'THINK_cycleBackground' : 'THINK_showHero')
+    )
+  }
+
+  const wordmark = (
+    <>
+      <MazeLogo className="h-7 w-7 self-center text-primary transition-colors duration-300 group-hover:text-amber-500 sm:h-8 sm:w-8" />
+      <span className="text-2xl font-bold leading-none tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-[1.6rem]">
+        THINK
+      </span>
+      <span className="relative top-[-1px] font-logo text-[0.8rem] font-semibold leading-none text-primary transition-colors duration-300 group-hover:text-amber-500 sm:text-[0.9rem]">
+        @ UCSC
+      </span>
+    </>
+  )
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm">
+    <header
+      className={cn(
+        'sticky top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300',
+        scrolled
+          ? 'border-border/70 bg-background/85 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/70'
+          : 'border-transparent bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/55'
+      )}
+    >
       <Container>
-        <nav className="flex h-[72px] items-center justify-between">
-          <div className="flex items-center">
-            <Link
-              href="/"
-              className="flex items-baseline gap-1.5 group"
-              onClick={(e) => {
-                if (typeof window === 'undefined') return
-
-                // If not on homepage, let the link navigate normally
-                if (pathname !== '/') return
-
-                // On homepage: check hero visibility
-                if (!heroVisible) {
-                  // Hero is hidden - show it and prevent navigation
-                  e.preventDefault()
-                  window.dispatchEvent(new CustomEvent('THINK_showHero'))
-                } else {
-                  // Hero is visible - cycle to next interactive background
-                  e.preventDefault()
-                  window.dispatchEvent(new CustomEvent('THINK_cycleBackground'))
-                }
-              }}
-            >
-              <MazeLogo className="h-8 w-8 text-primary group-hover:text-amber-500 transition-all duration-300 self-center" />
-              <span className="text-[1.75rem] font-sans font-bold tracking-tight text-foreground group-hover:text-primary transition-all duration-300 leading-none">
-                THINK
-              </span>
-              <span className="text-[0.95rem] font-logo font-semibold text-primary group-hover:text-amber-500 transition-all duration-300 leading-none relative top-[-2px]">
-                @ UCSC
-              </span>
-            </Link>
-          </div>
+        <nav className="flex h-16 items-center justify-between sm:h-[72px]">
+          <Link
+            href="/"
+            className="group flex items-baseline gap-1.5 rounded-lg py-1 pr-1"
+            onClick={handleLogoClick}
+          >
+            {wordmark}
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-0.5">
+          <div className="hidden md:flex md:items-center md:gap-0.5">
             {navigation.map((item) => {
               const active = isActive(item.href)
               const hovered = hoveredItem === item.name
@@ -105,11 +145,10 @@ export function Navigation() {
                   key={item.name}
                   href={item.href}
                   prefetch={true}
+                  aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'relative px-4 py-2.5 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200 rounded-lg',
-                    active
-                      ? 'text-foreground'
-                      : 'text-foreground/70 hover:text-foreground'
+                    'relative rounded-lg px-3 py-2 text-[0.9375rem] font-medium tracking-[-0.01em] transition-colors duration-200 lg:px-3.5',
+                    active ? 'text-foreground' : 'text-foreground/65 hover:text-foreground'
                   )}
                   style={active ? { color: itemColor } : undefined}
                   onMouseEnter={() => setHoveredItem(item.name)}
@@ -117,9 +156,9 @@ export function Navigation() {
                 >
                   <span className="relative">
                     {item.name}
-                    {/* Animated underline - width matches text */}
+                    {/* Underline sweeps out from the left on hover or when active */}
                     <span
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-all duration-300 ease-out origin-left"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] origin-left rounded-full transition-[transform,opacity] duration-300 ease-out-expo"
                       style={{
                         backgroundColor: itemColor,
                         transform: `scaleX(${active || hovered ? 1 : 0})`,
@@ -130,86 +169,106 @@ export function Navigation() {
                 </Link>
               )
             })}
-            <div className="ml-4 pl-4 border-l border-border/50">
+            <div className="ml-3 border-l border-border/60 pl-3">
               <ThemeToggle />
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          {/* Mobile controls */}
+          <div className="flex items-center gap-1 md:hidden">
             <ThemeToggle />
             <button
               type="button"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
               aria-label={mobileMenuOpen ? 'Close main menu' : 'Open main menu'}
-              className="ml-2 inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+              className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-accent hover:text-foreground active:scale-95"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <span className="sr-only">{mobileMenuOpen ? 'Close main menu' : 'Open main menu'}</span>
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
+              <Menu
+                className={cn(
+                  'absolute h-[22px] w-[22px] transition-all duration-300 ease-out-expo',
+                  mobileMenuOpen ? 'rotate-90 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'
+                )}
+                aria-hidden="true"
+              />
+              <X
+                className={cn(
+                  'absolute h-[22px] w-[22px] transition-all duration-300 ease-out-expo',
+                  mobileMenuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-75 opacity-0'
+                )}
+                aria-hidden="true"
+              />
             </button>
           </div>
         </nav>
+      </Container>
 
-        {/* Mobile menu */}
+      {/* Mobile menu — a sheet that overlays the page rather than pushing it */}
+      <div
+        className={cn(
+          'fixed inset-x-0 top-16 z-40 md:hidden',
+          mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        )}
+      >
+        <div
+          className={cn(
+            'absolute inset-x-0 top-0 h-[calc(100vh-4rem)] bg-foreground/25 backdrop-blur-[2px] transition-opacity duration-300',
+            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          )}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+
         <div
           id="mobile-menu"
-          className={cn(
-            'md:hidden overflow-hidden transition-all duration-300 ease-out',
-            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          )}
           role="navigation"
           aria-label="Mobile navigation"
+          className={cn(
+            'relative max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-border bg-background shadow-lg',
+            'origin-top transition-all duration-300 ease-out-expo',
+            mobileMenuOpen
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-3 opacity-0'
+          )}
         >
-          <div className="space-y-1 pb-4 pt-2">
-            {navigation.map((item) => {
-              const active = isActive(item.href)
-              const itemColor = getItemColor(item)
+          <Container>
+            <ul className="safe-b space-y-0.5 pt-2">
+              {navigation.map((item) => {
+                const active = isActive(item.href)
+                const itemColor = getItemColor(item)
 
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  aria-current={active ? 'page' : undefined}
-                  className={cn(
-                    'relative block rounded-lg px-4 py-3 text-base font-medium transition-all duration-200',
-                    active
-                      ? 'text-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  )}
-                  style={active ? { color: itemColor } : undefined}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-3">
-                    {/* Accent dot for active item */}
-                    <span
-                      className="w-2 h-2 rounded-full transition-all duration-300"
-                      style={{
-                        backgroundColor: active ? itemColor : 'transparent',
-                        transform: active ? 'scale(1)' : 'scale(0)',
-                      }}
-                    />
-                    {item.name}
-                  </span>
-
-                  {/* Left border accent on active */}
-                  {active && (
-                    <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 rounded-full"
-                      style={{ backgroundColor: itemColor }}
-                    />
-                  )}
-                </Link>
-              )
-            })}
-          </div>
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'flex min-h-[46px] items-center gap-3 rounded-xl px-3 text-base font-medium transition-colors duration-200',
+                        active
+                          ? 'bg-accent/70 text-foreground'
+                          : 'text-foreground/75 active:bg-accent/40'
+                      )}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {/* A colored bar marks the current section */}
+                      <span
+                        className="h-5 w-[3px] shrink-0 rounded-full transition-all duration-300"
+                        style={{
+                          backgroundColor: itemColor,
+                          opacity: active ? 1 : 0.3,
+                          transform: active ? 'scaleY(1)' : 'scaleY(0.55)',
+                        }}
+                      />
+                      <span style={active ? { color: itemColor } : undefined}>{item.name}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </Container>
         </div>
-      </Container>
+      </div>
     </header>
   )
 }

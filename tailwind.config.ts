@@ -49,6 +49,19 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 10px)',
+      },
+      /* Warm-tinted elevation scale — neutral black shadows read as grey
+         smudges against the cream palette, so every level is tinted. */
+      boxShadow: {
+        xs: '0 1px 2px -1px hsl(var(--shadow) / 0.10)',
+        sm: '0 1px 2px -1px hsl(var(--shadow) / 0.10), 0 2px 6px -2px hsl(var(--shadow) / 0.08)',
+        DEFAULT: '0 2px 4px -2px hsl(var(--shadow) / 0.10), 0 4px 12px -4px hsl(var(--shadow) / 0.10)',
+        md: '0 3px 6px -3px hsl(var(--shadow) / 0.12), 0 8px 20px -6px hsl(var(--shadow) / 0.12)',
+        lg: '0 6px 12px -6px hsl(var(--shadow) / 0.14), 0 16px 32px -12px hsl(var(--shadow) / 0.16)',
+        xl: '0 10px 20px -10px hsl(var(--shadow) / 0.16), 0 28px 56px -20px hsl(var(--shadow) / 0.20)',
+        none: 'none',
       },
       fontFamily: {
         sans: [
@@ -65,6 +78,7 @@ const config: Config = {
           'sans-serif',
         ],
         serif: [
+          'var(--font-source-serif)',
           'Georgia',
           'Cambria',
           '"Times New Roman"',
@@ -80,6 +94,18 @@ const config: Config = {
           'sans-serif',
         ],
       },
+      /* Fluid display sizes so headings breathe on desktop without
+         overwhelming a 375px phone. */
+      fontSize: {
+        'display-lg': ['clamp(2.25rem, 1.55rem + 3vw, 3.75rem)', { lineHeight: '1.05', letterSpacing: '-0.025em' }],
+        display: ['clamp(1.875rem, 1.35rem + 2.2vw, 3rem)', { lineHeight: '1.1', letterSpacing: '-0.022em' }],
+        title: ['clamp(1.5rem, 1.2rem + 1.3vw, 2.25rem)', { lineHeight: '1.18', letterSpacing: '-0.018em' }],
+        headline: ['clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem)', { lineHeight: '1.25', letterSpacing: '-0.014em' }],
+      },
+      transitionTimingFunction: {
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        spring: 'cubic-bezier(0.34, 1.4, 0.64, 1)',
+      },
       keyframes: {
         'fade-in': {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
@@ -89,10 +115,15 @@ const config: Config = {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(0)' },
         },
+        'sheet-in': {
+          '0%': { opacity: '0', transform: 'translateY(-8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
         'slide-in': 'slide-in 0.3s ease-out',
+        'sheet-in': 'sheet-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

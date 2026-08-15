@@ -18,7 +18,7 @@ export default function BlogError({
   }, [error])
 
   return (
-    <Section className="pt-24 pb-16">
+    <Section className="section-top pb-16">
       <Container>
         <div className="mx-auto max-w-md text-center">
           <h2 className="text-2xl font-serif font-bold mb-4">Unable to load post</h2>

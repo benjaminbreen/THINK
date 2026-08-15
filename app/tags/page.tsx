@@ -27,37 +27,37 @@ export default function TagsIndexPage() {
 
   return (
     <>
-      <Section className="pt-24 pb-16">
+      <Section className="section-top pb-16">
         <Container>
           <div className="mx-auto max-w-4xl">
             {/* Header */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Tag className="h-6 w-6 text-primary" />
+            <div className="mb-12 text-center">
+              <div className="mb-4 inline-flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-2.5">
+                  <Tag className="h-5 w-5 text-primary" />
                 </div>
-                <h1 className="text-4xl font-serif font-bold">Browse by Tag</h1>
+                <h1 className="text-display font-serif font-bold">Browse by Tag</h1>
               </div>
-              <p className="text-lg text-muted-foreground">
+              <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
                 Explore projects, resources, guides, and assignments by topic
               </p>
             </div>
 
             {/* Tag Cloud */}
-            <div className="bg-muted/30 rounded-2xl p-8 border">
-              <div className="flex flex-wrap gap-3 justify-center items-center">
+            <div className="rounded-2xl border border-border/70 bg-muted/30 p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-center gap-2.5">
                 {sortedTags.map(tag => {
                   const count = tagCounts[tag] || 0
                   const fontSize = getFontSize(count)
 
                   return (
-                    <Link key={tag} href={`/tags/${tagToSlug(tag)}`}>
+                    <Link key={tag} href={`/tags/${tagToSlug(tag)}`} className="group">
                       <span
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background border hover:bg-primary/10 hover:border-primary/30 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 leading-tight transition-[background-color,border-color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:border-primary/40 group-hover:bg-primary/10"
                         style={{ fontSize: `${fontSize}rem` }}
                       >
                         {tag}
-                        <span className="text-muted-foreground text-xs ml-1">
+                        <span className="font-mono text-xs tabular-nums text-muted-foreground">
                           {count}
                         </span>
                       </span>
@@ -68,14 +68,14 @@ export default function TagsIndexPage() {
             </div>
 
             {/* Alphabetical List */}
-            <div className="mt-12">
-              <h2 className="text-xl font-semibold mb-6 text-center">All Tags (A-Z)</h2>
+            <div className="mt-14">
+              <h2 className="mb-6 text-center text-headline font-serif font-bold">All Tags (A-Z)</h2>
               <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
                 {[...allTags].sort().map(tag => (
                   <Link key={tag} href={`/tags/${tagToSlug(tag)}`}>
-                    <div className="flex items-center justify-between p-3 rounded-lg border bg-background hover:bg-muted/50 transition-colors">
-                      <span className="font-medium">{tag}</span>
-                      <Badge variant="secondary" className="ml-2">
+                    <div className="flex min-h-[48px] items-center justify-between gap-3 rounded-xl border border-border/70 bg-card px-4 py-3 transition-colors hover:border-primary/30 hover:bg-accent/50">
+                      <span className="min-w-0 truncate text-sm font-medium">{tag}</span>
+                      <Badge variant="secondary" className="flex-shrink-0 font-mono tabular-nums">
                         {tagCounts[tag]}
                       </Badge>
                     </div>

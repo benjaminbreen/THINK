@@ -293,7 +293,7 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+              <h1 className="mb-4 text-display font-serif font-bold">
                 {assignment.title}
               </h1>
 

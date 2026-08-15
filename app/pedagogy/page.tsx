@@ -11,8 +11,10 @@ import { AssignmentListItem, AssignmentData } from '@/components/ui/assignment-l
 import { InkWashBackground } from '@/components/ui/ink-wash-background'
 import { PedagogyBackground } from '@/components/ui/pedagogy-background'
 import { AnimatedSection } from '@/components/ui/animated-section'
+import { PageHeader } from '@/components/ui/page-header'
 import { pageThemes } from '@/lib/page-themes'
 import { siteConfig } from '@/lib/config'
+import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { FileText, ExternalLink, Filter, List, LayoutGrid } from 'lucide-react'
 
@@ -21,6 +23,20 @@ const theme = pageThemes.pedagogy
 type FilterType = 'all' | 'assignment' | 'syllabus' | 'guide'
 type ViewMode = 'list' | 'grid'
 type ResourceSource = 'University' | 'Community College' | 'K-12' | 'Independent'
+
+const resourceFilters: { value: FilterType; label: string }[] = [
+  { value: 'all', label: 'All Resources' },
+  { value: 'assignment', label: 'Assignments' },
+  { value: 'syllabus', label: 'Syllabi' },
+  { value: 'guide', label: 'Guides' },
+]
+
+const institutionTypes: { label: ResourceSource; dot: string }[] = [
+  { label: 'University', dot: 'bg-blue-500' },
+  { label: 'Community College', dot: 'bg-green-500' },
+  { label: 'K-12', dot: 'bg-amber-500' },
+  { label: 'Independent', dot: 'bg-purple-500' },
+]
 
 interface ExternalResource {
   id: string
@@ -221,64 +237,66 @@ export default function PedagogyPage() {
   return (
     <>
       {/* Header with grid background */}
-      <Section className="pt-24 pb-6 relative">
+      <Section className="section-top relative pb-8">
         <div className="absolute inset-0 overflow-hidden">
           <InkWashBackground isHovered={isHeaderHovered} />
         </div>
         <Container className="relative">
-          <AnimatedSection className="mx-auto max-w-3xl text-center">
-            <div
-              className="inline-block"
-              onMouseEnter={() => setIsHeaderHovered(true)}
-              onMouseLeave={() => setIsHeaderHovered(false)}
-            >
-              <h1 className="text-4xl font-serif font-bold mb-1">Pedagogy Materials</h1>
-              <div
-                className="h-0.5 mx-auto transition-all duration-300"
-                style={{
-                  backgroundColor: theme.accent,
-                  width: isHeaderHovered ? '100%' : '4rem'
-                }}
-              />
-            </div>
-            <p className="text-lg text-muted-foreground mt-3">
-              Sample assignments, syllabi, and resources for teaching with and about AI in the humanities
-            </p>
+          <AnimatedSection>
+            <PageHeader
+              title="Pedagogy Materials"
+              accent={theme.accent}
+              onHoverChange={setIsHeaderHovered}
+              description="Sample assignments, syllabi, and resources for teaching with and about AI in the humanities"
+            />
           </AnimatedSection>
         </Container>
       </Section>
 
       {/* Sample Assignments Section */}
-      <Section className="pt-8 pb-8 sm:pt-10">
+      <Section className="section-y-sm">
         <Container>
-          <AnimatedSection delay={100} className="flex flex-col sm:flex-row sm:items-center sm:justify-between ">
+          <AnimatedSection
+            delay={100}
+            className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+          >
             <div>
-              <h2 className="text-3xl font-serif font-bold mb-2">Sample Assignments</h2>
-              <p className="text-muted-foreground mb-5">
+              <h2 className="text-title font-serif font-bold">Sample Assignments</h2>
+              <p className="mt-2 text-muted-foreground">
                 Ready-to-use assignments and simulation modules for your courses
               </p>
             </div>
 
             {/* View mode toggle */}
-            <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8"
+            <div className="inline-flex flex-shrink-0 self-start rounded-full border border-border bg-muted/50 p-1 sm:self-auto">
+              <button
+                type="button"
+                aria-pressed={viewMode === 'list'}
                 onClick={() => setViewMode('list')}
+                className={cn(
+                  'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors',
+                  viewMode === 'list'
+                    ? 'bg-card text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
               >
-                <List className="h-4 w-4 mr-1.5" />
+                <List className="h-4 w-4" />
                 List
-              </Button>
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8"
+              </button>
+              <button
+                type="button"
+                aria-pressed={viewMode === 'grid'}
                 onClick={() => setViewMode('grid')}
+                className={cn(
+                  'inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors',
+                  viewMode === 'grid'
+                    ? 'bg-card text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
               >
-                <LayoutGrid className="h-4 w-4 mr-1.5" />
+                <LayoutGrid className="h-4 w-4" />
                 Grid
-              </Button>
+              </button>
             </div>
           </AnimatedSection>
 
@@ -294,7 +312,7 @@ export default function PedagogyPage() {
               ))}
             </div>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
               {assignments.map((assignment, index) => (
                 <AssignmentCard
                   key={assignment.id}
@@ -311,6 +329,7 @@ export default function PedagogyPage() {
                   sampleSubmissionUrl={assignment.sampleSubmissionUrl}
                   courseName={assignment.courseName}
                   institution={assignment.institution}
+                  priority={index === 0}
                 />
               ))}
             </div>
@@ -319,89 +338,63 @@ export default function PedagogyPage() {
       </Section>
 
       {/* External Resources with Sidebar Filters */}
-      <Section className="bg-muted/40 border-t py-12">
+      <Section className="section-y border-t bg-muted/40">
         <Container>
-          <div className="mb-8">
-            <h2 className="text-3xl font-serif font-bold mb-2 text-center">Teaching Resources</h2>
-            <p className="text-muted-foreground text-center">
+          <div className="mb-9 text-center">
+            <h2 className="text-title font-serif font-bold">Teaching Resources</h2>
+            <p className="mt-2 text-muted-foreground">
               Syllabi, assignments, and guides from educators across institutions
             </p>
           </div>
 
           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-            {/* Sidebar Filters */}
-            <div className="lg:col-span-1 mb-6 lg:mb-0">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4" />
-                    <CardTitle className="text-sm">Filter Resources</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button
-                    variant={activeFilter === 'all' ? 'default' : 'ghost'}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => setActiveFilter('all')}
-                  >
-                    All Resources
-                  </Button>
-                  <Button
-                    variant={activeFilter === 'assignment' ? 'default' : 'ghost'}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => setActiveFilter('assignment')}
-                  >
-                    Assignments
-                  </Button>
-                  <Button
-                    variant={activeFilter === 'syllabus' ? 'default' : 'ghost'}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => setActiveFilter('syllabus')}
-                  >
-                    Syllabi
-                  </Button>
-                  <Button
-                    variant={activeFilter === 'guide' ? 'default' : 'ghost'}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => setActiveFilter('guide')}
-                  >
-                    Guides
-                  </Button>
-                </CardContent>
-              </Card>
+            {/* Sidebar Filters — a scrolling chip row on small screens */}
+            <div className="mb-8 lg:col-span-1 lg:mb-0">
+              <div className="lg:sticky lg:top-24">
+                <div className="mb-3 flex items-center gap-2 lg:mb-4">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <h3 className="eyebrow">Filter Resources</h3>
+                </div>
 
-              {/* Source Filter Legend */}
-              <Card className="mt-4">
-                <CardHeader>
-                  <CardTitle className="text-sm">By Institution Type</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-1 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                    <span>University</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    <span>Community College</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-amber-500"></div>
-                    <span>K-12</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-purple-500"></div>
-                    <span>Independent</span>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+                  {resourceFilters.map((filter) => {
+                    const active = activeFilter === filter.value
+                    return (
+                      <button
+                        key={filter.value}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => setActiveFilter(filter.value)}
+                        className={cn(
+                          'inline-flex h-10 flex-shrink-0 items-center rounded-full px-4 text-sm font-medium transition-colors lg:w-full lg:justify-start lg:rounded-lg',
+                          active
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'border border-border bg-card/70 text-muted-foreground hover:border-primary/30 hover:text-foreground lg:border-transparent lg:bg-transparent lg:hover:bg-accent/60'
+                        )}
+                      >
+                        {filter.label}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Source Filter Legend */}
+                <div className="mt-7 hidden rounded-xl border border-border/70 bg-card/60 p-4 lg:block">
+                  <h3 className="eyebrow mb-3">By Institution Type</h3>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    {institutionTypes.map((item) => (
+                      <li key={item.label} className="flex items-center gap-2.5">
+                        <span className={cn('h-2 w-2 rounded-full', item.dot)} />
+                        <span>{item.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
 
             {/* Resources List */}
-            <div className="lg:col-span-3 space-y-4">
+            <div className="space-y-3 lg:col-span-3">
               {filteredResources.map((resource) => {
                 const sourceColors = {
                   'University': 'bg-blue-500',
@@ -411,37 +404,42 @@ export default function PedagogyPage() {
                 }
 
                 return (
-                  <Card key={resource.id} className="hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className={`h-2 w-2 rounded-full ${sourceColors[resource.source]}`}></div>
-                            <Badge variant="outline" className="text-xs">
-                              {resource.type}
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-lg mb-1">{resource.title}</CardTitle>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {resource.author} • {resource.institution}
-                          </p>
-                          <CardDescription className="mb-3">
-                            {resource.description}
-                          </CardDescription>
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            {resource.tags.map((tag) => (
-                              <Badge key={tag} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
+                  <Card key={resource.id} interactive className="group">
+                    <CardHeader className="pb-4">
+                      <div className="mb-2.5 flex items-center gap-2">
+                        <span className={`h-2 w-2 rounded-full ${sourceColors[resource.source]}`} />
+                        <Badge variant="outline" className="capitalize">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg">
+                        <a
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="transition-colors hover:text-primary"
+                        >
+                          {resource.title}
+                        </a>
+                      </CardTitle>
+                      <p className="mt-1.5 text-sm text-muted-foreground">
+                        {resource.author} • {resource.institution}
+                      </p>
+                      <CardDescription className="mt-2.5">
+                        {resource.description}
+                      </CardDescription>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {resource.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="font-normal">
+                            {tag}
+                          </Badge>
+                        ))}
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <Button asChild variant="outline" size="sm">
+                    <CardContent className="pt-0">
+                      <Button asChild variant="outline" size="sm" className="external-link">
                         <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="mr-2 h-3 w-3" />
+                          <ExternalLink className="h-3.5 w-3.5" />
                           View Resource
                         </a>
                       </Button>
@@ -451,10 +449,10 @@ export default function PedagogyPage() {
               })}
 
               {/* Call to contribute */}
-              <Card className="border-dashed border-2">
-                <CardHeader>
-                  <CardTitle className="text-center">Share Your Resources</CardTitle>
-                  <CardDescription className="text-center">
+              <Card className="border-2 border-dashed border-border/70 bg-transparent shadow-none">
+                <CardHeader className="items-center text-center">
+                  <CardTitle className="text-lg">Share Your Resources</CardTitle>
+                  <CardDescription>
                     Have syllabi or assignments to contribute? Help grow the THINK community!
                   </CardDescription>
                 </CardHeader>
@@ -470,7 +468,7 @@ export default function PedagogyPage() {
       </Section>
 
       {/* About HistoryLens - with physics blocks background */}
-      <Section className="border-t relative overflow-hidden py-12 sm:py-16">
+      <Section className="section-y relative overflow-hidden border-t">
         <div className="absolute inset-0">
           <PedagogyBackground isHovered={isHistoryLensHovered} tags={allTags} />
         </div>
@@ -481,22 +479,22 @@ export default function PedagogyPage() {
               onMouseEnter={() => setIsHistoryLensHovered(true)}
               onMouseLeave={() => setIsHistoryLensHovered(false)}
             >
-              <h2 className="text-3xl font-serif font-bold mb-1 cursor-default">About the HistoryLens Framework</h2>
+              <h2 className="cursor-default text-title font-serif font-bold">About the HistoryLens Framework</h2>
               <div
-                className="h-0.5 mx-auto transition-all duration-300 mb-4"
+                className="mx-auto mt-2 h-[2px] rounded-full transition-[width] duration-500 ease-out-expo"
                 style={{
                   backgroundColor: theme.accent,
-                  width: isHistoryLensHovered ? '100%' : '4rem'
+                  width: isHistoryLensHovered ? '100%' : '3.5rem'
                 }}
               />
             </div>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
+            <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-muted-foreground">
               All simulation-based assignments are built using the HistoryLens pedagogical framework,
               which combines interactive historical simulations with authentic primary sources. Rather than
               treating AI as a source of knowledge, HistoryLens encourages students to test AI against
               historical reality, discovering how these systems misinterpret the past and break in revealing ways.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild>
                 <Link href="/projects/historylens">Learn About HistoryLens</Link>
               </Button>

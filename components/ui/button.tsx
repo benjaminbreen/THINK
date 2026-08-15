@@ -12,20 +12,25 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const buttonStyles = (variant: string, size: string, className?: string) =>
   cn(
-    'inline-flex items-center justify-center rounded-md font-medium transition-colors',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap',
+    'transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
     'disabled:pointer-events-none disabled:opacity-50',
+    'active:translate-y-px',
+    '[&_svg]:shrink-0',
     {
-      'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'default',
-      'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
-      'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
-      'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
+      'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md': variant === 'default',
+      'bg-secondary text-secondary-foreground hover:bg-secondary/70': variant === 'secondary',
+      'border border-border bg-card/70 text-foreground shadow-xs hover:border-primary/40 hover:bg-accent/60 hover:text-foreground hover:shadow-sm':
+        variant === 'outline',
+      'text-foreground/80 hover:bg-accent hover:text-foreground': variant === 'ghost',
     },
     {
-      'h-10 px-4 py-2': size === 'default',
-      'h-9 rounded-md px-3 text-sm': size === 'sm',
-      'h-11 rounded-md px-8 text-lg': size === 'lg',
-      'h-10 w-10': size === 'icon',
+      // 44px tall on touch screens, tightening to 40px once a pointer is present
+      'h-11 px-5 text-[0.9375rem] sm:h-10 sm:px-4': size === 'default',
+      'h-9 px-3.5 text-sm': size === 'sm',
+      'h-12 px-7 text-base sm:h-11': size === 'lg',
+      'h-10 w-10 p-0': size === 'icon',
     },
     className
   )

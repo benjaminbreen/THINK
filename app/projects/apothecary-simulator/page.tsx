@@ -41,7 +41,7 @@ export default function ApothecarySimulatorPage() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-4xl font-serif font-bold">Apothecary Simulator</h1>
+                    <h1 className="text-display font-serif font-bold">Apothecary Simulator</h1>
                     <Badge className="bg-cyan-600">Active</Badge>
                   </div>
                   <p className="text-lg text-muted-foreground">
@@ -990,7 +990,7 @@ export function calculatePatientFlow(gameState) {
       <Section className="bg-muted/40 py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">Use This in Your Classroom</h2>
+            <h2 className="mb-4 text-title font-serif font-bold">Use This in Your Classroom</h2>
             <p className="text-muted-foreground mb-8">
               Find detailed lesson plans, assignments, and discussion questions for using the Apothecary Simulator
               in history of medicine, colonial Latin American history, or digital humanities courses.
