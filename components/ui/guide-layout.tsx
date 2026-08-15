@@ -37,6 +37,14 @@ interface GuideLayoutProps {
   children: React.ReactNode
 }
 
+/* GuideLayout exposes its Wikipedia fetcher so the WikiLink components
+   rendered inside MDX content can reach it without prop drilling. */
+declare global {
+  interface Window {
+    __fetchWikipedia?: (searchTerm: string) => void
+  }
+}
+
 interface WikipediaData {
   title: string
   extract: string
@@ -125,9 +133,9 @@ export function GuideLayout({
 
   // Make fetchWikipedia available globally for WikiLink components
   useEffect(() => {
-    (window as any).__fetchWikipedia = fetchWikipedia
+    window.__fetchWikipedia = fetchWikipedia
     return () => {
-      delete (window as any).__fetchWikipedia
+      delete window.__fetchWikipedia
     }
   }, [fetchWikipedia])
 
@@ -439,10 +447,7 @@ export function WikiLink({
 }) {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    const fetchWikipedia = (window as any).__fetchWikipedia
-    if (fetchWikipedia) {
-      fetchWikipedia(term)
-    }
+    window.__fetchWikipedia?.(term)
   }
 
   return (

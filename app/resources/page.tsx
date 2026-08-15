@@ -1470,7 +1470,7 @@ export default function ResourcesPage() {
   const allCategories: ResourceCategory[] = Array.from(new Set(resources.map(r => r.category))).sort()
 
   const filteredAndSortedResources = useMemo(() => {
-    let filtered = resources.filter(resource => {
+    const filtered = resources.filter(resource => {
       const matchesSearch = searchQuery === '' ||
         resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         resource.authors.toLowerCase().includes(searchQuery.toLowerCase()) ||

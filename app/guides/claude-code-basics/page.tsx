@@ -28,7 +28,7 @@ export default function ClaudeCodeBasicsGuide() {
       title="Getting Started with AI Coding Tools"
       subtitle="Build custom tools for teaching and research by describing what you want in plain English—no programming experience required"
       guideId="claude-code-basics"
-      thumbnailPath="/thumbnails/claude-code-basics.png"
+      thumbnailPath="/thumbnails/claude-code-basics.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',

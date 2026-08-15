@@ -31,7 +31,7 @@ export const projects: TaggedContent[] = [
     author: 'Benjamin Breen',
     year: 2024,
     institution: 'UC Santa Cruz',
-    thumbnailPath: '/thumbnails/apothecary-simulator.png'
+    thumbnailPath: '/thumbnails/apothecary-simulator.webp'
   },
   {
     id: 'young-darwin',
@@ -43,7 +43,7 @@ export const projects: TaggedContent[] = [
     author: 'Benjamin Breen',
     year: 2024,
     institution: 'UC Santa Cruz',
-    thumbnailPath: '/thumbnails/young-darwin.png'
+    thumbnailPath: '/thumbnails/young-darwin.webp'
   },
   {
     id: 'history-simulator',
@@ -55,7 +55,7 @@ export const projects: TaggedContent[] = [
     author: 'Benjamin Breen',
     year: 2024,
     institution: 'UC Santa Cruz',
-    thumbnailPath: '/thumbnails/history-simulator.png'
+    thumbnailPath: '/thumbnails/history-simulator.webp'
   },
   {
     id: 'historical-persona-generator',
@@ -67,7 +67,7 @@ export const projects: TaggedContent[] = [
     author: 'Benjamin Breen',
     year: 2025,
     institution: 'UC Santa Cruz',
-    thumbnailPath: '/thumbnails/historical-persona-generator.png'
+    thumbnailPath: '/thumbnails/historical-persona-generator.webp'
   },
   {
     id: 'historylens',
@@ -79,7 +79,7 @@ export const projects: TaggedContent[] = [
     author: 'Benjamin Breen',
     year: 2024,
     institution: 'UC Santa Cruz',
-    thumbnailPath: '/thumbnails/historylens.png'
+    thumbnailPath: '/thumbnails/historylens.webp'
   }
 ]
 

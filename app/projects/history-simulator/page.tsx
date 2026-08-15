@@ -21,7 +21,7 @@ export default function HistorySimulatorPage() {
 
           <div className="mx-auto max-w-3xl">
             <ProjectBanner
-              thumbnailPath="/thumbnails/history-simulator.png"
+              thumbnailPath="/thumbnails/history-simulator.webp"
               projectTitle="History Simulator"
             />
 

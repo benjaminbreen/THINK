@@ -1,55 +1,57 @@
-# Guide Thumbnails
+# Thumbnails
 
-This directory contains thumbnail images for the guides displayed on the `/guides` page.
+Card images for guides, projects, and pedagogy assignments.
 
-## Usage
+## Specifications
 
-To add a thumbnail for a guide:
+| | |
+| --- | --- |
+| Format | WebP |
+| Aspect ratio | 16:10 — cards crop to this, so compose for it |
+| Width | Up to 1400px |
+| File size | Aim for under 300KB |
 
-1. **Create an image** (recommended size: 800x600px or 4:3 aspect ratio)
-2. **Name it after the guide ID** with a `.png`, `.jpg`, or `.webp` extension
-3. **Place it in this directory**
-4. **Update the guide entry** in `/app/guides/page.tsx` to include the thumbnail path
+Next/Image generates the responsive variants at request time, and
+`next.config.mjs` caps `deviceSizes` at 1200px. A source wider than ~1400px adds
+repository weight without improving what anyone sees.
 
-## Example
+To convert and resize a new image:
 
-For a guide with ID `claude-code-basics`, you would:
+```bash
+npx sharp-cli --input source.png --output ./ resize 1400 --withoutEnlargement \
+  --format webp --quality 82
+```
 
-1. Create an image named `claude-code-basics.png`
-2. Place it in `/public/thumbnails/claude-code-basics.png`
-3. Update the guide object in `/app/guides/page.tsx`:
+## Naming
+
+The filename must match the item's id or slug.
+
+**Projects** resolve their thumbnail automatically from the slug — no wiring
+needed. `slug: 'young-darwin'` loads `/thumbnails/young-darwin.webp`.
+
+**Guides** need an explicit path in the `guides` array in `app/guides/page.tsx`:
 
 ```typescript
 {
   id: 'claude-code-basics',
   title: 'Getting Started with Claude Code',
-  // ... other properties
-  thumbnail: '/thumbnails/claude-code-basics.png'
+  // ...
+  thumbnail: '/thumbnails/claude-code-basics.webp'
 }
 ```
 
-## Fallback Behavior
+**Assignments** take a `thumbnailPath` in the `assignments` array in
+`app/pedagogy/page.tsx`.
 
-If no thumbnail is specified (or the `thumbnail` field is omitted), the guide card will display the traditional icon-based design.
+## Fallback behaviour
 
-## Current Guides
+If a file is missing or fails to load, the card falls back gracefully — guides
+show their icon, assignments show a muted placeholder. Nothing breaks, but the
+browser still requests the missing file, so remove dead references rather than
+relying on the fallback.
 
-Guide IDs that can have thumbnails:
-- `claude-code-basics`
-- `prompt-engineering`
-- `history-machine-intelligence`
-- `building-simulations`
-- `ai-assignments`
-- `ai-historical-research`
-- `critical-pedagogy`
-- `responsible-ai-classroom`
+## Known gap
 
-## Image Specifications
-
-- **Format**: PNG, JPG, or WebP
-- **Recommended dimensions**: 800x600px (4:3 aspect ratio)
-- **Max file size**: Keep under 500KB for optimal loading
-- **Card display size**:
-  - Card view: Full width of card, 192px height
-  - List view: 128x96px
-- **Optimization**: Images are automatically optimized by Next.js Image component
+`historylens.webp` is referenced by `app/projects/historylens/page.tsx` and
+`lib/tags-data.ts` but does not exist in this directory, so those pages request
+a file that 404s and fall back. Adding the image resolves it.

@@ -21,7 +21,7 @@ export default function YoungDarwinPage() {
 
           <div className="mx-auto max-w-3xl">
             <ProjectBanner
-              thumbnailPath="/thumbnails/young-darwin.png"
+              thumbnailPath="/thumbnails/young-darwin.webp"
               projectTitle="Young Darwin"
             />
 

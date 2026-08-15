@@ -6,7 +6,7 @@ const assignmentData: AssignmentDetailData = {
   description: "A flexible final assignment offering creative work, digital artifact, or traditional research paper options. Students explore the cultural history of drugs through original research, building exhibits, databases, or interactive resources.",
   type: "Creative/Research",
   tags: ['History', 'Primary Sources', 'Digital Humanities', 'Research', 'Creative'],
-  thumbnailPath: "/thumbnails/drug-history-artifact.png",
+  thumbnailPath: "/thumbnails/drug-history-artifact.webp",
   pdfPath: "/pdfs/HIS151BDrugHistoryFinalAssignment.pdf",
   sampleSubmissionUrl: "https://cultural-history-drugs.vercel.app/",
   courseName: "History of Drugs",

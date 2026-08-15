@@ -174,7 +174,7 @@ export default function HomePage() {
               title="Getting Started with Claude Code"
               description="Learn how to use Claude Code in the terminal to build custom AI tools"
               href="/guides/claude-code-basics"
-              thumbnailPath="/thumbnails/claude-code-basics.png"
+              thumbnailPath="/thumbnails/claude-code-basics.webp"
               icon={<Code className="h-5 w-5 text-amber-600" />}
               animationDelay="100"
             />
@@ -183,7 +183,7 @@ export default function HomePage() {
               title="Prompt Engineering for Humanities"
               description="How to communicate effectively with AI when building educational tools"
               href="/guides/prompt-engineering"
-              thumbnailPath="/thumbnails/prompt-engineering.png"
+              thumbnailPath="/thumbnails/prompt-engineering.webp"
               icon={<FileText className="h-5 w-5 text-amber-600" />}
               animationDelay="200"
             />
@@ -192,7 +192,7 @@ export default function HomePage() {
               title="AI for Historical Research"
               description="NotebookLM, Elicit, and other AI tools for augmenting scholarly research"
               href="/guides/ai-historical-research"
-              thumbnailPath="/thumbnails/ai-historical-research.png"
+              thumbnailPath="/thumbnails/ai-historical-research.webp"
               icon={<Microscope className="h-5 w-5 text-amber-600" />}
               animationDelay="300"
             />
@@ -201,7 +201,7 @@ export default function HomePage() {
               title="History of Machine Intelligence"
               description="From 18th-century mechanist philosophy to contemporary AI"
               href="/guides/history-machine-intelligence"
-              thumbnailPath="/thumbnails/history-machine-intelligence.png"
+              thumbnailPath="/thumbnails/history-machine-intelligence.webp"
               icon={<BookOpen className="h-5 w-5 text-amber-600" />}
               animationDelay="400"
             />
@@ -210,7 +210,7 @@ export default function HomePage() {
               title="Responsible AI Use in the Classroom"
               description="How humanities faculty are approaching AI integration in 2025"
               href="/guides/responsible-ai-classroom"
-              thumbnailPath="/thumbnails/responsible-ai-classroom.png"
+              thumbnailPath="/thumbnails/responsible-ai-classroom.webp"
               icon={<Lightbulb className="h-5 w-5 text-amber-600" />}
               animationDelay="500"
             />

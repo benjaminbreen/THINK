@@ -22,7 +22,7 @@ export default function HistoryMachineIntelligenceGuide() {
       title="A History of Machine Intelligence"
       subtitle="From 18th-century mechanist philosophy to contemporary AI—a humanities perspective on thinking machines"
       guideId="history-machine-intelligence"
-      thumbnailPath="/thumbnails/history-machine-intelligence.png"
+      thumbnailPath="/thumbnails/history-machine-intelligence.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',

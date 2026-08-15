@@ -24,7 +24,7 @@ export default function CriticalPedagogyGuide() {
       title="Critical AI Pedagogy"
       subtitle="Teaching students to think critically about AI outputs and limitations"
       guideId="critical-pedagogy"
-      thumbnailPath="/thumbnails/critical-pedagogy.png"
+      thumbnailPath="/thumbnails/critical-pedagogy.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',

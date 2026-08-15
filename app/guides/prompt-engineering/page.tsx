@@ -23,7 +23,7 @@ export default function PromptEngineeringGuide() {
       title="Prompt Engineering for Humanities"
       subtitle="How to communicate effectively with AI when building educational tools and augmenting research workflows"
       guideId="prompt-engineering"
-      thumbnailPath="/thumbnails/prompt-engineering.png"
+      thumbnailPath="/thumbnails/prompt-engineering.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',

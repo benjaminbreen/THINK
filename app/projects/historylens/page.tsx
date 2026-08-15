@@ -22,7 +22,7 @@ export default function HistoryLensPage() {
 
           <div className="mx-auto max-w-3xl">
             <ProjectBanner
-              thumbnailPath="/thumbnails/historylens.png"
+              thumbnailPath="/thumbnails/historylens.webp"
               projectTitle="HistoryLens"
             />
 

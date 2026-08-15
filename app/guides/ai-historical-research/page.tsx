@@ -34,7 +34,7 @@ export default function AIHistoricalResearchGuide() {
       title="AI for Historical Research"
       subtitle="A skeptical but practical guide: what works, what doesn't, and how to think critically about AI tools for scholarship"
       guideId="ai-historical-research"
-      thumbnailPath="/thumbnails/ai-historical-research.png"
+      thumbnailPath="/thumbnails/ai-historical-research.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',

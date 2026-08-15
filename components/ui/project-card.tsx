@@ -33,7 +33,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const [hasImage, setHasImage] = useState(true)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
-  const thumbnailPath = `/thumbnails/${slug}.png`
+  const thumbnailPath = `/thumbnails/${slug}.webp`
 
   // Map string delays to actual CSS classes
   const delayClass = {

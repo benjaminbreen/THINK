@@ -1,224 +1,142 @@
-# THINK - Teaching with AI in Humanities Classes
+# THINK — Teaching with AI in Humanities Classes
 
-A clearing house for AI-enabled historical simulations, pedagogy materials, and educational resources. Built with Next.js 14, TypeScript, and Tailwind CSS.
+A clearing house for AI-enabled historical simulations, pedagogy materials, and
+educational resources. THINK is an NEH-funded project at UC Santa Cruz building
+freely available resources for teaching with and about AI in the humanities.
 
-## Overview
+## Tech stack
 
-THINK is a project at UC Santa Cruz funded by the National Endowment for the Humanities. Our mission is to create a web platform with freely available educational resources for teaching with and about AI in humanities classes.
+| | |
+| --- | --- |
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS 3 |
+| Content | MDX, parsed with `gray-matter` |
+| CMS | [Keystatic](https://keystatic.com) — see [CMS-SETUP.md](./CMS-SETUP.md) |
+| Icons | [Lucide](https://lucide.dev) |
+| Fonts | Inter (UI), Source Serif 4 (headings and prose), Space Grotesk (wordmark) — all self-hosted via `next/font` |
+| Theming | `next-themes`, class-based dark mode |
+| Analytics | Vercel Analytics |
+| Hosting | Vercel |
 
-## Features
+## Getting started
 
-- 🎨 **Modern Design**: Beautiful, responsive UI built with Tailwind CSS
-- 🌓 **Dark Mode**: Full dark mode support with system preference detection
-- 📝 **Content Management System**: Decap CMS for easy blog post creation (no subscription needed!)
-- 📝 **MDX Blog**: Write blog posts in Markdown with embedded React components
-- 🎭 **Historical Simulations**: Showcase for AI-powered educational tools
-- 📚 **Pedagogy Materials**: Syllabi, assignments, and teaching guides
-- 🔗 **Resource Directory**: Curated links to external tools and platforms
-- ⚡ **Fast & Performant**: Built on Next.js 14 with App Router
-- 🎬 **Smooth Animations**: Delightful micro-interactions with Framer Motion
+Requires Node.js 18 or newer.
 
-## Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **CMS**: Decap CMS (free, open-source, Git-based)
-- **Content**: MDX for blog posts and content pages
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Theme**: next-themes for dark mode
-- **Deployment**: Vercel
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd THINK
-```
-
-2. Install dependencies:
 ```bash
 npm install
-```
-
-3. Run the development server:
-```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+Then open <http://localhost:3000>.
 
-## Project Structure
+### Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve a production build |
+| `npm run lint` | ESLint (flat config in `eslint.config.mjs`) |
+| `npm run lint:fix` | ESLint with `--fix` |
+
+## Project structure
 
 ```
 THINK/
-├── app/                    # Next.js app directory
-│   ├── about/             # About page
-│   ├── blog/              # Blog posts (MDX)
-│   ├── pedagogy/          # Pedagogy materials
-│   ├── projects/          # Project showcase
-│   ├── resources/         # External resources
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Homepage
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── layout/           # Navigation, footer
-│   ├── ui/               # Reusable UI components
-│   ├── theme-provider.tsx
-│   └── theme-toggle.tsx
-├── content/              # MDX content files
-│   ├── blog/
-│   ├── pedagogy/
-│   └── projects/
-├── lib/                  # Utility functions
-│   └── utils.ts
-├── public/               # Static assets
-└── tailwind.config.ts    # Tailwind configuration
+├── app/                    # App Router pages
+│   ├── about/  team/  contact/
+│   ├── blog/               # Blog index + [slug] renderer
+│   ├── guides/             # How-to guides (one directory per guide)
+│   ├── pedagogy/           # Assignments and teaching materials
+│   ├── projects/           # Project showcase pages
+│   ├── resources/          # Curated reading list
+│   ├── tags/               # Tag index and per-tag pages
+│   ├── keystatic/          # CMS editor route (noindex)
+│   ├── api/keystatic/      # Keystatic route handler
+│   ├── icon.svg            # Favicon
+│   ├── globals.css         # Design tokens + global styles
+│   └── layout.tsx
+├── components/
+│   ├── layout/             # Navigation, footer, layout wrapper
+│   └── ui/                 # Reusable UI components
+├── content/blog/           # Blog posts as MDX
+├── hooks/
+├── lib/                    # blog parsing, config, tags, utils
+├── public/                 # Static assets (thumbnails, images, PDFs)
+├── keystatic.config.ts     # CMS schema
+├── eslint.config.mjs
+└── tailwind.config.ts
 ```
 
-## Adding Content
+## Design system
 
-### Using the CMS (Recommended)
+The visual language is defined in two places:
 
-The easiest way to create blog posts is through the Content Management System:
+- **`app/globals.css`** — colour tokens as HSL triples (light and `.dark`), a
+  warm-tinted elevation scale, section rhythm helpers (`section-y`,
+  `section-top`), and prose styles.
+- **`tailwind.config.ts`** — maps those tokens to Tailwind, and defines fluid
+  type sizes (`text-display-lg`, `text-display`, `text-title`, `text-headline`)
+  that scale with the viewport.
 
-1. **Access the CMS**: Visit `/admin` on your deployed site (e.g., `https://your-domain.com/admin`)
-2. **Login**: Click "Login with GitHub" (you'll need write access to the repo)
-3. **Create Post**: Click "Blog Posts" → "New Blog Post"
-4. **Fill in details**: Title, description, author, date, and content
-5. **Publish**: Click "Publish" to save and deploy
+Prefer these over ad-hoc values. Headings use `font-serif` (Source Serif 4);
+body copy and UI use the default sans (Inter).
 
-The CMS automatically creates the proper file structure and triggers deployment. **See [CMS-SETUP.md](CMS-SETUP.md) for complete setup instructions.**
+## Adding content
 
-### Creating a New Blog Post Manually
+### Blog posts
 
-Create a new MDX file in `app/blog/[slug]/page.mdx`:
+Posts live in `content/blog/*.mdx`. Write one through the CMS at `/keystatic`,
+or create the file by hand — see [CMS-SETUP.md](./CMS-SETUP.md) for the
+frontmatter shape.
 
-```mdx
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
+### Projects
 
-export const metadata = {
-  title: 'Your Post Title',
-  description: 'Post description',
-  date: '2024-01-15',
-  author: 'Your Name',
-}
+1. Create `app/projects/<project-name>/page.tsx`.
+2. Add an entry to the `projects` array in `app/projects/page.tsx`.
+3. Drop a thumbnail at `public/thumbnails/<slug>.webp` — `ProjectCard` resolves
+   it from the slug automatically.
 
-<Section className="pt-24 pb-16">
-  <Container>
-    <div className="mx-auto max-w-3xl prose">
-      # Your Post Title
+### Guides
 
-      Your content here...
-    </div>
-  </Container>
-</Section>
-```
+1. Create `app/guides/<guide-name>/page.tsx` using the `GuideLayout` component.
+2. Add an entry to the `guides` array in `app/guides/page.tsx`.
+3. Add a thumbnail at `public/thumbnails/<id>.webp`.
 
-### Adding a New Project
+### Images
 
-1. Create a new page in `app/projects/[project-name]/page.tsx`
-2. Add the project to the projects array in `app/projects/page.tsx`
-3. Update navigation links as needed
-
-### Adding Pedagogy Materials
-
-Add new materials to the materials object in `app/pedagogy/page.tsx` or create separate MDX files in the `content/pedagogy/` directory.
+Thumbnails are WebP, capped at 1400px wide. Next/Image generates the responsive
+variants, and `next.config.mjs` caps `deviceSizes` at 1200px, so sources wider
+than ~1400px add repo weight without improving quality.
 
 ## Deployment
 
-### Deploy to Vercel
+Push to GitHub and import the repository into [Vercel](https://vercel.com); it
+detects Next.js and configures the build automatically.
 
-1. Push your code to GitHub
-2. Import your repository in [Vercel](https://vercel.com)
-3. Vercel will automatically detect Next.js and configure the build
-4. Click "Deploy"
+### Environment variables
 
-Alternatively, use the Vercel CLI:
-
-```bash
-npm install -g vercel
-vercel
-```
-
-### Environment Variables
-
-No environment variables are required for basic functionality. If you add features that need API keys or secrets, create a `.env.local` file:
-
-```bash
-# Add your environment variables here
-# NEXT_PUBLIC_API_URL=https://api.example.com
-```
-
-## Customization
-
-### Colors & Theme
-
-Edit `tailwind.config.ts` and `app/globals.css` to customize the color scheme:
-
-```typescript
-// tailwind.config.ts
-theme: {
-  extend: {
-    colors: {
-      primary: 'hsl(var(--primary))',
-      // ... customize colors
-    }
-  }
-}
-```
-
-### Fonts
-
-The project uses Inter (sans-serif) and Playfair Display (serif). To change fonts, edit `app/layout.tsx`:
-
-```typescript
-import { Your_Font } from 'next/font/google'
-
-const yourFont = Your_Font({
-  subsets: ['latin'],
-  variable: '--font-your-font',
-})
-```
-
-## Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
+None are required. `NEXT_PUBLIC_SITE_URL` is optional and overrides the
+canonical URL used in metadata and structured data (it defaults to
+`https://think.ucsc.edu`). Site-wide values live in `lib/config.ts`.
 
 ## Contributing
 
-We welcome contributions from the community! If you've created AI-enabled humanities projects or teaching materials, please consider sharing them.
+We welcome contributions from educators across all fields. If you have built an
+AI-enabled humanities project or teaching material you would like to share, get
+in touch.
+
+## Acknowledgments
+
+Funded by the National Endowment for the Humanities and the Humanities
+Institute at UC Santa Cruz. Built with [Next.js](https://nextjs.org) and
+[Tailwind CSS](https://tailwindcss.com); icons by [Lucide](https://lucide.dev).
+
+## Contact
+
+<bbreen@ucsc.edu>
 
 ## License
 
 MIT
-
-## Acknowledgments
-
-- Funded by the National Endowment for the Humanities
-- Developed at UC Santa Cruz
-- Built with [Next.js](https://nextjs.org/)
-- Icons by [Lucide](https://lucide.dev/)
-
-## Contact
-
-For questions, suggestions, or collaboration inquiries, please contact [your-email@example.com]
-
-## Learn More
-
-- [THINK Website](https://your-domain.com)
-- [NEH Website](https://www.neh.gov)
-- [UC Santa Cruz](https://www.ucsc.edu)

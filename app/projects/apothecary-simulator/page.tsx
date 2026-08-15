@@ -32,7 +32,7 @@ export default function ApothecarySimulatorPage() {
 
           <div className="mx-auto max-w-4xl">
             <ProjectBanner
-              thumbnailPath="/thumbnails/apothecary-simulator.png"
+              thumbnailPath="/thumbnails/apothecary-simulator.webp"
               projectTitle="Apothecary Simulator"
             />
 

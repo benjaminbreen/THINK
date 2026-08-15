@@ -6,7 +6,7 @@ const assignmentData: AssignmentDetailData = {
   description: "An AI-powered historical simulation where students play as Maria de Lima, a converso apothecary in 1680s Mexico City. Students diagnose patients using period sources, then critically analyze the simulation's historical accuracy and archival gaps.",
   type: "Simulation + Primary Source Research",
   tags: ['History of Medicine', 'Primary Sources', 'Colonial Latin America', 'Critical AI Literacy', 'Roleplay'],
-  thumbnailPath: "/thumbnails/apothecary-simulator.png",
+  thumbnailPath: "/thumbnails/apothecary-simulator.webp",
   courseName: "History of Medicine / Colonial Latin American History",
   institution: "UC Santa Cruz",
   gradeLevel: "Undergraduate",

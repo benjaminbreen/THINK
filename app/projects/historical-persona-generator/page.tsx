@@ -30,7 +30,7 @@ export default function HistoricalPersonaGeneratorPage() {
 
           <div className="mx-auto max-w-4xl">
             <ProjectBanner
-              thumbnailPath="/thumbnails/historical-persona-generator.png"
+              thumbnailPath="/thumbnails/historical-persona-generator.webp"
               projectTitle="Historical Persona Generator"
             />
 

@@ -53,13 +53,8 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${sourceSerif.variable}`}
     >
       <head>
-        {/* DNS prefetch for external resources */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        {/* Preconnect for faster font loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Prevent dark mode flash by applying theme immediately */}
+        {/* next/font self-hosts these at build time, so no Google Fonts
+            preconnect is needed. Only the anti-flash theme script belongs here. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `

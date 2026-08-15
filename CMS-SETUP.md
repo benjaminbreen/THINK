@@ -1,126 +1,107 @@
 # CMS Setup Guide
 
-Your THINK website now has a Content Management System (CMS) powered by Decap CMS! This allows you and other team members to write and publish blog posts through a user-friendly interface.
+Blog posts on this site are edited through [Keystatic](https://keystatic.com), a
+Git-based CMS. There is no database — every post is an MDX file committed to this
+repository, so the editor is just a friendlier way to write those files.
 
-## Accessing the CMS
+The configuration lives in [`keystatic.config.ts`](./keystatic.config.ts).
 
-Once deployed, access the CMS at: **`https://your-domain.com/admin`**
+## Where the editor lives
 
-## Authentication Setup
+| Environment | URL | Where edits go |
+| --- | --- | --- |
+| Local development | `http://localhost:3000/keystatic` | Straight to your working copy on disk |
+| Production | `https://<your-domain>/keystatic` | Keystatic Cloud → a commit in this repo |
 
-The CMS uses GitHub for authentication. You need to set up a GitHub OAuth App (takes about 2 minutes):
+The editor route is marked `noindex, nofollow`, so it will not appear in search
+results.
 
-### Step 1: Create a GitHub OAuth App
+## Editing locally
 
-1. Go to GitHub Settings → Developer settings → OAuth Apps
-2. Click "New OAuth App"
-3. Fill in:
-   - **Application name**: `THINK CMS`
-   - **Homepage URL**: `https://your-vercel-domain.vercel.app` (or your custom domain)
-   - **Authorization callback URL**: `https://api.netlify.com/auth/done`
-4. Click "Register application"
-5. Copy your **Client ID** and **Client Secret**
+No accounts or tokens are needed — `storage.kind` is `local` whenever
+`NODE_ENV === 'development'`.
 
-### Step 2: Add OAuth App to Vercel
+```bash
+npm run dev
+# then open http://localhost:3000/keystatic
+```
 
-1. Go to your Vercel project settings
-2. Navigate to Environment Variables
-3. Add these two variables:
-   - `OAUTH_GITHUB_CLIENT_ID` = your Client ID
-   - `OAUTH_GITHUB_CLIENT_SECRET` = your Client Secret
-4. Redeploy your site
+Saving in the editor writes directly to `content/blog/`. The changes show up as
+ordinary modified files in `git status`, and you commit them like any other work.
 
-**Alternative: Use Netlify Identity (Even Simpler)**
+## Editing in production
 
-If you prefer, you can deploy the CMS through Netlify instead:
+In production the config switches to `storage.kind: 'cloud'`, backed by the
+Keystatic Cloud project `thinkucsc/think`. Contributors need to be invited to
+that project before they can sign in; see the
+[Keystatic Cloud docs](https://keystatic.com/docs/cloud) for managing access.
 
-1. Import your GitHub repo to Netlify (free)
-2. Netlify automatically handles the OAuth for you
-3. No manual OAuth setup needed!
+Publishing from the editor commits to this repository, which triggers a Vercel
+rebuild. New posts are usually live within a couple of minutes.
 
-## Using the CMS
+## What a blog post contains
 
-### For You (Site Owner)
+The `posts` collection writes one MDX file per post to `content/blog/`, with
+these fields:
 
-1. Visit `https://your-domain.com/admin`
-2. Click "Login with GitHub"
-3. Authorize the application
-4. You'll see the CMS dashboard
+| Field | Type | Notes |
+| --- | --- | --- |
+| Title | slug | Also determines the filename and URL |
+| Description | text (multiline) | Used on the blog index and for SEO |
+| Author | select | Benjamin Breen, Pranav Anand, Zac Zimmer, or THINK Team |
+| Publish Date | date | Defaults to today |
+| Tags | multiselect | Announcement, Tutorial, AI, Pedagogy, Research, Event, Project Update |
+| Featured Image | image | Uploaded to `public/images/blog/`, served from `/images/blog/` |
+| Content | mdx | The body of the post |
 
-### For Other Contributors
+Everything except Content is stored as YAML frontmatter; Content becomes the
+body of the file.
 
-Anyone with write access to your GitHub repository can:
+## Adding a post by hand
 
-1. Visit the `/admin` URL
-2. Log in with their GitHub account
-3. Create/edit blog posts
-4. Publish directly to the site
+The editor is optional. Creating `content/blog/my-post.mdx` with matching
+frontmatter works exactly the same way:
 
-## Creating a Blog Post
+```mdx
+---
+title: My Post Title
+description: A brief summary for the blog list and SEO.
+author: Benjamin Breen
+date: 2025-11-24
+tags:
+  - Pedagogy
+  - AI
+image: /images/blog/my-post/hero.jpg
+---
 
-1. In the CMS, click "Blog Posts" → "New Blog Post"
-2. Fill in:
-   - **Title**: Post title
-   - **Description**: Brief summary
-   - **Author**: Your name (defaults to Benjamin Breen)
-   - **Date**: Publication date
-   - **Tags**: Optional tags (e.g., "AI", "Pedagogy", "HistoryLens")
-   - **Body**: Your post content (supports Markdown)
-3. Click "Publish" when ready
+Your post content here. MDX means you can use React components as well as
+Markdown.
+```
 
-The post will automatically:
-- Create the proper file structure in GitHub
-- Trigger a Vercel rebuild
-- Appear on your blog within 1-2 minutes
+Posts are read by [`lib/blog.ts`](./lib/blog.ts), which parses the frontmatter and
+sorts by date.
 
-## File Structure
+## Changing the fields
 
-Blog posts are stored in: `app/blog/[slug]/page.mdx`
-
-The CMS automatically:
-- Creates the folder structure
-- Generates the MDX file
-- Adds frontmatter metadata
-- Handles image uploads (stored in `public/images/blog`)
-
-## Editing Existing Posts
-
-1. In the CMS, navigate to "Blog Posts"
-2. Click on any post to edit
-3. Make changes
-4. Click "Publish" to save
-
-Changes are committed to GitHub and trigger automatic redeployment.
-
-## Local Development
-
-To test the CMS locally:
-
-1. Uncomment `local_backend: true` in `public/admin/config.yml`
-2. Run `npx decap-server` in a terminal
-3. Run `npm run dev` in another terminal
-4. Visit `http://localhost:3000/admin`
+Edit the `schema` for the `posts` collection in `keystatic.config.ts`. Adding an
+author or a tag, for instance, means adding an entry to that field's `options`
+array. Fields are documented in the
+[Keystatic field reference](https://keystatic.com/docs/fields).
 
 ## Troubleshooting
 
-**"Error: Failed to load config.yml"**
-- Make sure the site is deployed and the file exists at `/admin/config.yml`
+**The editor is empty in production.** Check that your account has been added to
+the `thinkucsc/think` Keystatic Cloud project.
 
-**"Login failed"**
-- Verify your GitHub OAuth App credentials in Vercel
-- Check that the callback URL is correct
+**Local edits are not appearing on the site.** Local storage writes to disk but
+does not commit. Check `git status` — your changes are there, waiting to be
+committed and pushed.
 
-**"Cannot create post"**
-- Ensure you have write access to the GitHub repository
-- Check that the branch name in config.yml matches your repo
+**A post is missing from `/blog`.** Confirm the file is in `content/blog/`, ends
+in `.mdx`, and has a valid `date` in its frontmatter.
 
-## No Subscription Needed!
+## Cost
 
-- **Decap CMS**: 100% free and open source
-- **GitHub**: Free for public repos
-- **Vercel**: Free tier is plenty for this site
-- **Total cost**: $0/month
-
----
-
-For more help, see [Decap CMS Documentation](https://decapcms.org/docs/)
+Keystatic is open source and free to self-host in local mode. Keystatic Cloud
+has a free tier; see [their pricing](https://keystatic.com/docs/cloud) for
+current limits.

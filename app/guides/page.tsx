@@ -11,7 +11,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   Code, Sparkles, GraduationCap, Microscope, FileText, BookOpen,
-  Grid3x3, List, ArrowUpDown, Lightbulb, ArrowRight
+  Grid3x3, List, ArrowUpDown, Lightbulb, ArrowRight,
+  type LucideIcon
 } from 'lucide-react'
 import { GuidesBackground } from '@/components/ui/guides-background'
 import { PageHeader } from '@/components/ui/page-header'
@@ -29,7 +30,7 @@ interface Guide {
   description: string
   href: string
   category: 'Technical' | 'Pedagogical' | 'Research' | 'Best Practices'
-  icon: any
+  icon: LucideIcon
   status: 'available' | 'coming-soon'
   thumbnail?: string // Optional thumbnail path in /public folder
 }
@@ -43,7 +44,7 @@ const guides: Guide[] = [
     category: 'Technical',
     icon: Code,
     status: 'available',
-    thumbnail: '/thumbnails/claude-code-basics.png'
+    thumbnail: '/thumbnails/claude-code-basics.webp'
   },
   {
     id: 'prompt-engineering',
@@ -53,7 +54,7 @@ const guides: Guide[] = [
     category: 'Technical',
     icon: FileText,
     status: 'available',
-    thumbnail: '/thumbnails/prompt-engineering.png'
+    thumbnail: '/thumbnails/prompt-engineering.webp'
   },
   {
     id: 'history-machine-intelligence',
@@ -63,7 +64,7 @@ const guides: Guide[] = [
     category: 'Research',
     icon: BookOpen,
     status: 'available',
-    thumbnail: '/thumbnails/history-machine-intelligence.png'
+    thumbnail: '/thumbnails/history-machine-intelligence.webp'
   },
   {
     id: 'building-simulations',
@@ -73,7 +74,7 @@ const guides: Guide[] = [
     category: 'Pedagogical',
     icon: Sparkles,
     status: 'coming-soon',
-    thumbnail: '/thumbnails/building-simulations.png'
+    thumbnail: '/thumbnails/building-simulations.webp'
   },
   {
     id: 'ai-assignments',
@@ -83,7 +84,7 @@ const guides: Guide[] = [
     category: 'Pedagogical',
     icon: GraduationCap,
     status: 'coming-soon',
-    thumbnail: '/thumbnails/ai-assignments.png'
+    thumbnail: '/thumbnails/ai-assignments.webp'
   },
   {
     id: 'ai-historical-research',
@@ -93,7 +94,7 @@ const guides: Guide[] = [
     category: 'Research',
     icon: Microscope,
     status: 'available',
-    thumbnail: '/thumbnails/ai-historical-research.png'
+    thumbnail: '/thumbnails/ai-historical-research.webp'
   },
   {
     id: 'critical-pedagogy',
@@ -103,7 +104,7 @@ const guides: Guide[] = [
     category: 'Pedagogical',
     icon: BookOpen,
     status: 'coming-soon',
-    thumbnail: '/thumbnails/critical-pedagogy.png'
+    thumbnail: '/thumbnails/critical-pedagogy.webp'
   },
   {
     id: 'responsible-ai-classroom',
@@ -113,7 +114,7 @@ const guides: Guide[] = [
     category: 'Best Practices',
     icon: Lightbulb,
     status: 'available',
-    thumbnail: '/thumbnails/responsible-ai-classroom.png'
+    thumbnail: '/thumbnails/responsible-ai-classroom.webp'
   }
 ]
 

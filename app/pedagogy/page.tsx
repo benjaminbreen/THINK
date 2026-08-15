@@ -67,7 +67,7 @@ export default function PedagogyPage() {
       type: "Creative/Research",
       tags: ['History', 'Primary Sources', 'Digital Humanities', 'Research'],
       status: 'available',
-      thumbnailPath: "/thumbnails/drug-history-artifact.png",
+      thumbnailPath: "/thumbnails/drug-history-artifact.webp",
       pdfPath: "/pdfs/HIS151BDrugHistoryFinalAssignment.pdf",
       sampleSubmissionUrl: "https://cultural-history-drugs.vercel.app/",
       courseName: "HIS 151B: History of Drugs",
@@ -84,7 +84,7 @@ export default function PedagogyPage() {
       type: "Simulation",
       tags: ['History', 'Primary Sources', 'Roleplay'],
       status: 'available',
-      thumbnailPath: "/thumbnails/apothecary-simulator.png",
+      thumbnailPath: "/thumbnails/apothecary-simulator.webp",
       courseName: "History of Medicine",
       institution: "UC Santa Cruz"
     },
@@ -108,7 +108,7 @@ export default function PedagogyPage() {
       type: "Creative Project",
       tags: ['Critical Theory', 'Data', 'Research'],
       status: 'coming-soon',
-      thumbnailPath: "/thumbnails/counterfactual-datasets.png",
+      thumbnailPath: "/thumbnails/counterfactual-datasets.webp",
       gradeLevel: "Graduate"
     },
     {

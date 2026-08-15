@@ -67,7 +67,7 @@ export function ProjectsBackground({ isHovered = false }: ProjectsBackgroundProp
       // Horizontal lines with fade based on vertical position
       for (let y = 0; y <= canvas.height; y += gridSize) {
         const fadePhase = Math.sin(time.current * 0.0005 + y * 0.01)
-        let baseOpacity = 0.35 + (fadePhase * 0.1)
+        const baseOpacity = 0.35 + (fadePhase * 0.1)
 
         // Fade out based on vertical position (invisible by halfway)
         const verticalFade = Math.max(0, 1 - (y / (canvas.height * 0.5)))

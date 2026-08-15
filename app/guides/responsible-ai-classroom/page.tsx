@@ -23,7 +23,7 @@ export default function ResponsibleAIClassroomGuide() {
       title="Responsible AI Use in the Classroom"
       subtitle="How humanities faculty are approaching AI integration in 2025"
       guideId="responsible-ai-classroom"
-      thumbnailPath="/thumbnails/responsible-ai-classroom.png"
+      thumbnailPath="/thumbnails/responsible-ai-classroom.webp"
       author={{
         name: 'Benjamin Breen',
         role: 'Principal Investigator, THINK',
