@@ -72,7 +72,7 @@ export function Footer() {
               {columns.map((column) => (
                 <nav key={column.title} aria-label={column.title}>
                   <h3 className="eyebrow mb-4">{column.title}</h3>
-                  <ul className="space-y-3">
+                  <ul className="-my-1.5 space-y-0.5">
                     {column.links.map((link) => (
                       <li key={link.name}>
                         {'external' in link && link.external ? (
@@ -80,7 +80,7 @@ export function Footer() {
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary"
+                            className="group inline-flex min-h-[36px] items-center gap-1.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-primary"
                           >
                             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
                               {link.name}
@@ -90,7 +90,7 @@ export function Footer() {
                         ) : (
                           <Link
                             href={link.href}
-                            className="inline-block text-sm text-muted-foreground transition-[color,transform] duration-200 hover:translate-x-0.5 hover:text-primary"
+                            className="inline-flex min-h-[36px] items-center py-1.5 text-sm text-muted-foreground transition-[color,transform] duration-200 hover:translate-x-0.5 hover:text-primary"
                           >
                             {link.name}
                           </Link>
@@ -110,7 +110,7 @@ export function Footer() {
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => setShowColophon(true)}
-                    className="text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary/50"
+                    className="inline-flex min-h-[40px] items-center px-2 text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary/50"
                   >
                     Colophon
                   </button>

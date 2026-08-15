@@ -2052,7 +2052,7 @@ export default function ResourcesPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="flex-1 overflow-y-auto px-8 py-6">
           {/* Sort Controls */}
           <div className="mb-8 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -2297,7 +2297,7 @@ export default function ResourcesPage() {
               </Button>
             </CardContent>
           </Card>
-        </main>
+        </div>
       </div>
 
       {/* Mobile Main Content */}

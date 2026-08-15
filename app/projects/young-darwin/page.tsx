@@ -76,7 +76,7 @@ export default function YoungDarwinPage() {
                 critical thinking about both history and AI technology.
               </p>
 
-              <div className="flex gap-4 mt-8 not-prose">
+              <div className="not-prose mt-8 flex flex-wrap gap-3">
                 <Button asChild>
                   <a href="#" target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" /> Try Demo

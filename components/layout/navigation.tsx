@@ -119,7 +119,7 @@ export function Navigation() {
       className={cn(
         'sticky top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300',
         scrolled
-          ? 'border-border/70 bg-background/85 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/70'
+          ? 'border-border/70 bg-background/90 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/80'
           : 'border-transparent bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/55'
       )}
     >

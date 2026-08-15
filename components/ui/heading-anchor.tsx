@@ -22,29 +22,27 @@ export function HeadingAnchor({ id, children, level = 2 }: HeadingAnchorProps) {
 
   const Tag = `h${level}` as 'h2' | 'h3' | 'h4'
   const className = level === 2
-    ? "font-serif scroll-mt-24 group flex items-center gap-3"
+    ? "group flex scroll-mt-24 items-center gap-3 font-serif"
     : level === 3
-    ? "font-sans text-xl font-semibold mt-8 mb-4 scroll-mt-24 group flex items-center gap-3"
-    : "font-sans text-base font-semibold mt-0 mb-3 scroll-mt-24 group flex items-center gap-3"
+    ? "group mb-4 mt-8 flex scroll-mt-24 items-center gap-3 font-serif text-headline font-semibold"
+    : "group mb-3 mt-0 flex scroll-mt-24 items-center gap-3 font-serif text-lg font-semibold"
 
   return (
     <Tag id={id} className={className}>
       <span className="flex-1">{children}</span>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6"
-          onClick={handleCopy}
-          aria-label={copied ? "Link copied" : "Copy link to section"}
-        >
-          {copied ? (
-            <Check className="h-3 w-3 text-green-600" />
-          ) : (
-            <LinkIcon className="h-3 w-3" />
-          )}
-        </Button>
-      </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="reveal-on-hover h-8 w-8 flex-shrink-0 rounded-full"
+        onClick={handleCopy}
+        aria-label={copied ? 'Link copied' : 'Copy link to section'}
+      >
+        {copied ? (
+          <Check className="h-3.5 w-3.5 text-emerald-600" />
+        ) : (
+          <LinkIcon className="h-3.5 w-3.5" />
+        )}
+      </Button>
     </Tag>
   )
 }

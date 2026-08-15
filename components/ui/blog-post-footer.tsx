@@ -11,43 +11,43 @@ interface BlogPostFooterProps {
 
 export function BlogPostFooter({ showBackLink = true }: BlogPostFooterProps) {
   return (
-    <Section className="bg-muted/30 border-t py-10 sm:py-12">
+    <Section className="section-y border-t bg-muted/30">
       <Container>
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="mx-auto max-w-2xl text-center">
           {showBackLink && (
             <div className="mb-8">
               <Button asChild variant="ghost" size="sm">
                 <Link href="/blog">
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Back to all posts
+                  <ArrowLeft className="h-4 w-4" /> Back to all posts
                 </Link>
               </Button>
             </div>
           )}
 
-          <h3 className="text-xl font-serif font-semibold mb-3">
+          <h3 className="mb-3 text-headline font-serif font-bold">
             Questions or Ideas?
           </h3>
-          <p className="text-muted-foreground mb-6">
+          <p className="mb-7 text-muted-foreground">
             We'd love to hear from educators exploring AI in the humanities.
             Share your thoughts, ask questions, or tell us about your projects.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild>
               <Link href="/contact">
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <MessageSquare className="h-4 w-4" />
                 Contact Us
               </Link>
             </Button>
             <Button variant="outline" asChild>
               <a href={`mailto:${siteConfig.email}`}>
-                <Mail className="mr-2 h-4 w-4" />
+                <Mail className="h-4 w-4" />
                 Email Directly
               </a>
             </Button>
           </div>
 
-          <div className="mt-8 pt-6 border-t text-sm text-muted-foreground">
+          <div className="mt-10 border-t border-border/60 pt-6 text-sm text-muted-foreground">
             <p className="mb-2">
               THINK is supported by the{' '}
               <a

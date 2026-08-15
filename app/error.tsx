@@ -25,7 +25,7 @@ export default function Error({
           <p className="text-muted-foreground mb-6">
             We encountered an unexpected error. Please try again.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-wrap justify-center gap-3">
             <Button onClick={reset}>Try again</Button>
             <Button variant="outline" asChild>
               <a href="/">Go home</a>

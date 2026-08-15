@@ -19,7 +19,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
     <nav aria-label="Breadcrumb" className="border-b border-border/60 bg-muted/25">
       <Container>
         {/* Long trails scroll sideways instead of clipping the current page */}
-        <ol className="flex items-center gap-1.5 overflow-x-auto py-3 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ol className="flex items-center gap-1.5 overflow-x-auto py-1.5 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
             const isLast = index === items.length - 1
 
@@ -39,7 +39,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                   {item.href && !isLast ? (
                     <Link
                       href={item.href}
-                      className="rounded px-1 py-0.5 text-muted-foreground transition-colors hover:text-foreground"
+                      className="inline-flex min-h-[36px] items-center rounded px-1 text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {item.label}
                     </Link>
@@ -48,8 +48,8 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                       aria-current={isLast ? 'page' : undefined}
                       className={
                         isLast
-                          ? 'px-1 py-0.5 font-medium text-foreground'
-                          : 'px-1 py-0.5 text-muted-foreground'
+                          ? 'inline-flex min-h-[36px] items-center px-1 font-medium text-foreground'
+                          : 'inline-flex min-h-[36px] items-center px-1 text-muted-foreground'
                       }
                     >
                       {item.label}

@@ -198,7 +198,7 @@ export default function HistoryLensPage() {
                 agreements or student access to particular platforms.
               </p>
 
-              <div className="flex gap-4 mt-8 not-prose">
+              <div className="not-prose mt-8 flex flex-wrap gap-3">
                 <Button asChild>
                   <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" /> Try HistoryLens
@@ -223,7 +223,7 @@ export default function HistoryLensPage() {
               All HistoryLens materials are freely available. Explore our lesson plans, assignments,
               and guides to start using historical simulations in your courses.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap justify-center gap-3">
               <Button asChild size="lg">
                 <Link href="/pedagogy">Teaching Resources</Link>
               </Button>

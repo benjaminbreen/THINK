@@ -25,7 +25,7 @@ export default function ProjectsError({
           <p className="text-muted-foreground mb-6">
             We couldn't load this project. Please try again or return to the projects list.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-wrap justify-center gap-3">
             <Button onClick={reset}>Try again</Button>
             <Button variant="outline" asChild>
               <Link href="/projects">All projects</Link>

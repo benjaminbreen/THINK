@@ -101,11 +101,11 @@ interface CardSkeletonProps {
 
 export function CardSkeleton({ showImage = true }: CardSkeletonProps) {
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <div className="overflow-hidden rounded-xl border border-border/70 bg-card">
       {showImage && (
-        <LoadingSkeleton className="h-36 w-full rounded-none" />
+        <LoadingSkeleton className="aspect-[16/10] w-full rounded-none" />
       )}
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-5 sm:p-6">
         <div className="flex gap-2">
           <LoadingSkeleton className="h-5 w-16" />
           <LoadingSkeleton className="h-5 w-12" />
@@ -123,9 +123,9 @@ export function CardSkeleton({ showImage = true }: CardSkeletonProps) {
 
 export function BlogCardSkeleton() {
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
-      <LoadingSkeleton className="h-32 w-full rounded-none" />
-      <div className="p-6 space-y-4">
+    <div className="overflow-hidden rounded-xl border border-border/70 bg-card">
+      <LoadingSkeleton className="aspect-[5/2] w-full rounded-none" />
+      <div className="space-y-4 p-5 sm:p-6">
         <div className="flex gap-2">
           <LoadingSkeleton className="h-5 w-20" />
         </div>
@@ -148,7 +148,7 @@ export function BlogCardSkeleton() {
 export function HeroSkeleton() {
   return (
     <div className="animate-fade-in">
-      <div className="hero-glass-pane px-6 py-6 sm:px-10 sm:py-8">
+      <div className="hero-glass-pane px-6 py-7 sm:px-10 sm:py-9">
         <LoadingSkeleton className="h-6 w-24 mb-5" />
         <LoadingSkeleton className="h-12 w-full max-w-xl mb-3" />
         <LoadingSkeleton className="h-12 w-4/5 max-w-lg mb-3" />

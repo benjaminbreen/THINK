@@ -67,42 +67,41 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
 
   return (
     <Card
-      className={`group overflow-hidden animate-fade-in-up opacity-0 ${delayClass} transition-all duration-300 hover:shadow-lg ${!isAvailable ? 'opacity-60' : ''}`}
+      interactive={isAvailable}
+      className={`group overflow-hidden opacity-0 animate-fade-in-up ${delayClass} ${!isAvailable ? 'opacity-70' : ''}`}
     >
-      <div className="flex flex-col md:flex-row">
-        {/* Thumbnail with gradient overlay */}
-        <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 overflow-hidden">
+      <div className="flex flex-col sm:flex-row">
+        {/* Thumbnail */}
+        <div className="relative aspect-[16/10] w-full flex-shrink-0 overflow-hidden bg-muted/40 sm:aspect-auto sm:w-56 lg:w-64">
           {!imageError && thumbnailPath ? (
             <>
               <Image
                 src={thumbnailPath}
-                alt={assignment.title}
+                alt=""
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, 256px"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                 onError={() => setImageError(true)}
               />
-              {/* Gradient overlay that fades into card */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white dark:to-slate-900 hidden md:block" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-slate-900 md:hidden" />
-              {/* Purple tint overlay for coming-soon items */}
+              {/* Desaturate thumbnails for assignments that aren't published yet */}
               {!isAvailable && (
-                <div className="absolute inset-0 bg-violet-500/40 dark:bg-violet-900/50" />
+                <div className="absolute inset-0 bg-background/50 backdrop-grayscale" />
               )}
             </>
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900/30 dark:to-violet-800/30 flex items-center justify-center">
-              <BookOpen className="w-12 h-12 text-violet-400" />
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-50 to-violet-100/60 dark:from-violet-950/25 dark:to-violet-900/15">
+              <BookOpen className="h-9 w-9 text-violet-300/80 dark:text-violet-700/70" />
             </div>
           )}
           {/* Type badge overlay */}
-          <div className="absolute top-3 left-3">
-            <Badge className="bg-violet-600 text-white shadow-md">
+          <div className="absolute left-3 top-3">
+            <Badge className="bg-violet-600 text-white shadow-sm">
               {assignment.type}
             </Badge>
           </div>
           {!isAvailable && (
-            <div className="absolute top-3 right-3">
-              <Badge variant="secondary" className="bg-slate-800/80 text-white">
+            <div className="absolute right-3 top-3">
+              <Badge variant="secondary" className="bg-slate-900/80 text-white shadow-sm">
                 Coming Soon
               </Badge>
             </div>
@@ -110,10 +109,10 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-6">
-          <div className="flex flex-col h-full">
+        <div className="flex-1 p-5 sm:p-6">
+          <div className="flex h-full flex-col">
             {/* Header info */}
-            <div className="mb-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
               {assignment.courseName && (
                 <span className="font-medium text-foreground">{assignment.courseName}</span>
               )}
@@ -130,9 +129,9 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
             </div>
 
             {/* Title */}
-            <h3 className="text-xl font-serif font-bold mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+            <h3 className="mb-2 font-serif text-lg font-bold leading-snug transition-colors group-hover:text-violet-600 dark:group-hover:text-violet-400 sm:text-xl">
               {isAvailable ? (
-                <Link href={`/pedagogy/assignments/${assignment.slug}`} className="hover:underline">
+                <Link href={`/pedagogy/assignments/${assignment.slug}`}>
                   {assignment.title}
                 </Link>
               ) : (
@@ -141,14 +140,14 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
             </h3>
 
             {/* Description */}
-            <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
+            <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
               {assignment.description}
             </p>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="mb-5 flex flex-wrap gap-1.5">
               {assignment.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className={`text-xs ${getTagColor(tag)}`}>
+                <Badge key={tag} variant="outline" className={`border-transparent font-normal ${getTagColor(tag)}`}>
                   {tag}
                 </Badge>
               ))}
@@ -166,7 +165,7 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
               {assignment.pdfPath && (
                 <Button asChild variant="outline" size="sm">
                   <a href={assignment.pdfPath} target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-1.5 h-3.5 w-3.5" />
+                    <Download className="h-3.5 w-3.5" />
                     Download PDF
                   </a>
                 </Button>
@@ -174,7 +173,7 @@ export function AssignmentListItem({ assignment, animationDelay = '100' }: Assig
               {assignment.sampleSubmissionUrl && (
                 <Button asChild variant="outline" size="sm">
                   <a href={assignment.sampleSubmissionUrl} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+                    <ExternalLink className="h-3.5 w-3.5" />
                     Sample Submission
                   </a>
                 </Button>

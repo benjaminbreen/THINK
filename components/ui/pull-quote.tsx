@@ -35,16 +35,16 @@ export function PullQuote({
     >
       <blockquote
         className={cn(
-          'text-xl md:text-2xl font-serif leading-relaxed',
+          'font-serif text-lg leading-relaxed sm:text-xl md:text-2xl',
           'text-foreground/90',
           'relative',
           // Remove default blockquote styling when inside pull quote
           '[&]:border-0 [&]:pl-0 [&]:before:hidden [&]:italic'
         )}
       >
-        <span className="text-primary/40 text-4xl font-serif leading-none mr-1">"</span>
+        <span aria-hidden="true" className="mr-0.5 font-serif text-3xl leading-none text-primary/40">&ldquo;</span>
         {children}
-        <span className="text-primary/40 text-4xl font-serif leading-none ml-1">"</span>
+        <span aria-hidden="true" className="ml-0.5 font-serif text-3xl leading-none text-primary/40">&rdquo;</span>
       </blockquote>
       {attribution && (
         <figcaption className="mt-4 text-sm text-muted-foreground">

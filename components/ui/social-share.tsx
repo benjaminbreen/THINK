@@ -31,12 +31,12 @@ export function SocialShare({ title, url, description }: SocialShareProps) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground mr-1">Share:</span>
+    <div className="flex items-center gap-1">
+      <span className="mr-1.5 text-sm text-muted-foreground">Share:</span>
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 w-8 p-0"
+        className="h-10 w-10 rounded-full p-0"
         asChild
         aria-label="Share on Twitter"
       >
@@ -51,7 +51,7 @@ export function SocialShare({ title, url, description }: SocialShareProps) {
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 w-8 p-0"
+        className="h-10 w-10 rounded-full p-0"
         asChild
         aria-label="Share on LinkedIn"
       >
@@ -66,7 +66,7 @@ export function SocialShare({ title, url, description }: SocialShareProps) {
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 w-8 p-0"
+        className="h-10 w-10 rounded-full p-0"
         onClick={copyToClipboard}
         aria-label={copied ? 'Link copied' : 'Copy link'}
       >

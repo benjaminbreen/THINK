@@ -24,9 +24,8 @@ export function TagLink({
     <Link href={`/tags/${tagToSlug(tag)}`}>
       <Badge
         variant={variant}
-        className={`cursor-pointer hover:bg-primary/10 hover:border-primary/50 transition-colors ${
-          size === 'sm' ? 'text-xs px-2 py-0.5' : ''
-        } ${className}`}
+        interactive={size !== 'sm'}
+        className={`hover:border-primary/50 hover:bg-primary/10 hover:text-foreground ${className}`}
       >
         {tag}
       </Badge>
@@ -61,7 +60,7 @@ export function TagList({
         <TagLink key={tag} tag={tag} variant={variant} size={size} />
       ))}
       {remainingCount > 0 && (
-        <Badge variant="outline" className={size === 'sm' ? 'text-xs px-2 py-0.5' : ''}>
+        <Badge variant="outline" interactive={size !== 'sm'}>
           +{remainingCount} more
         </Badge>
       )}

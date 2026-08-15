@@ -167,28 +167,29 @@ export function GuideLayout({
           )}
 
           <div className="mb-8">
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="-ml-3 group">
               <Link href="/guides">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Guides
+                <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+                Back to Guides
               </Link>
             </Button>
           </div>
 
           {/* Main Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-12">
             {/* Sidebar */}
             <aside className="lg:col-span-1 order-2 lg:order-1">
               <div className="lg:sticky lg:top-24 space-y-4">
                 {/* Tab Buttons */}
-                <div className="flex rounded-lg bg-muted/50 p-1" role="tablist" aria-label="Sidebar navigation">
+                <div className="flex rounded-full border border-border bg-muted/50 p-1" role="tablist" aria-label="Sidebar navigation">
                   <button
                     role="tab"
                     aria-selected={sidebarTab === 'toc'}
                     aria-controls="toc-panel"
                     onClick={() => setSidebarTab('toc')}
-                    className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                    className={`flex-1 rounded-full px-3 py-2 text-xs font-medium transition-colors ${
                       sidebarTab === 'toc'
-                        ? 'bg-background shadow-sm text-foreground'
+                        ? 'bg-card text-foreground shadow-xs'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
@@ -199,9 +200,9 @@ export function GuideLayout({
                     aria-selected={sidebarTab === 'wikipedia'}
                     aria-controls="wikipedia-panel"
                     onClick={() => setSidebarTab('wikipedia')}
-                    className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                    className={`flex-1 rounded-full px-3 py-2 text-xs font-medium transition-colors ${
                       sidebarTab === 'wikipedia'
-                        ? 'bg-background shadow-sm text-foreground'
+                        ? 'bg-card text-foreground shadow-xs'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
@@ -215,9 +216,9 @@ export function GuideLayout({
                     id="toc-panel"
                     role="tabpanel"
                     aria-labelledby="toc-tab"
-                    className="bg-muted/30 rounded-lg p-6"
+                    className="rounded-2xl border border-border/60 bg-muted/30 p-5 sm:p-6"
                   >
-                    <h3 className="font-sans text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">
+                    <h3 className="eyebrow mb-4">
                       On This Page
                     </h3>
                     <nav className="space-y-1 text-sm" aria-label="Table of contents">
@@ -225,7 +226,7 @@ export function GuideLayout({
                         <a
                           key={id}
                           href={`#${id}`}
-                          className={`block py-1.5 rounded-md transition-colors ${
+                          className={`flex min-h-[34px] items-center rounded-md py-1.5 transition-colors ${
                             level === 2 ? 'pl-6 pr-3 text-xs' : 'px-3'
                           } ${
                             activeSection === id
@@ -251,14 +252,14 @@ export function GuideLayout({
                           <button
                             onClick={decreaseFontSize}
                             disabled={fontSize <= 80}
-                            className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-30"
                             aria-label="Decrease font size"
                           >
                             <Minus className="h-3.5 w-3.5 text-muted-foreground" />
                           </button>
                           <button
                             onClick={resetFontSize}
-                            className="px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors min-w-[36px]"
+                            className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-md font-mono text-[11px] font-medium tabular-nums text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                             aria-label="Reset font size"
                           >
                             {fontSize}%
@@ -266,7 +267,7 @@ export function GuideLayout({
                           <button
                             onClick={increaseFontSize}
                             disabled={fontSize >= 140}
-                            className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-30"
                             aria-label="Increase font size"
                           >
                             <Plus className="h-3.5 w-3.5 text-muted-foreground" />
@@ -283,17 +284,17 @@ export function GuideLayout({
                     id="wikipedia-panel"
                     role="tabpanel"
                     aria-labelledby="wikipedia-tab"
-                    className="bg-muted/30 rounded-lg p-6"
+                    className="rounded-2xl border border-border/60 bg-muted/30 p-5 sm:p-6"
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-sans text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                      <h3 className="eyebrow flex items-center gap-2">
                         <BookOpen className="h-4 w-4" />
                         Wikipedia
                       </h3>
                       {wikipediaData && (
                         <button
                           onClick={() => setWikipediaData(null)}
-                          className="p-1 rounded hover:bg-muted"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
                           aria-label="Close Wikipedia panel"
                         >
                           <X className="h-4 w-4 text-muted-foreground" />
@@ -362,12 +363,12 @@ export function GuideLayout({
                   <h1 className="mb-4 text-display-lg font-serif font-bold">
                     {title}
                   </h1>
-                  <p className="text-xl text-muted-foreground mb-8">
+                  <p className="mb-8 text-lg leading-relaxed text-muted-foreground sm:text-xl">
                     {subtitle}
                   </p>
 
                   {/* Author & Meta */}
-                  <div className="flex flex-wrap items-center gap-6 pb-8 border-b">
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-4 border-b border-border/70 pb-8">
                     {author && (
                       <div className="flex items-center gap-3">
                         {author.avatar ? (

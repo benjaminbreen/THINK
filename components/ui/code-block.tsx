@@ -49,16 +49,16 @@ export function CodeBlock({
   }
 
   return (
-    <div className={cn('relative group rounded-lg overflow-hidden border bg-muted/30', className)}>
+    <div className={cn('group relative overflow-hidden rounded-xl border border-border/70 bg-muted/30', className)}>
       {/* Header bar */}
       {(filename || language) && (
-        <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50">
+        <div className="flex items-center justify-between border-b border-border/70 bg-muted/50 px-4 py-2.5">
           <div className="flex items-center gap-3">
             {/* Traffic light dots */}
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-red-400/80" />
-              <span className="w-3 h-3 rounded-full bg-yellow-400/80" />
-              <span className="w-3 h-3 rounded-full bg-green-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+              <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/70" />
+              <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
             </div>
             {filename && (
               <span className="text-xs font-mono text-muted-foreground">{filename}</span>
@@ -76,11 +76,10 @@ export function CodeBlock({
       <button
         onClick={handleCopy}
         className={cn(
-          'absolute top-2 right-2 p-2 rounded-md',
-          'bg-background/80 backdrop-blur-sm border',
-          'opacity-0 group-hover:opacity-100 transition-opacity duration-200',
+          'reveal-on-hover absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-lg',
+          'border border-border bg-background/85 backdrop-blur-sm',
           'hover:bg-background',
-          'focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+          'focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           (filename || language) && 'top-12'
         )}
         aria-label={copied ? 'Copied!' : 'Copy code'}

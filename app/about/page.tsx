@@ -135,7 +135,7 @@ export default function AboutPage() {
                 href="https://www.neh.gov"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                className="inline-flex min-h-[36px] items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
               >
                 National Endowment for the Humanities
                 <ExternalLink className="h-3 w-3" />
@@ -145,7 +145,7 @@ export default function AboutPage() {
                 href="https://www.ucsc.edu"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                className="inline-flex min-h-[36px] items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
               >
                 UC Santa Cruz
                 <ExternalLink className="h-3 w-3" />
@@ -155,7 +155,7 @@ export default function AboutPage() {
                 href="https://www.baccc.net"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                className="inline-flex min-h-[36px] items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
               >
                 Bay Area Community College Consortium
                 <ExternalLink className="h-3 w-3" />
