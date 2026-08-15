@@ -92,7 +92,7 @@ export default function HistoricalPersonaGeneratorPage() {
                     </p>
                     <Button asChild size="default" className="bg-emerald-600 hover:bg-emerald-700 text-white group">
                       <a href="https://historical-persona-generator.vercel.app" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4 external-link-icon" />
+                        <ExternalLink className="h-4 w-4 external-link-icon" />
                         Launch Persona Generator
                       </a>
                     </Button>
@@ -278,12 +278,12 @@ export default function HistoricalPersonaGeneratorPage() {
                     <CardContent className="space-y-3">
                       <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
                         <a href="https://historical-persona-generator.vercel.app" target="_blank" rel="noopener noreferrer">
-                          <Play className="mr-2 h-4 w-4" /> Generate Personas
+                          <Play className="h-4 w-4" /> Generate Personas
                         </a>
                       </Button>
                       <Button asChild variant="outline" className="w-full group">
                         <a href="https://github.com/benjaminbreen/HistoricalPersonaGenerator" target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4 external-link-icon" /> View Source
+                          <Github className="h-4 w-4 external-link-icon" /> View Source
                         </a>
                       </Button>
                     </CardContent>
@@ -542,7 +542,7 @@ export default function HistoricalPersonaGeneratorPage() {
                       <CardTitle>Key Code Architecture</CardTitle>
                       <Button asChild variant="outline" size="sm" className="group">
                         <a href="https://github.com/benjaminbreen/HistoricalPersonaGenerator" target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4 external-link-icon" /> View Full Repository
+                          <Github className="h-4 w-4 external-link-icon" /> View Full Repository
                         </a>
                       </Button>
                     </div>
@@ -899,7 +899,7 @@ export type CulturalZone =
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700">
                 <a href="https://historical-persona-generator.vercel.app" target="_blank" rel="noopener noreferrer">
-                  <Play className="mr-2 h-4 w-4" /> Try It Now
+                  <Play className="h-4 w-4" /> Try It Now
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg">
@@ -923,7 +923,7 @@ export type CulturalZone =
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild size="lg">
                 <Link href="/projects/history-simulator">
-                  <BookOpen className="mr-2 h-5 w-5" /> History Simulator
+                  <BookOpen className="h-5 w-5" /> History Simulator
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">

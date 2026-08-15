@@ -3,41 +3,48 @@ import type { MDXComponents } from 'mdx/types'
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-4xl font-serif font-bold mb-4 mt-8">{children}</h1>
+      <h1 className="mb-5 mt-10 text-display font-serif font-bold">{children}</h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-3xl font-serif font-bold mb-3 mt-6">{children}</h2>
+      <h2 className="mb-4 mt-9 text-title font-serif font-bold">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-2xl font-serif font-semibold mb-2 mt-4">{children}</h3>
+      <h3 className="mb-3 mt-7 text-headline font-serif font-semibold">{children}</h3>
     ),
     p: ({ children }) => (
-      <p className="mb-4 leading-relaxed">{children}</p>
+      <p className="mb-5 leading-relaxed text-foreground/90">{children}</p>
     ),
     a: ({ href, children }) => (
-      <a href={href} className="text-primary hover:underline">
+      <a href={href} className="text-primary underline-offset-2 hover:underline">
         {children}
       </a>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc ml-6 mb-4">{children}</ul>
+      <ul className="mb-5 ml-6 list-disc space-y-2">{children}</ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal ml-6 mb-4">{children}</ol>
+      <ol className="mb-5 ml-6 list-decimal space-y-2">{children}</ol>
     ),
     li: ({ children }) => (
-      <li className="mb-2">{children}</li>
+      <li className="leading-relaxed">{children}</li>
     ),
     code: ({ children }) => (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm">{children}</code>
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.875em]">{children}</code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-4">{children}</pre>
+      <pre className="mb-5 overflow-x-auto rounded-xl bg-muted p-4">{children}</pre>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-primary pl-4 italic my-4">
+      <blockquote className="my-6 border-l-2 border-primary/45 pl-6 italic text-foreground/85">
         {children}
       </blockquote>
+    ),
+    hr: () => (
+      <hr className="my-10 h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
+    ),
+    img: ({ src, alt }) => (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src as string} alt={alt as string} className="my-6 w-full rounded-xl" />
     ),
     ...components,
   }

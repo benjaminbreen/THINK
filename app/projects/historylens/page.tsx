@@ -84,7 +84,7 @@ export default function HistoryLensPage() {
                   <CardContent>
                     <Button asChild>
                       <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" /> Access HistoryLens Modules
+                        <ExternalLink className="h-4 w-4" /> Access HistoryLens Modules
                       </a>
                     </Button>
                   </CardContent>
@@ -201,12 +201,12 @@ export default function HistoryLensPage() {
               <div className="not-prose mt-8 flex flex-wrap gap-3">
                 <Button asChild>
                   <a href="https://tinyurl.com/history-lens" target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-2 h-4 w-4" /> Try HistoryLens
+                    <ExternalLink className="h-4 w-4" /> Try HistoryLens
                   </a>
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="/pedagogy">
-                    <BookOpen className="mr-2 h-4 w-4" /> View Teaching Materials
+                    <BookOpen className="h-4 w-4" /> View Teaching Materials
                   </Link>
                 </Button>
               </div>

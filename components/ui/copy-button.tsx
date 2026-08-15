@@ -51,7 +51,7 @@ export function CopyButton({
       )}>
         {/* Copy icon */}
         <svg
-          className="mr-2 h-3.5 w-3.5"
+          className="h-3.5 w-3.5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -73,7 +73,7 @@ export function CopyButton({
         {/* Animated checkmark */}
         <svg
           className={cn(
-            'mr-2 h-4 w-4 text-emerald-600 dark:text-emerald-400',
+            'mr-1.5 h-4 w-4 text-emerald-600 dark:text-emerald-400',
             copied && 'animate-checkmark'
           )}
           viewBox="0 0 24 24"

@@ -31,7 +31,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="sm" className="w-9 h-9 px-0 rounded-full">
+      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
         <span className="sr-only">Toggle theme</span>
       </Button>
     )
@@ -42,11 +42,11 @@ export function ThemeToggle() {
   return (
     <Button
       variant="ghost"
-      size="sm"
+      size="icon"
       onClick={handleToggle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-9 h-9 px-0 rounded-full overflow-hidden group"
+      className="group relative h-10 w-10 overflow-hidden rounded-full"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
       {/* Sun icon */}

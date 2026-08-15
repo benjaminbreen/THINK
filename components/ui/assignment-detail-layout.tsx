@@ -240,7 +240,7 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
           <div className="mb-6">
             <Button asChild variant="ghost" size="sm" className="bg-background/80 backdrop-blur-sm">
               <Link href="/pedagogy">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Pedagogy
+                <ArrowLeft className="h-4 w-4" /> Back to Pedagogy
               </Link>
             </Button>
           </div>
@@ -334,11 +334,11 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
               </div>
 
               {/* Action buttons */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 {assignment.pdfPath && (
                   <Button asChild size="lg">
                     <a href={assignment.pdfPath} target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-4 w-4" />
+                      <Download className="h-4 w-4" />
                       Download Assignment PDF
                     </a>
                   </Button>
@@ -346,7 +346,7 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
                 {assignment.sampleSubmissionUrl && (
                   <Button asChild variant="outline" size="lg">
                     <a href={assignment.sampleSubmissionUrl} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" />
+                      <ExternalLink className="h-4 w-4" />
                       View Sample Submission
                     </a>
                   </Button>
@@ -428,7 +428,7 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
                       </>
                     ) : (
                       <>
-                        <Download className="mr-2 h-4 w-4" />
+                        <Download className="h-4 w-4" />
                         Download as PDF
                       </>
                     )}
@@ -509,12 +509,12 @@ export function AssignmentDetailLayout({ assignment }: AssignmentDetailLayoutPro
                   >
                     {copied ? (
                       <>
-                        <Check className="mr-2 h-3.5 w-3.5" />
+                        <Check className="h-3.5 w-3.5" />
                         Copied!
                       </>
                     ) : (
                       <>
-                        <Copy className="mr-2 h-3.5 w-3.5" />
+                        <Copy className="h-3.5 w-3.5" />
                         Copy Citation
                       </>
                     )}

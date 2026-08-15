@@ -79,12 +79,12 @@ export default function YoungDarwinPage() {
               <div className="not-prose mt-8 flex flex-wrap gap-3">
                 <Button asChild>
                   <a href="#" target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-2 h-4 w-4" /> Try Demo
+                    <ExternalLink className="h-4 w-4" /> Try Demo
                   </a>
                 </Button>
                 <Button asChild variant="outline">
                   <a href="#" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4" /> View on GitHub
+                    <Github className="h-4 w-4" /> View on GitHub
                   </a>
                 </Button>
               </div>

@@ -39,7 +39,7 @@ export default function TeamPage() {
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
                       <a href={`mailto:${siteConfig.email}`}>
-                        <Mail className="mr-2 h-4 w-4" /> Contact
+                        <Mail className="h-4 w-4" /> Contact
                       </a>
                     </Button>
                   </div>
@@ -60,7 +60,7 @@ export default function TeamPage() {
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
                       <a href="https://people.ucsc.edu/~panand/" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" /> Faculty Page
+                        <ExternalLink className="h-4 w-4" /> Faculty Page
                       </a>
                     </Button>
                   </div>
@@ -81,7 +81,7 @@ export default function TeamPage() {
                   <div className="space-y-2">
                     <Button asChild variant="outline" size="sm" className="w-full">
                       <a href="https://campusdirectory.ucsc.edu/cd_detail?uid=zaazimme" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" /> Faculty Page
+                        <ExternalLink className="h-4 w-4" /> Faculty Page
                       </a>
                     </Button>
                   </div>
@@ -148,7 +148,7 @@ export default function TeamPage() {
                   </p>
                   <Button asChild variant="outline" size="sm">
                     <a href="https://www.neh.gov" target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-3 w-3" /> Visit NEH
+                      <ExternalLink className="h-3 w-3" /> Visit NEH
                     </a>
                   </Button>
                 </CardContent>
@@ -166,7 +166,7 @@ export default function TeamPage() {
                   </p>
                   <Button asChild variant="outline" size="sm">
                     <a href="https://nationalhumanitiescenter.org" target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-3 w-3" /> Visit NHC
+                      <ExternalLink className="h-3 w-3" /> Visit NHC
                     </a>
                   </Button>
                 </CardContent>

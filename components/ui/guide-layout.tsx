@@ -345,7 +345,7 @@ export function GuideLayout({
                             rel="noopener noreferrer"
                           >
                             Read on Wikipedia
-                            <ExternalLink className="ml-2 h-3 w-3" />
+                            <ExternalLink className="h-3 w-3" />
                           </a>
                         </Button>
                       </div>

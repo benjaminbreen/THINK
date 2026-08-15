@@ -114,7 +114,7 @@ export default function AboutPage() {
             <AnimatedSection delay={150}>
               <Button asChild variant="outline" size="sm">
                 <Link href="/team">
-                  Full team <ArrowRight className="ml-2 h-4 w-4" />
+                  Full team <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </AnimatedSection>

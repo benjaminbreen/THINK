@@ -94,7 +94,7 @@ export default function ApothecarySimulatorPage() {
                     </p>
                     <Button asChild size="default" className="bg-emerald-600 hover:bg-emerald-700 text-white group">
                       <a href="https://apothecary-simulator.vercel.app" target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4 external-link-icon" />
+                        <ExternalLink className="h-4 w-4 external-link-icon" />
                         Launch Apothecary Simulator
                       </a>
                     </Button>
@@ -239,17 +239,17 @@ export default function ApothecarySimulatorPage() {
                     <CardContent className="space-y-3">
                       <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
                         <a href="https://apothecarysimulator.vercel.app" target="_blank" rel="noopener noreferrer">
-                          <Play className="mr-2 h-4 w-4" /> Play Now
+                          <Play className="h-4 w-4" /> Play Now
                         </a>
                       </Button>
                       <Button asChild variant="outline" className="w-full group">
                         <a href="https://github.com/benjaminbreen/HistoryLens" target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4 external-link-icon" /> View Source
+                          <Github className="h-4 w-4 external-link-icon" /> View Source
                         </a>
                       </Button>
                       <Button asChild variant="outline" className="w-full">
                         <Link href="/pedagogy/assignments/apothecary-simulator">
-                          <BookOpen className="mr-2 h-4 w-4" /> Teaching Guide
+                          <BookOpen className="h-4 w-4" /> Teaching Guide
                         </Link>
                       </Button>
                     </CardContent>
@@ -466,7 +466,7 @@ export default function ApothecarySimulatorPage() {
                       <CardTitle>Key Code Architecture</CardTitle>
                       <Button asChild variant="outline" size="sm" className="group">
                         <a href="https://github.com/benjaminbreen/HistoryLens" target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4 external-link-icon" /> View Full Repository
+                          <Github className="h-4 w-4 external-link-icon" /> View Full Repository
                         </a>
                       </Button>
                     </div>
@@ -978,7 +978,7 @@ export function calculatePatientFlow(gameState) {
             </p>
             <Button asChild size="lg" variant="outline" className="group">
               <a href="https://resobscura.substack.com/p/llm-based-educational-games-will" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="mr-2 h-4 w-4 external-link-icon" />
+                <ExternalLink className="h-4 w-4 external-link-icon" />
                 Read the Blog Post (May 2024)
               </a>
             </Button>
@@ -998,7 +998,7 @@ export function calculatePatientFlow(gameState) {
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild size="lg">
                 <Link href="/pedagogy/assignments/apothecary-simulator">
-                  <BookOpen className="mr-2 h-5 w-5" /> View Teaching Guide
+                  <BookOpen className="h-5 w-5" /> View Teaching Guide
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
